@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  crowbond.api:
+    image: crowbond.api
+    container_name: Crowbond.Api
+    build:
+      context: ./src/API/Crowbond.Api
+      dockerfile: Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+    volumes:
+      - /root/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - /usr/local/share/aspnet/Https:/root/.aspnet/https
