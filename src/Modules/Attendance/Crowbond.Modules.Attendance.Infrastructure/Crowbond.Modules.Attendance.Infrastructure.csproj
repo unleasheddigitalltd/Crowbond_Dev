@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Infrastructure\Crowbond.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Attendance.Application\Crowbond.Modules.Attendance.Application.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Attendance.Presentation\Crowbond.Modules.Attendance.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>
