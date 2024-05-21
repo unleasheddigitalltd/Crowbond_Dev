@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Application\Crowbond.Common.Application.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Ticketing.Domain\Crowbond.Modules.Ticketing.Domain.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Ticketing.IntegrationEvents\Crowbond.Modules.Ticketing.IntegrationEvents.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Customers\UpdateCustomer\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  crowbond.api:
+    image: ${DOCKER_REGISTRY-}crowbond.api
+    container_name: Crowbond.Api
+    build:
+      context: .
+      dockerfile: src/API/Crowbond.Api/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+    volumes:
+      - /root/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - /usr/local/share/aspnet/Https:/root/.aspnet/https
+
+  crowbond.database:
+    image: postgres:latest
+    container_name: Crowbond.Database
+    environment:
+      - POSTGRES_DB=crowbond
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  crowbond.identity:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: Crowbond.Identity
+    command: start-dev --import-realm
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
+
+  crowbond.seq:
+    image: datalust/seq:latest
+    container_name: Crowbond.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+
+  crowbond.redis:
+    image: redis:latest
+    container_name: Crowbond.Redis
+    restart: always
+    ports:
+      - 6379:6379

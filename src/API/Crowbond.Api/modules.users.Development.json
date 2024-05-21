@@ -1,0 +1,19 @@
+{
+  "Users": {
+    "Outbox": {
+      "IntervalInSeconds": 15,
+      "BatchSize": 20
+    },
+    "Inbox": {
+      "IntervalInSeconds": 15,
+      "BatchSize": 20
+    },
+    "KeyCloak": {
+      "AdminUrl": "http://crowbond.identity:8080/admin/realms/crowbond/",
+      "TokenUrl": "http://crowbond.identity:8080/realms/crowbond/protocol/openid-connect/token",
+      "ConfidentialClientId": "crowbond-confidential-client",
+      "ConfidentialClientSecret": "PzotcrvZRF9BHCKcUxdKfHWlIPECG49k",
+      "PublicClientId": "crowbond-public-client"
+    }
+  }
+}

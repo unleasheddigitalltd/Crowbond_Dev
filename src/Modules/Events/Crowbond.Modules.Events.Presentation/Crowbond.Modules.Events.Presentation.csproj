@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Presentation\Crowbond.Common.Presentation.csproj" />
+    <ProjectReference Include="..\..\Ticketing\Crowbond.Modules.Ticketing.IntegrationEvents\Crowbond.Modules.Ticketing.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Events.Application\Crowbond.Modules.Events.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Events\CancelEventSaga\" />
+  </ItemGroup>
+</Project>
