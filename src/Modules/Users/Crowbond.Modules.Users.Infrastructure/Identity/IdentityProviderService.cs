@@ -15,7 +15,7 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
     public async Task<Result<string>> RegisterUserAsync(UserModel user, CancellationToken cancellationToken = default)
     {
         var userRepresentation = new UserRepresentation(
-            user.Email,
+            user.Username,
             user.Email,
             user.FirstName,
             user.LastName,

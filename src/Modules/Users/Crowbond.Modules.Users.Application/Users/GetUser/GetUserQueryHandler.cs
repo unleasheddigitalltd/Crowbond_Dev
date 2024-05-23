@@ -18,6 +18,7 @@ internal sealed class GetUserQueryHandler(IDbConnectionFactory dbConnectionFacto
             $"""
              SELECT
                  id AS {nameof(UserResponse.Id)},
+                 username AS {nameof(UserResponse.Username)},
                  email AS {nameof(UserResponse.Email)},
                  first_name AS {nameof(UserResponse.FirstName)},
                  last_name AS {nameof(UserResponse.LastName)}

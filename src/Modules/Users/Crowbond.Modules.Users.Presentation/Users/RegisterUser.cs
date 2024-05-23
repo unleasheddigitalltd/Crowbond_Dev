@@ -17,6 +17,7 @@ internal sealed class RegisterUser : IEndpoint
         app.MapPost("users/register", async (Request request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new RegisterUserCommand(
+                request.Username,
                 request.Email,
                 request.Password,
                 request.FirstName,
@@ -30,6 +31,8 @@ internal sealed class RegisterUser : IEndpoint
 
     internal sealed class Request
     {
+        public string Username { get; set; }
+
         public string Email { get; init; }
 
         public string Password { get; init; }

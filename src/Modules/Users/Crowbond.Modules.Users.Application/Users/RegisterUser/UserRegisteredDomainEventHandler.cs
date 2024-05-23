@@ -30,6 +30,7 @@ internal sealed class UserRegisteredDomainEventHandler(ISender sender, IEventBus
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
                 result.Value.Id,
+                result.Value.Username,
                 result.Value.Email,
                 result.Value.FirstName,
                 result.Value.LastName),

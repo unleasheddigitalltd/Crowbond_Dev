@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20240416185034_Create_Database")]
+    [Migration("20240523115906_Create_Database")]
     partial class Create_Database
     {
         /// <inheritdoc />
@@ -268,6 +268,12 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("last_name");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("username");
+
                     b.HasKey("Id")
                         .HasName("pk_users");
 
@@ -278,6 +284,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.HasIndex("IdentityId")
                         .IsUnique()
                         .HasDatabaseName("ix_users_identity_id");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_username");
 
                     b.ToTable("users", "users");
                 });
