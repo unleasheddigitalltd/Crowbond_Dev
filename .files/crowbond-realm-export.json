@@ -1489,7 +1489,20 @@
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
-  "smtpServer": {},
+  "smtpServer" : {
+    "replyToDisplayName" : "",
+    "starttls" : "false",
+    "auth" : "true",
+    "envelopeFrom" : "",
+    "ssl" : "true",
+    "password" : "?m84xHMHmO87",
+    "port" : "465",
+    "replyTo" : "",
+    "host" : "unleashed-digital.co.uk",
+    "from" : "devteam@unleashed-digital.co.uk",
+    "fromDisplayName" : "",
+    "user" : "devteam@unleashed-digital.co.uk"
+  },
   "eventsEnabled": false,
   "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [],
