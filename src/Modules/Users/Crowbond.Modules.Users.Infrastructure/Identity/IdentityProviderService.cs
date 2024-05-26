@@ -40,16 +40,15 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
     // PUT /admin/realms/{realm}/users/{id}/reset-password-email
     public async Task<Result> ResetUserPasswordAsync(string identityId, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await keyCloakClient.ResetUserPasswordAsync(identityId, cancellationToken);
-            return Result.Success();
-        }
-        catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.Conflict)
-        {
-            logger.LogError(exception, "User registration failed");
-
-            return Result.Failure(IdentityProviderErrors.EmailIsNotUnique);
-        }
+        await keyCloakClient.ResetUserPasswordAsync(identityId, cancellationToken);
+        return Result.Success();
     }
+
+    // POST /admin/realms/{realm}/users/{id}/logout
+    public async Task<Result> LogOutUserAsync(string identityId, CancellationToken cancellationToken = default)
+    {
+        await keyCloakClient.LogOutUserAsync(identityId, cancellationToken);
+        return Result.Success();
+    }
+
 }
