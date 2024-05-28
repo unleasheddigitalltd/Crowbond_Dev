@@ -13,6 +13,8 @@ public sealed class User : Entity
 
     public Guid Id { get; private set; }
 
+    public string Username { get; private set; }
+
     public string Email { get; private set; }
 
     public string FirstName { get; private set; }
@@ -23,11 +25,12 @@ public sealed class User : Entity
 
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
-    public static User Create(string email, string firstName, string lastName, string identityId)
+    public static User Create(string username, string email, string firstName, string lastName, string identityId)
     {
         var user = new User
         {
             Id = Guid.NewGuid(),
+            Username = username,
             Email = email,
             FirstName = firstName,
             LastName = lastName,

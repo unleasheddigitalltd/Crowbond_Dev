@@ -15,7 +15,7 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
     public async Task<Result<string>> RegisterUserAsync(UserModel user, CancellationToken cancellationToken = default)
     {
         var userRepresentation = new UserRepresentation(
-            user.Email,
+            user.Username,
             user.Email,
             user.FirstName,
             user.LastName,
@@ -36,4 +36,19 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
             return Result.Failure<string>(IdentityProviderErrors.EmailIsNotUnique);
         }
     }
+
+    // PUT /admin/realms/{realm}/users/{id}/reset-password-email
+    public async Task<Result> ResetUserPasswordAsync(string identityId, CancellationToken cancellationToken = default)
+    {
+        await keyCloakClient.ResetUserPasswordAsync(identityId, cancellationToken);
+        return Result.Success();
+    }
+
+    // POST /admin/realms/{realm}/users/{id}/logout
+    public async Task<Result> LogOutUserAsync(string identityId, CancellationToken cancellationToken = default)
+    {
+        await keyCloakClient.LogOutUserAsync(identityId, cancellationToken);
+        return Result.Success();
+    }
+
 }

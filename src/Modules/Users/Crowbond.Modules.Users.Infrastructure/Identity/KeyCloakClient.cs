@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
 
@@ -14,6 +15,29 @@ internal sealed class KeyCloakClient(HttpClient httpClient)
         httpResponseMessage.EnsureSuccessStatusCode();
 
         return ExtractIdentityIdFromLocationHeader(httpResponseMessage);
+    }
+
+    internal async Task ResetUserPasswordAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        string[] action = ["UPDATE_PASSWORD"];
+
+        HttpResponseMessage httpResponseMessage = await httpClient.PutAsJsonAsync(
+            $"users/{userId}/execute-actions-email",
+            action,
+            new JsonSerializerOptions(JsonSerializerDefaults.Web),
+            cancellationToken);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+    }
+
+    internal async Task LogOutUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        HttpResponseMessage httpResponseMessage = await httpClient.PostAsJsonAsync(
+            $"users/{userId}/logout",
+            new JsonSerializerOptions(JsonSerializerDefaults.Web),
+            cancellationToken);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
     }
 
     private static string ExtractIdentityIdFromLocationHeader(
