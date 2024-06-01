@@ -31,7 +31,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateOrder,
             Permission.GetTickets,
             Permission.CheckInTicket,
-            Permission.GetEventStatistics);
+            Permission.GetEventStatistics,
+            Permission.GetProducts,
+            Permission.AddProduct,
+            Permission.UpdateProduct);
 
         builder
             .HasMany<Role>()
@@ -53,6 +56,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Member, Permission.CreateOrder),
                     CreateRolePermission(Role.Member, Permission.GetTickets),
                     CreateRolePermission(Role.Member, Permission.CheckInTicket),
+                    CreateRolePermission(Role.Member, Permission.GetProducts),
+                    CreateRolePermission(Role.Member, Permission.AddProduct),
+                    CreateRolePermission(Role.Member, Permission.UpdateProduct),
+
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
                     CreateRolePermission(Role.Administrator, Permission.ModifyUser),

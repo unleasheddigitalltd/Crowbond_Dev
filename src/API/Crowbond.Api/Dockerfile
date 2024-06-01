@@ -34,6 +34,12 @@ COPY ["src/Modules/Users/Crowbond.Modules.Users.Infrastructure/Crowbond.Modules.
 COPY ["src/Modules/Users/Crowbond.Modules.Users.IntegrationEvents/Crowbond.Modules.Users.IntegrationEvents.csproj", "src/Modules/Users/Crowbond.Modules.Users.IntegrationEvents/"]
 COPY ["src/Modules/Users/Crowbond.Modules.Users.Presentation/Crowbond.Modules.Users.Presentation.csproj", "src/Modules/Users/Crowbond.Modules.Users.Presentation/"]
 
+COPY ["src/Modules/Products/Crowbond.Modules.Products.Application/Crowbond.Modules.Products.Application.csproj", "src/Modules/Products/Crowbond.Modules.Products.Application/"]
+COPY ["src/Modules/Products/Crowbond.Modules.Products.Domain/Crowbond.Modules.Products.Domain.csproj", "src/Modules/Products/Crowbond.Modules.Products.Domain/"]
+COPY ["src/Modules/Products/Crowbond.Modules.Products.Infrastructure/Crowbond.Modules.Products.Infrastructure.csproj", "src/Modules/Products/Crowbond.Modules.Products.Infrastructure/"]
+COPY ["src/Modules/Products/Crowbond.Modules.Products.IntegrationEvents/Crowbond.Modules.Products.IntegrationEvents.csproj", "src/Modules/Products/Crowbond.Modules.Products.IntegrationEvents/"]
+COPY ["src/Modules/Products/Crowbond.Modules.Products.Presentation/Crowbond.Modules.Products.Presentation.csproj", "src/Modules/Products/Crowbond.Modules.Products.Presentation/"]
+
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .
 WORKDIR "src/API/Crowbond.Api"

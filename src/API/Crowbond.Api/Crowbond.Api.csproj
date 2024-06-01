@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Attendance\Crowbond.Modules.Attendance.Infrastructure\Crowbond.Modules.Attendance.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Events\Crowbond.Modules.Events.Infrastructure\Crowbond.Modules.Events.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Ticketing\Crowbond.Modules.Ticketing.Infrastructure\Crowbond.Modules.Ticketing.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Users\Crowbond.Modules.Users.Infrastructure\Crowbond.Modules.Users.Infrastructure.csproj" />
   </ItemGroup>

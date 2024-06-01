@@ -1,19 +1,18 @@
-﻿using System.Data;
-using System.Data.Common;
-using Crowbond.Common.Application.Clock;
+﻿using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Infrastructure.Inbox;
 using Crowbond.Common.Infrastructure.Serialization;
-using Crowbond.Modules.Users.Presentation;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
+using System.Data.Common;
+using System.Data;
 
-namespace Crowbond.Modules.Users.Infrastructure.Inbox;
+namespace Crowbond.Modules.Products.Infrastructure.Inbox;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessInboxJob(
@@ -23,7 +22,7 @@ internal sealed class ProcessInboxJob(
     IOptions<InboxOptions> inboxOptions,
     ILogger<ProcessInboxJob> logger) : IJob
 {
-    private const string ModuleName = "Users";
+    private const string ModuleName = "Products";
 
     public async Task Execute(IJobExecutionContext context)
     {
@@ -49,7 +48,7 @@ internal sealed class ProcessInboxJob(
                 IEnumerable<IIntegrationEventHandler> handlers = IntegrationEventHandlersFactory.GetHandlers(
                     integrationEvent.GetType(),
                     scope.ServiceProvider,
-                    AssemblyReference.Assembly);
+                    Presentation.AssemblyReference.Assembly);
 
                 foreach (IIntegrationEventHandler integrationEventHandler in handlers)
                 {
@@ -84,7 +83,7 @@ internal sealed class ProcessInboxJob(
              SELECT
                 id AS {nameof(InboxMessageResponse.Id)},
                 content AS {nameof(InboxMessageResponse.Content)}
-             FROM users.inbox_messages
+             FROM products.inbox_messages
              WHERE processed_on_utc IS NULL
              ORDER BY occurred_on_utc
              LIMIT {inboxOptions.Value.BatchSize}
@@ -106,7 +105,7 @@ internal sealed class ProcessInboxJob(
     {
         const string sql =
             """
-            UPDATE users.inbox_messages
+            UPDATE products.inbox_messages
             SET processed_on_utc = @ProcessedOnUtc,
                 error = @Error
             WHERE id = @Id

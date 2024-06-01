@@ -1,5 +1,6 @@
 ﻿using Crowbond.Modules.Attendance.Infrastructure.Database;
 using Crowbond.Modules.Events.Infrastructure.Database;
+using Crowbond.Modules.Products.Infrastructure.Database;
 using Crowbond.Modules.Ticketing.Infrastructure.Database;
 using Crowbond.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public static class MigrationExtensions
         ApplyMigration<EventsDbContext>(scope);
         ApplyMigration<TicketingDbContext>(scope);
         ApplyMigration<AttendanceDbContext>(scope);
+        ApplyMigration<ProductsDbContext>(scope);
     }
 
     private static void ApplyMigration<TDbContext>(IServiceScope scope)
