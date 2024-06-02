@@ -14,9 +14,17 @@ internal sealed class GetProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("products", async (ISender sender) =>
+        app.MapGet("products", async (
+            ISender sender,
+            string search = "",
+            string sort = "name",
+            string order = "asc",
+            int page = 1,
+            int size = 10
+            ) =>
         {
-            Result<ProductsResponse> result = await sender.Send(new GetProductQuery());
+            Result<ProductsResponse> result = await sender.Send(
+                new GetProductQuery(search, sort, order, page, size));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
