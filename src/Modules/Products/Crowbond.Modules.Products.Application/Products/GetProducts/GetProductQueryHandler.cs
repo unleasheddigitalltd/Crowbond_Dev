@@ -23,8 +23,8 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
             "id" => "id",
             "sku" => "sku",
             "name" => "name",
-            "filter_type_name" => "filter_type_name",
-            "unit_of_measure_name" => "unit_of_measure_name",
+            "filterTypeName" => "filter_type_name",
+            "unitOfMeasureName" => "unit_of_measure_name",
             "active" => "active",
             _ => "name" // Default sorting
         };
@@ -48,7 +48,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 unit_of_measure_name   AS {nameof(Product.UnitOfMeasureName)},
                 active                 AS {nameof(Product.Active)}
             FROM FilteredProducts
-            WHERE RowNum BETWEEN ((@Page) * @Size) + 1 AND @Page + 1 * @Size
+            WHERE RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY RowNum;
 
             SELECT Count(*) 

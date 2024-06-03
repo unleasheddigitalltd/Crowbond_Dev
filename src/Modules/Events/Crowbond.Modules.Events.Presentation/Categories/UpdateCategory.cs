@@ -1,7 +1,6 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.Events.Presentation;
 using Crowbond.Modules.Events.Application.Categories.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

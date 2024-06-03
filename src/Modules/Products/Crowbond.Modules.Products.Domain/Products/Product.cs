@@ -99,13 +99,13 @@ public sealed class Product : Entity
         string sku,
         string name,
         Guid? parentId,
-        FilterType filterType,
-        UnitOfMeasure unitOfMeasure,
-        Category category,
-        InventoryType inventoryType,
+        string filterTypeName,
+        string unitOfMeasureName,
+        Guid categoryId,
+        string inventoryTypeName,
         int barcode,
         int packSize,
-        string handlingNote,
+        string handlingNotes,
         bool qiCheck,
         string notes,
         int reorderLevel,
@@ -119,13 +119,13 @@ public sealed class Product : Entity
         Sku = sku;
         Name = name;
         ParentId = parentId;
-        FilterTypeName = filterType.Name;
-        UnitOfMeasureName = unitOfMeasure.Name;
-        CategoryId = category.Id;
-        InventoryTypeName = inventoryType.Name;
+        FilterTypeName = filterTypeName;
+        UnitOfMeasureName = unitOfMeasureName;
+        CategoryId = categoryId;
+        InventoryTypeName = inventoryTypeName;
         Barcode = barcode;
         PackSize = packSize;
-        HandlingNotes = handlingNote;
+        HandlingNotes = handlingNotes;
         QiCheck = qiCheck;
         Notes = notes;
         ReorderLevel = reorderLevel;

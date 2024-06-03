@@ -3,5 +3,5 @@
 internal static class Permissions
 {
     internal const string GetProducts = "products:read";
-    internal const string ModifyProducts = "products:update";
+    internal const string ModifyProduct = "products:update";
 }
