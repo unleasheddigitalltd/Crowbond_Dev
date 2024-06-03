@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{428C82D3-D616-4765-8A6A-DE50541CE102}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{528C82D3-D616-4765-9A6A-DE50541CE102}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D3B48DEC-BFCF-4925-A051-D242FFA31149}"
 EndProject
@@ -97,16 +97,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4542BDEB-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.ArchitectureTests", "test\Crowbond.ArchitectureTests\Crowbond.ArchitectureTests.csproj", "{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C6F4B00E-D760-4044-84EB-053EC2EEB9BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Application", "src\Modules\Products\Crowbond.Modules.Products.Application\Crowbond.Modules.Products.Application.csproj", "{0541A9FF-B567-4D33-9261-9FF511FB74CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Domain", "src\Modules\Products\Crowbond.Modules.Products.Domain\Crowbond.Modules.Products.Domain.csproj", "{6FFC00D1-3C95-4349-8C20-25450F8F95FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Infrastructure", "src\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj", "{A8C2B209-A367-4B94-9A52-22FE410081DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.IntegrationEvents", "src\Modules\Products\Crowbond.Modules.Products.IntegrationEvents\Crowbond.Modules.Products.IntegrationEvents.csproj", "{25905313-404D-40D2-AA17-FA2C0ED84642}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Presentation", "src\Modules\Products\Crowbond.Modules.Products.Presentation\Crowbond.Modules.Products.Presentation.csproj", "{264685FF-A258-463A-BAAA-4B37C9A747A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{428C82D3-D616-4765-8A6A-DE50541CE102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{428C82D3-D616-4765-8A6A-DE50541CE102}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{428C82D3-D616-4765-8A6A-DE50541CE102}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{428C82D3-D616-4765-8A6A-DE50541CE102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{528C82D3-D616-4765-9A6A-DE50541CE102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{528C82D3-D616-4765-9A6A-DE50541CE102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{528C82D3-D616-4765-9A6A-DE50541CE102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{528C82D3-D616-4765-9A6A-DE50541CE102}.Release|Any CPU.Build.0 = Release|Any CPU
 		{883418AC-7525-4A89-819E-1216B178E999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{883418AC-7525-4A89-819E-1216B178E999}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{883418AC-7525-4A89-819E-1216B178E999}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -227,6 +241,26 @@ Global
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25905313-404D-40D2-AA17-FA2C0ED84642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25905313-404D-40D2-AA17-FA2C0ED84642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25905313-404D-40D2-AA17-FA2C0ED84642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25905313-404D-40D2-AA17-FA2C0ED84642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,6 +307,13 @@ Global
 		{841415B7-8AE6-4A19-B6CC-EDB5AABB9DD2} = {86635D3F-08C8-4EEB-BBC6-E047F6D6DE4E}
 		{8635245D-8E75-48FC-B89F-B4B2DA953599} = {841415B7-8AE6-4A19-B6CC-EDB5AABB9DD2}
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4} = {4542BDEB-6361-414E-BA96-64418BD0FC4F}
+		{CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D} = {A0FE90F9-3D87-4B00-8D9C-5878284CE8B3}
+		{C6F4B00E-D760-4044-84EB-053EC2EEB9BD} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{0541A9FF-B567-4D33-9261-9FF511FB74CB} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{6FFC00D1-3C95-4349-8C20-25450F8F95FF} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{A8C2B209-A367-4B94-9A52-22FE410081DC} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{25905313-404D-40D2-AA17-FA2C0ED84642} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{264685FF-A258-463A-BAAA-4B37C9A747A1} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E42AE86-7F3C-45F4-A386-AB71CC4446CB}

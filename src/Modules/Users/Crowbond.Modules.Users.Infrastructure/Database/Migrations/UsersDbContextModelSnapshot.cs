@@ -209,6 +209,18 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "event-statistics:read"
+                        },
+                        new
+                        {
+                            Code = "products:read"
+                        },
+                        new
+                        {
+                            Code = "products:add"
+                        },
+                        new
+                        {
+                            Code = "product:update"
                         });
                 });
 
@@ -361,6 +373,21 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "tickets:check-in",
+                            RoleName = "Member"
+                        },
+                        new
+                        {
+                            PermissionCode = "products:read",
+                            RoleName = "Member"
+                        },
+                        new
+                        {
+                            PermissionCode = "products:add",
+                            RoleName = "Member"
+                        },
+                        new
+                        {
+                            PermissionCode = "product:update",
                             RoleName = "Member"
                         },
                         new
