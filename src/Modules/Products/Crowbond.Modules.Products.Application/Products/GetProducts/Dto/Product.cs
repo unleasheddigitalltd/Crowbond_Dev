@@ -8,11 +8,11 @@ public sealed record Product()
 
     public string Name { get; }
 
-    public string FilterTypeName { get; }
+    public string FilterType { get; }
 
-    public string UnitOfMeasureName { get; }
+    public string UnitOfMeasure { get; }
 
-    public string CategoryName { get; }
+    public string Category { get; }
 
     public bool Active { get; }       
 }
