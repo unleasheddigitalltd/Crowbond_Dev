@@ -20,7 +20,7 @@ internal sealed class CreateProduct : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.GetProducts)
+        .RequireAuthorization(Permissions.CreateProduct)
         .WithTags(Tags.Products);
     }
 }

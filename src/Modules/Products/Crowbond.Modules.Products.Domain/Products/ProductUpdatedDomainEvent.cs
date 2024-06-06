@@ -10,12 +10,12 @@ public sealed class ProductUpdatedDomainEvent(
     string UnitOfMeasureName,
     Guid CategoryId,
     string InventoryTypeName,
-    int Barcode,
-    int PackSize,
+    int? Barcode,
+    decimal? PackSize,
     string HandlingNotes,
     bool QiCheck,
     string Notes,
-    int ReorderLevel,
+    decimal? ReorderLevel,
     decimal? Height,
     decimal? Width,
     decimal? Length,
@@ -30,12 +30,12 @@ public sealed class ProductUpdatedDomainEvent(
     public string UnitOfMeasureName { get; init; } = UnitOfMeasureName;
     public Guid CategoryId { get; init; } = CategoryId;
     public string InventoryTypeName { get; init; } = InventoryTypeName;
-    public int Barcode { get; init; } = Barcode;
-    public int PackSize { get; init; } = PackSize;
+    public int? Barcode { get; init; } = Barcode;
+    public decimal? PackSize { get; init; } = PackSize;
     public string HandlingNotes { get; init; } = HandlingNotes;
     public bool QiCheck { get; init; } = QiCheck;
     public string Notes { get; init; } = Notes;
-    public int ReorderLevel { get; init; } = ReorderLevel;
+    public decimal? ReorderLevel { get; init; } = ReorderLevel;
     public decimal? Height { get; init; } = Height;
     public decimal? Width { get; init; } = Width;
     public decimal? Length { get; init; } = Length;

@@ -142,8 +142,8 @@ namespace Crowbond.Modules.Products.Infrastructure.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
                     b.HasKey("Id")
@@ -221,7 +221,7 @@ namespace Crowbond.Modules.Products.Infrastructure.Database.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("active");
 
-                    b.Property<int>("Barcode")
+                    b.Property<int?>("Barcode")
                         .HasColumnType("integer")
                         .HasColumnName("barcode");
 
@@ -267,8 +267,9 @@ namespace Crowbond.Modules.Products.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("notes");
 
-                    b.Property<int>("PackSize")
-                        .HasColumnType("integer")
+                    b.Property<decimal?>("PackSize")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("pack_size");
 
                     b.Property<Guid?>("ParentId")
@@ -279,8 +280,9 @@ namespace Crowbond.Modules.Products.Infrastructure.Database.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("qi_check");
 
-                    b.Property<int>("ReorderLevel")
-                        .HasColumnType("integer")
+                    b.Property<decimal?>("ReorderLevel")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("reorder_level");
 
                     b.Property<string>("Sku")
@@ -367,7 +369,7 @@ namespace Crowbond.Modules.Products.Infrastructure.Database.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("fk_products_category_category_id");
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.HasOne("Crowbond.Modules.Products.Domain.Products.FilterType", null)
                         .WithMany()

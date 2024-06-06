@@ -37,7 +37,7 @@ public sealed class User : Entity
             IdentityId = identityId,
         };
 
-        user._roles.Add(Role.Member);
+        user._roles.Add(Role.Administrator);
 
         user.Raise(new UserRegisteredDomainEvent(user.Id));
 
