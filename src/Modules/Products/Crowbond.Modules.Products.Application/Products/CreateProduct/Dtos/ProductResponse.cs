@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.Products.Application.Products.GetProduct.Dtos;
+﻿namespace Crowbond.Modules.Products.Application.Products.CreateProduct.Dtos;
 
 public sealed record ProductResponse(
     Guid Id,

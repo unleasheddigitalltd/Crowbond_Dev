@@ -216,7 +216,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "products:add"
+                            Code = "products:create"
                         },
                         new
                         {
@@ -323,76 +323,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "users:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "users:update",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "events:search",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "ticket-types:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:add",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:remove",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:create",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "tickets:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "tickets:check-in",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "products:read",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "products:add",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "product:update",
-                            RoleName = "Member"
-                        },
-                        new
-                        {
-                            PermissionCode = "users:read",
                             RoleName = "Administrator"
                         },
                         new
@@ -473,6 +403,21 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "event-statistics:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "products:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "products:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "product:update",
                             RoleName = "Administrator"
                         });
                 });

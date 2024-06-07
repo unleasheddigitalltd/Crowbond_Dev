@@ -1,7 +1,6 @@
-﻿namespace Crowbond.Modules.Products.Application.Products.GetProduct.Dtos;
+﻿namespace Crowbond.Modules.Products.Application.Products.CreateProduct.Dtos;
 
-public sealed record ProductResponse(
-    Guid Id,
+public sealed record ProductRequest(
     string Sku,
     string Name,
     Guid? Parent,
@@ -18,6 +17,4 @@ public sealed record ProductResponse(
     decimal? Height,
     decimal? Width,
     decimal? Length,
-    bool WeightInput,
-    bool Active
-    );
+    bool WeightInput);

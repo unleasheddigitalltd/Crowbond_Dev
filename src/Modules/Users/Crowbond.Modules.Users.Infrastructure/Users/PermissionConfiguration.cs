@@ -33,8 +33,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CheckInTicket,
             Permission.GetEventStatistics,
             Permission.GetProducts,
-            Permission.AddProduct,
-            Permission.UpdateProduct);
+            Permission.CreateProduct,
+            Permission.ModifyProduct);
 
         builder
             .HasMany<Role>()
@@ -45,20 +45,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                 joinBuilder.HasData(
                     // Member permissions
-                    CreateRolePermission(Role.Member, Permission.GetUser),
-                    CreateRolePermission(Role.Member, Permission.ModifyUser),
-                    CreateRolePermission(Role.Member, Permission.SearchEvents),
-                    CreateRolePermission(Role.Member, Permission.GetTicketTypes),
-                    CreateRolePermission(Role.Member, Permission.GetCart),
-                    CreateRolePermission(Role.Member, Permission.AddToCart),
-                    CreateRolePermission(Role.Member, Permission.RemoveFromCart),
-                    CreateRolePermission(Role.Member, Permission.GetOrders),
-                    CreateRolePermission(Role.Member, Permission.CreateOrder),
-                    CreateRolePermission(Role.Member, Permission.GetTickets),
-                    CreateRolePermission(Role.Member, Permission.CheckInTicket),
-                    CreateRolePermission(Role.Member, Permission.GetProducts),
-                    CreateRolePermission(Role.Member, Permission.AddProduct),
-                    CreateRolePermission(Role.Member, Permission.UpdateProduct),
 
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
@@ -77,7 +63,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateOrder),
                     CreateRolePermission(Role.Administrator, Permission.GetTickets),
                     CreateRolePermission(Role.Administrator, Permission.CheckInTicket),
-                    CreateRolePermission(Role.Administrator, Permission.GetEventStatistics));
+                    CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
+                    CreateRolePermission(Role.Administrator, Permission.GetProducts),
+                    CreateRolePermission(Role.Administrator, Permission.CreateProduct),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyProduct));
             });
     }
 

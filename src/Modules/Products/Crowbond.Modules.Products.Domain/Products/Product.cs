@@ -26,9 +26,9 @@ public sealed class Product : Entity
 
     public string InventoryTypeName { get; private set; }
 
-    public int Barcode { get; private set; }
+    public int? Barcode { get; private set; }
 
-    public int PackSize { get; private set; }
+    public decimal? PackSize { get; private set; }
 
     public string HandlingNotes { get; private set; }
 
@@ -36,7 +36,7 @@ public sealed class Product : Entity
 
     public string Notes { get; private set; }
 
-    public int ReorderLevel { get; private set; }
+    public decimal? ReorderLevel { get; private set; }
 
     public decimal? Height { get; private set; }
 
@@ -56,12 +56,12 @@ public sealed class Product : Entity
         UnitOfMeasure unitOfMeasure,
         Category category,
         InventoryType inventoryType,
-        int barcode,
-        int packSize,
+        int? barcode,
+        decimal? packSize,
         string handlingNote,
         bool qiCheck,
         string notes,
-        int reorderLevel,
+        decimal? reorderLevel,
         decimal? height,
         decimal? width,
         decimal? length,
@@ -103,12 +103,12 @@ public sealed class Product : Entity
         string unitOfMeasureName,
         Guid categoryId,
         string inventoryTypeName,
-        int barcode,
-        int packSize,
+        int? barcode,
+        decimal? packSize,
         string handlingNotes,
         bool qiCheck,
         string notes,
-        int reorderLevel,
+        decimal? reorderLevel,
         decimal? height,
         decimal? width,
         decimal? length,

@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Crowbond.Common.Presentation.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Crowbond.Modules.Products.Domain.Categories;
+using Crowbond.Modules.Products.Infrastructure.Categories;
 
 
 namespace Crowbond.Modules.Products.Infrastructure;
@@ -55,6 +57,8 @@ public static class ProductsModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductsDbContext>());
 
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Events:Outbox"));
 

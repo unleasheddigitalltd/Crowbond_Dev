@@ -55,6 +55,12 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(c => c.Width).IsRequired(false).HasPrecision(19, 0);
 
-        builder.Property(c => c.Length).IsRequired(false).HasPrecision(19, 0);        
+        builder.Property(c => c.Length).IsRequired(false).HasPrecision(19, 0);
+
+        builder.Property(c => c.Barcode).IsRequired(false);
+
+        builder.Property(c => c.ReorderLevel).IsRequired(false).HasPrecision(10, 2);
+
+        builder.Property(c => c.PackSize).IsRequired(false).HasPrecision(10, 2);
     }
 }

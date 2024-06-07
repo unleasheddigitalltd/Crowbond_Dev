@@ -20,7 +20,7 @@ public partial class Create_Database : Migration
             columns: table => new
             {
                 id = table.Column<Guid>(type: "uuid", nullable: false),
-                name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 is_archived = table.Column<bool>(type: "boolean", nullable: false)
             },
             constraints: table =>
@@ -137,12 +137,12 @@ public partial class Create_Database : Migration
                 unit_of_measure_name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                 category_id = table.Column<Guid>(type: "uuid", nullable: false),
                 inventory_type_name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                barcode = table.Column<int>(type: "integer", nullable: false),
-                pack_size = table.Column<int>(type: "integer", nullable: false),
+                barcode = table.Column<int>(type: "integer", nullable: true),
+                pack_size = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
                 handling_notes = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                 qi_check = table.Column<bool>(type: "boolean", nullable: false),
                 notes = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                reorder_level = table.Column<int>(type: "integer", nullable: false),
+                reorder_level = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
                 height = table.Column<decimal>(type: "numeric(19,0)", precision: 19, scale: 0, nullable: true),
                 width = table.Column<decimal>(type: "numeric(19,0)", precision: 19, scale: 0, nullable: true),
                 length = table.Column<decimal>(type: "numeric(19,0)", precision: 19, scale: 0, nullable: true),
@@ -153,7 +153,7 @@ public partial class Create_Database : Migration
             {
                 table.PrimaryKey("pk_products", x => x.id);
                 table.ForeignKey(
-                    name: "fk_products_category_category_id",
+                    name: "fk_products_categories_category_id",
                     column: x => x.category_id,
                     principalSchema: "products",
                     principalTable: "categories",
