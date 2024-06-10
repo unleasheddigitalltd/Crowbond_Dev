@@ -1,13 +1,11 @@
 ﻿using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
-using Crowbond.Modules.Products.Application.Abstractions.Data;
-using Crowbond.Modules.Products.Application;
-using Crowbond.Modules.Products.Domain.Products;
-using Crowbond.Modules.Products.Infrastructure.Database;
-using Crowbond.Modules.Products.Infrastructure.Inbox;
-using Crowbond.Modules.Products.Infrastructure.Outbox;
-using Crowbond.Modules.Products.Infrastructure.Products;
+using Crowbond.Modules.Warehouse.Application.Abstractions.Data;
+using Crowbond.Modules.Warehouse.Application;
+using Crowbond.Modules.Warehouse.Infrastructure.Database;
+using Crowbond.Modules.Warehouse.Infrastructure.Inbox;
+using Crowbond.Modules.Warehouse.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,15 +13,12 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Crowbond.Common.Presentation.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Crowbond.Modules.Products.Domain.Categories;
-using Crowbond.Modules.Products.Infrastructure.Categories;
 
+namespace Crowbond.Modules.Warehouse.Infrastructure;
 
-namespace Crowbond.Modules.Products.Infrastructure;
-
-public static class ProductsModule
+public static class WarehouseModule
 {
-    public static IServiceCollection AddProductsModule(
+    public static IServiceCollection AddWarehouseModule(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -40,26 +35,22 @@ public static class ProductsModule
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ProductsDbContext>((sp, options) =>
+        services.AddDbContext<WarehouseDbContext>((sp, options) =>
             options
                 .UseNpgsql(
                     configuration.GetConnectionString("Database"),
                     npgsqlOptions => npgsqlOptions
-                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Products))
+                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Warehouse))
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductsDbContext>());
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WarehouseDbContext>());
 
-        services.AddScoped<IProductRepository, ProductRepository>();
-
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-        services.Configure<OutboxOptions>(configuration.GetSection("Products:Outbox"));
+        services.Configure<OutboxOptions>(configuration.GetSection("Warehouse:Outbox"));
 
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-        services.Configure<InboxOptions>(configuration.GetSection("Products:Inbox"));
+        services.Configure<InboxOptions>(configuration.GetSection("Warehouse:Inbox"));
 
         services.ConfigureOptions<ConfigureProcessInboxJob>();
     }

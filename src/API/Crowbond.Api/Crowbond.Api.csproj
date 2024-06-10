@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="modules.warehouse.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
@@ -26,6 +30,7 @@
     <ProjectReference Include="..\..\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Ticketing\Crowbond.Modules.Ticketing.Infrastructure\Crowbond.Modules.Ticketing.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Users\Crowbond.Modules.Users.Infrastructure\Crowbond.Modules.Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Warehouse\Crowbond.Modules.Warehouse.Infrastructure\Crowbond.Modules.Warehouse.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

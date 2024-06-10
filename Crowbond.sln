@@ -101,15 +101,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{CE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C6F4B00E-D760-4044-84EB-053EC2EEB9BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Application", "src\Modules\Products\Crowbond.Modules.Products.Application\Crowbond.Modules.Products.Application.csproj", "{0541A9FF-B567-4D33-9261-9FF511FB74CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Application", "src\Modules\Products\Crowbond.Modules.Products.Application\Crowbond.Modules.Products.Application.csproj", "{0541A9FF-B567-4D33-9261-9FF511FB74CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Domain", "src\Modules\Products\Crowbond.Modules.Products.Domain\Crowbond.Modules.Products.Domain.csproj", "{6FFC00D1-3C95-4349-8C20-25450F8F95FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Domain", "src\Modules\Products\Crowbond.Modules.Products.Domain\Crowbond.Modules.Products.Domain.csproj", "{6FFC00D1-3C95-4349-8C20-25450F8F95FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Infrastructure", "src\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj", "{A8C2B209-A367-4B94-9A52-22FE410081DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Infrastructure", "src\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj", "{A8C2B209-A367-4B94-9A52-22FE410081DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.IntegrationEvents", "src\Modules\Products\Crowbond.Modules.Products.IntegrationEvents\Crowbond.Modules.Products.IntegrationEvents.csproj", "{25905313-404D-40D2-AA17-FA2C0ED84642}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.IntegrationEvents", "src\Modules\Products\Crowbond.Modules.Products.IntegrationEvents\Crowbond.Modules.Products.IntegrationEvents.csproj", "{25905313-404D-40D2-AA17-FA2C0ED84642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Products.Presentation", "src\Modules\Products\Crowbond.Modules.Products.Presentation\Crowbond.Modules.Products.Presentation.csproj", "{264685FF-A258-463A-BAAA-4B37C9A747A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Presentation", "src\Modules\Products\Crowbond.Modules.Products.Presentation\Crowbond.Modules.Products.Presentation.csproj", "{264685FF-A258-463A-BAAA-4B37C9A747A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warehouse", "Warehouse", "{D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Application", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Application\Crowbond.Modules.Warehouse.Application.csproj", "{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Domain", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Domain\Crowbond.Modules.Warehouse.Domain.csproj", "{AF975248-5DB3-407D-B5AE-A20040FD46ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Infrastructure", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Infrastructure\Crowbond.Modules.Warehouse.Infrastructure.csproj", "{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Presentation", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Presentation\Crowbond.Modules.Warehouse.Presentation.csproj", "{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CD31215E-119A-453E-876A-F541676AF633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Warehouse.IntegrationEvents", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.IntegrationEvents\Crowbond.Modules.Warehouse.IntegrationEvents.csproj", "{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -261,6 +275,26 @@ Global
 		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF975248-5DB3-407D-B5AE-A20040FD46ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF975248-5DB3-407D-B5AE-A20040FD46ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF975248-5DB3-407D-B5AE-A20040FD46ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF975248-5DB3-407D-B5AE-A20040FD46ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -314,6 +348,13 @@ Global
 		{A8C2B209-A367-4B94-9A52-22FE410081DC} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
 		{25905313-404D-40D2-AA17-FA2C0ED84642} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
 		{264685FF-A258-463A-BAAA-4B37C9A747A1} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
+		{D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282} = {A0FE90F9-3D87-4B00-8D9C-5878284CE8B3}
+		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
+		{AF975248-5DB3-407D-B5AE-A20040FD46ED} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
+		{54292315-9E5C-4CFD-B092-43CBD0D8B0F5} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
+		{322CA9FF-5BEB-4956-8F27-B1069BEE34E5} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
+		{CD31215E-119A-453E-876A-F541676AF633} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
+		{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E42AE86-7F3C-45F4-A386-AB71CC4446CB}
