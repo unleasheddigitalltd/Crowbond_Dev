@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Application\Crowbond.Common.Application.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Warehouse.Domain\Crowbond.Modules.Warehouse.Domain.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.Warehouse.IntegrationEvents\Crowbond.Modules.Warehouse.IntegrationEvents.csproj" />
+  </ItemGroup>
+
+</Project>
