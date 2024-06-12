@@ -97,33 +97,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4542BDEB-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.ArchitectureTests", "test\Crowbond.ArchitectureTests\Crowbond.ArchitectureTests.csproj", "{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WMS", "WMS", "{D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C6F4B00E-D760-4044-84EB-053EC2EEB9BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.Application", "src\Modules\WMS\Crowbond.Modules.WMS.Application\Crowbond.Modules.WMS.Application.csproj", "{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Application", "src\Modules\Products\Crowbond.Modules.Products.Application\Crowbond.Modules.Products.Application.csproj", "{0541A9FF-B567-4D33-9261-9FF511FB74CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.Domain", "src\Modules\WMS\Crowbond.Modules.WMS.Domain\Crowbond.Modules.WMS.Domain.csproj", "{AF975248-5DB3-407D-B5AE-A20040FD46ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Domain", "src\Modules\Products\Crowbond.Modules.Products.Domain\Crowbond.Modules.Products.Domain.csproj", "{6FFC00D1-3C95-4349-8C20-25450F8F95FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.Infrastructure", "src\Modules\WMS\Crowbond.Modules.WMS.Infrastructure\Crowbond.Modules.WMS.Infrastructure.csproj", "{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Infrastructure", "src\Modules\Products\Crowbond.Modules.Products.Infrastructure\Crowbond.Modules.Products.Infrastructure.csproj", "{A8C2B209-A367-4B94-9A52-22FE410081DC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.IntegrationEvents", "src\Modules\Products\Crowbond.Modules.Products.IntegrationEvents\Crowbond.Modules.Products.IntegrationEvents.csproj", "{25905313-404D-40D2-AA17-FA2C0ED84642}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Products.Presentation", "src\Modules\Products\Crowbond.Modules.Products.Presentation\Crowbond.Modules.Products.Presentation.csproj", "{264685FF-A258-463A-BAAA-4B37C9A747A1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warehouse", "Warehouse", "{D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Application", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Application\Crowbond.Modules.Warehouse.Application.csproj", "{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Domain", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Domain\Crowbond.Modules.Warehouse.Domain.csproj", "{AF975248-5DB3-407D-B5AE-A20040FD46ED}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Infrastructure", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Infrastructure\Crowbond.Modules.Warehouse.Infrastructure.csproj", "{54292315-9E5C-4CFD-B092-43CBD0D8B0F5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.Warehouse.Presentation", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.Presentation\Crowbond.Modules.Warehouse.Presentation.csproj", "{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.Presentation", "src\Modules\WMS\Crowbond.Modules.WMS.Presentation\Crowbond.Modules.WMS.Presentation.csproj", "{322CA9FF-5BEB-4956-8F27-B1069BEE34E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CD31215E-119A-453E-876A-F541676AF633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Warehouse.IntegrationEvents", "src\Modules\Warehouse\Crowbond.Modules.Warehouse.IntegrationEvents\Crowbond.Modules.Warehouse.IntegrationEvents.csproj", "{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.IntegrationEvents", "src\Modules\WMS\Crowbond.Modules.WMS.IntegrationEvents\Crowbond.Modules.WMS.IntegrationEvents.csproj", "{EDD6C1A5-CA8E-4136-9945-BF0CC8414A62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -255,26 +241,6 @@ Global
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0541A9FF-B567-4D33-9261-9FF511FB74CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FFC00D1-3C95-4349-8C20-25450F8F95FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8C2B209-A367-4B94-9A52-22FE410081DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25905313-404D-40D2-AA17-FA2C0ED84642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25905313-404D-40D2-AA17-FA2C0ED84642}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25905313-404D-40D2-AA17-FA2C0ED84642}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25905313-404D-40D2-AA17-FA2C0ED84642}.Release|Any CPU.Build.0 = Release|Any CPU
-		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{264685FF-A258-463A-BAAA-4B37C9A747A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -341,13 +307,6 @@ Global
 		{841415B7-8AE6-4A19-B6CC-EDB5AABB9DD2} = {86635D3F-08C8-4EEB-BBC6-E047F6D6DE4E}
 		{8635245D-8E75-48FC-B89F-B4B2DA953599} = {841415B7-8AE6-4A19-B6CC-EDB5AABB9DD2}
 		{CC9D5AC0-FCD0-4A53-9B65-F7F194F26DC4} = {4542BDEB-6361-414E-BA96-64418BD0FC4F}
-		{CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D} = {A0FE90F9-3D87-4B00-8D9C-5878284CE8B3}
-		{C6F4B00E-D760-4044-84EB-053EC2EEB9BD} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
-		{0541A9FF-B567-4D33-9261-9FF511FB74CB} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
-		{6FFC00D1-3C95-4349-8C20-25450F8F95FF} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
-		{A8C2B209-A367-4B94-9A52-22FE410081DC} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
-		{25905313-404D-40D2-AA17-FA2C0ED84642} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
-		{264685FF-A258-463A-BAAA-4B37C9A747A1} = {CE12DE7A-8BC3-4189-A9EB-EBC8F1C8DB1D}
 		{D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282} = {A0FE90F9-3D87-4B00-8D9C-5878284CE8B3}
 		{18ED3AB6-BDCB-4864-B550-5AC386EDCDAE} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
 		{AF975248-5DB3-407D-B5AE-A20040FD46ED} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
