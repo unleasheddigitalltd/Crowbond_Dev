@@ -7,10 +7,9 @@ using Crowbond.Modules.Attendance.Infrastructure;
 using Crowbond.Modules.Events.Infrastructure;
 using Crowbond.Modules.Ticketing.Infrastructure;
 using Crowbond.Modules.Users.Infrastructure;
-using Crowbond.Modules.Products.Infrastructure;
+using Crowbond.Modules.WMS.Infrastructure;
 using Crowbond.Common.Application;
 using Crowbond.Api.Options;
-using Crowbond.Modules.Warehouse.Infrastructure;
 
 namespace Crowbond.Api;
 
@@ -33,8 +32,7 @@ public static class DependencyInjection
             Modules.Events.Application.AssemblyReference.Assembly,
             Modules.Ticketing.Application.AssemblyReference.Assembly,
             Modules.Attendance.Application.AssemblyReference.Assembly,
-            Modules.Products.Application.AssemblyReference.Assembly,
-            Modules.Warehouse.Application.AssemblyReference.Assembly];
+            Modules.WMS.Application.AssemblyReference.Assembly];
 
         services.AddApplication(moduleApplicationAssemblies);
 
@@ -61,8 +59,7 @@ public static class DependencyInjection
         services.AddUsersModule(configuration);
         services.AddTicketingModule(configuration);
         services.AddAttendanceModule(configuration);
-        services.AddProductsModule(configuration);
-        services.AddWarehouseModule(configuration);
+        services.AddWMSModule(configuration);
 
         services.AddCors();
         services.ConfigureOptions<CorsOptionsSetup>();
