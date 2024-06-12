@@ -396,11 +396,11 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createtime_stamp");
 
-                    b.Property<string>("DeivaryNoteNumber")
+                    b.Property<string>("DeliveryNoteNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("deivary_note_number");
+                        .HasColumnName("delivery_note_number");
 
                     b.Property<Guid>("PurchaseOrderId")
                         .HasColumnType("uuid")

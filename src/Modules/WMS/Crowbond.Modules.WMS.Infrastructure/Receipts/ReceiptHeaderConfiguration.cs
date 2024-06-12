@@ -9,7 +9,7 @@ internal sealed class ReceiptHeaderConfiguration : IEntityTypeConfiguration<Rece
     public void Configure(EntityTypeBuilder<ReceiptHeader> builder)
     {
         builder.HasKey(r => r.Id);
-        builder.Property(r => r.DeivaryNoteNumber).IsRequired().HasMaxLength(255);
+        builder.Property(r => r.DeliveryNoteNumber).IsRequired().HasMaxLength(255);
 
     }
 }

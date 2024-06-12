@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    [Migration("20240612133035_Create_Database")]
+    [Migration("20240612145049_Create_Database")]
     partial class Create_Database
     {
         /// <inheritdoc />
@@ -399,11 +399,11 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createtime_stamp");
 
-                    b.Property<string>("DeivaryNoteNumber")
+                    b.Property<string>("DeliveryNoteNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("deivary_note_number");
+                        .HasColumnName("delivery_note_number");
 
                     b.Property<Guid>("PurchaseOrderId")
                         .HasColumnType("uuid")

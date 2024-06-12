@@ -14,7 +14,7 @@ public sealed class ReceiptHeader : Entity
 
     public Guid PurchaseOrderId { get; private set; }
 
-    public string DeivaryNoteNumber { get; private set; }
+    public string DeliveryNoteNumber { get; private set; }
 
     public ReceiptStatus Status { get; private set; }
 
@@ -31,7 +31,7 @@ public sealed class ReceiptHeader : Entity
             Id = Guid.NewGuid(),
             ReceivedDate = receivedDate,
             PurchaseOrderId = purchaseOrderId,
-            DeivaryNoteNumber = deliveryNoteNumber,
+            DeliveryNoteNumber = deliveryNoteNumber,
             Status = ReceiptStatus.Shipping,
             CreatetimeStamp = createtimeStamp
         };

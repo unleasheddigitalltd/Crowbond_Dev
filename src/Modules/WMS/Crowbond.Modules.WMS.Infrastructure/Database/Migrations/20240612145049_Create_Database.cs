@@ -146,7 +146,7 @@ public partial class Create_Database : Migration
                 id = table.Column<Guid>(type: "uuid", nullable: false),
                 received_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                 purchase_order_id = table.Column<Guid>(type: "uuid", nullable: false),
-                deivary_note_number = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                delivery_note_number = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                 status = table.Column<int>(type: "integer", nullable: false),
                 createtime_stamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
             },
