@@ -10,4 +10,8 @@
     <InternalsVisibleTo Include="Crowbond.Modules.WMS.IntegrationTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Stockes\" />
+  </ItemGroup>
+
 </Project>
