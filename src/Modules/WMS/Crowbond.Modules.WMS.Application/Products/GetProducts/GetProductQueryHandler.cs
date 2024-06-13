@@ -20,44 +20,62 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
         string sortOrder = request.Order.Equals("ASC", StringComparison.OrdinalIgnoreCase) ? "ASC" : "DESC";
         string orderByClause = request.Sort switch
         {
-            "id" => "id",
-            "sku" => "sku",
-            "name" => "name",
-            "filterType" => "filter_type_name",
-            "unitOfMeasure" => "unit_of_measure_name",
-            "active" => "active",
-            _ => "name" // Default sorting
+            "id" => "p.id",
+            "sku" => "p.sku",
+            "name" => "p.name",
+            "category" => "c.name",
+            "unitOfMeasure" => "p.unit_of_measure_name",
+            "active" => "p.active",
+            _ => "p.name" // Default sorting
         };
 
         string sql = $@"
             WITH FilteredProducts AS (
-                SELECT *,
+                SELECT
+                    p.id                            AS {nameof(Product.Id)},
+                    p.sku                           AS {nameof(Product.Sku)},
+                    p.name                          AS {nameof(Product.Name)},
+                    p.unit_of_measure_name          AS {nameof(Product.UnitOfMeasure)},
+                    c.name                          AS {nameof(Product.Category)},
+                    p.active                        AS {nameof(Product.Active)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
-                FROM wms.products
+                FROM wms.products p
+                INNER JOIN wms.categories c ON p.category_id = c.id
                 WHERE
-                    name ILIKE '%' || @Search || '%'
-                    OR sku ILIKE '%' || @Search || '%'
-                    OR filter_type_name ILIKE '%' || @Search || '%'
-                    OR unit_of_measure_name ILIKE '%' || @Search || '%'
+                    p.name ILIKE '%' || @Search || '%'
+                    OR p.sku ILIKE '%' || @Search || '%'
+                    OR c.name ILIKE '%' || @Search || '%'
+                    OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
             )
             SELECT 
-                id                     AS {nameof(Product.Id)},
-                sku                    AS {nameof(Product.Sku)},
-                name                   AS {nameof(Product.Name)},
-                filter_type_name       AS {nameof(Product.FilterType)},
-                unit_of_measure_name   AS {nameof(Product.UnitOfMeasure)},
-                active                 AS {nameof(Product.Active)}
-            FROM FilteredProducts
-            WHERE RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
-            ORDER BY RowNum;
+                p.{nameof(Product.Id)},
+                p.{nameof(Product.Sku)},
+                p.{nameof(Product.Name)},
+                p.{nameof(Product.UnitOfMeasure)},
+                p.{nameof(Product.Category)},
+                COALESCE(SUM(s.current_qty), 0) AS {nameof(Product.Stock)},
+                p.{nameof(Product.Active)}
+            FROM FilteredProducts p
+            LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id
+            WHERE p.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
+            GROUP BY 
+                p.{nameof(Product.Id)},
+                p.{nameof(Product.Sku)},
+                p.{nameof(Product.Name)},
+                p.{nameof(Product.UnitOfMeasure)},
+                p.{nameof(Product.Category)},
+                p.{nameof(Product.Active)},
+				p.RowNum
+            ORDER BY p.RowNum;
 
             SELECT Count(*) 
-                FROM wms.products
+                FROM wms.products p
+                INNER JOIN wms.categories c ON p.category_id = c.id
                 WHERE
-                    name ILIKE '%' || @Search || '%'
-                    OR sku ILIKE '%' || @Search || '%'
-                    OR filter_type_name ILIKE '%' || @Search || '%'
-                    OR unit_of_measure_name ILIKE '%' || @Search || '%'
+                    p.name ILIKE '%' || @Search || '%'
+                    OR p.sku ILIKE '%' || @Search || '%'
+                    OR c.name ILIKE '%' || @Search || '%'
+                    OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

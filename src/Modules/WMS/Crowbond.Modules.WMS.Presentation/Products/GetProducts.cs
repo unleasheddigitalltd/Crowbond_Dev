@@ -19,7 +19,7 @@ internal sealed class GetProducts : IEndpoint
             string search = "",
             string sort = "name",
             string order = "asc",
-            int page = 1,
+            int page = 0,
             int size = 10
             ) =>
         {
