@@ -14,5 +14,7 @@ public sealed record Product()
 
     public decimal Stock {  get; }
 
+    public decimal? ReorderLevel { get; }
+
     public bool Active { get; }
 }

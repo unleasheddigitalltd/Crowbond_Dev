@@ -37,6 +37,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                     p.name                          AS {nameof(Product.Name)},
                     p.unit_of_measure_name          AS {nameof(Product.UnitOfMeasure)},
                     c.name                          AS {nameof(Product.Category)},
+                    p.reorder_level                 AS {nameof(Product.ReorderLevel)},
                     p.active                        AS {nameof(Product.Active)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.products p
@@ -54,6 +55,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.UnitOfMeasure)},
                 p.{nameof(Product.Category)},
                 COALESCE(SUM(s.current_qty), 0) AS {nameof(Product.Stock)},
+                p.{nameof(Product.ReorderLevel)},
                 p.{nameof(Product.Active)}
             FROM FilteredProducts p
             LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id
@@ -64,6 +66,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.Name)},
                 p.{nameof(Product.UnitOfMeasure)},
                 p.{nameof(Product.Category)},
+                p.{nameof(Product.ReorderLevel)},
                 p.{nameof(Product.Active)},
 				p.RowNum
             ORDER BY p.RowNum;
