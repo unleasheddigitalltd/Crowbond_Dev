@@ -16,9 +16,9 @@ internal sealed class UpdateProduct : IEndpoint
     {
         app.MapPut("products/{id}", async (Guid id, ProductDto request, ISender sender) =>
         {
-            Result<ProductDto> result = await sender.Send(new UpdateProductCommand(id, request));
+            Result result = await sender.Send(new UpdateProductCommand(id, request));
 
-            return result.Match(Results.Ok, ApiResults.Problem);
+            return result.Match(Results.NoContent, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifyProduct)
         .WithTags(Tags.Products);

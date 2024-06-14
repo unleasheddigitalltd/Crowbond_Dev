@@ -3,4 +3,4 @@ using Crowbond.Modules.WMS.Application.Products.CreateProduct.Dtos;
 
 namespace Crowbond.Modules.WMS.Application.Products.CreateProduct;
 
-public sealed record CreateProductCommand(ProductRequest Product) : ICommand<ProductResponse>;
+public sealed record CreateProductCommand(ProductRequest Product) : ICommand<Guid>;

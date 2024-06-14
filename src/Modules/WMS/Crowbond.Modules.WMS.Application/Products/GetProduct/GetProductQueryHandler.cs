@@ -17,28 +17,27 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
 
         const string sql =
             $"""
-             SELECT
-                 id AS {nameof(ProductResponse.Id)},
-                 sku AS {nameof(ProductResponse.Sku)},
-                 name AS {nameof(ProductResponse.Name)},
-                 parent_id AS {nameof(ProductResponse.Parent)},
-                 filter_type_name AS {nameof(ProductResponse.FilterType)},
-                 unit_of_measure_name AS {nameof(ProductResponse.UnitOfMeasure)},
-                 category_id AS {nameof(ProductResponse.Category)},
-                 inventory_type_name AS {nameof(ProductResponse.InventoryType)},
-                 barcode AS {nameof(ProductResponse.Barcode)},
-                 pack_size AS {nameof(ProductResponse.PackSize)},
-                 handling_notes AS {nameof(ProductResponse.HandlingNotes)},
-                 qi_check AS {nameof(ProductResponse.QiCheck)},
-                 notes AS {nameof(ProductResponse.Notes)},
-                 reorder_level AS {nameof(ProductResponse.ReorderLevel)},
-                 height AS {nameof(ProductResponse.Height)},
-                 width AS {nameof(ProductResponse.Width)},
-                 length AS {nameof(ProductResponse.Length)},
-                 weight_input AS {nameof(ProductResponse.WeightInput)},
-                 active AS {nameof(ProductResponse.Active)}
-             FROM wms.products
-             WHERE id = @ProductId
+             SELECT 
+                 p.id                            AS {nameof(ProductResponse.Id)},
+                 p.sku                           AS {nameof(ProductResponse.Sku)},
+                 p.name                          AS {nameof(ProductResponse.Name)},
+                 p.unit_of_measure_name          AS {nameof(ProductResponse.UnitOfMeasure)},
+                 c.name                          AS {nameof(ProductResponse.Category)},                                 
+                 COALESCE(SUM(s.current_qty), 0) AS {nameof(ProductResponse.Stock)},
+                 p.reorder_level                 AS {nameof(ProductResponse.ReorderLevel)},
+                 p.active                        AS {nameof(ProductResponse.Active)}
+             FROM wms.products p
+             INNER JOIN wms.categories c ON c.id = p.category_id
+             LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id             
+             WHERE p.id = @ProductId
+             GROUP BY 
+                 p.id,
+                 p.sku,
+                 p.name,
+                 p.unit_of_measure_name,
+                 c.name, 
+                 p.reorder_level,
+                 p.active
              """;
 
         ProductResponse? product = await connection.QuerySingleOrDefaultAsync<ProductResponse>(sql, request);

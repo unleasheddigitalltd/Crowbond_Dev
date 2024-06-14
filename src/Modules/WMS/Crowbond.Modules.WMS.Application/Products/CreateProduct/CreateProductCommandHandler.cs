@@ -12,36 +12,36 @@ internal sealed class CreateProductCommandHandler(
     ICategoryRepository categoryRepository,
     IProductRepository productRepository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateProductCommand, ProductResponse>
+    : ICommandHandler<CreateProductCommand, Guid>
 {
-    public async Task<Result<ProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         Category? category = await categoryRepository.GetAsync(request.Product.Category, cancellationToken);
 
         if (category is null)
         {
-            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.Product.Category));
+            return Result.Failure<Guid>(CategoryErrors.NotFound(request.Product.Category));
         }
 
         FilterType? filterType = await productRepository.GetFilterTypeAsync(request.Product.FilterType, cancellationToken);
 
         if (filterType is null)
         {
-            return Result.Failure<ProductResponse>(ProductErrors.FilterTypeNotFound(request.Product.FilterType));
+            return Result.Failure<Guid>(ProductErrors.FilterTypeNotFound(request.Product.FilterType));
         }
 
         InventoryType? inventoryType = await productRepository.GetInventoryTypeAsync(request.Product.InventoryType, cancellationToken);
 
         if (inventoryType is null)
         {
-            return Result.Failure<ProductResponse>(ProductErrors.InventoryTypeNotFound(request.Product.InventoryType));
+            return Result.Failure<Guid>(ProductErrors.InventoryTypeNotFound(request.Product.InventoryType));
         }
 
         UnitOfMeasure? unitOfMeasure = await productRepository.GetUnitOfMeasureAsync(request.Product.UnitOfMeasure, cancellationToken);
 
         if (unitOfMeasure is null)
         {
-            return Result.Failure<ProductResponse>(ProductErrors.UnitOfMeasureNotFound(request.Product.UnitOfMeasure));
+            return Result.Failure<Guid>(ProductErrors.UnitOfMeasureNotFound(request.Product.UnitOfMeasure));
         }
 
         Result<Product> result = Product.Create(
@@ -66,35 +66,13 @@ internal sealed class CreateProductCommandHandler(
 
         if (result.IsFailure)
         {
-            return Result.Failure<ProductResponse>(result.Error);
+            return Result.Failure<Guid>(result.Error);
         }
 
         productRepository.Insert(result.Value);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var response = new ProductResponse(
-                result.Value.Id,
-                result.Value.Sku,
-                result.Value.Name,
-                result.Value.ParentId,
-                result.Value.FilterTypeName,
-                result.Value.UnitOfMeasureName,
-                result.Value.CategoryId,
-                result.Value.InventoryTypeName,
-                result.Value.Barcode,
-                result.Value.PackSize,
-                result.Value.HandlingNotes,
-                result.Value.QiCheck,
-                result.Value.Notes,
-                result.Value.ReorderLevel,
-                result.Value.Height,
-                result.Value.Width,
-                result.Value.Length,
-                result.Value.WeightInput,
-                result.Value.Active
-            );
-
-        return response;
+        return result.Value.Id;
     }
 }

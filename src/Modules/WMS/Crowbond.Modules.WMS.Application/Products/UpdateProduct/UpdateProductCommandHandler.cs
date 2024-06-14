@@ -1,21 +1,20 @@
 ﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
-using Crowbond.Modules.WMS.Application.Products.UpdateProduct.Dtos;
 using Crowbond.Modules.WMS.Domain.Products;
 
 namespace Crowbond.Modules.WMS.Application.Products.UpdateProduct;
 
 internal sealed class UpdateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
-    : ICommandHandler<UpdateProductCommand, ProductDto>
+    : ICommandHandler<UpdateProductCommand>
 {
-    public async Task<Result<ProductDto>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         Product? product = await productRepository.GetAsync(request.Id, cancellationToken);
 
         if (product is null)
         {
-            return Result.Failure<ProductDto>(ProductErrors.NotFound(request.Id));
+            return Result.Failure(ProductErrors.NotFound(request.Id));
         }
 
         product.Update(
@@ -40,27 +39,7 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
         );
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        var result = new ProductDto(
-            request.Id,
-            request.Product.Sku,
-            request.Product.Name,
-            request.Product.Parent,
-            request.Product.FilterType,
-            request.Product.UnitOfMeasure,
-            request.Product.Category,
-            request.Product.InventoryType,
-            request.Product.Barcode,
-            request.Product.PackSize,
-            request.Product.HandlingNotes,
-            request.Product.QiCheck,
-            request.Product.Notes,
-            request.Product.ReorderLevel,
-            request.Product.Height,
-            request.Product.Width,
-            request.Product.Length,
-            request.Product.WeightInput,
-            request.Product.Active);
 
-        return Result.Success(result);
+        return Result.Success();
     }
 }
