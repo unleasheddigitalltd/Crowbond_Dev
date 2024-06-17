@@ -34,17 +34,11 @@ COPY ["src/Modules/Users/Crowbond.Modules.Users.Infrastructure/Crowbond.Modules.
 COPY ["src/Modules/Users/Crowbond.Modules.Users.IntegrationEvents/Crowbond.Modules.Users.IntegrationEvents.csproj", "src/Modules/Users/Crowbond.Modules.Users.IntegrationEvents/"]
 COPY ["src/Modules/Users/Crowbond.Modules.Users.Presentation/Crowbond.Modules.Users.Presentation.csproj", "src/Modules/Users/Crowbond.Modules.Users.Presentation/"]
 
-COPY ["src/Modules/Products/Crowbond.Modules.Products.Application/Crowbond.Modules.Products.Application.csproj", "src/Modules/Products/Crowbond.Modules.Products.Application/"]
-COPY ["src/Modules/Products/Crowbond.Modules.Products.Domain/Crowbond.Modules.Products.Domain.csproj", "src/Modules/Products/Crowbond.Modules.Products.Domain/"]
-COPY ["src/Modules/Products/Crowbond.Modules.Products.Infrastructure/Crowbond.Modules.Products.Infrastructure.csproj", "src/Modules/Products/Crowbond.Modules.Products.Infrastructure/"]
-COPY ["src/Modules/Products/Crowbond.Modules.Products.IntegrationEvents/Crowbond.Modules.Products.IntegrationEvents.csproj", "src/Modules/Products/Crowbond.Modules.Products.IntegrationEvents/"]
-COPY ["src/Modules/Products/Crowbond.Modules.Products.Presentation/Crowbond.Modules.Products.Presentation.csproj", "src/Modules/Products/Crowbond.Modules.Products.Presentation/"]
-
-COPY ["src/Modules/Warehouse/Crowbond.Modules.Warehouse.Application/Crowbond.Modules.Warehouse.Application.csproj", "src/Modules/Warehouse/Crowbond.Modules.Warehouse.Application/"]
-COPY ["src/Modules/Warehouse/Crowbond.Modules.Warehouse.Domain/Crowbond.Modules.Warehouse.Domain.csproj", "src/Modules/Warehouse/Crowbond.Modules.Warehouse.Domain/"]
-COPY ["src/Modules/Warehouse/Crowbond.Modules.Warehouse.Infrastructure/Crowbond.Modules.Warehouse.Infrastructure.csproj", "src/Modules/Warehouse/Crowbond.Modules.Warehouse.Infrastructure/"]
-COPY ["src/Modules/Warehouse/Crowbond.Modules.Warehouse.IntegrationEvents/Crowbond.Modules.Warehouse.IntegrationEvents.csproj", "src/Modules/Warehouse/Crowbond.Modules.Warehouse.IntegrationEvents/"]
-COPY ["src/Modules/Warehouse/Crowbond.Modules.Warehouse.Presentation/Crowbond.Modules.Warehouse.Presentation.csproj", "src/Modules/Warehouse/Crowbond.Modules.Warehouse.Presentation/"]
+COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Application/Crowbond.Modules.WMS.Application.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Application/"]
+COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Domain/Crowbond.Modules.WMS.Domain.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Domain/"]
+COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Infrastructure/Crowbond.Modules.WMS.Infrastructure.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Infrastructure/"]
+COPY ["src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/Crowbond.Modules.WMS.IntegrationEvents.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/"]
+COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Presentation/Crowbond.Modules.WMS.Presentation.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Presentation/"]
 
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .

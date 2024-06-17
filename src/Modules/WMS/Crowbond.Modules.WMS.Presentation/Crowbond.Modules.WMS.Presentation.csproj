@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Infrastructure\Crowbond.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Presentation\Crowbond.Common.Presentation.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.WMS.Application\Crowbond.Modules.WMS.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Crowbond.Modules.WMS.IntegrationTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Stockes\" />
+  </ItemGroup>
+
+</Project>
