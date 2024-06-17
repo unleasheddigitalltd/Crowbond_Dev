@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Crowbond.Modules.Warehouse.IntegrationTests" />
+    <InternalsVisibleTo Include="Crowbond.Modules.WMS.IntegrationTests" />
   </ItemGroup>
 
 </Project>
