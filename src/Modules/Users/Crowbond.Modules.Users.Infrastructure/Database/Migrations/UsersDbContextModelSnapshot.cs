@@ -220,7 +220,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "product:update"
+                            Code = "products:update"
                         });
                 });
 
@@ -417,7 +417,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "product:update",
+                            PermissionCode = "products:update",
                             RoleName = "Administrator"
                         });
                 });
