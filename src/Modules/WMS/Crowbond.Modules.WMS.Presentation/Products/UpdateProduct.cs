@@ -20,7 +20,7 @@ internal sealed class UpdateProduct : IEndpoint
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.ModifyProduct)
+        .RequireAuthorization(Permissions.ModifyProducts)
         .WithTags(Tags.Products);
     }
 }
