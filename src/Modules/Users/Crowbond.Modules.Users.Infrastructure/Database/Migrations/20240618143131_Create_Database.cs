@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations;
-
 /// <inheritdoc />
 public partial class Create_Database : Migration
 {
@@ -177,26 +176,30 @@ public partial class Create_Database : Migration
             column: "code",
             values: new object[]
             {
-                "carts:add",
-                "carts:read",
-                "carts:remove",
-                "categories:read",
-                "categories:update",
-                "event-statistics:read",
-                "events:read",
-                "events:search",
-                "events:update",
-                "orders:create",
-                "orders:read",
-                "products:update",
-                "products:create",
-                "products:read",
-                "ticket-types:read",
-                "ticket-types:update",
-                "tickets:check-in",
-                "tickets:read",
-                "users:read",
-                "users:update"
+                    "carts:add",
+                    "carts:read",
+                    "carts:remove",
+                    "categories:read",
+                    "categories:update",
+                    "event-statistics:read",
+                    "events:read",
+                    "events:search",
+                    "events:update",
+                    "orders:create",
+                    "orders:read",
+                    "products:create",
+                    "products:read",
+                    "products:update",
+                    "receipts:read",
+                    "receipts:update",
+                    "stocks:read",
+                    "stocks:update",
+                    "ticket-types:read",
+                    "ticket-types:update",
+                    "tickets:check-in",
+                    "tickets:read",
+                    "users:read",
+                    "users:update"
             });
 
         migrationBuilder.InsertData(
@@ -205,8 +208,8 @@ public partial class Create_Database : Migration
             column: "name",
             values: new object[]
             {
-                "Administrator",
-                "Member"
+                    "Administrator",
+                    "Member"
             });
 
         migrationBuilder.InsertData(
@@ -215,26 +218,30 @@ public partial class Create_Database : Migration
             columns: new[] { "permission_code", "role_name" },
             values: new object[,]
             {
-                { "carts:add", "Administrator" },
-                { "carts:read", "Administrator" },
-                { "carts:remove", "Administrator" },
-                { "categories:read", "Administrator" },
-                { "categories:update", "Administrator" },
-                { "event-statistics:read", "Administrator" },
-                { "events:read", "Administrator" },
-                { "events:search", "Administrator" },
-                { "events:update", "Administrator" },
-                { "orders:create", "Administrator" },
-                { "orders:read", "Administrator" },
-                { "products:update", "Administrator" },
-                { "products:create", "Administrator" },
-                { "products:read", "Administrator" },
-                { "ticket-types:read", "Administrator" },
-                { "ticket-types:update", "Administrator" },
-                { "tickets:check-in", "Administrator" },
-                { "tickets:read", "Administrator" },
-                { "users:read", "Administrator" },
-                { "users:update", "Administrator" }
+                    { "carts:add", "Administrator" },
+                    { "carts:read", "Administrator" },
+                    { "carts:remove", "Administrator" },
+                    { "categories:read", "Administrator" },
+                    { "categories:update", "Administrator" },
+                    { "event-statistics:read", "Administrator" },
+                    { "events:read", "Administrator" },
+                    { "events:search", "Administrator" },
+                    { "events:update", "Administrator" },
+                    { "orders:create", "Administrator" },
+                    { "orders:read", "Administrator" },
+                    { "products:create", "Administrator" },
+                    { "products:read", "Administrator" },
+                    { "products:update", "Administrator" },
+                    { "receipts:read", "Administrator" },
+                    { "receipts:update", "Administrator" },
+                    { "stocks:read", "Administrator" },
+                    { "stocks:update", "Administrator" },
+                    { "ticket-types:read", "Administrator" },
+                    { "ticket-types:update", "Administrator" },
+                    { "tickets:check-in", "Administrator" },
+                    { "tickets:read", "Administrator" },
+                    { "users:read", "Administrator" },
+                    { "users:update", "Administrator" }
             });
 
         migrationBuilder.CreateIndex(
@@ -311,3 +318,4 @@ public partial class Create_Database : Migration
             schema: "users");
     }
 }
+

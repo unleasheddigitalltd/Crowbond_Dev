@@ -33,8 +33,12 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CheckInTicket,
             Permission.GetEventStatistics,
             Permission.GetProducts,
-            Permission.CreateProduct,
-            Permission.ModifyProduct);
+            Permission.CreateProducts,
+            Permission.ModifyProducts,
+            Permission.GetStocks,
+            Permission.ModifyStocks,
+            Permission.GetReceipts,
+            Permission.ModifyReceipts);
 
         builder
             .HasMany<Role>()
@@ -65,8 +69,12 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CheckInTicket),
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
                     CreateRolePermission(Role.Administrator, Permission.GetProducts),
-                    CreateRolePermission(Role.Administrator, Permission.CreateProduct),
-                    CreateRolePermission(Role.Administrator, Permission.ModifyProduct));
+                    CreateRolePermission(Role.Administrator, Permission.CreateProducts),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyProducts),
+                    CreateRolePermission(Role.Administrator, Permission.GetStocks),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyStocks),
+                    CreateRolePermission(Role.Administrator, Permission.GetReceipts),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyReceipts));
             });
     }
 
