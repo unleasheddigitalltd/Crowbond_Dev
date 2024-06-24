@@ -14,5 +14,7 @@ public sealed class Location : Entity
 
     public LocationStatus Status { get; private set; }
 
+    public string LocationTypeName { get; private set; }
 
+    public Guid? ParentId { get; private set; }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    [Migration("20240612145049_Create_Database")]
+    [Migration("20240624094005_Create_Database")]
     partial class Create_Database
     {
         /// <inheritdoc />
@@ -162,11 +162,21 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("LocationTypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("location_type_name");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("parent_id");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -175,7 +185,40 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_locations");
 
+                    b.HasIndex("LocationTypeName")
+                        .HasDatabaseName("ix_locations_location_type_name");
+
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_locations_parent_id");
+
                     b.ToTable("locations", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.LocationType", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Name")
+                        .HasName("pk_locations_type");
+
+                    b.ToTable("locations_type", "wms");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Site"
+                        },
+                        new
+                        {
+                            Name = "Area"
+                        },
+                        new
+                        {
+                            Name = "Location"
+                        });
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.FilterType", b =>
@@ -481,6 +524,12 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasName("pk_action_types");
 
                     b.ToTable("action_types", "wms");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Adjustment"
+                        });
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.Stock", b =>
@@ -576,11 +625,15 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("quantity");
 
+                    b.Property<Guid?>("ReasonId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reason_id");
+
                     b.Property<Guid>("StockId")
                         .HasColumnType("uuid")
                         .HasColumnName("stock_id");
 
-                    b.Property<Guid>("TaskId")
+                    b.Property<Guid?>("TaskId")
                         .HasColumnType("uuid")
                         .HasColumnName("task_id");
 
@@ -599,6 +652,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasIndex("ActionTypeName")
                         .HasDatabaseName("ix_stock_transactions_action_type_name");
 
+                    b.HasIndex("ReasonId")
+                        .HasDatabaseName("ix_stock_transactions_reason_id");
+
                     b.HasIndex("StockId")
                         .HasDatabaseName("ix_stock_transactions_stock_id");
 
@@ -606,6 +662,34 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_stock_transactions_task_id");
 
                     b.ToTable("stock_transactions", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.StockTransactionReason", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ActionTypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("action_type_name");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_stock_transaction_reasons");
+
+                    b.HasIndex("ActionTypeName")
+                        .HasDatabaseName("ix_stock_transaction_reasons_action_type_name");
+
+                    b.ToTable("stock_transaction_reasons", "wms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.Task", b =>
@@ -645,6 +729,21 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasName("pk_task_types");
 
                     b.ToTable("task_types", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.Location", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Locations.LocationType", null)
+                        .WithMany()
+                        .HasForeignKey("LocationTypeName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_locations_locations_type_location_type_name");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_locations_locations_parent_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.Product", b =>
@@ -720,6 +819,11 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_stock_transactions_action_types_action_type_name");
 
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Stocks.StockTransactionReason", null)
+                        .WithMany()
+                        .HasForeignKey("ReasonId")
+                        .HasConstraintName("fk_stock_transactions_stock_transaction_reasons_reason_id");
+
                     b.HasOne("Crowbond.Modules.WMS.Domain.Stocks.Stock", null)
                         .WithMany()
                         .HasForeignKey("StockId")
@@ -730,9 +834,17 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.Task", null)
                         .WithMany()
                         .HasForeignKey("TaskId")
+                        .HasConstraintName("fk_stock_transactions_tasks_task_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.StockTransactionReason", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Stocks.ActionType", null)
+                        .WithMany()
+                        .HasForeignKey("ActionTypeName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_stock_transactions_tasks_task_id");
+                        .HasConstraintName("fk_stock_transaction_reasons_action_types_action_type_name");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.Task", b =>

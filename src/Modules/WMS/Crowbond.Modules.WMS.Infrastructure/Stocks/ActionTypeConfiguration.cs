@@ -10,5 +10,8 @@ internal sealed class ActionTypeConfiguration : IEntityTypeConfiguration<ActionT
     {
         builder.HasKey(a => a.Name);
         builder.Property(a => a.Name).IsRequired().HasMaxLength(100);
+
+        builder.HasData(
+            ActionType.Adjustment);
     }
 }

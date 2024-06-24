@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20240618143131_Create_Database")]
+    [Migration("20240624094208_Create_Database")]
     partial class Create_Database
     {
         /// <inheritdoc />
@@ -231,7 +231,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "stocks:update"
+                            Code = "stocks:adjust"
+                        },
+                        new
+                        {
+                            Code = "stocks:relocate"
                         },
                         new
                         {
@@ -446,7 +450,12 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "stocks:update",
+                            PermissionCode = "stocks:adjust",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "stocks:relocate",
                             RoleName = "Administrator"
                         },
                         new

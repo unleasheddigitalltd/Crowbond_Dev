@@ -95,17 +95,15 @@ public partial class Create_Database : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "locations",
+            name: "locations_type",
             schema: "wms",
             columns: table => new
             {
-                id = table.Column<Guid>(type: "uuid", nullable: false),
-                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                status = table.Column<int>(type: "integer", nullable: false)
+                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("pk_locations", x => x.id);
+                table.PrimaryKey("pk_locations_type", x => x.name);
             });
 
         migrationBuilder.CreateTable(
@@ -177,6 +175,56 @@ public partial class Create_Database : Migration
             constraints: table =>
             {
                 table.PrimaryKey("pk_unit_of_measures", x => x.name);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "stock_transaction_reasons",
+            schema: "wms",
+            columns: table => new
+            {
+                id = table.Column<Guid>(type: "uuid", nullable: false),
+                name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                action_type_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("pk_stock_transaction_reasons", x => x.id);
+                table.ForeignKey(
+                    name: "fk_stock_transaction_reasons_action_types_action_type_name",
+                    column: x => x.action_type_name,
+                    principalSchema: "wms",
+                    principalTable: "action_types",
+                    principalColumn: "name",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "locations",
+            schema: "wms",
+            columns: table => new
+            {
+                id = table.Column<Guid>(type: "uuid", nullable: false),
+                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                status = table.Column<int>(type: "integer", nullable: false),
+                location_type_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                parent_id = table.Column<Guid>(type: "uuid", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("pk_locations", x => x.id);
+                table.ForeignKey(
+                    name: "fk_locations_locations_parent_id",
+                    column: x => x.parent_id,
+                    principalSchema: "wms",
+                    principalTable: "locations",
+                    principalColumn: "id");
+                table.ForeignKey(
+                    name: "fk_locations_locations_type_location_type_name",
+                    column: x => x.location_type_name,
+                    principalSchema: "wms",
+                    principalTable: "locations_type",
+                    principalColumn: "name",
+                    onDelete: ReferentialAction.Cascade);
             });
 
         migrationBuilder.CreateTable(
@@ -330,11 +378,12 @@ public partial class Create_Database : Migration
             columns: table => new
             {
                 id = table.Column<Guid>(type: "uuid", nullable: false),
-                task_id = table.Column<Guid>(type: "uuid", nullable: false),
+                task_id = table.Column<Guid>(type: "uuid", nullable: true),
                 action_type_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 pos_adjustment = table.Column<bool>(type: "boolean", nullable: false),
                 transaction_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                 transaction_note = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                reason_id = table.Column<Guid>(type: "uuid", nullable: true),
                 quantity = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
                 product_id = table.Column<Guid>(type: "uuid", nullable: false),
                 stock_id = table.Column<Guid>(type: "uuid", nullable: false)
@@ -350,6 +399,12 @@ public partial class Create_Database : Migration
                     principalColumn: "name",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
+                    name: "fk_stock_transactions_stock_transaction_reasons_reason_id",
+                    column: x => x.reason_id,
+                    principalSchema: "wms",
+                    principalTable: "stock_transaction_reasons",
+                    principalColumn: "id");
+                table.ForeignKey(
                     name: "fk_stock_transactions_stocks_stock_id",
                     column: x => x.stock_id,
                     principalSchema: "wms",
@@ -361,9 +416,14 @@ public partial class Create_Database : Migration
                     column: x => x.task_id,
                     principalSchema: "wms",
                     principalTable: "tasks",
-                    principalColumn: "id",
-                    onDelete: ReferentialAction.Cascade);
+                    principalColumn: "id");
             });
+
+        migrationBuilder.InsertData(
+            schema: "wms",
+            table: "action_types",
+            column: "name",
+            value: "Adjustment");
 
         migrationBuilder.InsertData(
             schema: "wms",
@@ -390,6 +450,17 @@ public partial class Create_Database : Migration
 
         migrationBuilder.InsertData(
             schema: "wms",
+            table: "locations_type",
+            column: "name",
+            values: new object[]
+            {
+                "Area",
+                "Location",
+                "Site"
+            });
+
+        migrationBuilder.InsertData(
+            schema: "wms",
             table: "unit_of_measures",
             column: "name",
             values: new object[]
@@ -400,6 +471,18 @@ public partial class Create_Database : Migration
                 "Kg",
                 "Pack"
             });
+
+        migrationBuilder.CreateIndex(
+            name: "ix_locations_location_type_name",
+            schema: "wms",
+            table: "locations",
+            column: "location_type_name");
+
+        migrationBuilder.CreateIndex(
+            name: "ix_locations_parent_id",
+            schema: "wms",
+            table: "locations",
+            column: "parent_id");
 
         migrationBuilder.CreateIndex(
             name: "ix_products_category_id",
@@ -438,10 +521,22 @@ public partial class Create_Database : Migration
             column: "receipt_header_id");
 
         migrationBuilder.CreateIndex(
+            name: "ix_stock_transaction_reasons_action_type_name",
+            schema: "wms",
+            table: "stock_transaction_reasons",
+            column: "action_type_name");
+
+        migrationBuilder.CreateIndex(
             name: "ix_stock_transactions_action_type_name",
             schema: "wms",
             table: "stock_transactions",
             column: "action_type_name");
+
+        migrationBuilder.CreateIndex(
+            name: "ix_stock_transactions_reason_id",
+            schema: "wms",
+            table: "stock_transactions",
+            column: "reason_id");
 
         migrationBuilder.CreateIndex(
             name: "ix_stock_transactions_stock_id",
@@ -518,7 +613,7 @@ public partial class Create_Database : Migration
             schema: "wms");
 
         migrationBuilder.DropTable(
-            name: "action_types",
+            name: "stock_transaction_reasons",
             schema: "wms");
 
         migrationBuilder.DropTable(
@@ -527,6 +622,10 @@ public partial class Create_Database : Migration
 
         migrationBuilder.DropTable(
             name: "tasks",
+            schema: "wms");
+
+        migrationBuilder.DropTable(
+            name: "action_types",
             schema: "wms");
 
         migrationBuilder.DropTable(
@@ -539,6 +638,10 @@ public partial class Create_Database : Migration
 
         migrationBuilder.DropTable(
             name: "task_types",
+            schema: "wms");
+
+        migrationBuilder.DropTable(
+            name: "locations_type",
             schema: "wms");
 
         migrationBuilder.DropTable(
