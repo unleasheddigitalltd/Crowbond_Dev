@@ -4,6 +4,8 @@ namespace Crowbond.Modules.WMS.Domain.Stocks;
 
 public sealed class ActionType : Entity
 {
+    public static readonly ActionType Adjustment = new("Adjustment");
+
     public ActionType(string name)
     {
         Name = name;

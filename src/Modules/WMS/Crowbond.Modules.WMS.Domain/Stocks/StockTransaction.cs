@@ -10,7 +10,7 @@ public sealed class StockTransaction : Entity
 
     public Guid Id { get; private set; }
 
-    public Guid TaskId { get; private set; }
+    public Guid? TaskId { get; private set; }
 
     public string ActionTypeName { get; private set; }
 
@@ -20,6 +20,8 @@ public sealed class StockTransaction : Entity
 
     public string? TransactionNote { get; private set; }
 
+    public Guid? ReasonId { get; private set; }
+
     public decimal Quantity { get; private set; }
 
     public Guid ProductId { get; private set; }
@@ -27,11 +29,12 @@ public sealed class StockTransaction : Entity
     public Guid StockId { get; private set; }
 
     public static StockTransaction Create(
-        Guid taskId,
+        Guid? taskId,
         string actionTypeName,
         bool posAdjustment,
         DateTime transactionDate,
         string? transactionNote,
+        Guid? reasonId,
         decimal quantity,
         Guid productId,
         Guid stockId)
@@ -44,6 +47,7 @@ public sealed class StockTransaction : Entity
             PosAdjustment = posAdjustment,
             TransactionDate = transactionDate,
             TransactionNote = transactionNote,
+            ReasonId = reasonId,
             Quantity = quantity,
             ProductId = productId,
             StockId = stockId

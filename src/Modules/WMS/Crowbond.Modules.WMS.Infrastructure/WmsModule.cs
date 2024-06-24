@@ -17,6 +17,8 @@ using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Categories;
 using Crowbond.Modules.WMS.Infrastructure.Products;
 using Crowbond.Modules.WMS.Infrastructure.Categories;
+using Crowbond.Modules.WMS.Domain.Stocks;
+using Crowbond.Modules.WMS.Infrastructure.Stocks;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -53,6 +55,8 @@ public static class WmsModule
         services.AddScoped<IProductRepository, ProductRepository>();
 
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddScoped<IStockRepository, StockRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 

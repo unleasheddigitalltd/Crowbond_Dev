@@ -35,6 +35,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
 
     internal DbSet<Location> Locations { get; set; }
 
+    internal DbSet<LocationType> LocationsType { get; set; }
+
     internal DbSet<ReceiptHeader> ReceiptHeaders { get; set; }
 
     internal DbSet<ReceiptLine> ReceiptLines { get; set; }
@@ -44,6 +46,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<Stock> Stocks { get; set; }
 
     internal DbSet<StockTransaction> StockTransactions { get; set; }
+
+    internal DbSet<StockTransactionReason> StockTransactionReasons { get; set; }
 
     internal DbSet<Task> Tasks { get; set; }
 
@@ -59,11 +63,13 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ReceiptHeaderConfiguration());
         modelBuilder.ApplyConfiguration(new ReceiptLineConfiguration());
         modelBuilder.ApplyConfiguration(new ActionTypeConfiguration());
         modelBuilder.ApplyConfiguration(new StockConfiguration());
         modelBuilder.ApplyConfiguration(new StockTransactionConfiguration());
+        modelBuilder.ApplyConfiguration(new StockTransactionReasonConfiguration());
         modelBuilder.ApplyConfiguration(new TaskConfiguration());
         modelBuilder.ApplyConfiguration(new TaskTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());

@@ -228,7 +228,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "stocks:update"
+                            Code = "stocks:adjust"
+                        },
+                        new
+                        {
+                            Code = "stocks:relocate"
                         },
                         new
                         {
@@ -443,7 +447,12 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "stocks:update",
+                            PermissionCode = "stocks:adjust",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "stocks:relocate",
                             RoleName = "Administrator"
                         },
                         new

@@ -36,7 +36,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateProducts,
             Permission.ModifyProducts,
             Permission.GetStocks,
-            Permission.ModifyStocks,
+            Permission.AdjustStocks,
+            Permission.RelocateStocks,
             Permission.GetReceipts,
             Permission.ModifyReceipts);
 
@@ -72,7 +73,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateProducts),
                     CreateRolePermission(Role.Administrator, Permission.ModifyProducts),
                     CreateRolePermission(Role.Administrator, Permission.GetStocks),
-                    CreateRolePermission(Role.Administrator, Permission.ModifyStocks),
+                    CreateRolePermission(Role.Administrator, Permission.AdjustStocks),
+                    CreateRolePermission(Role.Administrator, Permission.RelocateStocks),
                     CreateRolePermission(Role.Administrator, Permission.GetReceipts),
                     CreateRolePermission(Role.Administrator, Permission.ModifyReceipts));
             });

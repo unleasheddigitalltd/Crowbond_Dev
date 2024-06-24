@@ -63,4 +63,9 @@ public sealed class Stock : Entity
 
         return stock;
     }
+
+    public void Adjust(bool posAdjustment, decimal quantity)
+    {        
+        CurrentQty = posAdjustment ? CurrentQty + quantity : CurrentQty - quantity;
+    }
 }
