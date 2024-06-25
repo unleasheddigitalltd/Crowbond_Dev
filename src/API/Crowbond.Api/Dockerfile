@@ -40,6 +40,13 @@ COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Infrastructure/Crowbond.Modules.WMS.
 COPY ["src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/Crowbond.Modules.WMS.IntegrationEvents.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/"]
 COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Presentation/Crowbond.Modules.WMS.Presentation.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Presentation/"]
 
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Application/Crowbond.Modules.OMS.Application.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Application/"]
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Domain/Crowbond.Modules.OMS.Domain.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Domain/"]
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/Crowbond.Modules.OMS.Infrastructure.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/"]
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/Crowbond.Modules.OMS.IntegrationEvents.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/"]
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Presentation/Crowbond.Modules.OMS.Presentation.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Presentation/"]
+
+
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .
 WORKDIR "src/API/Crowbond.Api"
