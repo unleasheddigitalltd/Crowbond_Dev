@@ -23,7 +23,8 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
                  s.original_qty AS {nameof(StockResponse.OriginalQty)},
                  s.current_qty AS {nameof(StockResponse.CurrentQty)}
              FROM wms.stocks s
-             INNER JOIN wms.locations l ON l.id = s.location_id             
+             INNER JOIN wms.locations l ON l.id = s.location_id
+             WHERE s.id = @StockId;
              """;
 
         StockResponse? stock = await connection.QuerySingleOrDefaultAsync<StockResponse>(sql, request);
