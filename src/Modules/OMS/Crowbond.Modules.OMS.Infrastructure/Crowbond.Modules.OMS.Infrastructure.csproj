@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Crowbond.Common.Infrastructure\Crowbond.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.OMS.Application\Crowbond.Modules.OMS.Application.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.OMS.Presentation\Crowbond.Modules.OMS.Presentation.csproj" />
+  </ItemGroup>
+</Project>

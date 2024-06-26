@@ -11,7 +11,7 @@ builder.Services.AddServices(builder.Configuration);
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
-builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance", "wms", "crm"]);
+builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance", "wms", "crm", "oms"]);
 
 WebApplication app = builder.Build();
 
