@@ -8,6 +8,7 @@ using Crowbond.Modules.Events.Infrastructure;
 using Crowbond.Modules.Ticketing.Infrastructure;
 using Crowbond.Modules.Users.Infrastructure;
 using Crowbond.Modules.WMS.Infrastructure;
+using Crowbond.Modules.CRM.Infrastructure;
 using Crowbond.Modules.OMS.Infrastructure;
 using Crowbond.Common.Application;
 using Crowbond.Api.Options;
@@ -34,6 +35,7 @@ public static class DependencyInjection
             Modules.Ticketing.Application.AssemblyReference.Assembly,
             Modules.Attendance.Application.AssemblyReference.Assembly,
             Modules.WMS.Application.AssemblyReference.Assembly,
+            Modules.CRM.Application.AssemblyReference.Assembly,
             Modules.OMS.Application.AssemblyReference.Assembly];
 
         services.AddApplication(moduleApplicationAssemblies);
@@ -62,6 +64,7 @@ public static class DependencyInjection
         services.AddTicketingModule(configuration);
         services.AddAttendanceModule(configuration);
         services.AddWMSModule(configuration);
+        services.AddCRMModule(configuration);
         services.AddOMSModule(configuration);
 
         services.AddCors();

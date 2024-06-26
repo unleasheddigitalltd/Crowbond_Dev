@@ -40,12 +40,17 @@ COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Infrastructure/Crowbond.Modules.WMS.
 COPY ["src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/Crowbond.Modules.WMS.IntegrationEvents.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.IntegrationEvents/"]
 COPY ["src/Modules/WMS/Crowbond.Modules.WMS.Presentation/Crowbond.Modules.WMS.Presentation.csproj", "src/Modules/WMS/Crowbond.Modules.WMS.Presentation/"]
 
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Application/Crowbond.Modules.CRM.Application.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.Application/"]
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Domain/Crowbond.Modules.CRM.Domain.csproj", "src/Modules/CRM/Crowbond.Modules.CRM.Domain/"]
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Infrastructure/Crowbond.Modules.CRM.Infrastructure.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.Infrastructure/"]
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.IntegrationEvents/Crowbond.Modules.CRM.IntegrationEvents.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.IntegrationEvents/"]
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Presentation/Crowbond.Modules.CRM.Presentation.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.Presentation/"]
+
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Application/Crowbond.Modules.OMS.Application.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Application/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Domain/Crowbond.Modules.OMS.Domain.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Domain/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/Crowbond.Modules.OMS.Infrastructure.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/Crowbond.Modules.OMS.IntegrationEvents.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Presentation/Crowbond.Modules.OMS.Presentation.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Presentation/"]
-
 
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .
