@@ -1,5 +1,7 @@
 ﻿using Crowbond.Modules.Attendance.Infrastructure.Database;
+using Crowbond.Modules.CRM.Infrastructure.Database;
 using Crowbond.Modules.Events.Infrastructure.Database;
+using Crowbond.Modules.OMS.Infrastructure.Database;
 using Crowbond.Modules.Ticketing.Infrastructure.Database;
 using Crowbond.Modules.Users.Infrastructure.Database;
 using Crowbond.Modules.WMS.Infrastructure.Database;
@@ -18,6 +20,8 @@ public static class MigrationExtensions
         ApplyMigration<TicketingDbContext>(scope);
         ApplyMigration<AttendanceDbContext>(scope);
         ApplyMigration<WmsDbContext>(scope);
+        ApplyMigration<CrmDbContext>(scope);
+        ApplyMigration<OmsDbContext>(scope);
     }
 
     private static void ApplyMigration<TDbContext>(IServiceScope scope)
