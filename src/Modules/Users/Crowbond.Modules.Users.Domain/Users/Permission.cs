@@ -25,6 +25,7 @@ public sealed class Permission
     public static readonly Permission ModifyProducts = new("products:update");
 
     public static readonly Permission GetStocks = new("stocks:read");
+    public static readonly Permission GetStockTransactions = new("stocktransactions:read");
     public static readonly Permission AdjustStocks = new("stocks:adjust");
     public static readonly Permission RelocateStocks = new("stocks:relocate");
 
