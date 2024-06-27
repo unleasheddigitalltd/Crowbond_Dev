@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Dapper;
 
@@ -18,12 +17,28 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
         const string sql =
             $"""
              SELECT 
-                 s.id AS {nameof(StockResponse.Id)},
-                 l.name AS {nameof(StockResponse.Location)},
-                 s.original_qty AS {nameof(StockResponse.OriginalQty)},
-                 s.current_qty AS {nameof(StockResponse.CurrentQty)}
+                s.id AS {nameof(StockResponse.Id)},
+                p.sku AS {nameof(StockResponse.Sku)},
+                p.name AS {nameof(StockResponse.Name)},	
+                c.name AS {nameof(StockResponse.Category)},
+                s.batch_number AS {nameof(StockResponse.Batch)},
+                p.unit_of_measure_name AS {nameof(StockResponse.UnitOfMeasure)},
+                l.name AS {nameof(StockResponse.Location)},
+                p.reorder_level AS {nameof(StockResponse.ReorderLevel)},
+                CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(StockResponse.DaysInStock)},
+                s.sell_by_date AS {nameof(StockResponse.SellByDate)},
+                s.use_by_date AS {nameof(StockResponse.UseByDate)},
+                p.active AS {nameof(StockResponse.Active)},
+                s.current_qty AS {nameof(StockResponse.InStock)},
+                s.current_qty AS {nameof(StockResponse.Available)},
+                0.00 AS {nameof(StockResponse.Allocated)},
+                0.00 AS {nameof(StockResponse.OnHold)},
+                s.received_date,    
+                s.current_qty,
              FROM wms.stocks s
-             INNER JOIN wms.locations l ON l.id = s.location_id
+                INNER JOIN wms.products p ON p.id = s.product_id
+                INNER JOIN wms.categories c ON c.id = p.category_id
+                INNER JOIN wms.locations l ON s.location_id = l.id
              WHERE s.id = @StockId;
              """;
 
