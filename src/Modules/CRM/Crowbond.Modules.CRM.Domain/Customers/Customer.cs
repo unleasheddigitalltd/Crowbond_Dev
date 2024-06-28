@@ -20,7 +20,7 @@ namespace Crowbond.Modules.CRM.Domain.Customers;
 
     [Required]
     public int AccountNumber { get; set; }
-    public string CompanyName { get; set; }
+    public string BusinessName { get; set; }
 
     public string? DriverCode { get; set; }
 
