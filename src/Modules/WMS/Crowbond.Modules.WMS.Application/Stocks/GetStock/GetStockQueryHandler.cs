@@ -23,18 +23,16 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
                 c.name AS {nameof(StockResponse.Category)},
                 s.batch_number AS {nameof(StockResponse.Batch)},
                 p.unit_of_measure_name AS {nameof(StockResponse.UnitOfMeasure)},
+                s.current_qty AS {nameof(StockResponse.InStock)},
+                s.current_qty AS {nameof(StockResponse.Available)},
+                0.00 AS {nameof(StockResponse.Allocated)},
+                0.00 AS {nameof(StockResponse.OnHold)},
                 l.name AS {nameof(StockResponse.Location)},
                 p.reorder_level AS {nameof(StockResponse.ReorderLevel)},
                 CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(StockResponse.DaysInStock)},
                 s.sell_by_date AS {nameof(StockResponse.SellByDate)},
                 s.use_by_date AS {nameof(StockResponse.UseByDate)},
-                p.active AS {nameof(StockResponse.Active)},
-                s.current_qty AS {nameof(StockResponse.InStock)},
-                s.current_qty AS {nameof(StockResponse.Available)},
-                0.00 AS {nameof(StockResponse.Allocated)},
-                0.00 AS {nameof(StockResponse.OnHold)},
-                s.received_date,    
-                s.current_qty,
+                p.active AS {nameof(StockResponse.Active)}
              FROM wms.stocks s
                 INNER JOIN wms.products p ON p.id = s.product_id
                 INNER JOIN wms.categories c ON c.id = p.category_id

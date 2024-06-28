@@ -17,3 +17,4 @@ public sealed record StockResponse(
     DateTime SellByDate,
     DateTime UseByDate,
     bool Active);
+
