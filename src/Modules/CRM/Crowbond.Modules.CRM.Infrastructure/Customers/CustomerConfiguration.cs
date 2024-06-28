@@ -11,6 +11,6 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.CompanyName).IsRequired().HasMaxLength(100);
+        builder.Property(c => c.BusinessName).IsRequired().HasMaxLength(100);
     }
 }

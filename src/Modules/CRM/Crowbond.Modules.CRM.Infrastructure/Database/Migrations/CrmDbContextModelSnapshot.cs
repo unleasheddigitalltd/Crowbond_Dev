@@ -63,10 +63,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("billing_town_city");
 
-                    b.Property<string>("CompanyName")
+                    b.Property<string>("BusinessName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("company_name");
+                        .HasColumnName("business_name");
 
                     b.Property<string>("CustomerNotes")
                         .HasColumnType("text")
