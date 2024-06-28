@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Application.Messaging;
-using Crowbond.Modules.WMS.Application.Stocks.GetStocks.Dtos;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.GetStocks;
 

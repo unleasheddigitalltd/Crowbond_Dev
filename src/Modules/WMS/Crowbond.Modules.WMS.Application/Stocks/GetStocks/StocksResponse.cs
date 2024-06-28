@@ -1,8 +1,18 @@
-﻿namespace Crowbond.Modules.WMS.Application.Stocks.GetStocks.Dtos;
+﻿using Crowbond.Common.Application.Pagination;
 
-public sealed record class Stock
+namespace Crowbond.Modules.WMS.Application.Stocks.GetStocks;
+
+public sealed class StocksResponse : PaginatedResponse<Stock>
 {
-    public Guid Id { get; set; }
+    public StocksResponse(IReadOnlyCollection<Stock> stocks, IPagination pagination)
+        : base(stocks, pagination)
+    {
+    }    
+}
+
+public sealed record Stock
+{
+    public Guid Id { get; }
     public string Sku { get; }
     public string Name { get; }
     public string Category { get; }

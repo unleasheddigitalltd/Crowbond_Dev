@@ -1,7 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.WMS.Application.Stocks.GetStocks;
+using Crowbond.Modules.WMS.Application.Stocks.GetStockDetails;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,21 +9,13 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.WMS.Presentation.Stocks;
 
-internal sealed class GetStocks : IEndpoint
+internal sealed class GetStockDetails : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("stocks", async (
-            ISender sender,
-            string search = "",
-            string sort = "sku",
-            string order = "asc",
-            int page = 0,
-            int size = 10
-            ) =>
+        app.MapGet("stocks/{id}/details", async (Guid id, ISender sender) =>
         {
-            Result<StocksResponse> result = await sender.Send(
-                new GetStocksQuery(search, sort, order, page, size));
+            Result<StockDetailsResponse> result = await sender.Send(new GetStockDetailsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
