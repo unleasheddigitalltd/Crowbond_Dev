@@ -15,13 +15,13 @@ internal sealed class UpdateStockQuantity : IEndpoint
     {
         app.MapPut("stocks/{id}/adjust", async (Guid id, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateStockQuantityCommand(id, request.TransactionNote, request.ReasonId, request.Quantity));
+            Result result = await sender.Send(new UpdateStockQuantityCommand(id, request.TransactionNote, request.Reason, request.Quantity));
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.AdjustStocks)
         .WithTags(Tags.Stocks);
     }
 
-    public sealed record Request(string TransactionNote, Guid ReasonId, decimal Quantity);
+    public sealed record Request(string TransactionNote, Guid Reason, decimal Quantity);
 
 }
