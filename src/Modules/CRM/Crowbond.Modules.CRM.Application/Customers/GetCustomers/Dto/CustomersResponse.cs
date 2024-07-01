@@ -1,9 +1,15 @@
-﻿namespace Crowbond.Modules.CRM.Application.Customers.GetCustomers.Dto;
+﻿using Crowbond.Common.Application.Pagination;
 
-public sealed record CustomersResponse(
+namespace Crowbond.Modules.CRM.Application.Customers.GetCustomers.Dto;
 
-    IReadOnlyCollection<Customer> Customers,
+public sealed class CustomersResponse : PaginatedResponse<Customer>
+{
 
-    Pagination Pagination
-);
+    public CustomersResponse(IReadOnlyCollection<Customer> Customers, IPagination pagination)
+        : base(Customers, pagination)
+    { }
+
+
+}
+
 
