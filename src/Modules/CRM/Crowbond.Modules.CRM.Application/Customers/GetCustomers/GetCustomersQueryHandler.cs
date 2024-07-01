@@ -2,9 +2,9 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
+using Crowbond.Common.Application.Pagination;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomers.Dto;
 using Dapper;
-using Product = Crowbond.Modules.CRM.Application.Customers.GetCustomers.Dto.Customer;
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomers;
 
@@ -47,7 +47,7 @@ internal sealed class GetCustomersQueryHandler(IDbConnectionFactory dbConnection
                 c.{nameof(Customer.ShippingAddressLine2)},
             FROM FilteredCustomers c
             WHERE c.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
-            ORDER BY p.RowNum;
+            ORDER BY c.RowNum;
 
             SELECT Count(*) 
                 FROM crm.customers c

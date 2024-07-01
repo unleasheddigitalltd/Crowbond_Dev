@@ -14,6 +14,8 @@ using Crowbond.Modules.CRM.Infrastructure.Inbox;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Infrastructure.Customers;
+using Crowbond.Modules.CRM.Domain.Suppliers;
+using Crowbond.Modules.CRM.Infrastructure.Suppliers;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -48,7 +50,9 @@ public static class CrmModule
 
         services.AddScoped<ICustomerRepository,CustomerRepository>();
 
-          services.Configure<OutboxOptions>(configuration.GetSection("CRM:Outbox"));
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+        services.Configure<OutboxOptions>(configuration.GetSection("CRM:Outbox"));
 
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
