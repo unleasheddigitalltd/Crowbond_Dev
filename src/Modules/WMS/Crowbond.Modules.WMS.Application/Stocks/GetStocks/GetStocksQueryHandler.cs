@@ -21,7 +21,7 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
             "productDescription" => "p.name",
             "category" => "c.name",
             "batch" => "s.batch_number",
-            "unitOfMeasure" => "p.unit_of_measure_name",
+            "unitOfNeasure" => "p.unit_of_measure_name",
             "location" => "l.name",
             "daysInStock" => "s.received_date",
             "sellByDate" => "s.sell_by_date",
@@ -29,7 +29,6 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
             "active" => "p.active",
             _ => "p.sku" // Default sorting
         };
-
         string sql = $@"WITH FilteredStocks AS (
                     SELECT 
                         s.id            AS {nameof(Stock.Id)},
@@ -39,14 +38,8 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                         s.batch_number  AS {nameof(Stock.Batch)},
                         p.unit_of_measure_name AS {nameof(Stock.UnitOfMeasure)},
                         l.name          AS {nameof(Stock.Location)},
-                        p.reorder_level AS {nameof(Stock.ReorderLevel)},
-                        s.sell_by_date  AS {nameof(Stock.SellByDate)},
-                        s.use_by_date   AS {nameof(Stock.UseByDate)},
                         p.active        AS {nameof(Stock.Active)},
                         s.current_qty   AS {nameof(Stock.InStock)},
-                        s.current_qty   AS {nameof(Stock.Available)},
-                        0.00            AS {nameof(Stock.Allocated)},
-                        0.00            AS {nameof(Stock.OnHold)},
                         s.received_date,    
                         s.current_qty,
                         ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
@@ -70,32 +63,26 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                     s.{nameof(Stock.Batch)},
                     s.{nameof(Stock.UnitOfMeasure)},
                     s.{nameof(Stock.InStock)},
-                    s.{nameof(Stock.Available)},
-                    s.{nameof(Stock.Allocated)},
-                    s.{nameof(Stock.OnHold)},
-                    s.{nameof(Stock.Location)},
-                    s.{nameof(Stock.ReorderLevel)},                
+                    s.{nameof(Stock.Location)},               
                     CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(Stock.DaysInStock)},
-                    s.{nameof(Stock.SellByDate)},
-                    s.{nameof(Stock.UseByDate)},
                     s.{nameof(Stock.Active)}
                 FROM FilteredStocks s
                 WHERE s.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
                 ORDER BY s.RowNum;
 
-                SELECT Count(*) 
-                    FROM wms.stocks s
-                    INNER JOIN wms.products p ON p.id = s.product_id
-                    INNER JOIN wms.categories c ON c.id = p.category_id
-                    INNER JOIN wms.locations l ON s.location_id = l.id
-                    WHERE
-                        p.sku ILIKE '%' || @Search || '%'
-                        OR c.name ILIKE '%' || @Search || '%'
-                        OR p.name ILIKE '%' || @Search || '%'
-                        OR s.batch_number ILIKE '%' || @Search || '%'
-                        OR l.name ILIKE '%' || @Search || '%'
-                        OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
-            ";
+            SELECT Count(*) 
+                FROM wms.stocks s
+                INNER JOIN wms.products p ON p.id = s.product_id
+                INNER JOIN wms.categories c ON c.id = p.category_id
+                INNER JOIN wms.locations l ON s.location_id = l.id
+                WHERE
+                    p.sku ILIKE '%' || @Search || '%'
+                    OR c.name ILIKE '%' || @Search || '%'
+                    OR p.name ILIKE '%' || @Search || '%'
+                    OR s.batch_number ILIKE '%' || @Search || '%'
+                    OR l.name ILIKE '%' || @Search || '%'
+                    OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
+        ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
 
@@ -105,12 +92,9 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
         int totalPages = (int)Math.Ceiling(totalCount / (double)request.Size);
         int currentPage = request.Page;
         int pageSize = request.Size;
-        int startIndex = currentPage * pageSize;
+        int startIndex = (currentPage - 1) * pageSize;
         int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
-        var pagination = new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex);
-        var response = new StocksResponse(stocks, pagination);
-
-        return Result<StocksResponse>.Success(response);
+        return new StocksResponse(stocks, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }
 }

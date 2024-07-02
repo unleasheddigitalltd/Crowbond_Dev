@@ -8,13 +8,7 @@ public sealed record StockResponse(
     string Batch,
     string UnitOfMeasure,
     decimal InStock,
-    decimal Available,
-    decimal Allocated,
-    decimal OnHold,
     string Location,
-    decimal ReorderLevel,
     int DaysInStock,
-    DateTime SellByDate,
-    DateTime UseByDate,
     bool Active);
 
