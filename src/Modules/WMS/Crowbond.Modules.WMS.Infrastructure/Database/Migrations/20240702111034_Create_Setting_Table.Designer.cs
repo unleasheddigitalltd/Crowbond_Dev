@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.WMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    partial class WmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240702111034_Create_Setting_Table")]
+    partial class Create_Setting_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -537,8 +540,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c1f962a8-5ad6-4a3a-9921-d085f31c4c5c"),
-                            CreatedDate = new DateTime(2024, 7, 2, 11, 26, 46, 786, DateTimeKind.Utc).AddTicks(1521),
+                            Id = new Guid("963606d4-07a7-4a2c-8b42-66b86648c823"),
+                            CreatedDate = new DateTime(2024, 7, 2, 11, 10, 32, 206, DateTimeKind.Utc).AddTicks(3936),
                             HasMixBatchLocation = false,
                             IsActive = true
                         });
@@ -560,10 +563,6 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         new
                         {
                             Name = "Adjustment"
-                        },
-                        new
-                        {
-                            Name = "Relocating"
                         });
                 });
 

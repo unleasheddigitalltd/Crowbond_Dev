@@ -2,7 +2,12 @@
 public interface IStockRepository
 {
     Task<Stock?> GetAsync(Guid id, CancellationToken cancellationToken);
+
     Task<StockTransactionReason?> GetTransactionReasonAsync(Guid id, CancellationToken cancellationToken);
 
-    void InsertTransaction(StockTransaction transaction);
+    Task<IEnumerable<Stock>> GetByLocationAsync(Guid locationId, CancellationToken cancellationToken);
+
+    void InsertStockTransaction(StockTransaction transaction);
+
+    void InsertStock(Stock stock);
 }

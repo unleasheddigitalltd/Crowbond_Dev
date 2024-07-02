@@ -1,4 +1,6 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.WMS.Domain.Products;
+using Task = Crowbond.Modules.WMS.Domain.Tasks.Task;
 
 namespace Crowbond.Modules.WMS.Domain.Stocks;
 
@@ -29,28 +31,28 @@ public sealed class StockTransaction : Entity
     public Guid StockId { get; private set; }
 
     public static StockTransaction Create(
-        Guid? taskId,
+        Task? task,
         string actionTypeName,
         bool posAdjustment,
         DateTime transactionDate,
         string? transactionNote,
-        Guid? reasonId,
+        StockTransactionReason? reason,
         decimal quantity,
-        Guid productId,
-        Guid stockId)
+        Product product,
+        Stock stock)
     {
         var stockTransaction = new StockTransaction
         {
             Id = Guid.NewGuid(),
-            TaskId = taskId,
+            TaskId = task?.Id,
             ActionTypeName = actionTypeName,
             PosAdjustment = posAdjustment,
             TransactionDate = transactionDate,
             TransactionNote = transactionNote,
-            ReasonId = reasonId,
+            ReasonId = reason?.Id,
             Quantity = quantity,
-            ProductId = productId,
-            StockId = stockId
+            ProductId = product.Id,
+            StockId = stock.Id
         };
 
         return stockTransaction;

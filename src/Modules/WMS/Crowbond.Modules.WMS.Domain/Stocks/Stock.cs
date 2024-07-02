@@ -1,5 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.WMS.Domain.Locations;
+using Crowbond.Modules.WMS.Domain.Products;
+using Crowbond.Modules.WMS.Domain.Receipts;
 
 namespace Crowbond.Modules.WMS.Domain.Stocks;
 
@@ -34,29 +37,29 @@ public sealed class Stock : Entity
     public StockStatus Status { get; private set; }
 
     public static Stock Create(
-        Guid productId,
-        Guid locationId,
+        Product product,
+        Location location,
         decimal originalQty,
         decimal currentQty,
         string batchNumber,
         DateTime receivedDate,
         DateTime? sellByDate,
         DateTime? useByDate,
-        Guid receiptId,
+        ReceiptLine receipt,
         string? note)
     {
         var stock = new Stock
         {
             Id = Guid.NewGuid(),
-            ProductId = productId,
-            LocationId = locationId,
+            ProductId = product.Id,
+            LocationId = location.Id,
             OriginalQty = originalQty,
             CurrentQty = currentQty,
             BatchNumber = batchNumber,
             ReceivedDate = receivedDate,
             SellByDate = sellByDate,
             UseByDate = useByDate,
-            ReceiptId = receiptId,
+            ReceiptId = receipt.Id,
             Note = note,
             Status = StockStatus.Active
         };

@@ -12,6 +12,7 @@ internal sealed class ActionTypeConfiguration : IEntityTypeConfiguration<ActionT
         builder.Property(a => a.Name).IsRequired().HasMaxLength(100);
 
         builder.HasData(
-            ActionType.Adjustment);
+            ActionType.Adjustment,
+            ActionType.Relocating);
     }
 }

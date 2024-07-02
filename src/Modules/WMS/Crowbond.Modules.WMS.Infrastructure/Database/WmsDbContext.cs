@@ -17,6 +17,8 @@ using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Modules.WMS.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Crowbond.Modules.WMS.Domain.Settings;
+using Crowbond.Modules.WMS.Infrastructure.Settings;
 
 namespace Crowbond.Modules.WMS.Infrastructure.Database;
 
@@ -53,6 +55,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
 
     internal DbSet<TaskType> TaskTypes { get; set; }
 
+    internal DbSet<Setting> Settings { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,6 +81,7 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new FilterTypeConfiguration());
         modelBuilder.ApplyConfiguration(new InventoryTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new SettingConfiguration());
     }
     public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
     {

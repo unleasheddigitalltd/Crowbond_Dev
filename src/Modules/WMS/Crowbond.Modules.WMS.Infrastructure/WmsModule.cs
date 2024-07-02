@@ -19,6 +19,12 @@ using Crowbond.Modules.WMS.Infrastructure.Products;
 using Crowbond.Modules.WMS.Infrastructure.Categories;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Modules.WMS.Infrastructure.Stocks;
+using Crowbond.Modules.WMS.Domain.Locations;
+using Crowbond.Modules.WMS.Infrastructure.Locations;
+using Crowbond.Modules.WMS.Domain.Settings;
+using Crowbond.Modules.WMS.Infrastructure.Settings;
+using Crowbond.Modules.WMS.Domain.Receipts;
+using Crowbond.Modules.WMS.Infrastructure.Receipts;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -57,6 +63,12 @@ public static class WmsModule
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddScoped<IStockRepository, StockRepository>();
+
+        services.AddScoped<ILocationRepository, LocationRepository>();
+
+        services.AddScoped<ISettingRepository, SettingRepository>();
+
+        services.AddScoped<IReceiptRepository, ReceiptRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 
