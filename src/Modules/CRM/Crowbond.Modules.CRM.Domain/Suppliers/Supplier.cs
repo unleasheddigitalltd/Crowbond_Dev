@@ -28,7 +28,7 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public string AddressCounty { get; set; }
 
-    public string AddressCountry { get; set; }
+    public string? AddressCountry { get; set; }
 
     public string AddressPostalCode { get; set; }
 
@@ -40,19 +40,109 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public string BillingAddressCounty { get; set; }
 
-    public string BillingAddressCountry { get; set; }
+    public string? BillingAddressCountry { get; set; }
 
     public string BillingAddressPostalCode { get; set; }
 
-    public string EmailAddress { get; set; }
+    public string SupplierEmail { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string SupplierPhone { get; set; }
 
-    public string ContactName { get; set; }
+    public string SupplierContact { get; set; }
 
     public int PaymentTerms { get; set; }
 
     public string? SupplierNotes { get; set; }
+
+
+    public static Result<Supplier> Create(
+     int accountnumber,
+     string suppliername,
+     string addressline1,
+     string? addressline2,
+     string towncity,
+     string county,
+     string? country,
+     string postalcode,
+     string billingaddressline1,
+     string? billingaddressline2,
+     string billingaddresstowncity,
+     string billingaddresscounty,
+     string? billingaddresscountry,
+     string billingaddresspostalcode,
+     int paymentterms,
+     string? suppliernotes,
+    string supplieremail,
+    string supplierphone,
+    string suppliercontact
+)
+    {
+        var supplier = new Supplier
+        {
+            AccountNumber = accountnumber,
+            SupplierName = suppliername,
+            AddressLine1 = addressline1,
+            AddressLine2 = addressline2,
+            AddressTownCity = towncity,
+            AddressCounty = county,
+            AddressCountry = country,
+            AddressPostalCode = postalcode,
+            BillingAddressLine1 = billingaddressline1,
+            BillingAddressLine2 = billingaddressline2,
+            BillingAddressTownCity = billingaddresstowncity,
+            BillingAddressCounty = billingaddresscounty,
+            BillingAddressCountry = billingaddresscountry,
+            BillingAddressPostalCode = billingaddresspostalcode,
+            PaymentTerms = paymentterms,
+            SupplierNotes = suppliernotes,
+            SupplierEmail = supplieremail,
+            SupplierPhone = supplierphone,
+            SupplierContact = suppliercontact
+        };
+
+        return supplier;
+    }
+
+    public void Update(
+         string suppliername,
+         string addressline1,
+         string? addressline2,
+         string addresstowncity,
+         string addresscounty,
+         string? addresscountry,
+         string addresspostalcode,
+         string billingaddressline1,
+         string? billingaddressline2,
+         string billingaddresstowncity,
+         string billingaddresscounty,
+         string? billingaddresscountry,
+         string billingaddresspostalcode,
+         int paymentterms,
+         string? suppliernotes,
+        string supplieremail,
+        string supplierphone,
+        string suppliercontact)
+    {
+
+        SupplierName = suppliername;
+        AddressLine1 = addressline1;
+        AddressLine2 = addressline2;
+        AddressTownCity = addresstowncity;
+        AddressCounty = addresscounty;
+        AddressCountry = addresscountry;
+        AddressPostalCode = addresspostalcode;
+        BillingAddressLine1 = billingaddressline1;
+        BillingAddressLine2 = billingaddressline2;
+        BillingAddressTownCity = billingaddresstowncity;
+        BillingAddressCounty = billingaddresscounty;
+        BillingAddressCountry = billingaddresscountry;
+        BillingAddressPostalCode = billingaddresspostalcode;
+        PaymentTerms = paymentterms;
+        SupplierNotes = suppliernotes;
+        SupplierEmail = supplieremail;
+        SupplierPhone = supplierphone;
+        SupplierContact = suppliercontact;
+    }
 
 }
 
