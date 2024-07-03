@@ -36,11 +36,11 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public string BillingAddressPostalCode { get; private set; }
 
-    public string EmailAddress { get; private set; }
+    public string SupplierEmail { get; set; }
 
-    public string PhoneNumber { get; private set; }
+    public string SupplierPhone { get; set; }
 
-    public string ContactName { get; private set; }
+    public string SupplierContact { get; set; }
 
     public int PaymentTerms { get; private set; }
 
