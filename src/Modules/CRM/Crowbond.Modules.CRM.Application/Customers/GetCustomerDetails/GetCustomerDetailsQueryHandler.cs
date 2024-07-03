@@ -24,7 +24,7 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                  shipping_address_line2 AS {nameof(CustomerDetailsResponse.ShippingAddressLine2)},
                  shipping_town_city AS {nameof(CustomerDetailsResponse.ShippingTownCity)},
                  shipping_postal_code AS {nameof(CustomerDetailsResponse.ShippingPostalCode)},
-                 customer_contact AS {nameof(CustomerDetailsResponse.CustomerContact)}
+                 customer_contact AS {nameof(CustomerDetailsResponse.CustomerContact)},
                  customer_email AS {nameof(CustomerDetailsResponse.CustomerEmail)},
                  customer_phone AS {nameof(CustomerDetailsResponse.CustomerPhone)},
                  billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},

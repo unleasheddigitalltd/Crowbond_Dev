@@ -6,7 +6,7 @@ public sealed record CustomerDetailsResponse()
 {
     public Guid Id { get; }
 
-    public int AccountNumber { get; set; }
+    public string AccountNumber { get; set; }
     public string BusinessName { get; set; }
 
 
