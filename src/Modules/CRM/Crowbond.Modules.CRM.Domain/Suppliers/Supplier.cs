@@ -48,7 +48,7 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
 
     public static Result<Supplier> Create(
-     int accountnumber,
+     string accountnumber,
      string suppliername,
      string addressline1,
      string? addressline2,
