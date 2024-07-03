@@ -15,7 +15,7 @@ internal sealed class CreateSupplierCommandHandler(
     {
 
         Result<Supplier> result = Supplier.Create(
-            1,
+            "1",
              request.Supplier.SupplierName,
              request.Supplier.AddressLine1,
              request.Supplier.AddressLine2,

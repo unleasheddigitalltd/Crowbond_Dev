@@ -20,7 +20,7 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public string AddressCounty { get; private set; }
 
-    public string AddressCountry { get; private set; }
+    public string? AddressCountry { get; private set; }
 
     public string AddressPostalCode { get; private set; }
 
@@ -32,7 +32,7 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public string BillingAddressCounty { get; private set; }
 
-    public string BillingAddressCountry { get; private set; }
+    public string? BillingAddressCountry { get; private set; }
 
     public string BillingAddressPostalCode { get; private set; }
 
