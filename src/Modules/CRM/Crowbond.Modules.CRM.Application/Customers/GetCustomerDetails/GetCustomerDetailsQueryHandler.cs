@@ -18,21 +18,21 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
             $"""
              SELECT
                  id AS {nameof(CustomerDetailsResponse.Id)},
-                 businessname AS {nameof(CustomerDetailsResponse.BusinessName)},
-                 accountnumber AS {nameof(CustomerDetailsResponse.AccountNumber)},
-                 shippingaddressline1 AS {nameof(CustomerDetailsResponse.ShippingAddressLine1)},
-                 shippingaddressline2 AS {nameof(CustomerDetailsResponse.ShippingAddressLine2)},
-                 shippingtowncity AS {nameof(CustomerDetailsResponse.ShippingTownCity)},
-                 shippingpostalcode AS {nameof(CustomerDetailsResponse.ShippingPostalCode)},
-                 customeremail AS {nameof(CustomerDetailsResponse.CustomerEmail)},
-                 customerphone AS {nameof(CustomerDetailsResponse.CustomerPhone)},
-                 billingaddressline1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},
-                 billingaddressline2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},
-                 billingtowncity AS {nameof(CustomerDetailsResponse.BillingTownCity)},
-                 billingpostalcode AS {nameof(CustomerDetailsResponse.BillingPostalCode)},
-                 paymentterms AS {nameof(CustomerDetailsResponse.PaymentTerms)},
-                 customernotes AS {nameof(CustomerDetailsResponse.CustomerNotes)}
-                 
+                 account_number AS {nameof(CustomerDetailsResponse.AccountNumber)},
+                 business_name AS {nameof(CustomerDetailsResponse.BusinessName)},
+                 shipping_address_line1 AS {nameof(CustomerDetailsResponse.ShippingAddressLine1)},
+                 shipping_address_line2 AS {nameof(CustomerDetailsResponse.ShippingAddressLine2)},
+                 shipping_town_city AS {nameof(CustomerDetailsResponse.ShippingTownCity)},
+                 shipping_postal_code AS {nameof(CustomerDetailsResponse.ShippingPostalCode)},
+                 customer_contact AS {nameof(CustomerDetailsResponse.CustomerContact)},
+                 customer_email AS {nameof(CustomerDetailsResponse.CustomerEmail)},
+                 customer_phone AS {nameof(CustomerDetailsResponse.CustomerPhone)},
+                 billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},
+                 billing_address_line2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},
+                 billing_town_city AS {nameof(CustomerDetailsResponse.BillingTownCity)},
+                 billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},
+                 payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},
+                 customer_notes AS {nameof(CustomerDetailsResponse.CustomerNotes)}                 
              FROM crm.customers
              WHERE id = @CustomerId
              """;

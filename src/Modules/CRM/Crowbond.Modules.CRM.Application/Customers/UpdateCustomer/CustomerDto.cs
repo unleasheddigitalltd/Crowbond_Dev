@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 public sealed record CustomerDto(
-    Guid? Id,
+     Guid? Id,
      int AccountNumber,
      string BusinessName,
      string? DriverCode,
@@ -22,7 +22,7 @@ public sealed record CustomerDto(
      string BillingCounty,
      string BillingCountry,
      string BillingPostalCode,
-     int PriceGroupId,
+     Guid PriceGroupId,
      int PaymentTerms,
      string? CustomerNotes,
      string CustomerEmail,

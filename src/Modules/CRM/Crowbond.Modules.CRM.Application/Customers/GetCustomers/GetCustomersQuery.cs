@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Application.Messaging;
-using Crowbond.Modules.CRM.Application.Customers.GetCustomers.Dto;
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomers;
 

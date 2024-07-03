@@ -18,26 +18,26 @@ internal sealed class UpdateCustomerCommandHandler(ICustomerRepository customerR
         }
 
         customer.Update(
-            businessname: request.Customer.BusinessName,
-            drivercode: request.Customer.DriverCode,
-            shippingaddressline1: request.Customer.ShippingAddressLine1,
-            shippingaddressline2: request.Customer.ShippingAddressLine2,
-            shippingtowncity: request.Customer.ShippingTownCity,
-            shippingcounty: request.Customer.ShippingCounty,
-            shippingcountry: request.Customer.ShippingCountry,
-            shippingpostalcode: request.Customer.ShippingPostalCode,
-            billingaddressline1: request.Customer.BillingAddressLine1,
-            billingaddressline2: request.Customer.BillingAddressLine2,
-            billingtowncity: request.Customer.BillingTownCity,
-            billingcounty: request.Customer.BillingCounty,
-            billingcountry: request.Customer.BillingCountry,
-            billingpostalcode: request.Customer.BillingPostalCode,
-            customercontact: request.Customer.CustomerContact,
-            customeremail: request.Customer.CustomerEmail,
-            customerphone: request.Customer.CustomerPhone,
-            customernotes: request.Customer.CustomerNotes,
-            pricegroupid: request.Customer.PriceGroupId,
-            paymentterms: request.Customer.PaymentTerms
+            businessName: request.Customer.BusinessName,
+            driverCode: request.Customer.DriverCode,
+            shippingAddressLine1: request.Customer.ShippingAddressLine1,
+            shippingAddressLine2: request.Customer.ShippingAddressLine2,
+            shippingTownCity: request.Customer.ShippingTownCity,
+            shippingCounty: request.Customer.ShippingCounty,
+            shippingCountry: request.Customer.ShippingCountry,
+            shippingPostalCode: request.Customer.ShippingPostalCode,
+            billingAddressLine1: request.Customer.BillingAddressLine1,
+            billingAddressLine2: request.Customer.BillingAddressLine2,
+            billingTownCity: request.Customer.BillingTownCity,
+            billingCounty: request.Customer.BillingCounty,
+            billingCountry: request.Customer.BillingCountry,
+            billingPostalCode: request.Customer.BillingPostalCode,
+            customerContact: request.Customer.CustomerContact,
+            customerEmail: request.Customer.CustomerEmail,
+            customerPhone: request.Customer.CustomerPhone,
+            customerNotes: request.Customer.CustomerNotes,
+            priceGroupId: request.Customer.PriceGroupId,
+            paymentTerms: request.Customer.PaymentTerms
         );
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
