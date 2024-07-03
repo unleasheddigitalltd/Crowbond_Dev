@@ -1,6 +1,7 @@
 ﻿using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.Sequences;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Customers;
 
@@ -14,5 +15,10 @@ internal sealed class CustomerRepository(CrmDbContext context) : ICustomerReposi
     public void Insert(Customer customer)
     {
         context.Customers.Add(customer);
+    }
+
+    public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Customer, cancellationToken);
     }
 }

@@ -16,7 +16,7 @@ public sealed record CustomerRequest(
      string BillingCounty,
      string BillingCountry,
      string BillingPostalCode,
-     int PriceGroupId,
+     Guid PriceGroupId,
      Guid InvoicePeriodId,
      int PaymentTerms,
      bool DetailedInvoice,

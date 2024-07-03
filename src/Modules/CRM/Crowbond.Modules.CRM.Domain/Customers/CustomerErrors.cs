@@ -16,4 +16,7 @@ public static class CustomerErrors
     public static readonly Error AlreadyActivated = Error.Problem(
         "Customer.AlreadyActivated",
         "The customer was already activated");
+
+    public static Error SequenceNotFound() =>
+    Error.NotFound("Sequence.NotFound", $"The sequence for the customer type was not found");
 }
