@@ -24,4 +24,11 @@ public static class StockErrors
 
     public static Error SettingNotFound() =>
     Error.Conflict("Setting.NotFound", $"Any active setting was not found");
+
+    public static readonly Error NotActive = Error.Problem("Stocks.NotActive", "The stock is not in active status");
+
+    public static readonly Error NotHeld = Error.Problem("Stocks.NotHeld", "The stock is not in held status");
+
+    public static Error StatusNotFound(string stockStatus) =>
+    Error.NotFound("Stocks.StatusNotFound", $"The status {stockStatus} was not found");
 }

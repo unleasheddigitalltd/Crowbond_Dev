@@ -71,4 +71,35 @@ public sealed class Stock : Entity
     {        
         CurrentQty = posAdjustment ? CurrentQty + quantity : CurrentQty - quantity;
     }
+
+    public Result Hold()
+    {
+        if (Status != StockStatus.Active)
+        {
+            return Result.Failure(StockErrors.NotActive);
+        }
+
+        Status = StockStatus.Held;
+
+        return Result.Success();
+    }
+
+    public Result Activate()
+    {
+        if (Status != StockStatus.Held)
+        {
+            return Result.Failure(StockErrors.NotHeld);
+        }
+
+        Status = StockStatus.Active;
+
+        return Result.Success();
+    }
+
+    public Result MarkAsDamaged()
+    {
+        Status = StockStatus.Damaged;
+
+        return Result.Success();
+    }
 }

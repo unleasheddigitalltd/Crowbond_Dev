@@ -3,6 +3,6 @@
 public enum StockStatus
 {
     Active = 0,
-    Hold = 1,
+    Held = 1,
     Damaged = 2
 }
