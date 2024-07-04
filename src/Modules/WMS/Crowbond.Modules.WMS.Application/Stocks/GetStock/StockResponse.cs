@@ -10,5 +10,6 @@ public sealed record StockResponse(
     decimal InStock,
     string Location,
     int DaysInStock,
+    string Status,
     bool Active);
 

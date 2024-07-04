@@ -3,6 +3,7 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.WMS.Domain.Stocks;
 using Dapper;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.GetStocks;
@@ -27,8 +28,15 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
             "sellByDate" => "s.sell_by_date",
             "useByDate" => "s.use_by_date",
             "active" => "p.active",
+            "status" => "s.status",
             _ => "p.sku" // Default sorting
         };
+
+        string[] caseClauses = Enum.GetValues(typeof(StockStatus))
+                          .Cast<StockStatus>()
+                          .Select(status => $"WHEN {(int)status} THEN '{status}'")
+                          .ToArray();
+
         string sql = $@"WITH FilteredStocks AS (
                     SELECT 
                         s.id            AS {nameof(Stock.Id)},
@@ -39,6 +47,7 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                         p.unit_of_measure_name AS {nameof(Stock.UnitOfMeasure)},
                         l.name          AS {nameof(Stock.Location)},
                         p.active        AS {nameof(Stock.Active)},
+                        CASE s.status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(Stock.Status)},
                         s.current_qty   AS {nameof(Stock.InStock)},
                         s.received_date,    
                         s.current_qty,
@@ -65,6 +74,7 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                     s.{nameof(Stock.InStock)},
                     s.{nameof(Stock.Location)},               
                     CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(Stock.DaysInStock)},
+                    s.{nameof(Stock.Status)},
                     s.{nameof(Stock.Active)}
                 FROM FilteredStocks s
                 WHERE s.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
