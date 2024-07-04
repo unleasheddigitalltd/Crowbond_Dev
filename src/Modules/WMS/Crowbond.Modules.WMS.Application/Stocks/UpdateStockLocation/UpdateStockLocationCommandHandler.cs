@@ -7,6 +7,7 @@ using Crowbond.Modules.WMS.Domain.Locations;
 using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Settings;
+using MediatR;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockLocation;
 
@@ -18,43 +19,43 @@ internal sealed class UpdateStockLocationCommandHandler(
     ISettingRepository settingRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<UpdateStockLocationCommand>
+    : ICommandHandler<UpdateStockLocationCommand, Guid>
 {
-    public async Task<Result> Handle(UpdateStockLocationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(UpdateStockLocationCommand request, CancellationToken cancellationToken)
     {
         StockTransactionReason? transactionReason = await stockRepository.GetTransactionReasonAsync(request.ReasonId, cancellationToken);
 
         if (transactionReason is null || transactionReason.ActionTypeName != ActionType.Relocating.Name)
         {
-            return Result.Failure(StockErrors.ReasonNotFound(request.ReasonId));
+            return Result.Failure<Guid>(StockErrors.ReasonNotFound(request.ReasonId));
         }
 
         Location? location = await locationRepository.GetAsync(request.Destination, cancellationToken);
 
         if (location == null)
         {
-            return Result.Failure(StockErrors.LocationNotFound(request.Destination));
+            return Result.Failure<Guid>(StockErrors.LocationNotFound(request.Destination));
         }
 
         Stock? stock = await stockRepository.GetAsync(request.StockId, cancellationToken);
 
         if (stock is null)
         {
-            return Result.Failure(StockErrors.NotFound(request.StockId));
+            return Result.Failure<Guid>(StockErrors.NotFound(request.StockId));
         }
 
         Product? product = await productRepository.GetAsync(stock.ProductId, cancellationToken);
 
         if (product is null)
         {
-            return Result.Failure(StockErrors.ProductNotFound(stock.ProductId));
+            return Result.Failure<Guid>(StockErrors.ProductNotFound(stock.ProductId));
         }
 
         ReceiptLine? receipt = await receiptRepository.GetReceiptLineAsync(stock.ReceiptId, cancellationToken);
 
         if (receipt is null)
         {
-            return Result.Failure(StockErrors.ReceiptNotFound(stock.ReceiptId));
+            return Result.Failure<Guid>(StockErrors.ReceiptNotFound(stock.ReceiptId));
         }
 
         IEnumerable<Stock> destStocks = await stockRepository.GetByLocationAsync(request.Destination, cancellationToken);
@@ -63,19 +64,19 @@ internal sealed class UpdateStockLocationCommandHandler(
 
         if (setting is null)
         {
-            return Result.Failure(StockErrors.SettingNotFound());
+            return Result.Failure<Guid>(StockErrors.SettingNotFound());
         }
 
         if (destStocks?.FirstOrDefault(s => s.BatchNumber != stock.BatchNumber) is not null && !setting.HasMixBatchLocation)
         {
-            return Result.Failure(StockErrors.LocationNotEmpty(request.Destination));
+            return Result.Failure<Guid>(StockErrors.LocationNotEmpty(request.Destination));
         }
 
-        Stock destinationStock = destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber);
+        Result<Stock> destStockResult = destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber);
 
-        if (destinationStock is null)
+        if (destStockResult is null)
         {
-            destinationStock = Stock.Create(
+            destStockResult = Stock.Create(
                 product,
                 location,
                 request.Quantity,
@@ -87,11 +88,16 @@ internal sealed class UpdateStockLocationCommandHandler(
                 receipt,
                 stock.Note);
 
-            stockRepository.InsertStock(destinationStock);
+            if (destStockResult.IsFailure)
+            {
+                return Result.Failure<Guid>(destStockResult.Error);
+            }
+
+            stockRepository.InsertStock(destStockResult.Value);
         }
         else
-        {           
-            destinationStock.Adjust(true, request.Quantity);
+        {
+            destStockResult.Value.Adjust(true, request.Quantity);
         }
 
         var originTransaction = StockTransaction.Create(
@@ -119,12 +125,12 @@ internal sealed class UpdateStockLocationCommandHandler(
             transactionReason,
             request.Quantity,
             product,
-            destinationStock);      
+            destStockResult.Value);
 
         stockRepository.InsertStockTransaction(destTransaction);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return destStockResult.Value.Id;
     }
 }
