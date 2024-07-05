@@ -1,8 +1,8 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
+using Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaders;
 using Crowbond.Modules.WMS.Application.Receipts.GetReceipts;
-using Crowbond.Modules.WMS.Application.Receipts.GetReceipts.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,7 @@ internal sealed class GetReceiptHeaders : IEndpoint
             int size = 10
             ) =>
         {
-            Result<ReceiptHeadersResponse> result = await sender.Send(
+            Result<ReceiptResponse> result = await sender.Send(
                 new GetReceiptHeadersQuery(search, sort, order, page, size));
 
             return result.Match(Results.Ok, ApiResults.Problem);
