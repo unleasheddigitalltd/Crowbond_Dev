@@ -11,26 +11,34 @@ public partial class Edit_PriceGroupId_DataType : Migration
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.AlterColumn<Guid>(
+        migrationBuilder.DropColumn(
+            name: "price_group_id",
+            schema: "crm",
+            table: "customers");
+
+        migrationBuilder.AddColumn<Guid>(
             name: "price_group_id",
             schema: "crm",
             table: "customers",
             type: "uuid",
             nullable: false,
-            oldClrType: typeof(int),
-            oldType: "integer");
+            defaultValue: Guid.NewGuid());
     }
 
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.AlterColumn<int>(
+        migrationBuilder.DropColumn(
+            name: "price_group_id",
+            schema: "crm",
+            table: "customers");
+
+        migrationBuilder.AddColumn<int>(
             name: "price_group_id",
             schema: "crm",
             table: "customers",
             type: "integer",
             nullable: false,
-            oldClrType: typeof(Guid),
-            oldType: "uuid");
+            defaultValue: 0);
     }
 }

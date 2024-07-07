@@ -3,17 +3,17 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Receipts.GetReceipts;
-using Crowbond.Modules.WMS.Application.Receipts.GetReceipts.Dtos;
 using ReceiptStatus = Crowbond.Modules.WMS.Domain.Receipts.ReceiptStatus;
 using Dapper;
 using System.Text;
+using Crowbond.Common.Application.Pagination;
 
 namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaders;
 
 internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetReceiptHeadersQuery, ReceiptHeadersResponse>
+    : IQueryHandler<GetReceiptHeadersQuery, ReceiptResponse>
 {
-    public async Task<Result<ReceiptHeadersResponse>> Handle(GetReceiptHeadersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ReceiptResponse>> Handle(GetReceiptHeadersQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -69,6 +69,6 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
         int startIndex = (currentPage - 1) * pageSize;
         int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
-        return new ReceiptHeadersResponse(receipts, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
+        return new ReceiptResponse(receipts, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }
 }

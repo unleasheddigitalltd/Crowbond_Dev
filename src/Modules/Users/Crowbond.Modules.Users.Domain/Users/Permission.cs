@@ -31,6 +31,7 @@ public sealed class Permission
 
     public static readonly Permission GetReceipts = new("receipts:read");
     public static readonly Permission ModifyReceipts = new("receipts:update");
+    public static readonly Permission CreateReceipts = new("receipts:create");
 
     public static readonly Permission GetCustomers = new("customers:read");
     public static readonly Permission ModifyCustomers = new("customers:update");

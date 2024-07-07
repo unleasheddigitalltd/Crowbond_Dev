@@ -22,4 +22,5 @@ public sealed record Stock
     public string Location { get; }
     public int DaysInStock { get; }
     public bool Active { get; }
+    public string Status { get; }
 }

@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaderDetails.Dtos;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Dapper;
 

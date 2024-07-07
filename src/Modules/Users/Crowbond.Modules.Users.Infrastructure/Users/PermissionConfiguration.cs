@@ -46,7 +46,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateCustomers,
             Permission.GetSuppliers,
             Permission.ModifySuppliers,
-            Permission.CreateSuppliers);
+            Permission.CreateSuppliers,
+            Permission.CreateReceipts);
 
         builder
             .HasMany<Role>()
@@ -85,6 +86,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.RelocateStocks),
                     CreateRolePermission(Role.Administrator, Permission.GetReceipts),
                     CreateRolePermission(Role.Administrator, Permission.ModifyReceipts),
+                    CreateRolePermission(Role.Administrator, Permission.CreateReceipts),
                     CreateRolePermission(Role.Administrator, Permission.GetCustomers),
                     CreateRolePermission(Role.Administrator, Permission.ModifyCustomers),
                     CreateRolePermission(Role.Administrator, Permission.CreateCustomers),
