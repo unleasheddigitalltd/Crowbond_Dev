@@ -20,7 +20,7 @@ public sealed class OrderLine
 
     public decimal UnitPrice { get; private set; }
 
-    public int Qty { get; private set; }
+    public decimal Qty { get; private set; }
 
     public decimal SubTotal { get; private set; }
 

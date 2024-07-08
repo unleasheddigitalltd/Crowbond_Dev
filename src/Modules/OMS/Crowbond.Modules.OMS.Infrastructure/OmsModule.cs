@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Crowbond.Modules.OMS.Domain.Orders;
+using Crowbond.Modules.OMS.Infrastructure.Orders;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -44,6 +46,8 @@ public static class OmsModule
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
 
