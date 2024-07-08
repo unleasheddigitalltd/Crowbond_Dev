@@ -4,6 +4,7 @@ using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
@@ -26,5 +27,6 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new OrderHeaderConfiguratin());
         modelBuilder.ApplyConfiguration(new OrderLineConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
     }
 }
