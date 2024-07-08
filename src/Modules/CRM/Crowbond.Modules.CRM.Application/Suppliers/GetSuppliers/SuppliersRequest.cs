@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers.Dto;
+﻿namespace Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers;
 
 public sealed record SuppliersRequest(
 

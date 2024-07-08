@@ -5,15 +5,15 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers;
+using Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrders;
 
-namespace Crowbond.Modules.CRM.Presentation.Suppliers;
+namespace Crowbond.Modules.OMS.Presentation.PurchaseOrders;
 
-internal sealed class GetSuppliers : IEndpoint
+internal sealed class GetPurchaseOrders : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("suppliers", async (
+        app.MapGet("purchaseorders", async (
             ISender sender,
             string search = "",
             string sort = "suppliername",
@@ -22,12 +22,12 @@ internal sealed class GetSuppliers : IEndpoint
             int size = 10
             ) =>
         {
-            Result<SuppliersResponse> result = await sender.Send(
-                new GetSuppliersQuery(search, sort, order, page, size));
+            Result<PurchaseOrdersResponse> result = await sender.Send(
+                new GetPurchaseOrdersQuery(search, sort, order, page, size));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.GetSuppliers)
-        .WithTags(Tags.Suppliers);
+        .RequireAuthorization(Permissions.GetPurchaseOrders)
+        .WithTags(Tags.PurchaseOrders);
     }
 }

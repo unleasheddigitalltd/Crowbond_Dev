@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.OMS.Application;
+using Crowbond.Modules.OMS.Domain.Orders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Modules.OMS.Infrastructure.Orders;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
@@ -44,6 +48,8 @@ public static class OmsModule
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
+
+        services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
 

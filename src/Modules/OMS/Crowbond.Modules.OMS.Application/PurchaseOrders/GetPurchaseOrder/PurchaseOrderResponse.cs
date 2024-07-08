@@ -1,9 +1,10 @@
-﻿namespace Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers.Dto;
+﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrder;
 
-public sealed record Supplier()
+public sealed record PurchaseOrderResponse()
 {
     public Guid Id { get; }
-    public int AccountNumber { get; set; }
+
+    public string PurchaseOrderNumber { get; set; }
     public string SupplierName { get; set; }
 
     public string AddressLine1 { get; set; }
@@ -14,7 +15,7 @@ public sealed record Supplier()
 
     public string AddressCounty { get; set; }
 
-    public string AddressCountry { get; set; }
+    public string? AddressCountry { get; set; }
 
     public string AddressPostalCode { get; set; }
 
@@ -30,13 +31,13 @@ public sealed record Supplier()
 
     public string BillingAddressPostalCode { get; set; }
 
-    public string EmailAddress { get; set; }
-
-    public string PhoneNumber { get; set; }
-
-    public string ContactName { get; set; }
-
     public int PaymentTerms { get; set; }
 
     public string? SupplierNotes { get; set; }
-}
+
+    public string SupplierEmail { get; set; }
+
+    public string SupplierPhone { get; set; }
+
+    public string SupplierContact { get; set; }
+};

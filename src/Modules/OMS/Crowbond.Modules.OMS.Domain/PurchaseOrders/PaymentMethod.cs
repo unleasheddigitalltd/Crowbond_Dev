@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.OMS.Domain.Orders;
+﻿namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 public sealed class PaymentMethod
 {
     public static readonly PaymentMethod BankTransfer = new("Bank Transfer");
