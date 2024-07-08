@@ -26,7 +26,7 @@ public sealed class OrderHeader : Entity
 
     public decimal OrderAmount { get; private set; }
 
-    public string DriverCode { get; private set; }
+    public Guid RouteId { get; private set; }
 
     public string ShippingAddressCompany { get; private set; }
 
@@ -75,7 +75,7 @@ public sealed class OrderHeader : Entity
     string customerMobile,
     string customerEmail,
     decimal orderAmount,
-    string driverCode,
+    Guid routeId,
     string shippingAddressCompany,
     string shippingAddressLine1,
     string shippingAddressLine2,
@@ -107,7 +107,7 @@ public sealed class OrderHeader : Entity
             CustomerMobile = customerMobile,
             CustomerEmail = customerEmail,
             OrderAmount = orderAmount,
-            DriverCode = driverCode,
+            RouteId = routeId,
             ShippingAddressCompany = shippingAddressCompany,
             ShippingAddressLine1 = shippingAddressLine1,
             ShippingAddressLine2 = shippingAddressLine2,
