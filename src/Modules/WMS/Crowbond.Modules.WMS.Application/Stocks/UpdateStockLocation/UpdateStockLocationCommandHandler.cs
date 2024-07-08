@@ -7,7 +7,6 @@ using Crowbond.Modules.WMS.Domain.Locations;
 using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Settings;
-using MediatR;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockLocation;
 
@@ -74,7 +73,7 @@ internal sealed class UpdateStockLocationCommandHandler(
 
         Result<Stock> destStockResult = destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber);
 
-        if (destStockResult is null)
+        if (destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber) is null)
         {
             destStockResult = Stock.Create(
                 product,
