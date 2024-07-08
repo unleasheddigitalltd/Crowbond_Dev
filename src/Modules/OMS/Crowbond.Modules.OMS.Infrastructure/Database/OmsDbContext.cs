@@ -2,6 +2,7 @@
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Orders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,9 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
 {
     internal DbSet<OrderHeader> orderHeaders {  get; set; }
     internal DbSet<OrderLine> orderLines {  get; set; }
+
+    internal DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+    internal DbSet<PurchaseOrderHeader> PurchaseOrderHeaders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

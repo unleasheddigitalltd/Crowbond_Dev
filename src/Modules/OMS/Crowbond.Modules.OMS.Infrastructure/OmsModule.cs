@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -48,6 +50,8 @@ public static class OmsModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
+
+        services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
 
