@@ -15,10 +15,10 @@ public sealed record Customer
     public Guid Id { get; }
     public string AccountNumber { get; }
     public string BusinessName { get; }
-    public string CustomerContact { get; }
-    public string ShippingAddressLine1 { get; }
-    public string ShippingAddressLine2 { get; }
-    public string CustomerPhone { get; }
+    public string BillingAddressLine1 { get; }
+    public string BillingAddressLine2 { get; }
+    public string BillingTownCity { get; }
+    public string IsActive { get; }
 }
 
 

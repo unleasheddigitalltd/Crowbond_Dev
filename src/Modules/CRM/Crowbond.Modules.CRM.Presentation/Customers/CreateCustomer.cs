@@ -15,7 +15,7 @@ internal sealed class CreateCustomer : IEndpoint
     {
         app.MapPost("Customers", async (CustomerRequest request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new CreateCustomerCommand(request));
+            Result<Guid> result = await sender.Send(new CreateCustomerCommand(Guid.NewGuid(), request));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

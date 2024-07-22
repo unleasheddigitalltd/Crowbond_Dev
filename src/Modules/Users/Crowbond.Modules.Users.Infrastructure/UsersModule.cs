@@ -3,6 +3,7 @@ using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Presentation.Endpoints;
+using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Abstractions.Data;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Domain.Users;
@@ -13,6 +14,7 @@ using Crowbond.Modules.Users.Infrastructure.Inbox;
 using Crowbond.Modules.Users.Infrastructure.Outbox;
 using Crowbond.Modules.Users.Infrastructure.Users;
 using Crowbond.Modules.Users.Presentation;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +39,11 @@ public static class UsersModule
         services.AddEndpoints(AssemblyReference.Assembly);
 
         return services;
+    }
+
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactCreatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

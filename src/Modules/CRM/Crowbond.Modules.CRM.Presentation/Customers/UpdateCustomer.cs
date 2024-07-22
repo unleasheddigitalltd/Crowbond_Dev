@@ -1,4 +1,5 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Security.Claims;
+using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
@@ -13,9 +14,10 @@ internal sealed class UpdateCustomer: IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("customers/{id}", async (Guid id, CustomerDto request, ISender sender) =>
+        app.MapPut("customers/{id}", async (Guid id, CustomerRequest request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateCustomerCommand(id, request));
+
+            Result result = await sender.Send(new UpdateCustomerCommand(id, Guid.NewGuid(), request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

@@ -21,7 +21,6 @@ internal sealed class GetCustomersQueryHandler(IDbConnectionFactory dbConnection
         {
             "businessName" => "c.business_name",
             "accountNumber" => "c.account_number",
-            "CustomerContact" => "c.customer_contact",
             "active" => "p.active",
             _ => "c.business_name" // Default sorting
         };
@@ -32,28 +31,27 @@ internal sealed class GetCustomersQueryHandler(IDbConnectionFactory dbConnection
                     c.id AS {nameof(Customer.Id)},
                     c.account_number AS {nameof(Customer.AccountNumber)}, 
                     c.business_name AS {nameof(Customer.BusinessName)},
-                    c.customer_contact AS {nameof(Customer.CustomerContact)},
-                    c.shipping_address_line1 AS {nameof(Customer.ShippingAddressLine1)},
-                    c.shipping_address_line2 AS {nameof(Customer.ShippingAddressLine2)},
-                    c.customer_phone AS {nameof(Customer.CustomerPhone)},
+                    c.billing_address_line1 AS {nameof(Customer.BillingAddressLine1)},
+                    c.billing_address_line2 AS {nameof(Customer.BillingAddressLine2)},
+                    c.billing_town_city AS {nameof(Customer.BillingTownCity)},
+                    c.is_active AS {nameof(Customer.IsActive)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM crm.customers c
                 WHERE
                     c.business_name ILIKE '%' || @Search || '%'
                     OR c.account_number ILIKE '%' || @Search || '%'
-                    OR c.customer_contact ILIKE '%' || @Search || '%'
-                    OR c.shipping_address_line1 ILIKE '%' || @Search || '%'
-                    OR c.shipping_address_line2 ILIKE '%' || @Search || '%'
-                    OR c.customer_phone ILIKE '%' || @Search || '%'                    
+                    OR c.billing_address_line1 ILIKE '%' || @Search || '%'
+                    OR c.billing_address_line2 ILIKE '%' || @Search || '%'       
+                    OR c.billing_town_city ILIKE '%' || @Search || '%'
             )
             SELECT 
                 c.{nameof(Customer.Id)},
                 c.{nameof(Customer.AccountNumber)},
                 c.{nameof(Customer.BusinessName)},
-                c.{nameof(Customer.CustomerContact)},
-                c.{nameof(Customer.ShippingAddressLine1)},
-                c.{nameof(Customer.ShippingAddressLine2)},
-                c.{nameof(Customer.CustomerPhone)}
+                c.{nameof(Customer.BillingAddressLine1)},
+                c.{nameof(Customer.BillingAddressLine2)},
+                c.{nameof(Customer.BillingTownCity)},
+                c.{nameof( Customer.IsActive)}
             FROM FilteredCustomers c
             WHERE c.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY c.RowNum;
@@ -63,10 +61,9 @@ internal sealed class GetCustomersQueryHandler(IDbConnectionFactory dbConnection
                 WHERE
                     c.business_name ILIKE '%' || @Search || '%'
                     OR c.account_number ILIKE '%' || @Search || '%'
-                    OR c.customer_contact ILIKE '%' || @Search || '%'
-                    OR c.shipping_address_line1 ILIKE '%' || @Search || '%'
-                    OR c.shipping_address_line2 ILIKE '%' || @Search || '%'
-                    OR c.customer_phone ILIKE '%' || @Search || '%'  
+                    OR c.billing_address_line1 ILIKE '%' || @Search || '%'
+                    OR c.billing_address_line2 ILIKE '%' || @Search || '%'       
+                    OR c.billing_town_city ILIKE '%' || @Search || '%'
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

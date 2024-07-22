@@ -6,13 +6,35 @@ internal sealed class UpdateCustomerCommandValidator : AbstractValidator<UpdateC
 {
     public UpdateCustomerCommandValidator()
     {
-        RuleFor(c => c.Customer.BusinessName).NotEmpty();
-        RuleFor(c => c.Customer.ShippingAddressLine1).NotEmpty();
-        RuleFor(c => c.Customer.ShippingAddressLine2).NotEmpty();
-        RuleFor(c => c.Customer.ShippingTownCity).NotEmpty();
-        RuleFor(c => c.Customer.ShippingPostalCode).NotEmpty();
-        RuleFor(c => c.Customer.CustomerEmail).NotEmpty();
-        RuleFor(c => c.Customer.CustomerPhone).NotEmpty();
-        RuleFor(c => c.Customer.CustomerContact).NotEmpty();
+        RuleFor(c => c.Customer.BusinessName).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.Customer.BillingAddressLine1).NotEmpty().MaximumLength(255);
+        RuleFor(c => c.Customer.BillingAddressLine2).MaximumLength(255);
+        RuleFor(c => c.Customer.BillingTownCity).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.Customer.BillingCounty).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.Customer.BillingCountry).MaximumLength(100);
+        RuleFor(c => c.Customer.BillingPostalCode).NotEmpty().MaximumLength(16);
+        RuleFor(c => c.Customer.CustomerNotes).MaximumLength(500);
+
+        RuleForEach(c => c.Customer.CustomerContacts)
+            .ChildRules(t =>
+            {
+                t.RuleFor(t => t.FirstName).NotEmpty().MaximumLength(100);
+                t.RuleFor(t => t.LastName).NotEmpty().MaximumLength(100);
+                t.RuleFor(t => t.PhoneNumber).NotEmpty().MaximumLength(20);
+                t.RuleFor(t => t.Mobile).NotEmpty().MaximumLength(20);
+                t.RuleFor(t => t.Email).NotEmpty().MaximumLength(255);
+            });
+
+        RuleForEach(c => c.Customer.CustomerOutletAddresses)
+            .ChildRules(s =>
+            {
+                s.RuleFor(s => s.AddressLine1).NotEmpty().MaximumLength(255);
+                s.RuleFor(s => s.AddressLine2).MaximumLength(255);
+                s.RuleFor(s => s.TownCity).NotEmpty().MaximumLength(100);
+                s.RuleFor(s => s.County).NotEmpty().MaximumLength(100);
+                s.RuleFor(s => s.Country).MaximumLength(100);
+                s.RuleFor(s => s.PostalCode).NotEmpty().MaximumLength(16);
+                s.RuleFor(s => s.DeliveryNote).MaximumLength(500);
+            });
     }
 }

@@ -15,4 +15,8 @@ public sealed class Sequence : Entity
     public SequenceContext Context { get; private set; }
     public int LastNumber { get; private set; }
 
+    public void IncreaseSequence()
+    {
+        LastNumber++;
+    }
 }

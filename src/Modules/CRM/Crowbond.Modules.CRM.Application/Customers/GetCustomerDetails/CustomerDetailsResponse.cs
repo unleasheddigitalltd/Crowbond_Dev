@@ -1,40 +1,71 @@
-﻿using System.Xml.Linq;
+﻿namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
 
-namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
-
-public sealed record CustomerDetailsResponse()
+public sealed record CustomerDetailsResponse
 {
+    public CustomerDetailsResponse()
+    {
+        CustomerContacts = new List<CustomerContactResponse>();
+        CustomerShippingAddresses = new List<CustomerShippingAddressResponse>();
+    }
+
     public Guid Id { get; }
 
-    public string AccountNumber { get; set; }
-    public string BusinessName { get; set; }
+    public string AccountNumber { get; }
 
+    public string BusinessName { get; }
 
-    public string ShippingAddressLine1 { get; set; }
+    public string BillingAddressLine1 { get; }
 
-    public string? ShippingAddressLine2 { get; set; }
+    public string? BillingAddressLine2 { get; }
 
-    public string ShippingTownCity { get; set; }
+    public string BillingTownCity { get; }
 
-    public string ShippingPostalCode { get; set; }
+    public string BillingPostalCode { get; }
 
-    public string BillingAddressLine1 { get; set; }
+    public string BillingCounty { get; }
 
-    public string? BillingAddressLine2 { get; set; }
+    public string BillingCountry { get; }
 
-    public string BillingTownCity { get; set; }
+    public Guid PriceGroupId { get;  }
 
-    public string BillingPostalCode { get; set; }
+    public Guid InvoicePeriodId { get; }
 
-    public int PaymentTerms { get; set; }
+    public int PaymentTerms { get; }
 
-    public string? CustomerNotes { get; set; }
+    public bool DetailedInvoice { get; }
 
-    public string CustomerEmail { get; set; }
+    public string? CustomerNotes { get; }
 
-    public string CustomerPhone { get; set; }
+    public bool IsHq { get; }
 
-    public string CustomerContact { get; set; }
+    public bool IsActive { get; }
 
+    public List<CustomerContactResponse> CustomerContacts { get; set; }
 
+    public List<CustomerShippingAddressResponse> CustomerShippingAddresses { get; set; }
 };
+public sealed record CustomerContactResponse(
+    Guid Id,
+    Guid CustomerId,
+    string FirstName,
+    string LastName,
+    string PhoneNumber,
+    string Mobile,
+    string Email,
+    bool Primary,
+    bool IsActive);
+
+public sealed record CustomerShippingAddressResponse(
+    Guid Id,
+    Guid CustomerId,
+    string ShippingAddressLine1,
+    string? ShippingAddressLine2,
+    string ShippingTownCity,
+    string ShippingCounty,
+    string? ShippingCountry,
+    string ShippingPostalCode,
+    string? DeliveryNote,
+    DateTime DeliveryTimeFrom,
+    DateTime DeliveryTimeTo,
+    bool Is24HrsDelivery);
+
