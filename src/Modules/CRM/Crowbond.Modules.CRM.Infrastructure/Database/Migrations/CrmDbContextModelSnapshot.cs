@@ -23,6 +23,450 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Crowbond.Common.Infrastructure.Inbox.InboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_on_utc");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_on_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_inbox_messages");
+
+                    b.ToTable("inbox_messages", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Common.Infrastructure.Inbox.InboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("InboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("inbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("InboxMessageId", "Name")
+                        .HasName("pk_inbox_message_consumers");
+
+                    b.ToTable("inbox_message_consumers", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Common.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_on_utc");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_on_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_outbox_messages");
+
+                    b.ToTable("outbox_messages", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Common.Infrastructure.Outbox.OutboxMessageConsumer", b =>
+                {
+                    b.Property<Guid>("OutboxMessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_message_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("OutboxMessageId", "Name")
+                        .HasName("pk_outbox_message_consumers");
+
+                    b.ToTable("outbox_message_consumers", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Categories.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_archived");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_categories");
+
+                    b.ToTable("categories", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerContacts.CustomerContact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreateBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("create_by");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_number");
+
+                    b.Property<bool>("Primary")
+                        .HasColumnType("boolean")
+                        .HasColumnName("primary");
+
+                    b.Property<bool>("ReceiveInvoice")
+                        .HasColumnType("boolean")
+                        .HasColumnName("receive_invoice");
+
+                    b.Property<bool>("ReceiveOrder")
+                        .HasColumnType("boolean")
+                        .HasColumnName("receive_order");
+
+                    b.Property<bool>("ReceivePriceList")
+                        .HasColumnType("boolean")
+                        .HasColumnName("receive_price_list");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_contacts");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_customer_contacts_customer_id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_customer_contacts_email");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_customer_contacts_username");
+
+                    b.ToTable("customer_contacts", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutletRoutes.CustomerOutletRoute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CustomerOutletId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_outlet_id");
+
+                    b.Property<string>("DaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("days_of_week");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("route_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_outlet_routes");
+
+                    b.ToTable("customer_outlet_routes", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutlet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("address_line1");
+
+                    b.Property<string>("AddressLine2")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("address_line2");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("country");
+
+                    b.Property<string>("County")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("county");
+
+                    b.Property<Guid>("CreateBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("create_by");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("DeliveryNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("delivery_note");
+
+                    b.Property<DateTime>("DeliveryTimeFrom")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivery_time_from");
+
+                    b.Property<DateTime>("DeliveryTimeTo")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivery_time_to");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("full_name");
+
+                    b.Property<bool>("Is24HrsDelivery")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is24hrs_delivery");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("LocationName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("location_name");
+
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_number");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("postal_code");
+
+                    b.Property<string>("TownCity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("town_city");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_outlets");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_customer_outlets_customer_id");
+
+                    b.ToTable("customer_outlets", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProductPrices.CustomerProductPrice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text")
+                        .HasColumnName("comment");
+
+                    b.Property<Guid>("CustomerProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_product_id");
+
+                    b.Property<DateOnly>("EffectiveDate")
+                        .HasColumnType("date")
+                        .HasColumnName("effective_date");
+
+                    b.Property<DateOnly?>("ExpiryDate")
+                        .HasColumnType("date")
+                        .HasColumnName("expiry_date");
+
+                    b.Property<decimal?>("FixedDiscount")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)")
+                        .HasColumnName("fixed_discount");
+
+                    b.Property<decimal?>("FixedPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("fixed_price");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_product_prices");
+
+                    b.HasIndex("CustomerProductId")
+                        .HasDatabaseName("ix_customer_product_prices_customer_product_id");
+
+                    b.ToTable("customer_product_prices", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_products");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_customer_products_product_id");
+
+                    b.HasIndex("CustomerId", "ProductId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_customer_products_customer_id_product_id");
+
+                    b.ToTable("customer_products", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -32,36 +476,42 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasColumnName("account_number");
 
                     b.Property<string>("BillingAddressLine1")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("billing_address_line1");
 
                     b.Property<string>("BillingAddressLine2")
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("billing_address_line2");
 
                     b.Property<string>("BillingCountry")
-                        .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("billing_country");
 
                     b.Property<string>("BillingCounty")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("billing_county");
 
                     b.Property<string>("BillingPostalCode")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasColumnName("billing_postal_code");
 
                     b.Property<string>("BillingTownCity")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("billing_town_city");
 
                     b.Property<string>("BusinessName")
@@ -70,77 +520,278 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("business_name");
 
-                    b.Property<string>("CustomerContact")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("customer_contact");
+                    b.Property<Guid>("CreateBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("create_by");
 
-                    b.Property<string>("CustomerEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("customer_email");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date");
+
+                    b.Property<bool>("CustomPaymentTerm")
+                        .HasColumnType("boolean")
+                        .HasColumnName("custom_payment_term");
 
                     b.Property<string>("CustomerNotes")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("customer_notes");
 
-                    b.Property<string>("CustomerPhone")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("customer_phone");
+                    b.Property<decimal?>("DeliveryCharge")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("delivery_charge");
+
+                    b.Property<int>("DeliveryFeeSetting")
+                        .HasColumnType("integer")
+                        .HasColumnName("delivery_fee_setting");
+
+                    b.Property<decimal?>("DeliveryMinOrderValue")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("delivery_min_order_value");
 
                     b.Property<bool>("DetailedInvoice")
                         .HasColumnType("boolean")
                         .HasColumnName("detailed_invoice");
 
-                    b.Property<string>("DriverCode")
-                        .HasColumnType("text")
-                        .HasColumnName("driver_code");
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)")
+                        .HasColumnName("discount");
 
-                    b.Property<Guid>("InvoicePeriodId")
+                    b.Property<int?>("InvoiceDueDays")
+                        .HasColumnType("integer")
+                        .HasColumnName("invoice_due_days");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsHq")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_hq");
+
+                    b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("invoice_period_id");
+                        .HasColumnName("last_modified_by");
 
-                    b.Property<int>("PaymentTerms")
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<bool>("NoDiscountFixedPrice")
+                        .HasColumnType("boolean")
+                        .HasColumnName("no_discount_fixed_price");
+
+                    b.Property<bool>("NoDiscountSpecialItem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("no_discount_special_item");
+
+                    b.Property<int?>("PaymentTerms")
                         .HasColumnType("integer")
                         .HasColumnName("payment_terms");
 
-                    b.Property<Guid>("PriceGroupId")
+                    b.Property<Guid>("PriceTierId")
                         .HasColumnType("uuid")
-                        .HasColumnName("price_group_id");
+                        .HasColumnName("price_tier_id");
 
-                    b.Property<string>("ShippingAddressLine1")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_line1");
+                    b.Property<Guid?>("RepId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("rep_id");
 
-                    b.Property<string>("ShippingAddressLine2")
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_line2");
+                    b.Property<bool>("ShowPriceInApp")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_price_in_app");
 
-                    b.Property<string>("ShippingCountry")
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_country");
-
-                    b.Property<string>("ShippingCounty")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_county");
-
-                    b.Property<string>("ShippingPostalCode")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_postal_code");
-
-                    b.Property<string>("ShippingTownCity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_town_city");
+                    b.Property<bool>("ShowPricesInDeliveryDocket")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_prices_in_delivery_docket");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
 
+                    b.HasIndex("RepId")
+                        .HasDatabaseName("ix_customers_rep_id");
+
                     b.ToTable("customers", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.PriceTiers.PriceTier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_price_tiers");
+
+                    b.ToTable("price_tiers", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.ProductPrices.ProductPrice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("BasePurchasePrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("base_purchase_price");
+
+                    b.Property<DateOnly>("EffectiveDate")
+                        .HasColumnType("date")
+                        .HasColumnName("effective_date");
+
+                    b.Property<Guid>("PriceTierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("price_tier_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("sale_price");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_prices");
+
+                    b.HasIndex("PriceTierId")
+                        .HasDatabaseName("ix_product_prices_price_tier_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_product_prices_product_id");
+
+                    b.ToTable("product_prices", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("sku");
+
+                    b.Property<string>("UnitOfMeasureName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("unit_of_measure_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_products");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_products_category_id");
+
+                    b.ToTable("products", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Recipients.Recipient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CustomerContactId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_contact_id");
+
+                    b.Property<int>("RecipientType")
+                        .HasColumnType("integer")
+                        .HasColumnName("recipient_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_recipients");
+
+                    b.HasIndex("CustomerContactId")
+                        .HasDatabaseName("ix_recipients_customer_contact_id");
+
+                    b.ToTable("recipients", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Reps.Rep", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_reps");
+
+                    b.ToTable("reps", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Routes.Route", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<TimeOnly>("CutOffTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("cut_off_time");
+
+                    b.Property<string>("DaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("CHAR(7)")
+                        .HasColumnName("days_of_week");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer")
+                        .HasColumnName("position");
+
+                    b.HasKey("Id")
+                        .HasName("pk_routes");
+
+                    b.ToTable("routes", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Sequences.Sequence", b =>
@@ -177,7 +828,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("account_number");
 
                     b.Property<string>("AddressCountry")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("address_country");
 
@@ -206,7 +856,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("address_town_city");
 
                     b.Property<string>("BillingAddressCountry")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("billing_address_country");
 
@@ -234,24 +883,19 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("billing_address_town_city");
 
-                    b.Property<string>("ContactName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("contact_name");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email_address");
-
                     b.Property<int>("PaymentTerms")
                         .HasColumnType("integer")
                         .HasColumnName("payment_terms");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("SupplierContact")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("phone_number");
+                        .HasColumnName("supplier_contact");
+
+                    b.Property<string>("SupplierEmail")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("supplier_email");
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
@@ -263,10 +907,108 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("supplier_notes");
 
+                    b.Property<string>("SupplierPhone")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("supplier_phone");
+
                     b.HasKey("Id")
                         .HasName("pk_suppliers");
 
                     b.ToTable("suppliers", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerContacts.CustomerContact", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_contacts_customers_customer_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutlet", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_outlets_customers_customer_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProductPrices.CustomerProductPrice", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_product_prices_customer_products_customer_product_");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_products_customers_customer_id");
+
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_products_products_product_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Reps.Rep", null)
+                        .WithMany()
+                        .HasForeignKey("RepId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("fk_customers_reps_rep_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.ProductPrices.ProductPrice", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.PriceTiers.PriceTier", null)
+                        .WithMany()
+                        .HasForeignKey("PriceTierId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_prices_price_tiers_price_tier_id");
+
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_prices_products_product_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Product", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_categories_category_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Recipients.Recipient", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.CustomerContacts.CustomerContact", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_recipients_customer_contacts_customer_contact_id");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,6 +47,7 @@ public static class DependencyInjection
             [
                 EventsModule.ConfigureConsumers(redisConnectionString),
                     TicketingModule.ConfigureConsumers,
+                    UsersModule.ConfigureConsumers,
                     AttendanceModule.ConfigureConsumers,
             ],
             databaseConnectionString,

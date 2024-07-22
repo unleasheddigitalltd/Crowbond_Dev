@@ -25,11 +25,11 @@ public sealed class User : Entity
 
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
-    public static User Create(string username, string email, string firstName, string lastName, string identityId)
+    public static User Create(Guid id, string username, string email, string firstName, string lastName, string identityId)
     {
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = id,
             Username = username,
             Email = email,
             FirstName = firstName,
@@ -43,6 +43,7 @@ public sealed class User : Entity
 
         return user;
     }
+
 
     public void Update(string firstName, string lastName)
     {

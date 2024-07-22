@@ -19,21 +19,12 @@ internal sealed class GetCustomerQueryHandler(IDbConnectionFactory dbConnectionF
             $"""
              SELECT
                  id AS {nameof(CustomerResponse.Id)},
-                 businessname AS {nameof(CustomerResponse.BusinessName)},
-                 accountnumber AS {nameof(CustomerResponse.AccountNumber)},
-                 shippingaddressline1 AS {nameof(CustomerResponse.ShippingAddressLine1)},
-                 shippingaddressline2 AS {nameof(CustomerResponse.ShippingAddressLine2)},
-                 shippingtowncity AS {nameof(CustomerResponse.ShippingTownCity)},
-                 shippingpostalcode AS {nameof(CustomerResponse.ShippingPostalCode)},
-                 customeremail AS {nameof(CustomerResponse.CustomerEmail)},
-                 customerphone AS {nameof(CustomerResponse.CustomerPhone)},
-                 billingaddressline1 AS {nameof(CustomerResponse.BillingAddressLine1)},
-                 billingaddressline2 AS {nameof(CustomerResponse.BillingAddressLine2)},
-                 billingtowncity AS {nameof(CustomerResponse.BillingTownCity)},
-                 billingpostalcode AS {nameof(CustomerResponse.BillingPostalCode)},
-                 paymentterms AS {nameof(CustomerResponse.PaymentTerms)},
-                 customernotes AS {nameof(CustomerResponse.CustomerNotes)}
-                 
+                 business_name AS {nameof(CustomerResponse.BusinessName)},
+                 account_number AS {nameof(CustomerResponse.AccountNumber)},
+                 billing_address_line1 AS {nameof(CustomerResponse.BillingAddressLine1)},
+                 billing_address_line2 AS {nameof(CustomerResponse.BillingAddressLine2)},
+                 billing_town_city AS {nameof(CustomerResponse.BillingTownCity)},
+                 is_active AS {nameof(CustomerResponse.IsActive)}             
              FROM crm.customers
              WHERE id = @CustomerId
              """;
