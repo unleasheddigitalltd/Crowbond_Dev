@@ -49,6 +49,14 @@ public sealed class Permission
     public static readonly Permission ModifyDrivers = new("drivers:update");
     public static readonly Permission CreateDrivers = new("drivers:create");
 
+    public static readonly Permission GetRoutes = new("routes:read");
+    public static readonly Permission ModifyRoutes = new("routes:update");
+    public static readonly Permission CreateRoutes = new("routes:create");
+
+    public static readonly Permission GetRouteTrips = new("routetrip:read");
+    public static readonly Permission ModifyRouteTrips = new("routetrip:update");
+    public static readonly Permission CreateRouteTrips = new("routetrip:create");
+
     public Permission(string code)
     {
         Code = code;
