@@ -71,6 +71,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                 joinBuilder.HasData(
                     // Driver permissions
                     CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
+                    CreateRolePermission(Role.Driver, Permission.GetOrders),
 
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
