@@ -19,7 +19,7 @@ internal sealed class UpdatePurchaseOrder : IEndpoint
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
-        .RequireAuthorization(Permission.ModifyPurchaseOrders)
+        .RequireAuthorization(Permissions.ModifyPurchaseOrders)
         .WithTags(Tags.PurchaseOrders);
     }
 }

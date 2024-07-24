@@ -113,27 +113,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.Integr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CRM", "CRM", "{DE01AD95-46F7-41B7-BC41-CD83FDC7BC4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.Application", "src\Modules\CRM\Crowbond.Modules.CRM.Application\Crowbond.Modules.CRM.Application.csproj", "{EF17AF7F-3E5D-42A2-A414-E42318EDF94F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.Application", "src\Modules\CRM\Crowbond.Modules.CRM.Application\Crowbond.Modules.CRM.Application.csproj", "{EF17AF7F-3E5D-42A2-A414-E42318EDF94F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.Domain", "src\Modules\CRM\Crowbond.Modules.CRM.Domain\Crowbond.Modules.CRM.Domain.csproj", "{A810588A-02EE-44B1-9356-655B787A5695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.Domain", "src\Modules\CRM\Crowbond.Modules.CRM.Domain\Crowbond.Modules.CRM.Domain.csproj", "{A810588A-02EE-44B1-9356-655B787A5695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.Infrastructure", "src\Modules\CRM\Crowbond.Modules.CRM.Infrastructure\Crowbond.Modules.CRM.Infrastructure.csproj", "{9364B203-CA68-43E6-9570-FFFD2EE1E4A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.Infrastructure", "src\Modules\CRM\Crowbond.Modules.CRM.Infrastructure\Crowbond.Modules.CRM.Infrastructure.csproj", "{9364B203-CA68-43E6-9570-FFFD2EE1E4A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.IntegrationEvents", "src\Modules\CRM\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj", "{3370065D-B4E3-44E1-ACDB-58378177BEAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.IntegrationEvents", "src\Modules\CRM\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj", "{3370065D-B4E3-44E1-ACDB-58378177BEAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.Presentation", "src\Modules\CRM\Crowbond.Modules.CRM.Presentation\Crowbond.Modules.CRM.Presentation.csproj", "{36EED481-EC54-4DBD-9692-B55090CEE6BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.Presentation", "src\Modules\CRM\Crowbond.Modules.CRM.Presentation\Crowbond.Modules.CRM.Presentation.csproj", "{36EED481-EC54-4DBD-9692-B55090CEE6BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OMS", "OMS", "{CF31CEC9-5A24-4DC6-856C-6D3E26EE8D12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.Application", "src\Modules\OMS\Crowbond.Modules.OMS.Application\Crowbond.Modules.OMS.Application.csproj", "{D35B38C8-826A-49E8-B229-C0214E339EA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.Application", "src\Modules\OMS\Crowbond.Modules.OMS.Application\Crowbond.Modules.OMS.Application.csproj", "{D35B38C8-826A-49E8-B229-C0214E339EA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.Domain", "src\Modules\OMS\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj", "{9E9992A0-28A8-4EFC-A9DB-FAC7BFA34145}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.Domain", "src\Modules\OMS\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj", "{9E9992A0-28A8-4EFC-A9DB-FAC7BFA34145}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.Infrastructure", "src\Modules\OMS\Crowbond.Modules.OMS.Infrastructure\Crowbond.Modules.OMS.Infrastructure.csproj", "{23BD412D-B831-4F91-80E5-B36A363CE3FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.Infrastructure", "src\Modules\OMS\Crowbond.Modules.OMS.Infrastructure\Crowbond.Modules.OMS.Infrastructure.csproj", "{23BD412D-B831-4F91-80E5-B36A363CE3FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.IntegrationEvents", "src\Modules\OMS\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj", "{93121CF2-4161-4F16-8C71-640CFFB53FF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.IntegrationEvents", "src\Modules\OMS\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj", "{93121CF2-4161-4F16-8C71-640CFFB53FF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.Presentation", "src\Modules\OMS\Crowbond.Modules.OMS.Presentation\Crowbond.Modules.OMS.Presentation.csproj", "{1FDE8963-DA9A-431E-88A3-D89124E3F9DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.Presentation", "src\Modules\OMS\Crowbond.Modules.OMS.Presentation\Crowbond.Modules.OMS.Presentation.csproj", "{1FDE8963-DA9A-431E-88A3-D89124E3F9DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

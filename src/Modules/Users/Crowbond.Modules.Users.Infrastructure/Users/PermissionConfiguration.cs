@@ -50,7 +50,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateReceipts,
             Permission.CreatePurchaseOrders,
             Permission.GetPurchaseOrders,
-            Permission.ModifyPurchaseOrders);
+            Permission.ModifyPurchaseOrders,
+            Permission.GetDrivers,
+            Permission.ModifyDrivers,
+            Permission.CreateDrivers);
 
         builder
             .HasMany<Role>()
@@ -98,7 +101,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateSuppliers),
                     CreateRolePermission(Role.Administrator, Permission.CreatePurchaseOrders),
                     CreateRolePermission(Role.Administrator, Permission.ModifyPurchaseOrders),
-                    CreateRolePermission(Role.Administrator, Permission.GetPurchaseOrders)
+                    CreateRolePermission(Role.Administrator, Permission.GetPurchaseOrders),
+                    CreateRolePermission(Role.Administrator, Permission.GetDrivers),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyDrivers),
+                    CreateRolePermission(Role.Administrator, Permission.CreateDrivers)
                     );
             });
     }

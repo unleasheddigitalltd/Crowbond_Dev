@@ -46,9 +46,9 @@ public static class DependencyInjection
         services.AddInfrastructure(
             [
                 EventsModule.ConfigureConsumers(redisConnectionString),
-                    TicketingModule.ConfigureConsumers,
-                    UsersModule.ConfigureConsumers,
-                    AttendanceModule.ConfigureConsumers,
+                TicketingModule.ConfigureConsumers,
+                UsersModule.ConfigureConsumers,
+                AttendanceModule.ConfigureConsumers,
             ],
             databaseConnectionString,
             redisConnectionString);

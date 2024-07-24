@@ -19,7 +19,7 @@ internal sealed class GetOrdersByRouteId : IEndpoint
 
             return reault.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permission.GetOrders)
+            .RequireAuthorization(Permissions.GetOrders)
             .WithTags(Tags.Orders);
     }
 }

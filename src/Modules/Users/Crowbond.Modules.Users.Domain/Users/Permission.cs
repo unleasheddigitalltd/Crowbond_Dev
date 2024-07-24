@@ -45,6 +45,10 @@ public sealed class Permission
     public static readonly Permission ModifyPurchaseOrders = new("purchaseorders:update");
     public static readonly Permission CreatePurchaseOrders = new("purchaseorders:create");
 
+    public static readonly Permission GetDrivers = new("drivers:read");
+    public static readonly Permission ModifyDrivers = new("drivers:update");
+    public static readonly Permission CreateDrivers = new("drivers:create");
+
     public Permission(string code)
     {
         Code = code;

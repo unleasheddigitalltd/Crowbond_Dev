@@ -24,14 +24,15 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
                 h.customer_mobile AS {nameof(OrderResponse.CustomerMobile)},
                 h.customer_email AS {nameof(OrderResponse.CustomerEmail)},
                 h.route_id AS {nameof(OrderResponse.ReouteId)},
-                h.shipping_address_line1 AS {nameof(OrderResponse.ShippingAddressLine1)},
-                h.shipping_address_line2 AS {nameof(OrderResponse.ShippingAddressLine2)},
-                h.shipping_address_country AS {nameof(OrderResponse.ShippingAddressCountry)},
-                h.shipping_date AS {nameof(OrderResponse.ShippingDate)},
-                h.shipping_address_postal_code AS {nameof(OrderResponse.ShippingAddressPostalCode)},
-                h.shipping_address_town_city AS {nameof(OrderResponse.ShippingAddressTownCity)},
-                h.sales_order_number AS {nameof(OrderResponse.SalesOrderNumber)},
-                h.shipping_address_company AS {nameof(OrderResponse.ShippingAddressCompany)}                
+                h.delivery_address_line1 AS {nameof(OrderResponse.DeliveryAddressLine1)},
+                h.delivery_address_line2 AS {nameof(OrderResponse.DeliveryAddressLine2)},
+                h.delivery_address_country AS {nameof(OrderResponse.DeliveryAddressCountry)},
+                h.delivery_date AS {nameof(OrderResponse.DeliveryDate)},
+                h.delivery_address_postal_code AS {nameof(OrderResponse.DeliveryAddressPostalCode)},
+                h.delivery_address_town_city AS {nameof(OrderResponse.DeliveryAddressTownCity)},
+                h.sales_order_number AS {nameof(OrderResponse.
+                OrderNumber)},
+                h.shipping_address_company AS {nameof(OrderResponse.DeliveryAddressCompany)}                
              FROM oms.order_headers h
              WHERE h.route_id = @RouteId;
 

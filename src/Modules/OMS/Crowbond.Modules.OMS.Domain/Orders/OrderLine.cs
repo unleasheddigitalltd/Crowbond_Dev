@@ -18,6 +18,8 @@ public sealed class OrderLine
 
     public string ProductName { get; private set; }
 
+    public string UnitOfMeasureName { get; private set; }
+
     public decimal UnitPrice { get; private set; }
 
     public decimal Qty { get; private set; }
@@ -32,12 +34,14 @@ public sealed class OrderLine
 
     public bool Taxable { get; private set; }
 
+    public OrderLineStatus Status { get; private set; }
 
     public static Result<OrderLine> Create(
         Guid orderId,
         Guid productId,
         string productSku,
         string productName,
+        string unitOfMeasureName,
         decimal unitPrice,
         int qty,
         decimal subTotal,
@@ -53,13 +57,15 @@ public sealed class OrderLine
             ProductId = productId,
             ProductSku = productSku,
             ProductName = productName,
+            UnitOfMeasureName = unitOfMeasureName,
             UnitPrice = unitPrice,
             Qty = qty,
             SubTotal = subTotal,
             Tax = tax,
             LineTotal = lineTotal,
             FOC = foc,
-            Taxable = taxable            
+            Taxable = taxable,
+            Status = OrderLineStatus.Pending
         };
 
         return orderLine;

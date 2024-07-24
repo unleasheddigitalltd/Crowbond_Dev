@@ -1,4 +1,5 @@
-﻿using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+﻿using Crowbond.Modules.OMS.Domain.Payments;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.CreatePurchaseOrder;
 

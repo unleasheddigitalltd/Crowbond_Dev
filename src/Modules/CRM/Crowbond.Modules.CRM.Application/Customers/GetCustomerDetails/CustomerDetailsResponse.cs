@@ -26,9 +26,13 @@ public sealed record CustomerDetailsResponse
 
     public string BillingCountry { get; }
 
-    public Guid PriceGroupId { get;  }
+    public Guid PriceTierId { get; private set; }
 
-    public Guid InvoicePeriodId { get; }
+    public decimal Discount { get; private set; }
+
+    public Guid? RepId { get; private set; }
+
+    public bool CustomPaymentTerm { get; private set; }
 
     public int PaymentTerms { get; }
 

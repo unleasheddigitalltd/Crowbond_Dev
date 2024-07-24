@@ -49,7 +49,7 @@ internal sealed class GetPurchaseOrdersQueryHandler(IDbConnectionFactory dbConne
                 s.{nameof(PurchaseOrderHeader.Id)},
                 s.{nameof(PurchaseOrderHeader.PurchaseOrderNo)},
                 s.{nameof(PurchaseOrderHeader.SupplierName)},
-                s.{nameof(PurchaseOrderHeader.ShippingAddressCompany)},
+                s.{nameof(PurchaseOrderHeader.LocationName)},
                 s.{nameof(PurchaseOrderHeader.ShippingAddressLine1)}
             FROM FilteredPurchaseOrders s
             WHERE .RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size

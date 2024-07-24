@@ -4,6 +4,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.CRM.IntegrationEvents;
+using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Abstractions.Data;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Domain.Users;
@@ -44,6 +45,7 @@ public static class UsersModule
     public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactCreatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverCreatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

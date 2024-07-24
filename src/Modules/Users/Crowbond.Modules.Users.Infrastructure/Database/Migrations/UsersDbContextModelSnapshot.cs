@@ -285,6 +285,18 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "purchaseorders:update"
+                        },
+                        new
+                        {
+                            Code = "drivers:read"
+                        },
+                        new
+                        {
+                            Code = "drivers:update"
+                        },
+                        new
+                        {
+                            Code = "drivers:create"
                         });
                 });
 
@@ -303,7 +315,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Name = "Member"
+                            Name = "Customer"
+                        },
+                        new
+                        {
+                            Name = "Driver"
                         },
                         new
                         {
@@ -562,6 +578,21 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "purchaseorders:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:create",
                             RoleName = "Administrator"
                         });
                 });

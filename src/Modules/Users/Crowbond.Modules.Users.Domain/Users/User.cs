@@ -37,13 +37,15 @@ public sealed class User : Entity
             IdentityId = identityId,
         };
 
-        user._roles.Add(Role.Administrator);
-
         user.Raise(new UserRegisteredDomainEvent(user.Id));
 
         return user;
     }
 
+    public void AddRole(Role role)
+    {
+        _roles.Add(role);
+    }
 
     public void Update(string firstName, string lastName)
     {

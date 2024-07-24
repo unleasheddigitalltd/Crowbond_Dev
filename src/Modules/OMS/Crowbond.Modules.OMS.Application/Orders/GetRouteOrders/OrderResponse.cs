@@ -7,21 +7,21 @@ public sealed record OrderResponse
     }
 
     public Guid OrderHeaderId { get; }
+    public string OrderNumber { get; }
     public string InvoiceNo { get; }
     public Guid CustomerId { get; }
-    public decimal OrderAmount { get; }
     public string CustomerName { get; }
     public string CustomerMobile { get; }
     public string CustomerEmail { get; }
+    public decimal OrderAmount { get; }
     public Guid ReouteId { get; }
-    public string ShippingAddressLine1 { get; }
-    public string ShippingAddressLine2 { get; }
-    public string ShippingAddressCountry { get; }
-    public DateOnly ShippingDate { get; }
-    public string ShippingAddressPostalCode { get; }
-    public string ShippingAddressTownCity { get; }
-    public string SalesOrderNumber { get; }
-    public string ShippingAddressCompany { get; }
+    public string DeliveryAddressLine1 { get; }
+    public string DeliveryAddressLine2 { get; }
+    public string DeliveryAddressCountry { get; }
+    public DateOnly DeliveryDate { get; }
+    public string DeliveryAddressPostalCode { get; }
+    public string DeliveryAddressTownCity { get; }
+    public string DeliveryAddressCompany { get; }
     public List<OrderLineResponse> OrderLines { get; set; }
 }
 public sealed record OrderLineResponse(
