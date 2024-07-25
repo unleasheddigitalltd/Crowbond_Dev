@@ -262,17 +262,6 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
 
-                    b.Property<string>("DeliveryAddressCountry")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("delivery_address_country");
-
-                    b.Property<string>("DeliveryAddressCounty")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("delivery_address_county");
-
                     b.Property<string>("DeliveryAddressLine1")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -285,22 +274,21 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("delivery_address_line2");
 
-                    b.Property<string>("DeliveryAddressPostalCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("delivery_address_postal_code");
-
-                    b.Property<string>("DeliveryAddressTownCity")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("delivery_address_town_city");
-
                     b.Property<decimal>("DeliveryCharge")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("delivery_charge");
+
+                    b.Property<string>("DeliveryCountry")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("delivery_country");
+
+                    b.Property<string>("DeliveryCounty")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("delivery_county");
 
                     b.Property<string>("DeliveryEmail")
                         .HasMaxLength(255)
@@ -338,6 +326,18 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("delivery_phone");
+
+                    b.Property<string>("DeliveryPostalCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("delivery_postal_code");
+
+                    b.Property<string>("DeliveryTownCity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("delivery_town_city");
 
                     b.Property<string>("ExternalOrderRef")
                         .HasMaxLength(100)

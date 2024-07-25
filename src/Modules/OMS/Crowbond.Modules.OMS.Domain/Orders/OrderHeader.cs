@@ -35,13 +35,13 @@ public sealed class OrderHeader : Entity
 
     public string DeliveryAddressLine2 { get; private set; }
 
-    public string DeliveryAddressTownCity { get; private set; }
+    public string DeliveryTownCity { get; private set; }
 
-    public string DeliveryAddressCounty { get; private set; }
+    public string DeliveryCounty { get; private set; }
 
-    public string? DeliveryAddressCountry { get; private set; }
+    public string? DeliveryCountry { get; private set; }
 
-    public string DeliveryAddressPostalCode { get; private set; }
+    public string DeliveryPostalCode { get; private set; }
 
     public DateOnly ShippingDate { get; private set; }
 
@@ -84,10 +84,10 @@ public sealed class OrderHeader : Entity
         string? deliveryNotes,
         string deliveryAddressLine1,
         string deliveryAddressLine2,
-        string deliveryAddressTownCity,
-        string deliveryAddressCounty,
-        string? deliveryAddressCountry,
-        string deliveryAddressPostalCode,
+        string deliveryTownCity,
+        string deliveryCounty,
+        string? deliveryCountry,
+        string deliveryPostalCode,
         DateOnly shippingDate,
         DeliveryMethod deliveryMethod,
         decimal deliveryCharge,
@@ -115,10 +115,10 @@ public sealed class OrderHeader : Entity
             DeliveryNotes = deliveryNotes,
             DeliveryAddressLine1 = deliveryAddressLine1,
             DeliveryAddressLine2 = deliveryAddressLine2,
-            DeliveryAddressTownCity = deliveryAddressTownCity,
-            DeliveryAddressCounty = deliveryAddressCounty,
-            DeliveryAddressCountry = deliveryAddressCountry,
-            DeliveryAddressPostalCode = deliveryAddressPostalCode,
+            DeliveryTownCity = deliveryTownCity,
+            DeliveryCounty = deliveryCounty,
+            DeliveryCountry = deliveryCountry,
+            DeliveryPostalCode = deliveryPostalCode,
             ShippingDate = shippingDate,
             DeliveryMethod = deliveryMethod,
             DeliveryCharge = deliveryCharge,
@@ -148,10 +148,10 @@ public sealed class OrderHeader : Entity
         string? deliveryNotes,
         string deliveryAddressLine1,
         string deliveryAddressLine2,
-        string deliveryAddressTownCity,
-        string deliveryAddressCounty,
-        string? deliveryAddressCountry,
-        string deliveryAddressPostalCode,
+        string deliveryTownCity,
+        string deliveryCounty,
+        string? deliveryCountry,
+        string deliveryPostalCode,
         DateOnly shippingDate,
         Guid? routeTripId,
         string? routeName,
@@ -177,10 +177,10 @@ public sealed class OrderHeader : Entity
         DeliveryNotes = deliveryNotes;
         DeliveryAddressLine1 = deliveryAddressLine1;
         DeliveryAddressLine2 = deliveryAddressLine2;
-        DeliveryAddressTownCity = deliveryAddressTownCity;
-        DeliveryAddressCounty = deliveryAddressCounty;
-        DeliveryAddressCountry = deliveryAddressCountry;
-        DeliveryAddressPostalCode = deliveryAddressPostalCode;
+        DeliveryTownCity = deliveryTownCity;
+        DeliveryCounty = deliveryCounty;
+        DeliveryCountry = deliveryCountry;
+        DeliveryPostalCode = deliveryPostalCode;
         ShippingDate = shippingDate;
         RouteTripId = routeTripId;
         RouteName = routeName;

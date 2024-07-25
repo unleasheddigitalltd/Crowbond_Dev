@@ -19,9 +19,9 @@ public sealed record OrderResponse
     public string DeliveryNotes { get; }
     public string DeliveryAddressLine1 { get; }
     public string DeliveryAddressLine2 { get; }
-    public string DeliveryAddressTownCity { get; }
-    public string DeliveryAddressCounty { get; }
-    public string DeliveryAddressPostalCode { get; }
+    public string DeliveryTownCity { get; }
+    public string DeliveryCounty { get; }
+    public string DeliveryPostalCode { get; }
     public DateOnly ShippingDate { get; }
     public Guid RouteTripId { get; }
     public string RouteName { get; }

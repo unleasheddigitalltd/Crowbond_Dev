@@ -21,10 +21,10 @@ public sealed class OrderHeaderConfiguratin : IEntityTypeConfiguration<OrderHead
         builder.Property(o => o.DeliveryNotes).HasMaxLength(500);
         builder.Property(o => o.DeliveryAddressLine1).IsRequired().HasMaxLength(255);
         builder.Property(o => o.DeliveryAddressLine2).HasMaxLength(255);
-        builder.Property(o => o.DeliveryAddressTownCity).IsRequired().HasMaxLength(100);
-        builder.Property(o => o.DeliveryAddressCounty).IsRequired().HasMaxLength(100);
-        builder.Property(o => o.DeliveryAddressCountry).HasMaxLength(100);
-        builder.Property(o => o.DeliveryAddressPostalCode).IsRequired().HasMaxLength(20);
+        builder.Property(o => o.DeliveryTownCity).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.DeliveryCounty).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.DeliveryCountry).HasMaxLength(100);
+        builder.Property(o => o.DeliveryPostalCode).IsRequired().HasMaxLength(20);
         builder.Property(o => o.RouteTripId).IsRequired(false);
         builder.Property(o => o.DeliveryCharge).HasPrecision(10, 2);
         builder.Property(o => o.OrderAmount).HasPrecision(10, 2);
