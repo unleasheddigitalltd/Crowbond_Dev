@@ -36,5 +36,15 @@ public sealed class RouteTripLog : Entity
         return routeTripLog;
     }
 
+    public Result LogOff(DateTime loggedOffTime)
+    {
+        if (LoggedOffTime != null)
+        {
+            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
+        }
 
+        LoggedOffTime = loggedOffTime;
+
+        return Result.Success();
+    }
 }

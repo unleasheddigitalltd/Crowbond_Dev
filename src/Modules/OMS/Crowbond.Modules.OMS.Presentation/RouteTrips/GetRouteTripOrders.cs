@@ -19,7 +19,7 @@ internal sealed class GetRouteTripOrders : IEndpoint
 
             return reault.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.GetOrders)
+            .RequireAuthorization(Permissions.GetRouteTrips)
             .WithTags(Tags.Routes);
     }
 }

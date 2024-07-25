@@ -19,4 +19,7 @@ internal static class Permissions
     internal const string GetRouteTrips = "routetrip:read";
     internal const string ModifyRouteTrips = "routetrip:update";
     internal const string CreateRouteTrips = "routetrip:create";
+
+    internal const string ModifyRouteTriplogs = "routetriplog:update";
+    internal const string ModifyOtherRouteTripLogs = "routetriplog:update:other";
 }

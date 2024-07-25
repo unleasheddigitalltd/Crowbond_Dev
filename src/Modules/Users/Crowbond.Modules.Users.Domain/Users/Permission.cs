@@ -57,6 +57,9 @@ public sealed class Permission
     public static readonly Permission ModifyRouteTrips = new("routetrip:update");
     public static readonly Permission CreateRouteTrips = new("routetrip:create");
 
+    public static readonly Permission ModifyRouteTriplogs = new("routetriplog:update");
+    public static readonly Permission ModifyOtherRouteTripLogs = new("routetriplog:update:other");
+
     public Permission(string code)
     {
         Code = code;
