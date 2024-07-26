@@ -4,4 +4,7 @@
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Presentation\Crowbond.Common.Presentation.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Application\Crowbond.Modules.OMS.Application.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Orders\" />
+  </ItemGroup>
 </Project>

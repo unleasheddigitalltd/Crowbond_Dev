@@ -20,7 +20,7 @@ internal sealed class GetPurchaseOrder : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permission.GetPurchaseOrders)
+        .RequireAuthorization(Permissions.GetPurchaseOrders)
         .WithTags(Tags.PurchaseOrders);
     }
 }

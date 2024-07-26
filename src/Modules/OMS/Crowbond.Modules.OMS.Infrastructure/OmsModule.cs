@@ -16,6 +16,22 @@ using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
+using Crowbond.Modules.OMS.Domain.Drivers;
+using Crowbond.Modules.OMS.Infrastructure.Drivers;
+using Crowbond.Modules.OMS.Infrastructure.Routes;
+using Crowbond.Modules.OMS.Domain.Routes;
+using Crowbond.Modules.OMS.Domain.RouteTrips;
+using Crowbond.Modules.OMS.Infrastructure.RouteTrips;
+using Crowbond.Modules.OMS.Domain.RouteTripLogs;
+using Crowbond.Modules.OMS.Infrastructure.RouteTripLogs;
+using Crowbond.Modules.OMS.Domain.RouteTripLogDatails;
+using Crowbond.Modules.OMS.Infrastructure.RouteTripLogDatails;
+using Crowbond.Modules.OMS.Domain.Deliveries;
+using Crowbond.Modules.OMS.Infrastructure.Deliveries;
+using Crowbond.Modules.OMS.Domain.DeliveryImages;
+using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
+using MassTransit;
+using Crowbond.Modules.OMS.IntegrationEvents;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -50,15 +66,21 @@ public static class OmsModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
-
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
+        services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IRouteRepository, RouteRepository>();
+        services.AddScoped<IRouteTripRepository, RouteTripRepository>();
+        services.AddScoped<IRouteTripStatusHistoryRepository, RouteTripStatusHistoryRepository>();
+        services.AddScoped<IRouteTripLogRepository, RouteTripLogRepository>();
+        services.AddScoped<IRouteTripLogDatailRepository, RouteTripLogDatailRepository>();
+        services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+        services.AddScoped<IDeliveryImageRepository, DeliveryImageRepository>();
+        services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
-
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
         services.Configure<InboxOptions>(configuration.GetSection("OMS:Inbox"));
-
         services.ConfigureOptions<ConfigureProcessInboxJob>();
     }
 

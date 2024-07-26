@@ -25,6 +25,8 @@ internal sealed class RegisterUserCommandHandler(
 
         var user = User.Create(Guid.NewGuid(), request.Username, request.Email, request.FirstName, request.LastName, result.Value);
 
+        user.AddRole(Role.Administrator);
+
         userRepository.Insert(user);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -17,23 +17,34 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(CustomerDetailsResponse.Id)},
-                 account_number AS {nameof(CustomerDetailsResponse.AccountNumber)},
-                 business_name AS {nameof(CustomerDetailsResponse.BusinessName)},
-                 billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},
-                 billing_address_line2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},
-                 billing_town_city AS {nameof(CustomerDetailsResponse.BillingTownCity)},
-                 billing_county AS {nameof(CustomerDetailsResponse.BillingCounty)},
-                 billing_country AS {nameof(CustomerDetailsResponse.BillingCountry)},
-                 billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},
-                 payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},
-                 detailed_invoice AS {nameof(CustomerDetailsResponse.DetailedInvoice)},
-                 price_group_id AS {nameof(CustomerDetailsResponse.PriceGroupId)},
-                 invoice_period_id AS {nameof(CustomerDetailsResponse.InvoicePeriodId)},
-                 customer_notes AS {nameof(CustomerDetailsResponse.CustomerNotes)},
-                 is_hq AS {nameof(CustomerDetailsResponse.IsHq)},
-                 is_active AS {nameof(CustomerDetailsResponse.IsActive)}
-             FROM crm.customers
+                 c.id, 
+                 c.account_number, 
+                 c.business_name, 
+                 c.billing_address_line1, 
+                 c.billing_address_line2, 
+                 c.billing_town_city, 
+                 c.billing_county, 
+                 c.billing_country, 
+                 c.billing_postal_code, 
+                 t.name, 
+                 c.discount, 
+                 r.name, 
+                 c.custom_payment_term, 
+                 c.payment_terms, 
+                 c.invoice_due_days, 
+                 c.delivery_fee_setting, 
+                 c.delivery_min_order_value, 
+                 c.delivery_charge, 
+                 c.no_discount_special_item, 
+                 c.no_discount_fixed_price, 
+                 c.show_prices_in_delivery_docket, 
+                 c.show_price_in_app, detailed_invoice, 
+                 c.customer_notes, 
+                 c.is_hq, 
+                 c.is_active
+             FROM crm.customers c
+             INNER JOIN crm.price_tiers t ON t.id = c.price_tier_id
+             INNER JOIN crm.reps r ON r.id = c.rep_id
              WHERE id = @CustomerId;
 
              SELECT

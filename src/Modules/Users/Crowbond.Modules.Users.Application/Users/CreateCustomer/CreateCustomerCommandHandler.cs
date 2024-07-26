@@ -27,6 +27,8 @@ internal sealed class CreateCustomerCommandHandler(
 
         var user = User.Create(request.UserId, request.Username, request.Email, request.FirstName, request.LastName, result.Value);
 
+        user.AddRole(Role.Customer);
+
         userRepository.Insert(user);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -61,11 +61,6 @@ public static class CrmModule
         return services;
     }
 
-    private static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
-    {
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactCreatedIntegrationEvent>>();
-    }
-
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<CrmDbContext>((sp, options) =>
