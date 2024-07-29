@@ -1,4 +1,5 @@
 ﻿using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 
@@ -21,11 +22,13 @@ public sealed record CustomerRequest(
      decimal? DeliveryCharge,
      bool NoDiscountSpecialItem,
      bool NoDiscountFixedPrice,
-     bool ShowPricesInDeliveryDocket,
-     bool ShowPriceInApp,
      bool DetailedInvoice,
      string? CustomerNotes,
      bool IsHq,
+     bool ShowPricesInDeliveryDocket,
+     bool ShowPriceInApp,
+     ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
+     string? customerLogo,
      bool IsActive,
      List<CustomerRequest.CustomerContact> CustomerContacts,
      List<CustomerRequest.CustomerOutletAddress> CustomerOutletAddresses

@@ -1,4 +1,5 @@
 ﻿using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
 using MediatR;
 
 namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
@@ -22,11 +23,13 @@ public sealed record CustomerRequest(
      decimal? DeliveryCharge,
      bool NoDiscountSpecialItem,
      bool NoDiscountFixedPrice,
-     bool ShowPricesInDeliveryDocket,
-     bool ShowPriceInApp,
      bool DetailedInvoice,
      string? CustomerNotes,
      bool IsHq,
+     bool ShowPricesInDeliveryDocket,
+     bool ShowPriceInApp,
+     ShowLogoInDeliveryDocket ShowLogoInDeliveryDocket,
+     string? CustomerLogo, 
      List<CustomerRequest.CustomerContact> CustomerContacts,
      List<CustomerRequest.CustomerOutletAddress> CustomerOutletAddresses
     )
