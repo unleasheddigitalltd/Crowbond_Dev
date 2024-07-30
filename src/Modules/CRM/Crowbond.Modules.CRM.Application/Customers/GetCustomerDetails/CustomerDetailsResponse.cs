@@ -1,11 +1,14 @@
-﻿namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
+﻿using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
+
+namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
 
 public sealed record CustomerDetailsResponse
 {
     public CustomerDetailsResponse()
     {
         CustomerContacts = new List<CustomerContactResponse>();
-        CustomerShippingAddresses = new List<CustomerShippingAddressResponse>();
+        CustomerOutlets = new List<CustomerOutletResponse>();
     }
 
     public Guid Id { get; }
@@ -20,11 +23,23 @@ public sealed record CustomerDetailsResponse
 
     public string BillingTownCity { get; }
 
-    public string BillingPostalCode { get; }
-
     public string BillingCounty { get; }
 
     public string BillingCountry { get; }
+
+    public string BillingPostalCode { get; }
+
+    public string PriceTierName { get; }
+
+    public decimal Discount { get; }
+
+    public string RepName { get; }
+
+    public bool CustomPaymentTerm { get; }
+
+    public PaymentTerm? PaymentTerms { get; }
+
+    public int? InvoiceDueDays { get; }
 
     public Guid PriceTierId { get; private set; }
 
@@ -34,7 +49,15 @@ public sealed record CustomerDetailsResponse
 
     public bool CustomPaymentTerm { get; private set; }
 
-    public int PaymentTerms { get; }
+    public DeliveryFeeSetting DeliveryFeeSetting { get; }
+
+    public decimal? DeliveryMinOrderValue { get; }
+
+    public decimal? DeliveryCharge { get; }
+
+    public bool NoDiscountSpecialItem { get; }
+
+    public bool NoDiscountFixedPrice { get; }
 
     public bool DetailedInvoice { get; }
 
@@ -44,9 +67,17 @@ public sealed record CustomerDetailsResponse
 
     public bool IsActive { get; }
 
+    public bool ShowPricesInDeliveryDocket { get; }
+
+    public bool ShowPriceInApp { get; }
+
+    public ShowLogoInDeliveryDocket ShowLogoInDeliveryDocket { get; }
+
+    public string? CustomerLogo { get; }
+
     public List<CustomerContactResponse> CustomerContacts { get; set; }
 
-    public List<CustomerShippingAddressResponse> CustomerShippingAddresses { get; set; }
+    public List<CustomerOutletResponse> CustomerOutlets { get; set; }
 };
 public sealed record CustomerContactResponse(
     Guid Id,
@@ -54,22 +85,17 @@ public sealed record CustomerContactResponse(
     string FirstName,
     string LastName,
     string PhoneNumber,
-    string Mobile,
-    string Email,
     bool Primary,
     bool IsActive);
 
-public sealed record CustomerShippingAddressResponse(
+public sealed record CustomerOutletResponse(
     Guid Id,
     Guid CustomerId,
-    string ShippingAddressLine1,
-    string? ShippingAddressLine2,
-    string ShippingTownCity,
-    string ShippingCounty,
-    string? ShippingCountry,
-    string ShippingPostalCode,
-    string? DeliveryNote,
-    DateTime DeliveryTimeFrom,
-    DateTime DeliveryTimeTo,
-    bool Is24HrsDelivery);
+    string LocationName, 
+    string AddressLine1,    
+    string? AddressLine2,    
+    string TownCity,    
+    string County,  
+    string? Country,
+    string PostalCode);
 

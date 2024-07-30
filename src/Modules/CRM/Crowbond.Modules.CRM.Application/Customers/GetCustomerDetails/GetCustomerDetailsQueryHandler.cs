@@ -17,35 +17,39 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
         const string sql =
             $"""
              SELECT
-                 c.id, 
-                 c.account_number, 
-                 c.business_name, 
-                 c.billing_address_line1, 
-                 c.billing_address_line2, 
-                 c.billing_town_city, 
-                 c.billing_county, 
-                 c.billing_country, 
-                 c.billing_postal_code, 
-                 t.name, 
-                 c.discount, 
-                 r.name, 
-                 c.custom_payment_term, 
-                 c.payment_terms, 
-                 c.invoice_due_days, 
-                 c.delivery_fee_setting, 
-                 c.delivery_min_order_value, 
-                 c.delivery_charge, 
-                 c.no_discount_special_item, 
-                 c.no_discount_fixed_price, 
-                 c.show_prices_in_delivery_docket, 
-                 c.show_price_in_app, detailed_invoice, 
-                 c.customer_notes, 
-                 c.is_hq, 
-                 c.is_active
+                 c.id AS {nameof(CustomerDetailsResponse.Id)}, 
+                 c.account_number AS {nameof(CustomerDetailsResponse.AccountNumber)},  
+                 c.business_name AS {nameof(CustomerDetailsResponse.BusinessName)},  
+                 c.billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},  
+                 c.billing_address_line2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},  
+                 c.billing_town_city AS {nameof(CustomerDetailsResponse.BillingTownCity)},  
+                 c.billing_county AS {nameof(CustomerDetailsResponse.BillingCounty)},  
+                 c.billing_country AS {nameof(CustomerDetailsResponse.BillingCountry)},  
+                 c.billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},  
+                 t.name AS {nameof(CustomerDetailsResponse.PriceTierName)},  
+                 c.discount AS {nameof(CustomerDetailsResponse.Discount)},  
+                 r.name AS {nameof(CustomerDetailsResponse.RepName)},  
+                 c.custom_payment_term AS {nameof(CustomerDetailsResponse.CustomPaymentTerm)},  
+                 c.payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},  
+                 c.invoice_due_days AS {nameof(CustomerDetailsResponse.InvoiceDueDays)},  
+                 c.delivery_fee_setting AS {nameof(CustomerDetailsResponse.DeliveryFeeSetting)},  
+                 c.delivery_min_order_value AS {nameof(CustomerDetailsResponse.DeliveryMinOrderValue)},  
+                 c.delivery_charge AS {nameof(CustomerDetailsResponse.DeliveryCharge)},  
+                 c.no_discount_special_item AS {nameof(CustomerDetailsResponse.NoDiscountSpecialItem)},  
+                 c.no_discount_fixed_price AS {nameof(CustomerDetailsResponse.NoDiscountFixedPrice)},  
+                 c.detailed_invoice AS {nameof(CustomerDetailsResponse.DetailedInvoice)},  
+                 c.customer_notes AS {nameof(CustomerDetailsResponse.CustomerNotes)},  
+                 c.is_hq AS {nameof(CustomerDetailsResponse.IsHq)},  
+                 c.is_active AS {nameof(CustomerDetailsResponse.IsActive)},
+                 cs.show_prices_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowPricesInDeliveryDocket)},  
+                 cs.show_price_in_app AS {nameof(CustomerDetailsResponse.ShowPriceInApp)}, 
+                 cs.show_logo_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowLogoInDeliveryDocket)}, 
+                 cs.customer_logo AS {nameof(CustomerDetailsResponse.CustomerLogo)}
              FROM crm.customers c
+             INNER JOIN crm.customer_settings cs ON c.id = cs.customer_id
              INNER JOIN crm.price_tiers t ON t.id = c.price_tier_id
              INNER JOIN crm.reps r ON r.id = c.rep_id
-             WHERE id = @CustomerId;
+             WHERE c.id = @CustomerId;
 
              SELECT
                  t.id AS {nameof(CustomerContactResponse.Id)},
@@ -53,8 +57,6 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                  t.first_name AS {nameof(CustomerContactResponse.FirstName)},
                  t.last_name AS {nameof(CustomerContactResponse.LastName)},
                  t.phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
-                 t.mobile AS {nameof(CustomerContactResponse.Mobile)},
-                 t.email AS {nameof(CustomerContactResponse.Email)},
                  t.primary AS {nameof(CustomerContactResponse.Primary)},
                  t.is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts t
@@ -62,19 +64,16 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
              WHERE c.id = @CustomerId;
 
              SELECT
-                 s.id AS {nameof(CustomerShippingAddressResponse.Id)},
-                 s.customer_id AS {nameof(CustomerShippingAddressResponse.CustomerId)},
-                 s.shipping_address_line1 AS {nameof(CustomerShippingAddressResponse.ShippingAddressLine1)},
-                 s.shipping_address_line2 AS {nameof(CustomerShippingAddressResponse.ShippingAddressLine2)},
-                 s.shipping_town_city AS {nameof(CustomerShippingAddressResponse.ShippingTownCity)},
-                 s.shipping_county AS {nameof(CustomerShippingAddressResponse.ShippingCounty)},
-                 s.shipping_country AS {nameof(CustomerShippingAddressResponse.ShippingCountry)},
-                 s.shipping_postal_code AS {nameof(CustomerShippingAddressResponse.ShippingPostalCode)},
-                 s.delivery_note AS {nameof(CustomerShippingAddressResponse.DeliveryNote)},
-                 s.delivery_time_from AS {nameof(CustomerShippingAddressResponse.DeliveryTimeFrom)},
-                 s.delivery_time_to AS {nameof(CustomerShippingAddressResponse.DeliveryTimeTo)},
-                 s.is24hrs_delivery AS {nameof(CustomerShippingAddressResponse.Is24HrsDelivery)}                
-             FROM crm.customer_shipping_addresses s
+                 s.id AS {nameof(CustomerOutletResponse.Id)},
+                 s.customer_id AS {nameof(CustomerOutletResponse.CustomerId)},
+                 s.location_name AS {nameof(CustomerOutletResponse.LocationName)},
+                 s.address_line1 AS {nameof(CustomerOutletResponse.AddressLine1)},
+                 s.address_line2 AS {nameof(CustomerOutletResponse.AddressLine2)},
+                 s.town_city AS {nameof(CustomerOutletResponse.TownCity)},
+                 s.county AS {nameof(CustomerOutletResponse.County)},
+                 s.country AS {nameof(CustomerOutletResponse.Country)},
+                 s.postal_code AS {nameof(CustomerOutletResponse.PostalCode)}         
+             FROM crm.customer_outlets s
              INNER JOIN crm.customers c ON c.id = s.customer_id
              WHERE c.id = @CustomerId;
              """;
@@ -84,7 +83,7 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
 
         var customers = (await multi.ReadAsync<CustomerDetailsResponse>()).ToList();
         var customerContacts = (await multi.ReadAsync<CustomerContactResponse>()).ToList();
-        var customerShippingAddresses = (await multi.ReadAsync<CustomerShippingAddressResponse>()).ToList();
+        var customerOutlets = (await multi.ReadAsync<CustomerOutletResponse>()).ToList();
 
         CustomerDetailsResponse? customer = customers.SingleOrDefault();
 
@@ -94,7 +93,7 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
         }
 
         customer.CustomerContacts = customerContacts.Where(a => a.CustomerId == customer.Id).ToList();
-        customer.CustomerShippingAddresses = customerShippingAddresses.Where(a => a.CustomerId == customer.Id).ToList();
+        customer.CustomerOutlets = customerOutlets.Where(a => a.CustomerId == customer.Id).ToList();
 
         return customer;
     }

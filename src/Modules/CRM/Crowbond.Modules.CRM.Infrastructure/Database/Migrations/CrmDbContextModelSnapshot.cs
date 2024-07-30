@@ -467,6 +467,44 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("customer_products", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("CustomerLogo")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("customer_logo");
+
+                    b.Property<int>("ShowLogoInDeliveryDocket")
+                        .HasColumnType("integer")
+                        .HasColumnName("show_logo_in_delivery_docket");
+
+                    b.Property<bool>("ShowPriceInApp")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_price_in_app");
+
+                    b.Property<bool>("ShowPricesInDeliveryDocket")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_prices_in_delivery_docket");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_settings");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_customer_settings_customer_id");
+
+                    b.ToTable("customer_settings", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -599,14 +637,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.Property<Guid?>("RepId")
                         .HasColumnType("uuid")
                         .HasColumnName("rep_id");
-
-                    b.Property<bool>("ShowPriceInApp")
-                        .HasColumnType("boolean")
-                        .HasColumnName("show_price_in_app");
-
-                    b.Property<bool>("ShowPricesInDeliveryDocket")
-                        .HasColumnType("boolean")
-                        .HasColumnName("show_prices_in_delivery_docket");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
@@ -965,6 +995,16 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_customer_products_products_product_id");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
+                        .WithOne("CustomerSetting")
+                        .HasForeignKey("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_settings_customers_customer_id");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>
                 {
                     b.HasOne("Crowbond.Modules.CRM.Domain.Reps.Rep", null)
@@ -1009,6 +1049,12 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_recipients_customer_contacts_customer_contact_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>
+                {
+                    b.Navigation("CustomerSetting")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

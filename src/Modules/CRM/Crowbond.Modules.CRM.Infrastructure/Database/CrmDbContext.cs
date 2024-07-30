@@ -33,12 +33,15 @@ using Crowbond.Modules.CRM.Infrastructure.CustomerProducts;
 using Crowbond.Modules.CRM.Domain.CustomerProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.CustomerProductPrices;
 using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
+using Crowbond.Modules.CRM.Infrastructure.CustomerSettings;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Database;
 public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbContext(options), IUnitOfWork
 {
 
     internal DbSet<Customer> Customers { get; set; }
+    internal DbSet<CustomerSetting> CustomerSettings { get; set; }
     internal DbSet<CustomerOutlet> CustomerOutlets { get; set; }
     internal DbSet<CustomerContact> CustomerContacts { get; set; }
     internal DbSet<Supplier> Suppliers { get; set; }
@@ -63,6 +66,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new SupplierConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerSettingConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerOutletConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerContactConfiguration());
         modelBuilder.ApplyConfiguration(new SequenceConfiguration());

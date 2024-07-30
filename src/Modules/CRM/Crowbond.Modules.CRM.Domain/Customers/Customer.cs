@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
 
 namespace Crowbond.Modules.CRM.Domain.Customers;
 
@@ -49,10 +50,6 @@ public sealed class Customer : Entity
 
     public bool NoDiscountFixedPrice { get; private set; }
 
-    public bool ShowPricesInDeliveryDocket { get; private set; }
-
-    public bool ShowPriceInApp { get; private set; }
-
     public bool DetailedInvoice { get; private set; }
 
     public string? CustomerNotes { get; private set; }
@@ -60,6 +57,8 @@ public sealed class Customer : Entity
     public bool IsHq { get; private set; }
 
     public bool IsActive { get; private set; }
+    
+    public CustomerSetting CustomerSetting { get; private set; }
 
     public Guid CreateBy { get; private set; }
 
@@ -90,17 +89,21 @@ public sealed class Customer : Entity
          decimal? deliveryCharge,
          bool noDiscountSpecialItem,
          bool noDiscountFixedPrice,
-         bool showPricesInDeliveryDocket,
-         bool showPriceInApp,
          bool detailedInvoice,
          string? customerNotes,
          bool isHq,
+         bool showPricesInDeliveryDocket,
+         bool showPriceInApp,
+         ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
+         string? customerLogo,
          Guid createBy,
          DateTime createDate)
     {
+        var customerId = Guid.NewGuid();
+
         var customer = new Customer
         {
-            Id = Guid.NewGuid(),
+            Id = customerId,
             AccountNumber = accountNumber,
             BusinessName = businessName,
             BillingAddressLine1 = billingAddressLine1,
@@ -120,14 +123,18 @@ public sealed class Customer : Entity
             DeliveryCharge = deliveryCharge,
             NoDiscountSpecialItem = noDiscountSpecialItem,
             NoDiscountFixedPrice = noDiscountFixedPrice,
-            ShowPricesInDeliveryDocket = showPricesInDeliveryDocket,
-            ShowPriceInApp = showPriceInApp,
             DetailedInvoice = detailedInvoice,
             CustomerNotes = customerNotes,
             IsHq = isHq,
             IsActive = true,
             CreateBy = createBy,
-            CreateDate = createDate
+            CreateDate = createDate,
+            CustomerSetting = CustomerSetting.Create(
+                customerId: customerId,
+                showPricesInDeliveryDocket: showPricesInDeliveryDocket,
+                showPriceInApp: showPriceInApp,
+                showLogoInDeliveryDocket: showLogoInDeliveryDocket,
+                customerLogo: customerLogo)
         };
 
         return customer;
@@ -152,14 +159,16 @@ public sealed class Customer : Entity
          decimal? deliveryCharge,
          bool noDiscountSpecialItem,
          bool noDiscountFixedPrice,
-         bool showPricesInDeliveryDocket,
-         bool showPriceInApp,
          bool detailedInvoice,
          string? customerNotes,
          bool isHq,
          bool isActive,
          Guid lastModifiedBy,
-         DateTime lastModifiedDate)
+         DateTime lastModifiedDate,
+         bool showPricesInDeliveryDocket,
+         bool showPriceInApp,
+         ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
+         string? customerLogo)
     {
         BusinessName = businessName;
         BillingAddressLine1 = billingAddressLine1;
@@ -179,14 +188,17 @@ public sealed class Customer : Entity
         DeliveryCharge = deliveryCharge;
         NoDiscountSpecialItem = noDiscountSpecialItem;
         NoDiscountFixedPrice = noDiscountFixedPrice;
-        ShowPricesInDeliveryDocket = showPricesInDeliveryDocket;
-        ShowPriceInApp = showPriceInApp;
         DetailedInvoice = detailedInvoice;
         CustomerNotes = customerNotes;
         IsHq = isHq;
         IsActive = isActive;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;        
+        CustomerSetting.Update(
+            showPricesInDeliveryDocket,
+            showPriceInApp,
+            showLogoInDeliveryDocket,
+            customerLogo );        
     }
 }
 
