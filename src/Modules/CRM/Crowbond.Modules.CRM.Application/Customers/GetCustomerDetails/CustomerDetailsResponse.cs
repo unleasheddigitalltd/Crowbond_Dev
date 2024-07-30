@@ -41,6 +41,14 @@ public sealed record CustomerDetailsResponse
 
     public int? InvoiceDueDays { get; }
 
+    public Guid PriceTierId { get; private set; }
+
+    public decimal Discount { get; private set; }
+
+    public Guid? RepId { get; private set; }
+
+    public bool CustomPaymentTerm { get; private set; }
+
     public DeliveryFeeSetting DeliveryFeeSetting { get; }
 
     public decimal? DeliveryMinOrderValue { get; }

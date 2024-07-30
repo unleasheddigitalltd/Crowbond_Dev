@@ -37,5 +37,5 @@ public sealed class PurchaseOrderHeaderConfiguratin : IEntityTypeConfiguration<P
         //builder.Property(o => o.OriginalSource).
         //builder.Property(o => o.ExternalOrderRef).
         //builder.Property(o => o.Tags).
-}
+    }
 }

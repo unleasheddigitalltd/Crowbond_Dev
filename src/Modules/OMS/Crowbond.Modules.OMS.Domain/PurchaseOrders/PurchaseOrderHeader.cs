@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Payments;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
@@ -28,7 +29,7 @@ public sealed class PurchaseOrderHeader : Entity
 
     public decimal PurchaseOrderAmount { get; private set; }
 
-    public string ShippingAddressCompany { get; private set; }
+    public string LocationName { get; private set; }
 
     public string ShippingAddressLine1 { get; private set; }
 

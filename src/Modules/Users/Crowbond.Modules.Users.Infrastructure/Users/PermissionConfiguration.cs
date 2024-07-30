@@ -50,7 +50,18 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateReceipts,
             Permission.CreatePurchaseOrders,
             Permission.GetPurchaseOrders,
-            Permission.ModifyPurchaseOrders);
+            Permission.ModifyPurchaseOrders,
+            Permission.GetDrivers,
+            Permission.ModifyDrivers,
+            Permission.CreateDrivers,
+            Permission.GetRoutes,
+            Permission.ModifyRoutes,
+            Permission.CreateRoutes,
+            Permission.GetRouteTrips,
+            Permission.ModifyRouteTrips,
+            Permission.CreateRouteTrips,
+            Permission.ModifyRouteTriplogs,
+            Permission.ModifyOtherRouteTripLogs);
 
         builder
             .HasMany<Role>()
@@ -60,7 +71,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                 joinBuilder.ToTable("role_permissions");
 
                 joinBuilder.HasData(
-                    // Member permissions
+                    // Driver permissions
+                    CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
+                    CreateRolePermission(Role.Driver, Permission.ModifyRouteTriplogs),
 
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
@@ -98,8 +111,18 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateSuppliers),
                     CreateRolePermission(Role.Administrator, Permission.CreatePurchaseOrders),
                     CreateRolePermission(Role.Administrator, Permission.ModifyPurchaseOrders),
-                    CreateRolePermission(Role.Administrator, Permission.GetPurchaseOrders)
-                    );
+                    CreateRolePermission(Role.Administrator, Permission.GetPurchaseOrders),
+                    CreateRolePermission(Role.Administrator, Permission.GetDrivers),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyDrivers),
+                    CreateRolePermission(Role.Administrator, Permission.CreateDrivers),
+                    CreateRolePermission(Role.Administrator, Permission.GetRoutes),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyRoutes),
+                    CreateRolePermission(Role.Administrator, Permission.CreateRoutes),
+                    CreateRolePermission(Role.Administrator, Permission.GetRouteTrips),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyRouteTrips),
+                    CreateRolePermission(Role.Administrator, Permission.CreateRouteTrips),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyRouteTriplogs),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyOtherRouteTripLogs));
             });
     }
 

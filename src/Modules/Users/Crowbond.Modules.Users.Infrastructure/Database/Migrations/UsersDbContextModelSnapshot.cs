@@ -285,6 +285,50 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "purchaseorders:update"
+                        },
+                        new
+                        {
+                            Code = "drivers:read"
+                        },
+                        new
+                        {
+                            Code = "drivers:update"
+                        },
+                        new
+                        {
+                            Code = "drivers:create"
+                        },
+                        new
+                        {
+                            Code = "routes:read"
+                        },
+                        new
+                        {
+                            Code = "routes:update"
+                        },
+                        new
+                        {
+                            Code = "routes:create"
+                        },
+                        new
+                        {
+                            Code = "routetrip:read"
+                        },
+                        new
+                        {
+                            Code = "routetrip:update"
+                        },
+                        new
+                        {
+                            Code = "routetrip:create"
+                        },
+                        new
+                        {
+                            Code = "routetriplog:update"
+                        },
+                        new
+                        {
+                            Code = "routetriplog:update:other"
                         });
                 });
 
@@ -303,7 +347,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Name = "Member"
+                            Name = "Customer"
+                        },
+                        new
+                        {
+                            Name = "Driver"
                         },
                         new
                         {
@@ -384,6 +432,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.ToTable("role_permissions", "users");
 
                     b.HasData(
+                        new
+                        {
+                            PermissionCode = "routetrip:read",
+                            RoleName = "Driver"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetriplog:update",
+                            RoleName = "Driver"
+                        },
                         new
                         {
                             PermissionCode = "users:read",
@@ -562,6 +620,61 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "purchaseorders:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "drivers:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routes:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routes:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routes:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetrip:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetrip:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetrip:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetriplog:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "routetriplog:update:other",
                             RoleName = "Administrator"
                         });
                 });

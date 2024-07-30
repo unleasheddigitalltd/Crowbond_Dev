@@ -19,7 +19,7 @@ internal sealed class CreatePurchaseOrder : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permission.CreatePurchaseOrders)
+        .RequireAuthorization(Permissions.CreatePurchaseOrders)
         .WithTags(Tags.PurchaseOrders);
     }
 }

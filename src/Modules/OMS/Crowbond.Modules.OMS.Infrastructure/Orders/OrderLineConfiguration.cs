@@ -11,6 +11,7 @@ public sealed class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
         builder.HasKey(x => x.Id);
         builder.Property(o => o.ProductSku).IsRequired().HasMaxLength(100);
         builder.Property(o => o.ProductName).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.UnitOfMeasureName).IsRequired().HasMaxLength(20);
         builder.Property(o => o.UnitPrice).IsRequired().HasPrecision(10, 2);
         builder.Property(o => o.Qty).IsRequired().HasPrecision(10, 2);
         builder.Property(o => o.SubTotal).IsRequired().HasPrecision(10, 2);

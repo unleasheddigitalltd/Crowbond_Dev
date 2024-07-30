@@ -1,7 +1,6 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.Users.Presentation;
 using Crowbond.Modules.Users.Application.Users.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

@@ -2,7 +2,7 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.Customers.GetUserContactQuery;
+using Crowbond.Modules.CRM.Application.Customers.GetCustomerContact;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using MediatR;
