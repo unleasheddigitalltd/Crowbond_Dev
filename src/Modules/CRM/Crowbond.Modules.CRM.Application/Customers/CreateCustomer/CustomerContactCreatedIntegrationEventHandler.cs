@@ -2,7 +2,7 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.Customers.GetCustomerContact;
+using Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using MediatR;
@@ -17,12 +17,12 @@ internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender send
         CancellationToken cancellationToken = default)
     {
         Result<CustomerContactResponse> result = await sender.Send(
-            new GetCustomerContactQuery(domainEvent.CustomerContactId),
+            new GetCustomerContactDetailsQuery(domainEvent.CustomerContactId),
             cancellationToken);
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(GetCustomerContactQuery), result.Error);
+            throw new CrowbondException(nameof(GetCustomerContactDetailsQuery), result.Error);
         }
 
         await eventBus.PublishAsync(

@@ -4,4 +4,10 @@
     <ProjectReference Include="..\Crowbond.Modules.CRM.Domain\Crowbond.Modules.CRM.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomerContacts\CreateCustomerContact\" />
+    <Folder Include="CustomerContacts\UpdateCustomerContact\" />
+    <Folder Include="CustomerOutlets\CreateCustomerOutlet\" />
+    <Folder Include="CustomerOutlets\UpdateCustomerOutlet\" />
+  </ItemGroup>
 </Project>

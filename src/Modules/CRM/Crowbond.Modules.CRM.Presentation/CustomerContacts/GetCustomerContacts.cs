@@ -1,21 +1,21 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.CRM.Application.Customers.GetCustomerOutlets;
+using Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContacts;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Crowbond.Modules.CRM.Presentation.Customers;
+namespace Crowbond.Modules.CRM.Presentation.CustomerContacts;
 
-internal sealed class GetCustomerOutlets : IEndpoint
+internal sealed class GetCustomerContacts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("customers/{id}/outlets", async (Guid id, ISender sender) =>
+        app.MapGet("customers/{id}/contacts", async (Guid id, ISender sender) =>
         {
-            Result<IReadOnlyCollection<CustomerOutletResponse>> result = await sender.Send(new GetCustomerOutletsQuery(id));
+            Result<IReadOnlyCollection<CustomerContactResponse>> result = await sender.Send(new GetCustomerContactsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

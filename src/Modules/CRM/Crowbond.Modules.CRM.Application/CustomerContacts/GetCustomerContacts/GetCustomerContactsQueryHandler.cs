@@ -4,7 +4,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerContacts;
+namespace Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContacts;
 
 internal sealed class GetCustomerContactsQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetCustomerContactsQuery, IReadOnlyCollection<CustomerContactResponse>>
@@ -21,12 +21,7 @@ internal sealed class GetCustomerContactsQueryHandler(IDbConnectionFactory dbCon
                  t.first_name AS {nameof(CustomerContactResponse.FirstName)},
                  t.last_name AS {nameof(CustomerContactResponse.LastName)},
                  t.phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
-                 t.mobile AS {nameof(CustomerContactResponse.Mobile)},
-                 t.email AS {nameof(CustomerContactResponse.Email)},
                  t.primary AS {nameof(CustomerContactResponse.Primary)},
-                 t.receive_invoice AS {nameof(CustomerContactResponse.ReceiveInvoice)},
-                 t.receive_order AS {nameof(CustomerContactResponse.ReceiveOrder)},
-                 t.receive_price_list AS {nameof(CustomerContactResponse.ReceivePriceList)},
                  t.is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts t
              INNER JOIN crm.customers c ON c.id = t.customer_id

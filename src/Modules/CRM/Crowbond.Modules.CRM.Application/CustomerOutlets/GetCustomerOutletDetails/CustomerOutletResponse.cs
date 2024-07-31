@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerOutlets;
+﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletDetails;
 public sealed record CustomerOutletResponse(
     Guid Id,
     Guid CustomerId,
@@ -14,6 +14,6 @@ public sealed record CustomerOutletResponse(
     string? Country,
     string PostalCode,
     string? DeliveryNote,
-    DateTime DeliveryTimeFrom,
-    DateTime DeliveryTimeTo,
+    TimeOnly DeliveryTimeFrom,
+    TimeOnly DeliveryTimeTo,
     bool Is24HrsDelivery);
