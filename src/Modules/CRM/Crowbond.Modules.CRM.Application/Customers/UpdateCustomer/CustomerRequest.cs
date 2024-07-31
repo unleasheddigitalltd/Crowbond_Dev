@@ -61,7 +61,7 @@ public sealed record CustomerRequest(
         string? Country,
         string PostalCode,
         string? DeliveryNote,
-        DateTime DeliveryTimeFrom,
-        DateTime DeliveryTimeTo,
+        TimeOnly DeliveryTimeFrom,
+        TimeOnly DeliveryTimeTo,
         bool Is24HrsDelivery);
 };

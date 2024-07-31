@@ -2,10 +2,10 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Dapper;
 
-namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerContact;
+namespace Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContact;
 
 internal sealed class GetCustomerContactQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetCustomerContactQuery, CustomerContactResponse>
@@ -18,11 +18,13 @@ internal sealed class GetCustomerContactQueryHandler(IDbConnectionFactory dbConn
             $"""
              SELECT
                  id AS {nameof(CustomerContactResponse.Id)},
-                 username AS {nameof(CustomerContactResponse.Username)},
-                 email AS {nameof(CustomerContactResponse.Email)},
+                 customer_id AS {nameof(CustomerContactResponse.CustomerId)},
                  first_name AS {nameof(CustomerContactResponse.FirstName)},
-                 last_name AS {nameof(CustomerContactResponse.LastName)}
-             FROM crm.customer_contacts
+                 last_name AS {nameof(CustomerContactResponse.LastName)},
+                 phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
+                 primary AS {nameof(CustomerContactResponse.Primary)},
+                 is_active AS {nameof(CustomerContactResponse.IsActive)}
+             FROM crm.customer_contacts t
              WHERE id = @CustomerContactId
              """;
 
@@ -30,7 +32,7 @@ internal sealed class GetCustomerContactQueryHandler(IDbConnectionFactory dbConn
 
         if (customerContact is null)
         {
-            return Result.Failure<CustomerContactResponse>(CustomerErrors.NotFound(request.CustomerContactId));
+            return Result.Failure<CustomerContactResponse>(CustomerContactErrors.NotFound(request.CustomerContactId));
         }
 
         return customerContact;

@@ -93,8 +93,8 @@ internal sealed class UpdateCustomerCommandHandler(
                 country: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.Country,
                 postalCode: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.PostalCode ?? "",
                 deliveryNote: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.DeliveryNote,
-                deliveryTimeFrom: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.DeliveryTimeFrom ?? dateTimeProvider.UtcNow,
-                deliveryTimeTo: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.DeliveryTimeTo ?? dateTimeProvider.UtcNow,
+                deliveryTimeFrom: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.DeliveryTimeFrom ?? TimeOnly.MinValue,
+                deliveryTimeTo: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.DeliveryTimeTo ?? TimeOnly.MinValue,
                 is24HrsDelivery: request.Customer.CustomerOutletAddresses.SingleOrDefault(s => s.Id == address.Id)?.Is24HrsDelivery ?? false,
                 lastModifiedBy: request.UserName,
                 lastModifiedDate: dateTimeProvider.UtcNow);

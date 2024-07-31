@@ -36,9 +36,9 @@ public sealed class CustomerOutlet : Entity
 
     public string? DeliveryNote { get; private set; }
 
-    public DateTime DeliveryTimeFrom { get; private set; }
+    public TimeOnly DeliveryTimeFrom { get; private set; }
 
-    public DateTime DeliveryTimeTo { get; private set; }
+    public TimeOnly DeliveryTimeTo { get; private set; }
 
     public bool Is24HrsDelivery { get; private set; }
 
@@ -64,8 +64,8 @@ public sealed class CustomerOutlet : Entity
         string? country,
         string postalCode,
         string? deliveryNote,
-        DateTime deliveryTimeFrom,
-        DateTime deliveryTimeTo,
+        TimeOnly deliveryTimeFrom,
+        TimeOnly deliveryTimeTo,
         bool is24HrsDelivery,
         Guid createBy,
         DateTime createDate)
@@ -108,8 +108,8 @@ public sealed class CustomerOutlet : Entity
         string? country,
         string postalCode,
         string? deliveryNote,
-        DateTime deliveryTimeFrom,
-        DateTime deliveryTimeTo,
+        TimeOnly deliveryTimeFrom,
+        TimeOnly deliveryTimeTo,
         bool is24HrsDelivery,
         Guid lastModifiedBy,
         DateTime lastModifiedDate)
