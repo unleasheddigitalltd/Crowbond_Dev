@@ -27,41 +27,6 @@ public sealed record CustomerRequest(
      bool IsHq,
      bool ShowPricesInDeliveryDocket,
      bool ShowPriceInApp,
-     ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-     string? customerLogo,
-     bool IsActive,
-     List<CustomerRequest.CustomerContact> CustomerContacts,
-     List<CustomerRequest.CustomerOutletAddress> CustomerOutletAddresses
-    )
-{
-    public sealed record CustomerContact(
-        Guid Id,
-        string FirstName,
-        string LastName,
-        string PhoneNumber,
-        string Mobile,
-        string Email,
-        bool Primary,
-        bool ReceiveInvoice,
-        bool ReceiveOrder,
-        bool ReceivePriceList,
-        bool IsActive);
-
-    public sealed record CustomerOutletAddress(
-        Guid Id,
-        string LocationName,
-        string FullName,
-        string? Email,
-        string PhoneNumber,
-        string? Mobile,
-        string AddressLine1,
-        string? AddressLine2,
-        string TownCity,
-        string County,
-        string? Country,
-        string PostalCode,
-        string? DeliveryNote,
-        TimeOnly DeliveryTimeFrom,
-        TimeOnly DeliveryTimeTo,
-        bool Is24HrsDelivery);
-};
+     ShowLogoInDeliveryDocket ShowLogoInDeliveryDocket,
+     string? CustomerLogo,
+     bool IsActive);

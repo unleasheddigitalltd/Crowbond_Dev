@@ -9,7 +9,7 @@ internal sealed class CustomerRepository(CrmDbContext context) : ICustomerReposi
 {
     public async Task<Customer?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.Customers.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+        return await context.Customers.Include(c => c.CustomerSetting).SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
     public void Insert(Customer customer)
