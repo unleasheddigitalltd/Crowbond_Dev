@@ -1,7 +1,6 @@
 ﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.CreateCustomerOutlet;
 
 public sealed record CustomerOutletRequest(
-    Guid CustomerId,
     string LocationName,
     string FullName,
     string? Email,

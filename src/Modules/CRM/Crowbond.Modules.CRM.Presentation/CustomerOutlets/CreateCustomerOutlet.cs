@@ -15,7 +15,7 @@ internal sealed class CreateCustomerOutlet : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("customers/{id}/outlets", async (Guid id, ClaimsPrincipal claims, CustomerOutletRequest request, ISender sender) =>
+        app.MapPost("customers/{id}/outlets", async (Guid id, ClaimsPrincipal claims, CustomerOutletRequest request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CreateCustomerOutletCommand(id, claims.GetUserId(), request));
 

@@ -14,6 +14,4 @@ public sealed record CustomerOutletDetailsResponse(
     string? Country,
     string PostalCode,
     string? DeliveryNote,
-    TimeOnly DeliveryTimeFrom,
-    TimeOnly DeliveryTimeTo,
     bool Is24HrsDelivery);
