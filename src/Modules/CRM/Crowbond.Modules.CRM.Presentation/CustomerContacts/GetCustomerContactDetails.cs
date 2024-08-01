@@ -14,7 +14,7 @@ internal sealed class GetCustomerContactDetails : IEndpoint
     {
         app.MapGet("customers/contacts/{id}/details", async (Guid id, ISender sender) =>
         {
-            Result<CustomerContactResponse> result = await sender.Send(new GetCustomerContactDetailsQuery(id));
+            Result<CustomerContactDetailsResponse> result = await sender.Send(new GetCustomerContactDetailsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

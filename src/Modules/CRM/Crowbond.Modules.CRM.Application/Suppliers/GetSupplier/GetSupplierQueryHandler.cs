@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.Suppliers.GetSupplierDetails;
 using Crowbond.Modules.CRM.Domain.Suppliers;
 using Dapper;
 
@@ -19,22 +18,14 @@ internal sealed class GetSupplierQueryHandler(IDbConnectionFactory dbConnectionF
             $"""
              SELECT
                  id AS {nameof(SupplierResponse.Id)},
-                 businessname AS {nameof(SupplierResponse.SupplierName)},
-                 accountnumber AS {nameof(SupplierResponse.AccountNumber)},
-                 shippingaddressline1 AS {nameof(SupplierResponse.AddressLine1)},
-                 shippingaddressline2 AS {nameof(SupplierResponse.AddressLine2)},
-                 shippingtowncity AS {nameof(SupplierResponse.AddressTownCity)},
-                 shippingpostalcode AS {nameof(SupplierResponse.AddressPostalCode)},
-                 supplieremail AS {nameof(SupplierResponse.SupplierEmail)},
-                 supplierphone AS {nameof(SupplierResponse.SupplierPhone)},
-                 suppliercontact AS {nameof(SupplierResponse.SupplierContact)},
-                 billingaddressline1 AS {nameof(SupplierResponse.BillingAddressLine1)},
-                 billingaddressline2 AS {nameof(SupplierResponse.BillingAddressLine2)},
-                 billingaddresstowncity AS {nameof(SupplierResponse.BillingAddressTownCity)},
-                 billingaddresspostalcode AS {nameof(SupplierResponse.BillingAddressPostalCode)},
-                 paymentterms AS {nameof(SupplierResponse.PaymentTerms)},
-                 suppliernotes AS {nameof(SupplierResponse.SupplierNotes)}
-                 
+                 account_number AS {nameof(SupplierResponse.AccountNumber)},
+                 supplier_name AS {nameof(SupplierResponse.SupplierName)},
+                 address_line1 AS {nameof(SupplierResponse.AddressLine1)},
+                 address_line2 AS {nameof(SupplierResponse.AddressLine2)},
+                 town_city AS {nameof(SupplierResponse.TownCity)},
+                 county AS {nameof(SupplierResponse.County)},
+                 country AS {nameof(SupplierResponse.Country)},
+                 postal_code AS {nameof(SupplierResponse.PostalCode)}                 
              FROM crm.suppliers
              WHERE id = @SupplierId
              """;

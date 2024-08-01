@@ -16,7 +16,7 @@ internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender send
         CustomerContactCreatedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
-        Result<CustomerContactResponse> result = await sender.Send(
+        Result<CustomerContactDetailsResponse> result = await sender.Send(
             new GetCustomerContactDetailsQuery(domainEvent.CustomerContactId),
             cancellationToken);
 

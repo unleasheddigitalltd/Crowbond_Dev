@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers;
-using Crowbond.Modules.CRM.Application.Suppliers.GetSuppliers.Dto;
 
 namespace Crowbond.Modules.CRM.Presentation.Suppliers;
 

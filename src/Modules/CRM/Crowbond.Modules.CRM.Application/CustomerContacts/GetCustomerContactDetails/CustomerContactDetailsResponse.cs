@@ -1,6 +1,6 @@
 ﻿namespace Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
 
-public sealed record CustomerContactResponse(
+public sealed record CustomerContactDetailsResponse(
     Guid Id,    
     Guid CustomerId,    
     string FirstName,    

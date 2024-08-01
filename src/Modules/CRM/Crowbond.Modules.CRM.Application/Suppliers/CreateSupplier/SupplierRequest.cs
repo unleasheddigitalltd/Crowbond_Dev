@@ -1,22 +1,14 @@
-﻿namespace Crowbond.Modules.CRM.Application.Suppliers.CreateSupplier;
+﻿using Crowbond.Modules.CRM.Domain.Customers;
+
+namespace Crowbond.Modules.CRM.Application.Suppliers.CreateSupplier;
 
 public sealed record SupplierRequest(
      string SupplierName,
      string AddressLine1,
      string? AddressLine2,
-     string AddressTownCity,
-     string AddressCounty,
-     string? AddressCountry,
-     string AddressPostalCode,
-     string BillingAddressLine1,
-     string? BillingAddressLine2,
-     string BillingAddressTownCity,
-     string BillingAddressCounty,
-     string? BillingAddressCountry,
-     string BillingAddressPostalCode,
-     int PaymentTerms,
-     string? SupplierNotes,
-     string SupplierEmail,
-     string SupplierPhone,
-     string SupplierContact
-    );
+     string TownCity,
+     string County,
+     string? Country,
+     string PostalCode,
+     PaymentTerm PaymentTerms,
+     string? SupplierNotes);

@@ -4,15 +4,15 @@ using Crowbond.Modules.Users.Application.Abstractions.Data;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Domain.Users;
 
-namespace Crowbond.Modules.Users.Application.Users.CreateCustomer;
+namespace Crowbond.Modules.Users.Application.Users.CreateUser;
 
-internal sealed class CreateCustomerCommandHandler(
+internal sealed class CreateUserCommandHandler(
     IIdentityProviderService identityProviderService,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateCustomerCommand>
+    : ICommandHandler<CreateUserCommand>
 {
-    public async Task<Result> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         const  string defaultPassword = "123456";
 

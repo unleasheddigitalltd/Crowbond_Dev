@@ -845,6 +845,93 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("sequences", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierContacts.SupplierContact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreateBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("create_by");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_number");
+
+                    b.Property<bool>("Primary")
+                        .HasColumnType("boolean")
+                        .HasColumnName("primary");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supplier_id");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_supplier_contacts");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_supplier_contacts_email");
+
+                    b.HasIndex("SupplierId")
+                        .HasDatabaseName("ix_supplier_contacts_supplier_id");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_supplier_contacts_username");
+
+                    b.ToTable("supplier_contacts", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", b =>
                 {
                     b.Property<Guid>("Id")
@@ -854,78 +941,41 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasColumnName("account_number");
-
-                    b.Property<string>("AddressCountry")
-                        .HasColumnType("text")
-                        .HasColumnName("address_country");
-
-                    b.Property<string>("AddressCounty")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("address_county");
 
                     b.Property<string>("AddressLine1")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("address_line1");
 
                     b.Property<string>("AddressLine2")
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("address_line2");
 
-                    b.Property<string>("AddressPostalCode")
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("country");
+
+                    b.Property<string>("County")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("address_postal_code");
-
-                    b.Property<string>("AddressTownCity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("address_town_city");
-
-                    b.Property<string>("BillingAddressCountry")
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_country");
-
-                    b.Property<string>("BillingAddressCounty")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_county");
-
-                    b.Property<string>("BillingAddressLine1")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_line1");
-
-                    b.Property<string>("BillingAddressLine2")
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_line2");
-
-                    b.Property<string>("BillingAddressPostalCode")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_postal_code");
-
-                    b.Property<string>("BillingAddressTownCity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("billing_address_town_city");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("county");
 
                     b.Property<int>("PaymentTerms")
                         .HasColumnType("integer")
                         .HasColumnName("payment_terms");
 
-                    b.Property<string>("SupplierContact")
+                    b.Property<string>("PostalCode")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_contact");
-
-                    b.Property<string>("SupplierEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_email");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("postal_code");
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
@@ -934,13 +984,15 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("supplier_name");
 
                     b.Property<string>("SupplierNotes")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("supplier_notes");
 
-                    b.Property<string>("SupplierPhone")
+                    b.Property<string>("TownCity")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_phone");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("town_city");
 
                     b.HasKey("Id")
                         .HasName("pk_suppliers");
@@ -1049,6 +1101,16 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_recipients_customer_contacts_customer_contact_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierContacts.SupplierContact", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", null)
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_contacts_suppliers_supplier_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>

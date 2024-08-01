@@ -18,32 +18,45 @@ internal sealed class GetSupplierDetailsQueryHandler(IDbConnectionFactory dbConn
             $"""
              SELECT
                  id AS {nameof(SupplierDetailsResponse.Id)},
-                 suppliername AS {nameof(SupplierDetailsResponse.SupplierName)},
-                 accountnumber AS {nameof(SupplierDetailsResponse.AccountNumber)},
-                 addressline1 AS {nameof(SupplierDetailsResponse.AddressLine1)},
-                 addressline2 AS {nameof(SupplierDetailsResponse.AddressLine2)},
-                 towncity AS {nameof(SupplierDetailsResponse.TownCity)},
-                 postalcode AS {nameof(SupplierDetailsResponse.PostalCode)},
-                 supplieremail AS {nameof(SupplierDetailsResponse.SupplierEmail)},
-                 supplierphone AS {nameof(SupplierDetailsResponse.SupplierPhone)},
-                 suppliercontact AS {nameof(SupplierDetailsResponse.SupplierContact)},
-                 billingaddressline1 AS {nameof(SupplierDetailsResponse.BillingAddressLine1)},
-                 billingaddressline2 AS {nameof(SupplierDetailsResponse.BillingAddressLine2)},
-                 billingtowncity AS {nameof(SupplierDetailsResponse.BillingTownCity)},
-                 billingpostalcode AS {nameof(SupplierDetailsResponse.BillingPostalCode)},
-                 paymentterms AS {nameof(SupplierDetailsResponse.PaymentTerms)},
-                 suppliernotes AS {nameof(SupplierDetailsResponse.SupplierNotes)}
-                 
+                 account_number AS {nameof(SupplierDetailsResponse.AccountNumber)},
+                 supplier_name AS {nameof(SupplierDetailsResponse.SupplierName)},
+                 address_line1 AS {nameof(SupplierDetailsResponse.AddressLine1)},
+                 address_line2 AS {nameof(SupplierDetailsResponse.AddressLine2)},
+                 town_city AS {nameof(SupplierDetailsResponse.TownCity)},
+                 county AS {nameof(SupplierDetailsResponse.County)},
+                 country AS {nameof(SupplierDetailsResponse.Country)},
+                 postal_code AS {nameof(SupplierDetailsResponse.PostalCode)},
+                 payment_terms AS {nameof(SupplierDetailsResponse.PaymentTerms)},
+                 supplier_notes AS {nameof(SupplierDetailsResponse.SupplierNotes)}                 
              FROM crm.suppliers
-             WHERE id = @SupplierId
+             WHERE id = @SupplierId;
+
+             SELECT
+                 t.id AS {nameof(SupplierContactResponse.Id)},
+                 t.supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
+                 t.first_name AS {nameof(SupplierContactResponse.FirstName)},
+                 t.last_name AS {nameof(SupplierContactResponse.LastName)},
+                 t.phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
+                 t.primary AS {nameof(SupplierContactResponse.Primary)},
+                 t.is_active AS {nameof(SupplierContactResponse.IsActive)}
+             FROM crm.supplier_contacts t
+             INNER JOIN crm.suppliers s ON s.id = t.supplier_id
+             WHERE s.id = @SupplierId;
              """;
 
-        SupplierDetailsResponse? supplier = await connection.QuerySingleOrDefaultAsync<SupplierDetailsResponse>(sql, request);
+        SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
+
+        var suppliers = (await multi.ReadAsync<SupplierDetailsResponse>()).ToList();
+        var supplierContacts = (await multi.ReadAsync<SupplierContactResponse>()).ToList();
+
+        SupplierDetailsResponse? supplier = suppliers.SingleOrDefault();
 
         if (supplier is null)
         {
             return Result.Failure<SupplierDetailsResponse>(SupplierErrors.NotFound(request.SupplierId));
         }
+
+        supplier.SupplierContacts = supplierContacts.Where(a => a.SupplierId == supplier.Id).ToList();
 
         return supplier;
     }

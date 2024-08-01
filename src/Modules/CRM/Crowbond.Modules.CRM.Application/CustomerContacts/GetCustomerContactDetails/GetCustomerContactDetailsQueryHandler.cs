@@ -8,37 +8,37 @@ using Dapper;
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
 
 internal sealed class GetCustomerContactDetailsQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetCustomerContactDetailsQuery, CustomerContactResponse>
+    : IQueryHandler<GetCustomerContactDetailsQuery, CustomerContactDetailsResponse>
 {
-    public async Task<Result<CustomerContactResponse>> Handle(GetCustomerContactDetailsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerContactDetailsResponse>> Handle(GetCustomerContactDetailsQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(CustomerContactResponse.Id)},
-                 customer_id AS {nameof(CustomerContactResponse.CustomerId)},
-                 first_name AS {nameof(CustomerContactResponse.FirstName)},
-                 last_name AS {nameof(CustomerContactResponse.LastName)},
-                 phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
-                 mobile AS {nameof(CustomerContactResponse.Mobile)},
-                 username AS {nameof(CustomerContactResponse.Username)},
-                 email AS {nameof(CustomerContactResponse.Email)},
-                 primary AS {nameof(CustomerContactResponse.Primary)},             
-                 receive_invoice AS {nameof(CustomerContactResponse.ReceiveInvoice)}, 
-                 receive_order AS {nameof(CustomerContactResponse.ReceiveOrder)}, 
-                 receive_price_list AS {nameof(CustomerContactResponse.ReceivePriceList)},
-                 is_active AS {nameof(CustomerContactResponse.IsActive)}
+                 id AS {nameof(CustomerContactDetailsResponse.Id)},
+                 customer_id AS {nameof(CustomerContactDetailsResponse.CustomerId)},
+                 first_name AS {nameof(CustomerContactDetailsResponse.FirstName)},
+                 last_name AS {nameof(CustomerContactDetailsResponse.LastName)},
+                 phone_number AS {nameof(CustomerContactDetailsResponse.PhoneNumber)},
+                 mobile AS {nameof(CustomerContactDetailsResponse.Mobile)},
+                 username AS {nameof(CustomerContactDetailsResponse.Username)},
+                 email AS {nameof(CustomerContactDetailsResponse.Email)},
+                 primary AS {nameof(CustomerContactDetailsResponse.Primary)},             
+                 receive_invoice AS {nameof(CustomerContactDetailsResponse.ReceiveInvoice)}, 
+                 receive_order AS {nameof(CustomerContactDetailsResponse.ReceiveOrder)}, 
+                 receive_price_list AS {nameof(CustomerContactDetailsResponse.ReceivePriceList)},
+                 is_active AS {nameof(CustomerContactDetailsResponse.IsActive)}
              FROM crm.customer_contacts t
              WHERE id = @CustomerContactId             
              """;
 
-        CustomerContactResponse? customerContact = await connection.QuerySingleOrDefaultAsync<CustomerContactResponse>(sql, request);
+        CustomerContactDetailsResponse? customerContact = await connection.QuerySingleOrDefaultAsync<CustomerContactDetailsResponse>(sql, request);
 
         if (customerContact is null)
         {
-            return Result.Failure<CustomerContactResponse>(CustomerContactErrors.NotFound(request.CustomerContactId));
+            return Result.Failure<CustomerContactDetailsResponse>(CustomerContactErrors.NotFound(request.CustomerContactId));
         }
 
         return customerContact;

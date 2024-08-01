@@ -2,9 +2,9 @@
 
 namespace Crowbond.Modules.CRM.IntegrationEvents;
 
-public sealed class CustomerContactUpdatedIntgrationEvent : IntegrationEvent
+public sealed class SupplierContactCreatedIntegrationEvent : IntegrationEvent
 {
-    public CustomerContactUpdatedIntgrationEvent(
+    public SupplierContactCreatedIntegrationEvent(
         Guid id,
         DateTime occurredOnUtc,
         Guid userId,

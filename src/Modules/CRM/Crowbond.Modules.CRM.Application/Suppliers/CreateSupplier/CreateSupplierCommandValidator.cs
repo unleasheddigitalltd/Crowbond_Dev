@@ -6,13 +6,13 @@ internal sealed class CreateSupplierCommandValidator : AbstractValidator<CreateS
 {
     public CreateSupplierCommandValidator()
     {
-        RuleFor(s => s.Supplier.SupplierName).NotEmpty();
-        RuleFor(s => s.Supplier.AddressLine1).NotEmpty();
-        RuleFor(s => s.Supplier.AddressTownCity).NotEmpty();
-        RuleFor(s => s.Supplier.AddressPostalCode).NotEmpty();
-        RuleFor(s => s.Supplier.AddressCounty).NotEmpty();
-        RuleFor(s => s.Supplier.SupplierEmail).NotEmpty();
-        RuleFor(s => s.Supplier.SupplierPhone).NotEmpty();
+        RuleFor(s => s.Supplier.SupplierName).NotEmpty().MaximumLength(100);
+        RuleFor(s => s.Supplier.AddressLine1).NotEmpty().MaximumLength(255);
+        RuleFor(s => s.Supplier.AddressLine2).MaximumLength(255);
+        RuleFor(s => s.Supplier.TownCity).NotEmpty().MaximumLength(100);
+        RuleFor(s => s.Supplier.PostalCode).NotEmpty().MaximumLength(100);
+        RuleFor(s => s.Supplier.County).NotEmpty().MaximumLength(100);
+        RuleFor(s => s.Supplier.Country).MaximumLength(100);
         RuleFor(s => s.Supplier.SupplierNotes).MaximumLength(500);
     }
 }

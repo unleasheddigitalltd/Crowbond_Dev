@@ -33,7 +33,7 @@ internal sealed class ProcessInboxJob(
 
         IReadOnlyList<InboxMessageResponse> inboxMessages = await GetInboxMessagesAsync(connection, transaction);
 
-        foreach (InboxMessageResponse inboxMessage in inboxMessages)
+         foreach (InboxMessageResponse inboxMessage in inboxMessages)
         {
             Exception? exception = null;
 
