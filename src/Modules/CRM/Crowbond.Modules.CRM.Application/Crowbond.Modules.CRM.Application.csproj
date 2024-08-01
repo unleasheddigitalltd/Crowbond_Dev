@@ -5,9 +5,6 @@
     <ProjectReference Include="..\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustomerContacts\CreateCustomerContact\" />
-    <Folder Include="CustomerContacts\UpdateCustomerContact\" />
-    <Folder Include="CustomerOutlets\CreateCustomerOutlet\" />
-    <Folder Include="CustomerOutlets\UpdateCustomerOutlet\" />
+    <PackageReference Include="Elasticsearch.Net" Version="7.17.5" />
   </ItemGroup>
 </Project>

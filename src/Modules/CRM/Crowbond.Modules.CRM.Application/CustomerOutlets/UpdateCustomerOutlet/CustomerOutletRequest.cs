@@ -1,6 +1,6 @@
-﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletDetails;
-public sealed record CustomerOutletResponse(
-    Guid Id,
+﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
+
+public sealed record CustomerOutletRequest(
     Guid CustomerId,
     string LocationName,
     string FullName,
