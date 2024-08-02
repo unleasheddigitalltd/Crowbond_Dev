@@ -260,6 +260,22 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "customers:contacts:create"
+                        },
+                        new
+                        {
+                            Code = "customers:contacts:update"
+                        },
+                        new
+                        {
+                            Code = "customers:outlets:create"
+                        },
+                        new
+                        {
+                            Code = "customers:outlets:update"
+                        },
+                        new
+                        {
                             Code = "suppliers:read"
                         },
                         new
@@ -269,6 +285,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "suppliers:create"
+                        },
+                        new
+                        {
+                            Code = "suppliers:contacts:create"
+                        },
+                        new
+                        {
+                            Code = "suppliers:contacts:update"
                         },
                         new
                         {
@@ -594,6 +618,26 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "customers:contacts:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:contacts:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:outlets:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:outlets:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "suppliers:read",
                             RoleName = "Administrator"
                         },
@@ -605,6 +649,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "suppliers:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "suppliers:contacts:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "suppliers:contacts:update",
                             RoleName = "Administrator"
                         },
                         new

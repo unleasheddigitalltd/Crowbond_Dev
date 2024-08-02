@@ -14,27 +14,6 @@ internal sealed class UpdateCustomerCommandValidator : AbstractValidator<UpdateC
         RuleFor(c => c.Customer.BillingCountry).MaximumLength(100);
         RuleFor(c => c.Customer.BillingPostalCode).NotEmpty().MaximumLength(16);
         RuleFor(c => c.Customer.CustomerNotes).MaximumLength(500);
-
-        RuleForEach(c => c.Customer.CustomerContacts)
-            .ChildRules(t =>
-            {
-                t.RuleFor(t => t.FirstName).NotEmpty().MaximumLength(100);
-                t.RuleFor(t => t.LastName).NotEmpty().MaximumLength(100);
-                t.RuleFor(t => t.PhoneNumber).NotEmpty().MaximumLength(20);
-                t.RuleFor(t => t.Mobile).NotEmpty().MaximumLength(20);
-                t.RuleFor(t => t.Email).NotEmpty().MaximumLength(255);
-            });
-
-        RuleForEach(c => c.Customer.CustomerOutletAddresses)
-            .ChildRules(s =>
-            {
-                s.RuleFor(s => s.AddressLine1).NotEmpty().MaximumLength(255);
-                s.RuleFor(s => s.AddressLine2).MaximumLength(255);
-                s.RuleFor(s => s.TownCity).NotEmpty().MaximumLength(100);
-                s.RuleFor(s => s.County).NotEmpty().MaximumLength(100);
-                s.RuleFor(s => s.Country).MaximumLength(100);
-                s.RuleFor(s => s.PostalCode).NotEmpty().MaximumLength(16);
-                s.RuleFor(s => s.DeliveryNote).MaximumLength(500);
-            });
+        RuleFor(c => c.Customer.CustomerLogo).MaximumLength(100);
     }
 }

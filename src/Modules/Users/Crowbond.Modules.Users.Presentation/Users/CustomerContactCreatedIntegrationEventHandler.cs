@@ -2,7 +2,7 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.IntegrationEvents;
-using Crowbond.Modules.Users.Application.Users.CreateCustomer;
+using Crowbond.Modules.Users.Application.Users.CreateUser;
 using MediatR;
 
 namespace Crowbond.Modules.Users.Presentation.Users;
@@ -14,7 +14,7 @@ internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender send
         CancellationToken cancellationToken = default)
     {
         Result result = await sender.Send(
-            new CreateCustomerCommand(
+            new CreateUserCommand(
                 integrationEvent.UserId,
                 integrationEvent.Email,
                 integrationEvent.Username,
@@ -24,7 +24,7 @@ internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender send
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(CreateCustomerCommand), result.Error);
+            throw new CrowbondException(nameof(CreateUserCommand), result.Error);
         }
     }
 }

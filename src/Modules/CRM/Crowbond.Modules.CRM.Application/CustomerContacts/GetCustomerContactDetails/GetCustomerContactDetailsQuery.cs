@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
 
-public sealed record GetCustomerContactDetailsQuery(Guid CustomerContactId) : IQuery<CustomerContactResponse>;
+public sealed record GetCustomerContactDetailsQuery(Guid CustomerContactId) : IQuery<CustomerContactDetailsResponse>;

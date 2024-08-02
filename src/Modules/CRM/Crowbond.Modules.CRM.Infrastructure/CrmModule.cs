@@ -42,6 +42,8 @@ using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Infrastructure.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Domain.Routes;
 using Crowbond.Modules.CRM.Infrastructure.Routes;
+using Crowbond.Modules.CRM.Domain.SupplierContacts;
+using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -76,6 +78,7 @@ public static class CrmModule
         services.AddScoped<ICustomerContactRepository,CustomerContactRepository>();
         services.AddScoped<ICustomerOutletRepository,CustomerOutletRepository>();
         services.AddScoped<ISupplierRepository, SupplierRepository>();
+        services.AddScoped<ISupplierContactRepository, SupplierContactRepository>();
         services.AddScoped<IRepRepository, RepRepository>();
         services.AddScoped<IRecipientRepository, RecipientRepository>();
         services.AddScoped<IPriceTierRepository, PriceTierRepository>();
