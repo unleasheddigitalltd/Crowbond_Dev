@@ -29,11 +29,11 @@ public sealed record CustomerDetailsResponse
 
     public string BillingPostalCode { get; }
 
-    public string PriceTierName { get; }
+    public Guid PriceTierId { get; }
 
     public decimal Discount { get; }
 
-    public string RepName { get; }
+    public Guid RepId { get; }
 
     public bool CustomPaymentTerm { get; }
 

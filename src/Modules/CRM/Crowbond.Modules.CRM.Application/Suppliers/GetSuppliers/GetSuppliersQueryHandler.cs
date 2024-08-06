@@ -19,32 +19,47 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
         string sortOrder = request.Order.Equals("ASC", StringComparison.OrdinalIgnoreCase) ? "ASC" : "DESC";
         string orderByClause = request.Sort switch
         {
-            "id" => "id",
-            "supplierName" => "supplier_name",
-            "accountNumber" => "account_number",
-            _ => "s.supplier_name" // Default sorting
+            "supplierName" => nameof(Supplier.SupplierName),
+            "accountNumber" => nameof(Supplier.AccountNumber),
+            _ => nameof(Supplier.AccountNumber) // Default sorting
         };
 
         string sql = $@"
             WITH FilteredSuppliers AS (
                 SELECT
-                    id AS {nameof(Supplier.Id)},
-                    account_number AS {nameof(Supplier.AccountNumber)},
-                    supplier_name AS {nameof(Supplier.SupplierName)},
-                    address_line1 AS {nameof(Supplier.AddressLine1)},                    
-                    address_line2 AS {nameof(Supplier.AddressLine2)},
-                    town_city AS {nameof(Supplier.TownCity)},
-                    county AS {nameof(Supplier.County)},
-                    country AS {nameof(Supplier.Country)},
-                    postal_code AS {nameof(Supplier.PostalCode)},
-                    ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
+                    s.id AS {nameof(Supplier.Id)},
+                    s.account_number AS {nameof(Supplier.AccountNumber)},
+                    s.supplier_name AS {nameof(Supplier.SupplierName)},
+                    s.address_line1 AS {nameof(Supplier.AddressLine1)},                    
+                    s.address_line2 AS {nameof(Supplier.AddressLine2)},
+                    s.town_city AS {nameof(Supplier.TownCity)},
+                    s.county AS {nameof(Supplier.County)},
+                    s.country AS {nameof(Supplier.Country)},
+                    s.postal_code AS {nameof(Supplier.PostalCode)},
+                    t.first_name AS {nameof(Supplier.FirstName)},
+                    t.last_name AS {nameof(Supplier.LastName)},
+                    t.phone_number AS {nameof(Supplier.PhoneNumber)},
+                    t.email AS {nameof(Supplier.Email)},
+                    ROW_NUMBER() OVER (PARTITION BY s.id ORDER BY t.primary DESC) AS FilterRowNum
                 FROM crm.suppliers s
+                LEFT JOIN crm.supplier_contacts t ON s.id = t.supplier_id
                 WHERE
-                    supplier_name ILIKE '%' || @Search || '%'
-                    OR account_number ILIKE '%' || @Search || '%'
-                    OR address_line1 ILIKE '%' || @Search || '%'
-                    OR address_line2 ILIKE '%' || @Search || '%'       
-                    OR town_city ILIKE '%' || @Search || '%'                    
+                    s.supplier_name ILIKE '%' || @Search || '%'
+                    OR s.account_number ILIKE '%' || @Search || '%'
+                    OR s.address_line1 ILIKE '%' || @Search || '%'
+                    OR s.address_line2 ILIKE '%' || @Search || '%'       
+                    OR s.town_city ILIKE '%' || @Search || '%'    
+                    OR s.county ILIKE '%' || @Search || '%'
+                    OR s.country ILIKE '%' || @Search || '%'
+                    OR t.first_name ILIKE '%' || @Search || '%' 
+                    OR t.last_name ILIKE '%' || @Search || '%'
+            ),
+            RankedSuppliers AS (
+                SELECT
+                    *,
+                    ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
+                FROM FilteredSuppliers
+                WHERE FilterRowNum = 1
             )
             SELECT 
                 s.{nameof(Supplier.Id)},
@@ -55,19 +70,33 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
                 s.{nameof(Supplier.TownCity)},
                 s.{nameof(Supplier.County)},
                 s.{nameof(Supplier.Country)},
-                s.{nameof(Supplier.PostalCode)}
-            FROM FilteredSuppliers s
+                s.{nameof(Supplier.PostalCode)},
+                s.{nameof(Supplier.FirstName)},
+                s.{nameof(Supplier.LastName)},
+                s.{nameof(Supplier.PhoneNumber)},
+                s.{nameof(Supplier.Email)}
+            FROM RankedSuppliers s
             WHERE s.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY s.RowNum;
 
             SELECT Count(*) 
+            FROM (
+                SELECT
+                    s.id
                 FROM crm.suppliers s
+                LEFT JOIN crm.supplier_contacts t ON s.id = t.supplier_id
                 WHERE
-                    supplier_name ILIKE '%' || @Search || '%'
-                    OR account_number ILIKE '%' || @Search || '%'
-                    OR address_line1 ILIKE '%' || @Search || '%'
-                    OR address_line2 ILIKE '%' || @Search || '%'       
-                    OR town_city ILIKE '%' || @Search || '%'
+                    s.supplier_name ILIKE '%' || @Search || '%'
+                    OR s.account_number ILIKE '%' || @Search || '%'
+                    OR s.address_line1 ILIKE '%' || @Search || '%'
+                    OR s.address_line2 ILIKE '%' || @Search || '%'       
+                    OR s.town_city ILIKE '%' || @Search || '%'    
+                    OR s.county ILIKE '%' || @Search || '%'
+                    OR s.country ILIKE '%' || @Search || '%'
+                    OR t.first_name ILIKE '%' || @Search || '%' 
+                    OR t.last_name ILIKE '%' || @Search || '%'
+                GROUP BY s.id
+            ) AS UniqueSuppliers
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
@@ -78,7 +107,7 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
         int totalPages = (int)Math.Ceiling(totalCount / (double)request.Size);
         int currentPage = request.Page;
         int pageSize = request.Size;
-        int startIndex = (currentPage - 1) * pageSize;
+        int startIndex = currentPage * pageSize;
         int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new SuppliersResponse(suppliers, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));

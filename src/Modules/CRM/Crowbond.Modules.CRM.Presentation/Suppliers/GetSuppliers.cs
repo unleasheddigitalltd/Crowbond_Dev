@@ -16,7 +16,7 @@ internal sealed class GetSuppliers : IEndpoint
         app.MapGet("suppliers", async (
             ISender sender,
             string search = "",
-            string sort = "suppliername",
+            string sort = "AccountNumber",
             string order = "asc",
             int page = 0,
             int size = 10

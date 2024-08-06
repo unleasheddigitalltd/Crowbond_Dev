@@ -26,9 +26,9 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                  c.billing_county AS {nameof(CustomerDetailsResponse.BillingCounty)},  
                  c.billing_country AS {nameof(CustomerDetailsResponse.BillingCountry)},  
                  c.billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},  
-                 t.name AS {nameof(CustomerDetailsResponse.PriceTierName)},  
+                 c.price_tier_id AS {nameof(CustomerDetailsResponse.PriceTierId)},  
                  c.discount AS {nameof(CustomerDetailsResponse.Discount)},  
-                 r.name AS {nameof(CustomerDetailsResponse.RepName)},  
+                 c.rep_id AS {nameof(CustomerDetailsResponse.RepId)},  
                  c.custom_payment_term AS {nameof(CustomerDetailsResponse.CustomPaymentTerm)},  
                  c.payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},  
                  c.invoice_due_days AS {nameof(CustomerDetailsResponse.InvoiceDueDays)},  
@@ -47,8 +47,6 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                  cs.customer_logo AS {nameof(CustomerDetailsResponse.CustomerLogo)}
              FROM crm.customers c
              INNER JOIN crm.customer_settings cs ON c.id = cs.customer_id
-             INNER JOIN crm.price_tiers t ON t.id = c.price_tier_id
-             INNER JOIN crm.reps r ON r.id = c.rep_id
              WHERE c.id = @CustomerId;
 
              SELECT
