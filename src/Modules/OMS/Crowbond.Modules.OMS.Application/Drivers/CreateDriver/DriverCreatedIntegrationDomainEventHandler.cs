@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Crowbond.Modules.OMS.Application.Drivers.CreateDriver;
 
-internal sealed class DriverCreatedIntegrationEventHandler(ISender sender, IEventBus eventBus)
+internal sealed class DriverCreatedIntegrationDomainEventHandler(ISender sender, IEventBus eventBus)
     : DomainEventHandler<DriverCreatedDomainEvent>
 {
     public override async Task Handle(

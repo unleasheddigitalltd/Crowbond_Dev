@@ -5,7 +5,7 @@ namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 public sealed class PurchaseOrderHeader : Entity
 {
-    public PurchaseOrderHeader()
+    private PurchaseOrderHeader()
     {        
     }
 

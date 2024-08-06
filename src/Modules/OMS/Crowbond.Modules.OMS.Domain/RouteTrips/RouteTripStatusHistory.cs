@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.RouteTrips;
 
 public sealed class RouteTripStatusHistory : Entity
 {
-    public RouteTripStatusHistory()
+    private RouteTripStatusHistory()
     {        
     }
 

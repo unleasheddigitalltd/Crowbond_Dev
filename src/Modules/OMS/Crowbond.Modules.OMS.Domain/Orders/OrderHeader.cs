@@ -5,7 +5,7 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public sealed class OrderHeader : Entity
 {
-    public OrderHeader()
+    private OrderHeader()
     {        
     }
 

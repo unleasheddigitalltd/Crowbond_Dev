@@ -76,6 +76,7 @@ public static class OmsModule
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<IDeliveryImageRepository, DeliveryImageRepository>();
         services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
+        services.AddScoped<IPurchaseOrderStatusHistoryRepository, PurchaseOrderStatusHistoryRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
         services.ConfigureOptions<ConfigureProcessOutboxJob>();

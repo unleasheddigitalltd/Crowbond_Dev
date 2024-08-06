@@ -41,6 +41,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<Delivery> Deliveries { get; set; }
     internal DbSet<DeliveryImage> DeliveryImages { get; set; }
     internal DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+    internal DbSet<PurchaseOrderStatusHistory> PurchaseOrderStatusHistories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,5 +65,6 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new DeliveryConfiguration());
         modelBuilder.ApplyConfiguration(new DeliveryImageConfiguration());
         modelBuilder.ApplyConfiguration(new OrderStatusHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new PurchaseOrderStatusHistoryConfiguration());
     }
 }

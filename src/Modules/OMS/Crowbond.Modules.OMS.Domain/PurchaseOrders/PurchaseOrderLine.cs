@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 public sealed class PurchaseOrderLine
 {
-    public PurchaseOrderLine()
+    private PurchaseOrderLine()
     {
     }
 
