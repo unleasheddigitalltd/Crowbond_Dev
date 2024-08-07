@@ -14,8 +14,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
-using Crowbond.Modules.OMS.Domain.PurchaseOrders;
-using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.Drivers;
 using Crowbond.Modules.OMS.Infrastructure.Drivers;
 using Crowbond.Modules.OMS.Infrastructure.Routes;
@@ -30,8 +29,7 @@ using Crowbond.Modules.OMS.Domain.Deliveries;
 using Crowbond.Modules.OMS.Infrastructure.Deliveries;
 using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
-using MassTransit;
-using Crowbond.Modules.OMS.IntegrationEvents;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -66,7 +64,7 @@ public static class OmsModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
+        services.AddScoped<IPurchaseOrderHeaderRepository, PurchaseOrderHeaderRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IRouteTripRepository, RouteTripRepository>();
