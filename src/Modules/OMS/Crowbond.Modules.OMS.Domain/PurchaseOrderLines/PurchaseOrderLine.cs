@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Crowbond.Common.Domain;
+﻿using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
 
@@ -27,6 +26,8 @@ public sealed class PurchaseOrderLine
 
     public decimal SubTotal { get; private set; }
 
+    public TaxRateType TaxRateType { get; private set; }
+
     public decimal Tax { get; private set; }
 
     public decimal LineTotal { get; private set; }
@@ -45,10 +46,8 @@ public sealed class PurchaseOrderLine
         string productName,
         string unitOfMeasureName,
         decimal unitPrice,
-        int qty,
-        decimal subTotal,
-        decimal tax,
-        decimal lineTotal,
+        decimal qty,
+        TaxRateType taxRateType,
         bool foc,
         bool taxable,
         string? comments)
@@ -63,29 +62,44 @@ public sealed class PurchaseOrderLine
             UnitOfMeasureName = unitOfMeasureName,
             UnitPrice = unitPrice,
             Qty = qty,
-            SubTotal = subTotal,
-            Tax = tax,
-            LineTotal = lineTotal,
+            TaxRateType = taxRateType,
             FOC = foc,
             Taxable = taxable,
             Comments = comments
         };
 
+        purchaseOrderLine.SubTotal = purchaseOrderLine.UnitPrice * purchaseOrderLine.Qty;
+        purchaseOrderLine.Tax = purchaseOrderLine.SubTotal * purchaseOrderLine.TaxRate(purchaseOrderLine.TaxRateType);
+        purchaseOrderLine.LineTotal = purchaseOrderLine.SubTotal + purchaseOrderLine.Tax;
+
         return purchaseOrderLine;
     }
 
     public void Update(
-        int qty,
-        decimal subTotal,
-        decimal tax,
-        decimal lineTotal,
+        decimal qty,
         string? comments)
     {
         Qty = qty;
-        SubTotal = subTotal;
-        Tax = tax;
-        LineTotal = lineTotal;
         Comments = comments;
+
+        SubTotal = UnitPrice * Qty;
+        Tax = TaxRate(TaxRateType);
+        LineTotal = SubTotal + Tax;
     }
 
+    private decimal TaxRate(TaxRateType taxRateType)
+    {
+        if (Taxable)
+        {
+            return taxRateType switch
+            {
+                TaxRateType.VatOnIncome => 0.2m,
+                TaxRateType.NoVat => 0,
+                TaxRateType.ZeroRatedIncome => 0,
+                _ => 0
+            };
+        }
+
+        return 0;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Domain.Payments;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
 
@@ -77,18 +78,15 @@ public sealed class PurchaseOrderHeader : Entity
 
     public DateTime? LastModifiedDate { get; private set; }
 
+    public List<PurchaseOrderLine> PurchaseOrderLines { get; private set; }
+
     public static Result<PurchaseOrderHeader> Create(
         Guid supplierId,
         string supplierName,
         string? contactFullName,
         string? contactPhone,
         string? contactEmail,
-        decimal purchaseOrderAmount,
         DateOnly requiredDate,
-        decimal purchaseOrderTax,
-        decimal deliveryCharge,
-        PaymentMethod paymentMethod,
-        PaymentStatus paymentStatus,
         string? purchaseOrderNotes,
         Guid createBy,
         DateTime createDate)
@@ -101,16 +99,17 @@ public sealed class PurchaseOrderHeader : Entity
             ContactFullName = contactFullName,
             ContactPhone = contactPhone,
             ContactEmail = contactEmail,
-            PurchaseOrderAmount = purchaseOrderAmount,
+            PurchaseOrderAmount = 0,
             RequiredDate = requiredDate,
-            PurchaseOrderTax = purchaseOrderTax,
-            DeliveryCharge = deliveryCharge,
-            PaymentMethod = paymentMethod,
-            PaymentStatus = paymentStatus,
+            PurchaseOrderTax = 0,
+            PaymentMethod = PaymentMethod.Invoice,
+            PaymentStatus = PaymentStatus.Unpaid,
             PurchaseOrderNotes = purchaseOrderNotes,
             Status = PurchaseOrderStatus.Draft,
             CreateBy = createBy,
-            CreateDate = createDate
+            CreateDate = createDate,
+            Tags = [],
+            PurchaseOrderLines = new List<PurchaseOrderLine>()
         };
 
         return orderHeader;
@@ -203,5 +202,17 @@ public sealed class PurchaseOrderHeader : Entity
         PaidDate = paidDate;
 
         return Result.Success();
+    }
+
+    public void AddPurchaseOrderLine(PurchaseOrderLine purchaseOrderLine)
+    {
+        PurchaseOrderLines.Add(purchaseOrderLine);
+        CalculateTotalAmount();
+    }
+
+    private void CalculateTotalAmount()
+    {
+        PurchaseOrderTax = PurchaseOrderLines.Sum(line => line.Tax);
+        PurchaseOrderAmount = PurchaseOrderLines.Sum(line => line.SubTotal);
     }
 }

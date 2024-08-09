@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Presentation.Endpoints;
-using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Crowbond.Modules.CRM.Application;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
-using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Crowbond.Modules.CRM.Infrastructure.Outbox;
 using Crowbond.Modules.CRM.Infrastructure.Inbox;
@@ -32,8 +30,6 @@ using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
-using Crowbond.Modules.CRM.Domain.Products;
-using Crowbond.Modules.CRM.Infrastructure.Products;
 using Crowbond.Modules.CRM.Domain.Categories;
 using Crowbond.Modules.CRM.Infrastructure.Categories;
 using Crowbond.Modules.CRM.Domain.CustomerProductPrices;
@@ -44,6 +40,8 @@ using Crowbond.Modules.CRM.Domain.Routes;
 using Crowbond.Modules.CRM.Infrastructure.Routes;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
+using Crowbond.Modules.CRM.PublicApi;
+using Crowbond.Modules.CRM.Infrastructure.PublicApi;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -83,13 +81,15 @@ public static class CrmModule
         services.AddScoped<IRecipientRepository, RecipientRepository>();
         services.AddScoped<IPriceTierRepository, PriceTierRepository>();
         services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
         services.AddScoped<ICustomerProductPriceRepository, CustomerProductPriceRepository>();
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
 
+
+        services.AddScoped<ISupplierApi, SupplierApi>();
+        services.AddScoped<ISupplierProductApi, SupplierProductsApi>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<CrmDbContext>());
 

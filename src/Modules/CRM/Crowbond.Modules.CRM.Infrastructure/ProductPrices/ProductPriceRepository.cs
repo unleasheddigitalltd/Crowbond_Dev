@@ -1,6 +1,5 @@
 ﻿using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
-using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +17,9 @@ public sealed class ProductPriceRepository(CrmDbContext context) : IProductPrice
         return await context.ProductPrices.Where(p => p.PriceTierId ==  priceTier.Id).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductPrice>> GetForProduct(Product product, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ProductPrice>> GetForProduct(Guid productId, CancellationToken cancellationToken = default)
     {
-        return await context.ProductPrices.Where(p => p.ProductId == product.Id).ToListAsync(cancellationToken);
+        return await context.ProductPrices.Where(p => p.ProductId == productId).ToListAsync(cancellationToken);
     }
 
     public void Insert(ProductPrice price)

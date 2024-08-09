@@ -1,6 +1,4 @@
 ﻿using Crowbond.Modules.CRM.Domain.CustomerProducts;
-using Crowbond.Modules.CRM.Domain.Customers;
-using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 

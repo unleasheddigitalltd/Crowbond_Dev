@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.OMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(OmsDbContext))]
-    partial class OmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240808155642_Add_TaxType_Purchase_Order")]
+    partial class Add_TaxType_Purchase_Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -597,6 +600,7 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnName("purchase_order_amount");
 
                     b.Property<string>("PurchaseOrderNo")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("purchase_order_no");
@@ -621,6 +625,7 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnName("sales_order_ref");
 
                     b.Property<string>("ShippingAddressLine1")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("shipping_address_line1");
@@ -636,21 +641,25 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnName("shipping_country");
 
                     b.Property<string>("ShippingCounty")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("shipping_county");
 
                     b.Property<string>("ShippingLocationName")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("shipping_location_name");
 
                     b.Property<string>("ShippingPostalCode")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("shipping_postal_code");
 
                     b.Property<string>("ShippingTownCity")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("shipping_town_city");

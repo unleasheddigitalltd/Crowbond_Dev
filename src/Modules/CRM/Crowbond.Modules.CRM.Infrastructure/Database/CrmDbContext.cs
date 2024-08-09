@@ -18,11 +18,9 @@ using Crowbond.Modules.CRM.Domain.Recipients;
 using Crowbond.Modules.CRM.Infrastructure.Recipients;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
-using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Domain.Categories;
 using Crowbond.Modules.CRM.Infrastructure.Categories;
 using Crowbond.Modules.CRM.Domain.PriceTiers;
-using Crowbond.Modules.WMS.Infrastructure.Products;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
@@ -37,6 +35,8 @@ using Crowbond.Modules.CRM.Domain.CustomerSettings;
 using Crowbond.Modules.CRM.Infrastructure.CustomerSettings;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
+using Crowbond.Modules.CRM.Domain.SupplierProducts;
+using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Database;
 public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbContext(options), IUnitOfWork
@@ -51,7 +51,6 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<Sequence> Sequences { get; set; }
     internal DbSet<Rep> Reps { get; set; }
     internal DbSet<Recipient> Recipients { get; set; }
-    internal DbSet<Product> Products { get; set; }
     internal DbSet<Category> Categories { get; set; }
     internal DbSet<PriceTier> PriceTiers { get; set; }
     internal DbSet<ProductPrice> ProductPrices { get; set; }
@@ -59,6 +58,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<CustomerProductPrice> CustomerProductPrices { get; set; }
     internal DbSet<CustomerOutletRoute> CustomerOutletRoutes { get; set; }
     internal DbSet<Route> Routes { get; set; }
+    internal DbSet<SupplierProduct> SupplierProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,7 +76,6 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new SequenceConfiguration());
         modelBuilder.ApplyConfiguration(new RepConfiguration());
         modelBuilder.ApplyConfiguration(new RecipientConfiguration());
-        modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         modelBuilder.ApplyConfiguration(new PriceTierConfiguration());
         modelBuilder.ApplyConfiguration(new ProductPriceConfiguration());
@@ -84,6 +83,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new CustomerProductPriceConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerOutletConfiguration());
         modelBuilder.ApplyConfiguration(new RouteConfiguration());
+        modelBuilder.ApplyConfiguration(new SupplierProductConfiguration());
     }
 
     public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)

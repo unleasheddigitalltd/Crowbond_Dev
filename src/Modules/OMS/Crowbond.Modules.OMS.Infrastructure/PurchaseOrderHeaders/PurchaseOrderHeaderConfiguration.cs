@@ -15,21 +15,22 @@ public sealed class PurchaseOrderHeaderConfiguratin : IEntityTypeConfiguration<P
             );
 
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.PurchaseOrderNo).IsRequired().HasMaxLength(20);
+        builder.Property(p => p.PurchaseOrderNo).HasMaxLength(20);
         builder.Property(p => p.PaidBy).HasMaxLength(100);
         builder.Property(p => p.PaidDate).IsRequired(false);
         builder.Property(p => p.SupplierName).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.ContactFullName).IsRequired(false).HasMaxLength(200);
-        builder.Property(p => p.ContactPhone).IsRequired(false).HasMaxLength(20);
-        builder.Property(p => p.ContactEmail).IsRequired(false).HasMaxLength(255);
+        builder.Property(p => p.ContactFullName).HasMaxLength(200);
+        builder.Property(p => p.ContactPhone).HasMaxLength(20);
+        builder.Property(p => p.ContactEmail).HasMaxLength(255);
         builder.Property(p => p.PurchaseOrderAmount).IsRequired().HasPrecision(10, 2);
-        builder.Property(p => p.ShippingLocationName).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.ShippingAddressLine1).IsRequired().HasMaxLength(255);
+        builder.Property(p => p.ShippingLocationName).HasMaxLength(100);
+        builder.Property(p => p.ShippingAddressLine1).HasMaxLength(255);
         builder.Property(p => p.ShippingAddressLine2).HasMaxLength(255);
-        builder.Property(p => p.ShippingTownCity).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.ShippingCounty).IsRequired().HasMaxLength(100);
-        builder.Property(p => p.ShippingCountry).IsRequired(false).HasMaxLength(100);
-        builder.Property(p => p.ShippingPostalCode).IsRequired().HasMaxLength(20);
+        builder.Property(p => p.ShippingTownCity).HasMaxLength(100);
+        builder.Property(p => p.ShippingCounty).HasMaxLength(100);
+        builder.Property(p => p.ShippingCountry).HasMaxLength(100);
+        builder.Property(p => p.ShippingPostalCode).HasMaxLength(20);
+        builder.Property(p => p.ExpectedShippingDate).IsRequired(false);
         builder.Property(p => p.SupplierReference).HasMaxLength(100);
         builder.Property(p => p.PurchaseOrderTax).IsRequired().HasPrecision(10, 2);
         builder.Property(p => p.DeliveryMethod).IsRequired(false);
@@ -37,6 +38,8 @@ public sealed class PurchaseOrderHeaderConfiguratin : IEntityTypeConfiguration<P
         builder.Property(p => p.PurchaseOrderNotes).HasMaxLength(500);
         builder.Property(p => p.SalesOrderRef).HasMaxLength(100);
         builder.Property(p => p.Tags).HasConversion(tagsConverter).HasMaxLength(255);
+        builder.Property(p => p.LastModifiedBy).IsRequired(false);
+        builder.Property(p => p.LastModifiedDate).IsRequired(false);
         
     }
 }

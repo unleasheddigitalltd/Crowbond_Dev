@@ -18,7 +18,5 @@ public sealed class PurchaseOrderLineConfiguration : IEntityTypeConfiguration<Pu
         builder.Property(p => p.SubTotal).IsRequired().HasPrecision(10, 2);
         builder.Property(p => p.Tax).IsRequired().HasPrecision(5, 2);
         builder.Property(p => p.LineTotal).IsRequired().HasPrecision(10, 2);
-
-        builder.HasOne<PurchaseOrderHeader>().WithMany().HasForeignKey(p => p.PurchaseOrderHeaderId);
     }
 }
