@@ -139,7 +139,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{00BF6A0E-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.ArchitectureTests", "src\Modules\OMS\Crowbond.Modules.OMS.ArchitectureTests\Crowbond.Modules.OMS.ArchitectureTests.csproj", "{A229BDF9-8D31-4E18-AF28-D890913B677E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.PublicApi", "src\Modules\CRM\Crowbond.Modules.CRM.PublicApi\Crowbond.Modules.CRM.PublicApi.csproj", "{F7348CDB-103E-4552-AD51-A0CACA8BB60E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.PublicApi", "src\Modules\CRM\Crowbond.Modules.CRM.PublicApi\Crowbond.Modules.CRM.PublicApi.csproj", "{F7348CDB-103E-4552-AD51-A0CACA8BB60E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D2FFA242-71E5-48FE-8CF8-F337663C0DA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.ArchitectureTests", "src\Modules\CRM\Crowbond.Modules.CRM.ArchitectureTests\Crowbond.Modules.CRM.ArchitectureTests.csproj", "{D5E62DE5-4DA8-45E5-8350-D082CB4359D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -339,6 +343,10 @@ Global
 		{F7348CDB-103E-4552-AD51-A0CACA8BB60E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7348CDB-103E-4552-AD51-A0CACA8BB60E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7348CDB-103E-4552-AD51-A0CACA8BB60E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -407,6 +415,8 @@ Global
 		{00BF6A0E-DB64-47D1-B744-2379A3CDE04B} = {CF31CEC9-5A24-4DC6-856C-6D3E26EE8D12}
 		{A229BDF9-8D31-4E18-AF28-D890913B677E} = {00BF6A0E-DB64-47D1-B744-2379A3CDE04B}
 		{F7348CDB-103E-4552-AD51-A0CACA8BB60E} = {DE01AD95-46F7-41B7-BC41-CD83FDC7BC4B}
+		{D2FFA242-71E5-48FE-8CF8-F337663C0DA9} = {DE01AD95-46F7-41B7-BC41-CD83FDC7BC4B}
+		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2} = {D2FFA242-71E5-48FE-8CF8-F337663C0DA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E42AE86-7F3C-45F4-A386-AB71CC4446CB}
