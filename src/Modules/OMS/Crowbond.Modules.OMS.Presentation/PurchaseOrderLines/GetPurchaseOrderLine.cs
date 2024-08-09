@@ -1,14 +1,14 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLine;
-using Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLines;
+using Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLine;
+using Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLines;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Crowbond.Modules.OMS.Presentation.PurchaseOrders;
+namespace Crowbond.Modules.OMS.Presentation.PurchaseOrderLines;
 
 internal sealed class GetPurchaseOrderLine : IEndpoint
 {

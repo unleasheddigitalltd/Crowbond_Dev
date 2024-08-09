@@ -2,11 +2,11 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLines;
+using Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLines;
 using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
 using Dapper;
 
-namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLine;
+namespace Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLine;
 
 internal sealed class GetPurchaseOrderLineQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetPurchaseOrderLineQuery, PurchaseOrderLineResponse>

@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
 
@@ -38,6 +39,7 @@ public sealed class PurchaseOrderLine
 
     public string? Comments { get; private set; }
 
+    public PurchaseOrderHeader PurchaseOrderHeader { get; private set; }
 
     public static Result<PurchaseOrderLine> Create(
         Guid purchaseOrderHeaderId,
@@ -83,7 +85,7 @@ public sealed class PurchaseOrderLine
         Comments = comments;
 
         SubTotal = UnitPrice * Qty;
-        Tax = TaxRate(TaxRateType);
+        Tax = SubTotal * TaxRate(TaxRateType);
         LineTotal = SubTotal + Tax;
     }
 

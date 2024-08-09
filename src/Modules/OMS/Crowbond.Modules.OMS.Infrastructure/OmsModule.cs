@@ -30,6 +30,8 @@ using Crowbond.Modules.OMS.Infrastructure.Deliveries;
 using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderLines;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -65,6 +67,7 @@ public static class OmsModule
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IPurchaseOrderHeaderRepository, PurchaseOrderHeaderRepository>();
+        services.AddScoped<IPurchaseOrderLineRepository, PurchaseOrderLineRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IRouteTripRepository, RouteTripRepository>();

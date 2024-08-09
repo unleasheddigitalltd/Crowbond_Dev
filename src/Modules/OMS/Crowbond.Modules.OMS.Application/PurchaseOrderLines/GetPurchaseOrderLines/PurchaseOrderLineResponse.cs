@@ -1,6 +1,7 @@
-﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLines;
+﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLines;
 
-public sealed record PurchaseOrderLineResponse {
+public sealed record PurchaseOrderLineResponse
+{
     public Guid Id { get; }
     public Guid PurchaseOrderHeaderId { get; }
     public Guid ProductId { get; }

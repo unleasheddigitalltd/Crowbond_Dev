@@ -157,6 +157,7 @@ public sealed class PurchaseOrderHeader : Entity
         SalesOrderRef = salesOrderRef;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
+        UpdateTotalAmount();
     }
 
     public Result Pend()
@@ -207,12 +208,12 @@ public sealed class PurchaseOrderHeader : Entity
     public void AddPurchaseOrderLine(PurchaseOrderLine purchaseOrderLine)
     {
         PurchaseOrderLines.Add(purchaseOrderLine);
-        CalculateTotalAmount();
+        UpdateTotalAmount();
     }
 
-    private void CalculateTotalAmount()
+    public void UpdateTotalAmount()
     {
         PurchaseOrderTax = PurchaseOrderLines.Sum(line => line.Tax);
-        PurchaseOrderAmount = PurchaseOrderLines.Sum(line => line.SubTotal);
+        PurchaseOrderAmount = PurchaseOrderLines.Sum(line => line.LineTotal) + DeliveryCharge;
     }
 }

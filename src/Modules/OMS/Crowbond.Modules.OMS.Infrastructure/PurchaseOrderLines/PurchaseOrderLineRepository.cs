@@ -8,7 +8,7 @@ internal sealed class PurchaseOrderLineRepository(OmsDbContext context) : IPurch
 {
     public async Task<PurchaseOrderLine?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.PurchaseOrderLines.SingleOrDefaultAsync(pl => pl.Id == id, cancellationToken);
+        return await context.PurchaseOrderLines.Include(pl => pl.PurchaseOrderHeader).SingleOrDefaultAsync(pl => pl.Id == id, cancellationToken);
     }
 
     public void InserRange(IEnumerable<PurchaseOrderLine> purchaseOrderLines)

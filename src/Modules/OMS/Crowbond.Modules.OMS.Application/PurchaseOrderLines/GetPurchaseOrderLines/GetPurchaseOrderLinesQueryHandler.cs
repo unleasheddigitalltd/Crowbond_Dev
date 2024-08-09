@@ -4,7 +4,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLines;
+namespace Crowbond.Modules.OMS.Application.PurchaseOrderLines.GetPurchaseOrderLines;
 
 internal sealed class GetPurchaseOrderLinesQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetPurchaseOrderLinesQuery, IReadOnlyCollection<PurchaseOrderLineResponse>>
