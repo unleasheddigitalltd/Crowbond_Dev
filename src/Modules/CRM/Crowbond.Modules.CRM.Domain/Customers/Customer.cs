@@ -5,7 +5,7 @@ namespace Crowbond.Modules.CRM.Domain.Customers;
 
 public sealed class Customer : Entity
 {
-    public Customer()
+    private Customer()
     {
 
     }

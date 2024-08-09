@@ -2,5 +2,5 @@
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrder;
 
-public sealed record GetPurchaseOrderQuery(Guid PurchaseOrderId) : IQuery<PurchaseOrderResponse>;
+public sealed record GetPurchaseOrderQuery(Guid PurchaseOrderHeaderId) : IQuery<PurchaseOrderResponse>;
 

@@ -7,7 +7,7 @@ using Dapper;
 
 namespace Crowbond.Modules.CRM.Application.SupplierContacts.GetSupplierContactDetails;
 
-internal sealed class GetSupplierContactDetailsQueryHandle(IDbConnectionFactory dbConnectionFactory)
+internal sealed class GetSupplierContactDetailsQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetSupplierContactDetailsQuery, SupplierContactDetailsResponse>
 {
     public async Task<Result<SupplierContactDetailsResponse>> Handle(GetSupplierContactDetailsQuery request, CancellationToken cancellationToken)

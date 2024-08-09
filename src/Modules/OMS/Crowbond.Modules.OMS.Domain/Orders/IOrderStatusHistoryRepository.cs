@@ -2,7 +2,7 @@
 
 public interface IOrderStatusHistoryRepository
 {
-    Task<OrderStatusHistory> GetAsync(Guid Id, CancellationToken cancellationToken = default);
+    Task<OrderStatusHistory?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
     void Insert(OrderStatusHistory orderStatusHistory);
 }

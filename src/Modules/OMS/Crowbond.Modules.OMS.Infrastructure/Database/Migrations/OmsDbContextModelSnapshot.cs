@@ -519,32 +519,60 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.ToTable("order_status_histories", "oms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("ContactEmail")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("contact_email");
+
+                    b.Property<string>("ContactFullName")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("contact_full_name");
+
+                    b.Property<string>("ContactPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("contact_phone");
+
+                    b.Property<Guid>("CreateBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("create_by");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date");
+
                     b.Property<decimal>("DeliveryCharge")
-                        .HasColumnType("numeric")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("delivery_charge");
 
                     b.Property<int?>("DeliveryMethod")
                         .HasColumnType("integer")
                         .HasColumnName("delivery_method");
 
-                    b.Property<DateOnly>("ExpectedShippingDate")
+                    b.Property<DateOnly?>("ExpectedShippingDate")
                         .HasColumnType("date")
                         .HasColumnName("expected_shipping_date");
 
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("location_name");
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
 
                     b.Property<string>("PaidBy")
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("paid_by");
 
                     b.Property<DateTime?>("PaidDate")
@@ -559,26 +587,28 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("payment_status");
 
-                    b.Property<DateOnly>("PurchaseDate")
+                    b.Property<DateOnly?>("PurchaseDate")
                         .HasColumnType("date")
                         .HasColumnName("purchase_date");
 
                     b.Property<decimal>("PurchaseOrderAmount")
-                        .HasColumnType("numeric")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("purchase_order_amount");
 
                     b.Property<string>("PurchaseOrderNo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
                         .HasColumnName("purchase_order_no");
 
                     b.Property<string>("PurchaseOrderNotes")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("purchase_order_notes");
 
                     b.Property<decimal>("PurchaseOrderTax")
-                        .HasColumnType("numeric")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("purchase_order_tax");
 
                     b.Property<DateOnly>("RequiredDate")
@@ -586,46 +616,48 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnName("required_date");
 
                     b.Property<string>("SalesOrderRef")
-                        .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("sales_order_ref");
 
-                    b.Property<string>("ShippingAddressCountry")
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_country");
-
-                    b.Property<string>("ShippingAddressCounty")
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_county");
-
                     b.Property<string>("ShippingAddressLine1")
-                        .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("shipping_address_line1");
 
                     b.Property<string>("ShippingAddressLine2")
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("shipping_address_line2");
 
-                    b.Property<string>("ShippingAddressPostalCode")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_postal_code");
+                    b.Property<string>("ShippingCountry")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("shipping_country");
 
-                    b.Property<string>("ShippingAddressTownCity")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("shipping_address_town_city");
+                    b.Property<string>("ShippingCounty")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("shipping_county");
 
-                    b.Property<string>("SupplierContact")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_contact");
+                    b.Property<string>("ShippingLocationName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("shipping_location_name");
 
-                    b.Property<string>("SupplierEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_email");
+                    b.Property<string>("ShippingPostalCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("shipping_postal_code");
+
+                    b.Property<string>("ShippingTownCity")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("shipping_town_city");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uuid")
@@ -633,21 +665,19 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("supplier_name");
 
-                    b.Property<string>("SupplierPhone")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("supplier_phone");
-
                     b.Property<string>("SupplierReference")
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("supplier_reference");
 
                     b.Property<string>("Tags")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("tags");
 
                     b.HasKey("Id")
@@ -656,12 +686,48 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.ToTable("purchase_order_headers", "oms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderLine", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderStatusHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("changed_at");
+
+                    b.Property<Guid>("ChangedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("changed_by");
+
+                    b.Property<Guid>("PurchaseOrderHeaderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("purchase_order_header_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id")
+                        .HasName("pk_purchase_order_status_histories");
+
+                    b.HasIndex("PurchaseOrderHeaderId")
+                        .HasDatabaseName("ix_purchase_order_status_histories_purchase_order_header_id");
+
+                    b.ToTable("purchase_order_status_histories", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderLines.PurchaseOrderLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("text")
+                        .HasColumnName("comments");
 
                     b.Property<bool>("FOC")
                         .HasColumnType("boolean")
@@ -688,13 +754,13 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("product_sku");
 
-                    b.Property<Guid>("PurchaseOrderId")
+                    b.Property<Guid>("PurchaseOrderHeaderId")
                         .HasColumnType("uuid")
-                        .HasColumnName("purchase_order_id");
+                        .HasColumnName("purchase_order_header_id");
 
-                    b.Property<int>("Qty")
+                    b.Property<decimal>("Qty")
                         .HasPrecision(10, 2)
-                        .HasColumnType("integer")
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("qty");
 
                     b.Property<decimal>("SubTotal")
@@ -707,9 +773,19 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(5,2)")
                         .HasColumnName("tax");
 
+                    b.Property<int>("TaxRateType")
+                        .HasColumnType("integer")
+                        .HasColumnName("tax_rate_type");
+
                     b.Property<bool>("Taxable")
                         .HasColumnType("boolean")
                         .HasColumnName("taxable");
+
+                    b.Property<string>("UnitOfMeasureName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("unit_of_measure_name");
 
                     b.Property<decimal>("UnitPrice")
                         .HasPrecision(10, 2)
@@ -719,8 +795,8 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_purchase_order_lines");
 
-                    b.HasIndex("PurchaseOrderId")
-                        .HasDatabaseName("ix_purchase_order_lines_purchase_order_id");
+                    b.HasIndex("PurchaseOrderHeaderId")
+                        .HasDatabaseName("ix_purchase_order_lines_purchase_order_header_id");
 
                     b.ToTable("purchase_order_lines", "oms");
                 });
@@ -978,11 +1054,21 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_order_status_histories_order_headers_order_header_id");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderLine", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderStatusHistory", b =>
                 {
-                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", null)
+                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", null)
                         .WithMany()
-                        .HasForeignKey("PurchaseOrderId")
+                        .HasForeignKey("PurchaseOrderHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_purchase_order_status_histories_purchase_order_headers_purc");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderLines.PurchaseOrderLine", b =>
+                {
+                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", null)
+                        .WithMany("PurchaseOrderLines")
+                        .HasForeignKey("PurchaseOrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_purchase_order_lines_purchase_order_headers_purchase_order_");
@@ -1040,6 +1126,11 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_route_trip_status_histories_route_trips_route_trip_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", b =>
+                {
+                    b.Navigation("PurchaseOrderLines");
                 });
 #pragma warning restore 612, 618
         }

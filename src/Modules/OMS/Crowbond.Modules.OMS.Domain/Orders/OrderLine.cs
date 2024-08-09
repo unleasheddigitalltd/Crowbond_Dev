@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public sealed class OrderLine
 {
-    public OrderLine()
+    private OrderLine()
     {
     }
 

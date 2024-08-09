@@ -1,48 +1,35 @@
-﻿using System.Xml.Linq;
+﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderDetails;
 
-namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderDetails;
-
-public sealed record PurchaseOrderDetailsResponse()
+public sealed record PurchaseOrderDetailsResponse
 {
     public Guid Id { get; }
-
-    public string PurchaseOrderNo { get; set; }
-
-    public string SupplierName { get; set; }
-
-    public string AddressLine1 { get; set; }
-
-    public string? AddressLine2 { get; set; }
-
-    public string TownCity { get; set; }
-
-    public string County { get; set; }
-
-    public string? Country { get; set; }
-
-    public string PostalCode { get; set; }
-
-    public string BillingAddressLine1 { get; set; }
-
-    public string? BillingAddressLine2 { get; set; }
-
-    public string BillingTownCity { get; set; }
-
-    public string BillingCounty { get; set; }
-
-    public string BillingCountry { get; set; }
-
-    public string BillingPostalCode { get; set; }
-
-    public int PaymentTerms { get; set; }
-
-    public Decimal PurchaseOrderTotal { get; set; }
-
-    public string? SupplierNotes { get; set; }
-
-    public string SupplierEmail { get; set; }
-
-    public string SupplierPhone { get; set; }
-
-    public string SupplierContact { get; set; }
-};
+    public string? PurchaseOrderNo { get; }
+    public DateOnly? PurchaseDate { get; }
+    public string? PaidBy { get; }
+    public DateTime? PaidDate { get; }
+    public Guid SupplierId { get; }
+    public string SupplierName { get; }
+    public string? ContactFullName { get; }
+    public string? ContactPhone { get; }
+    public string? ContactEmail { get; }
+    public decimal PurchaseOrderAmount { get; }
+    public string? ShippingLocationName { get; }
+    public string? ShippingAddressLine1 { get; }
+    public string? ShippingAddressLine2 { get; }
+    public string? ShippingTownCity { get; }
+    public string? ShippingCounty { get; }
+    public string? ShippingCountry { get; }
+    public string? ShippingPostalCode { get; }
+    public DateOnly RequiredDate { get; }
+    public DateOnly? ExpectedShippingDate { get; }
+    public string? SupplierReference { get; }
+    public decimal PurchaseOrderTax { get; }
+    public int? DeliveryMethod { get; }
+    public decimal DeliveryCharge { get; }
+    public int PaymentMethod { get; }
+    public int PaymentStatus { get; }
+    public string? PurchaseOrderNotes { get; }
+    public string? SalesOrderRef { get; }
+    public string Tags { get; }
+    public int Status { get; }
+}

@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.Recipients;
 
 public sealed class Recipient : Entity
 {
-    public Recipient()
+    private Recipient()
     {        
     }
 

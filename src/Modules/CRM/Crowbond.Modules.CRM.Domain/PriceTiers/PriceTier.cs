@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.PriceTiers;
 
 public sealed class PriceTier : Entity
 {
-    public PriceTier()
+    private PriceTier()
     {        
     }
 

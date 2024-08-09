@@ -6,13 +6,15 @@ internal sealed class CreatePurchaseOrderCommandValidator : AbstractValidator<Cr
 {
     public CreatePurchaseOrderCommandValidator()
     {
-        RuleFor(s => s.PurchaseOrder.SupplierName).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.ShippingAddressLine1).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.ShippingAddressTownCity).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.ShippingAddressPostalCode).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.ShippingAddressCounty).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.SupplierEmail).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.SupplierPhone).NotEmpty();
-        RuleFor(s => s.PurchaseOrder.PurchaseOrderNotes).MaximumLength(500);
+        RuleFor(po => po.PurchaseOrder.SupplierId).NotEmpty();
+        RuleFor(po => po.PurchaseOrder.RequiredDate).NotEmpty();
+        RuleFor(po => po.PurchaseOrder.PurchaseOrderNotes).MaximumLength(500);
+        RuleForEach(po => po.PurchaseOrder.PurchaseOrderLines)
+            .ChildRules(l =>
+            {
+                l.RuleFor(l => l.Qty).NotEmpty().GreaterThan(decimal.Zero);
+                l.RuleFor(l => l.ProductId).NotEmpty();
+                l.RuleFor(l => l.Comments).MaximumLength(255);
+            });
     }
 }

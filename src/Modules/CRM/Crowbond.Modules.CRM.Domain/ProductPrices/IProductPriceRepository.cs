@@ -1,7 +1,4 @@
-﻿using Crowbond.Modules.CRM.Domain.PriceTiers;
-using Crowbond.Modules.CRM.Domain.Products;
-
-namespace Crowbond.Modules.CRM.Domain.ProductPrices;
+﻿namespace Crowbond.Modules.CRM.Domain.ProductPrices;
 
 public interface IProductPriceRepository
 {

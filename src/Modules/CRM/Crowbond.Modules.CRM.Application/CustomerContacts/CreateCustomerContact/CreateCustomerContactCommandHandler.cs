@@ -7,7 +7,7 @@ using Crowbond.Modules.CRM.Domain.Customers;
 
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContact;
 
-internal sealed class CreateCustomerContactCommandHandlerICustomerRepository(
+internal sealed class CreateCustomerContactCommandHandler(
     ICustomerRepository customerRepository,
     ICustomerContactRepository customerContactRepository,
     IDateTimeProvider dateTimeProvider,

@@ -1,7 +1,4 @@
-﻿using Crowbond.Modules.CRM.Domain.Customers;
-using Crowbond.Modules.CRM.Domain.Products;
-
-namespace Crowbond.Modules.CRM.Domain.CustomerProducts;
+﻿namespace Crowbond.Modules.CRM.Domain.CustomerProducts;
 
 public interface ICustomerProductRepository
 {

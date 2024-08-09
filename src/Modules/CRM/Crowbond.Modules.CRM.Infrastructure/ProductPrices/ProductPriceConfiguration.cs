@@ -1,6 +1,6 @@
-﻿using Crowbond.Modules.CRM.Domain.PriceTiers;
+﻿using Crowbond.Modules.CRM.Domain.Categories;
+using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
-using Crowbond.Modules.CRM.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,10 +12,15 @@ public sealed class ProductPriceConfiguration : IEntityTypeConfiguration<Product
     {
         builder.HasKey(p => p.Id);
 
+        builder.Property(c => c.ProductSku).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.ProductName).IsRequired().HasMaxLength(100);
+        builder.Property(c => c.UnitOfMeasureName).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.CategoryId).IsRequired();
         builder.Property(p => p.BasePurchasePrice).IsRequired().HasPrecision(10, 2);
         builder.Property(p => p.SalePrice).IsRequired().HasPrecision(10, 2);
 
-        builder.HasOne<Product>().WithMany().HasForeignKey(p => p.ProductId);
         builder.HasOne<PriceTier>().WithMany().HasForeignKey(p => p.PriceTierId).OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryId).OnDelete(DeleteBehavior.NoAction);
     }
 }

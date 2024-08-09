@@ -4,11 +4,10 @@ using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Drivers;
 using Crowbond.Modules.OMS.Domain.Orders;
-using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.Routes;
 using Crowbond.Modules.OMS.Infrastructure.Drivers;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
-using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 using Crowbond.Modules.OMS.Infrastructure.Routes;
 using Crowbond.Modules.OMS.Infrastructure.Sequences;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +21,9 @@ using Crowbond.Modules.OMS.Domain.Deliveries;
 using Crowbond.Modules.OMS.Infrastructure.Deliveries;
 using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
+using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderLines;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
@@ -41,6 +43,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<Delivery> Deliveries { get; set; }
     internal DbSet<DeliveryImage> DeliveryImages { get; set; }
     internal DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+    internal DbSet<PurchaseOrderStatusHistory> PurchaseOrderStatusHistories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,5 +67,6 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new DeliveryConfiguration());
         modelBuilder.ApplyConfiguration(new DeliveryImageConfiguration());
         modelBuilder.ApplyConfiguration(new OrderStatusHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new PurchaseOrderStatusHistoryConfiguration());
     }
 }

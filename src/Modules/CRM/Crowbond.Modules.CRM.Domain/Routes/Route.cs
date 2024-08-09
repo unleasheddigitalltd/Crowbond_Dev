@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.Routes;
 
 public sealed class Route : Entity
 {
-    public Route()
+    private Route()
     {        
     }
 

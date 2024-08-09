@@ -5,7 +5,7 @@ namespace Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
 
 public sealed class CustomerOutletRoute : Entity
 {
-    public CustomerOutletRoute()
+    private CustomerOutletRoute()
     {
         
     }

@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Crowbond.Modules.Users.Presentation.Users;
 
-internal class SupplierContactCreatedIntegrationEventHandler(ISender sender)
+internal sealed class SupplierContactCreatedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<SupplierContactCreatedIntegrationEvent>
 {
     public override async Task Handle(

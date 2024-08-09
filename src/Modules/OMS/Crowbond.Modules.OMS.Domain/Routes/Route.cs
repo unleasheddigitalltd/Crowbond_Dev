@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.Routes;
 
 public sealed class Route : Entity
 {
-    public Route()
+    private Route()
     {
     }
 

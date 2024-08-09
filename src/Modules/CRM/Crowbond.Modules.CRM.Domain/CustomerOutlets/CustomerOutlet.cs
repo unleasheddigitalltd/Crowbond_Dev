@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
 public sealed class CustomerOutlet : Entity
 {
-    public CustomerOutlet()
+    private CustomerOutlet()
     {
     }
 

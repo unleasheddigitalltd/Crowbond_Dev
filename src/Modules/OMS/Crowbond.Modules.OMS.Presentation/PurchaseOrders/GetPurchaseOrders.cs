@@ -16,8 +16,8 @@ internal sealed class GetPurchaseOrders : IEndpoint
         app.MapGet("purchaseorders", async (
             ISender sender,
             string search = "",
-            string sort = "suppliername",
-            string order = "asc",
+            string sort = "createddate",
+            string order = "decs",
             int page = 0,
             int size = 10
             ) =>
