@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.CustomerContacts;
 
 public sealed class CustomerContact : Entity
 {
-    public CustomerContact()
+    private CustomerContact()
     {
     }
 

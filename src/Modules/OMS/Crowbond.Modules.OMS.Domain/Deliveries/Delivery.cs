@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.Deliveries;
 
 public sealed class Delivery : Entity
 {
-    public Delivery()
+    private Delivery()
     {        
     }
 

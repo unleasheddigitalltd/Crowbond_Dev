@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.RouteTripLogDatails;
 
 public sealed class RouteTripLogDatail : Entity
 {
-    public RouteTripLogDatail()
+    private RouteTripLogDatail()
     {    
     }
 

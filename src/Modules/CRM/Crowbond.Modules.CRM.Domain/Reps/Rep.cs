@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.Reps;
 
 public sealed class Rep : Entity
 {
-    public Rep()
+    private Rep()
     {        
     }
 

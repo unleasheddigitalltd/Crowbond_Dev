@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.Drivers;
 
 public sealed class Driver : Entity
 {
-    public Driver()
+    private Driver()
     {        
     }
 

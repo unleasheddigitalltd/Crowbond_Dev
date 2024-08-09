@@ -5,7 +5,7 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public sealed class Supplier : Entity
 {
-    public Supplier()
+    private Supplier()
     {
     }
 

@@ -442,6 +442,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
@@ -454,11 +458,29 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("product_name");
+
+                    b.Property<string>("ProductSku")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("product_sku");
+
+                    b.Property<string>("UnitOfMeasureName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("unit_of_measure_name");
+
                     b.HasKey("Id")
                         .HasName("pk_customer_products");
 
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_customer_products_product_id");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_customer_products_category_id");
 
                     b.HasIndex("CustomerId", "ProductId")
                         .IsUnique()
@@ -678,6 +700,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("base_purchase_price");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
                     b.Property<DateOnly>("EffectiveDate")
                         .HasColumnType("date")
                         .HasColumnName("effective_date");
@@ -690,45 +716,22 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("product_name");
+
+                    b.Property<string>("ProductSku")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("product_sku");
+
                     b.Property<decimal>("SalePrice")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("sale_price");
-
-                    b.HasKey("Id")
-                        .HasName("pk_product_prices");
-
-                    b.HasIndex("PriceTierId")
-                        .HasDatabaseName("ix_product_prices_price_tier_id");
-
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_product_prices_product_id");
-
-                    b.ToTable("product_prices", "crm");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("category_id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("sku");
 
                     b.Property<string>("UnitOfMeasureName")
                         .IsRequired()
@@ -737,12 +740,15 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("unit_of_measure_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_products");
+                        .HasName("pk_product_prices");
 
                     b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_products_category_id");
+                        .HasDatabaseName("ix_product_prices_category_id");
 
-                    b.ToTable("products", "crm");
+                    b.HasIndex("PriceTierId")
+                        .HasDatabaseName("ix_product_prices_price_tier_id");
+
+                    b.ToTable("product_prices", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Recipients.Recipient", b =>
@@ -932,6 +938,73 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("supplier_contacts", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierProducts.SupplierProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("comments");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("product_name");
+
+                    b.Property<string>("ProductSku")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("product_sku");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supplier_id");
+
+                    b.Property<int>("TaxRateType")
+                        .HasColumnType("integer")
+                        .HasColumnName("tax_rate_type");
+
+                    b.Property<string>("UnitOfMeasureName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("unit_of_measure_name");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("unit_price");
+
+                    b.HasKey("Id")
+                        .HasName("pk_supplier_products");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_supplier_products_category_id");
+
+                    b.HasIndex("SupplierId")
+                        .HasDatabaseName("ix_supplier_products_supplier_id");
+
+                    b.ToTable("supplier_products", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1032,19 +1105,19 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
                 {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_products_categories_category_id");
+
                     b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_customer_products_customers_customer_id");
-
-                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_customer_products_products_product_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", b =>
@@ -1068,29 +1141,19 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.ProductPrices.ProductPrice", b =>
                 {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_prices_categories_category_id");
+
                     b.HasOne("Crowbond.Modules.CRM.Domain.PriceTiers.PriceTier", null)
                         .WithMany()
                         .HasForeignKey("PriceTierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("fk_product_prices_price_tiers_price_tier_id");
-
-                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_product_prices_products_product_id");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Product", b =>
-                {
-                    b.HasOne("Crowbond.Modules.CRM.Domain.Categories.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_products_categories_category_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Recipients.Recipient", b =>
@@ -1111,6 +1174,23 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_supplier_contacts_suppliers_supplier_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierProducts.SupplierProduct", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_products_categories_category_id");
+
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", null)
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_products_suppliers_supplier_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>

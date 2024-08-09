@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.SupplierContacts;
 
 public sealed class SupplierContact : Entity
 {
-    public SupplierContact()
+    private SupplierContact()
     {        
     }
 

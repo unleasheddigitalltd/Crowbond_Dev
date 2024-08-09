@@ -4,7 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.DeliveryImages;
 
 public sealed class DeliveryImage : Entity
 {
-    public DeliveryImage()
+    private DeliveryImage()
     {        
     }
 

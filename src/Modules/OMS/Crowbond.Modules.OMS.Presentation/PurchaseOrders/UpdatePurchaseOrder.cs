@@ -1,4 +1,6 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Security.Claims;
+using Crowbond.Common.Domain;
+using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.OMS.Application.PurchaseOrders.UpdatePurchaseOrder;
@@ -13,13 +15,13 @@ internal sealed class UpdatePurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchaseorders/{id}", async (Guid id, PurchaseOrderDto request, ISender sender) =>
+        app.MapPut("purchase-orders/{id}", async (Guid id, PurchaseOrderHeaderRequest request, ClaimsPrincipal claims, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdatePurchaseOrderCommand(id, request));
+            Result result = await sender.Send(new UpdatePurchaseOrderCommand(id, claims.GetUserId(), request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.ModifyPurchaseOrders)
-        .WithTags(Tags.PurchaseOrders);
+            .RequireAuthorization(Permissions.ModifyPurchaseOrders)
+            .WithTags(Tags.PurchaseOrders);
     }
 }
