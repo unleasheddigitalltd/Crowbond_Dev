@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Crowbond.Modules.CRM.Application.SupplierContacts.UpdateSupplierContact;
 
-internal sealed class SupplierContactUpdatedIntegrationEventHandler(ISender sender, IEventBus eventBus)
+internal sealed class SupplierContactUpdatedDomainEventHandler(ISender sender, IEventBus eventBus)
     : DomainEventHandler<SupplierContactUpdatedDomainEvent>
 {
     public override async Task Handle(

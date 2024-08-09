@@ -7,9 +7,9 @@ using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using MediatR;
 
-namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
+namespace Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContact;
 
-internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender sender, IEventBus eventBus)
+internal sealed class CustomerContactCreatedDomainEventHandler(ISender sender, IEventBus eventBus)
     : DomainEventHandler<CustomerContactCreatedDomainEvent>
 {
     public override async Task Handle(

@@ -4,7 +4,7 @@ namespace Crowbond.Modules.CRM.Domain.ProductPrices;
 
 public sealed class ProductPrice : Entity
 {
-    public ProductPrice()
+    private ProductPrice()
     {        
     }
 

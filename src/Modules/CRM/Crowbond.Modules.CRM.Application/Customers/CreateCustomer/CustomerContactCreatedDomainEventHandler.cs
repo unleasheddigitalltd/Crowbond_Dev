@@ -2,31 +2,31 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.SupplierContacts.GetSupplierContactDetails;
-using Crowbond.Modules.CRM.Domain.SupplierContacts;
+using Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
+using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using MediatR;
 
-namespace Crowbond.Modules.CRM.Application.SupplierContacts.CreateSupplierContact;
+namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
 
-internal sealed class SupplierContactCreatedIntegrationEventHandler(ISender sender, IEventBus eventBus)
-    : DomainEventHandler<SupplierContactCreatedDomainEvent>
+internal sealed class CustomerContactCreatedDomainEventHandler(ISender sender, IEventBus eventBus)
+    : DomainEventHandler<CustomerContactCreatedDomainEvent>
 {
     public override async Task Handle(
-        SupplierContactCreatedDomainEvent domainEvent,
+        CustomerContactCreatedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
-        Result<SupplierContactDetailsResponse> result = await sender.Send(
-            new GetSupplierContactDetailsQuery(domainEvent.SupplierContactId),
+        Result<CustomerContactDetailsResponse> result = await sender.Send(
+            new GetCustomerContactDetailsQuery(domainEvent.CustomerContactId),
             cancellationToken);
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(GetSupplierContactDetailsQuery), result.Error);
+            throw new CrowbondException(nameof(GetCustomerContactDetailsQuery), result.Error);
         }
 
         await eventBus.PublishAsync(
-            new SupplierContactCreatedIntegrationEvent(
+            new CustomerContactCreatedIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
                 result.Value.Id,

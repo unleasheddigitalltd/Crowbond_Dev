@@ -2,31 +2,31 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
-using Crowbond.Modules.CRM.Domain.CustomerContacts;
+using Crowbond.Modules.CRM.Application.SupplierContacts.GetSupplierContactDetails;
+using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using MediatR;
 
-namespace Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContact;
+namespace Crowbond.Modules.CRM.Application.SupplierContacts.CreateSupplierContact;
 
-internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender sender, IEventBus eventBus)
-    : DomainEventHandler<CustomerContactCreatedDomainEvent>
+internal sealed class SupplierContactCreatedDomainEventHandler(ISender sender, IEventBus eventBus)
+    : DomainEventHandler<SupplierContactCreatedDomainEvent>
 {
     public override async Task Handle(
-        CustomerContactCreatedDomainEvent domainEvent,
+        SupplierContactCreatedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
-        Result<CustomerContactDetailsResponse> result = await sender.Send(
-            new GetCustomerContactDetailsQuery(domainEvent.CustomerContactId),
+        Result<SupplierContactDetailsResponse> result = await sender.Send(
+            new GetSupplierContactDetailsQuery(domainEvent.SupplierContactId),
             cancellationToken);
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(GetCustomerContactDetailsQuery), result.Error);
+            throw new CrowbondException(nameof(GetSupplierContactDetailsQuery), result.Error);
         }
 
         await eventBus.PublishAsync(
-            new CustomerContactCreatedIntegrationEvent(
+            new SupplierContactCreatedIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
                 result.Value.Id,
