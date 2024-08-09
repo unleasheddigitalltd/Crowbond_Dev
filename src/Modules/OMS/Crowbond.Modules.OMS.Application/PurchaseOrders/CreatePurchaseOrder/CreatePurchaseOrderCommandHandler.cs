@@ -53,7 +53,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             }
 
             Result<PurchaseOrderLine> lineResult = PurchaseOrderLine.Create(
-                purchaseOrderHeaderId: result.Value.Id,
+                purchaseOrderHeader: result.Value,
                 productId: supplierProduct.Id,
                 productSku: supplierProduct.ProductSku,
                 productName: supplierProduct.ProductName,

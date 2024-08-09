@@ -8,7 +8,7 @@ internal sealed class PurchaseOrderHeaderRepository(OmsDbContext context) : IPur
 {
     public async Task<PurchaseOrderHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.PurchaseOrderHeaders.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+        return await context.PurchaseOrderHeaders.Include(p => p.PurchaseOrderLines).SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
     public void Insert(PurchaseOrderHeader purchaseorderheader)

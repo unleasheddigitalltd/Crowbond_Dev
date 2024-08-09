@@ -216,4 +216,36 @@ public sealed class PurchaseOrderHeader : Entity
         PurchaseOrderTax = PurchaseOrderLines.Sum(line => line.Tax);
         PurchaseOrderAmount = PurchaseOrderLines.Sum(line => line.LineTotal) + DeliveryCharge;
     }
+
+    public Result RemoveLine(Guid lineId)
+    {
+        if (Status != PurchaseOrderStatus.Draft)
+        {
+            return Result.Failure(PurchaseOrderHeaderErrors.NotDraft);
+        }
+
+        PurchaseOrderLine? line = PurchaseOrderLines.SingleOrDefault(l => l.Id == lineId);
+        if (line == null)
+        {
+            return Result.Failure(PurchaseOrderLineErrors.NotFound(lineId));
+        }        
+
+        PurchaseOrderLines.Remove(line);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+
+    public Result RemoveLines()
+    {
+        if (Status != PurchaseOrderStatus.Draft)
+        {
+            return Result.Failure(PurchaseOrderHeaderErrors.NotDraft);
+        }
+
+        PurchaseOrderLines.Clear();
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
 }

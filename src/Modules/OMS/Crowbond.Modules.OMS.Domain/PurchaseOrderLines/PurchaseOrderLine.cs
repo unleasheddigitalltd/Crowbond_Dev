@@ -42,7 +42,6 @@ public sealed class PurchaseOrderLine
     public PurchaseOrderHeader PurchaseOrderHeader { get; private set; }
 
     public static Result<PurchaseOrderLine> Create(
-        Guid purchaseOrderHeaderId,
         Guid productId,
         string productSku,
         string productName,
@@ -52,12 +51,12 @@ public sealed class PurchaseOrderLine
         TaxRateType taxRateType,
         bool foc,
         bool taxable,
-        string? comments)
+        string? comments,
+        PurchaseOrderHeader purchaseOrderHeader)
     {
         var purchaseOrderLine = new PurchaseOrderLine
         {
             Id = Guid.NewGuid(),
-            PurchaseOrderHeaderId = purchaseOrderHeaderId,
             ProductId = productId,
             ProductSku = productSku,
             ProductName = productName,
@@ -67,12 +66,15 @@ public sealed class PurchaseOrderLine
             TaxRateType = taxRateType,
             FOC = foc,
             Taxable = taxable,
-            Comments = comments
+            Comments = comments,
+            PurchaseOrderHeaderId = purchaseOrderHeader.Id
         };
 
         purchaseOrderLine.SubTotal = purchaseOrderLine.UnitPrice * purchaseOrderLine.Qty;
         purchaseOrderLine.Tax = purchaseOrderLine.SubTotal * purchaseOrderLine.TaxRate(purchaseOrderLine.TaxRateType);
         purchaseOrderLine.LineTotal = purchaseOrderLine.SubTotal + purchaseOrderLine.Tax;
+
+        purchaseOrderHeader.AddPurchaseOrderLine(purchaseOrderLine);
 
         return purchaseOrderLine;
     }
@@ -87,6 +89,8 @@ public sealed class PurchaseOrderLine
         SubTotal = UnitPrice * Qty;
         Tax = SubTotal * TaxRate(TaxRateType);
         LineTotal = SubTotal + Tax;
+
+        PurchaseOrderHeader.UpdateTotalAmount();
     }
 
     private decimal TaxRate(TaxRateType taxRateType)
