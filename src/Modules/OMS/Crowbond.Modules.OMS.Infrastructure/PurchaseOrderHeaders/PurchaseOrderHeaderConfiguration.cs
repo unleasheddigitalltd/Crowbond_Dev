@@ -1,4 +1,4 @@
-﻿using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
+﻿using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;

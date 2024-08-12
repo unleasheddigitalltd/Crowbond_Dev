@@ -33,7 +33,7 @@ public sealed record CustomerDetailsResponse
 
     public decimal Discount { get; }
 
-    public Guid RepId { get; }
+    public Guid? RepId { get; }
 
     public bool CustomPaymentTerm { get; }
 

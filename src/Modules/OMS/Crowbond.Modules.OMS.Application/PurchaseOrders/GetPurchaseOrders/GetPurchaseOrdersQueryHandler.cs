@@ -4,7 +4,6 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Common.Application.Pagination;
 using Dapper;
-using Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrder;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrders;
 
@@ -114,7 +113,7 @@ internal sealed class GetPurchaseOrdersQueryHandler(IDbConnectionFactory dbConne
         int totalPages = (int)Math.Ceiling(totalCount / (double)request.Size);
         int currentPage = request.Page;
         int pageSize = request.Size;
-        int startIndex = (currentPage - 1) * pageSize;
+        int startIndex = currentPage * pageSize;
         int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new PurchaseOrdersResponse(purchaseOrders, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));

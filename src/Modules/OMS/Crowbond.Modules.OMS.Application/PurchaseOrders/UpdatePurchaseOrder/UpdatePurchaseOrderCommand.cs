@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.UpdatePurchaseOrder;
 
-public sealed record UpdatePurchaseOrderCommand(Guid PurchaseOrderHeaderId, Guid UserId, PurchaseOrderHeaderRequest PurchaseOrderHeader) : ICommand;
+public sealed record UpdatePurchaseOrderCommand(Guid UserId, Guid PurchaseOrderHeaderId, PurchaseOrderRequest PurchaseOrder) : ICommand;

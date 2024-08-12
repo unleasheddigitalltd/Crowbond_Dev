@@ -2,7 +2,7 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderDetails;
@@ -55,7 +55,7 @@ internal sealed class GetSupplierDetailsQueryHandler(IDbConnectionFactory dbConn
 
         if (purchaseorder is null)
         {
-            return Result.Failure<PurchaseOrderDetailsResponse>(PurchaseOrderHeaderErrors.NotFound(request.PurchaseOrderHeaderId));
+            return Result.Failure<PurchaseOrderDetailsResponse>(PurchaseOrderErrors.NotFound(request.PurchaseOrderHeaderId));
         }
 
         return purchaseorder;

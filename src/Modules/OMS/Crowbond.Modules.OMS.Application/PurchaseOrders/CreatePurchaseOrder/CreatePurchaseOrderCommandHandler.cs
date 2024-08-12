@@ -3,15 +3,14 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Modules.OMS.Domain.SupplierProducts;
 using Crowbond.Modules.OMS.Domain.Suppliers;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.CreatePurchaseOrder;
 
 internal sealed class CreatePurchaseOrderCommandHandler(
-    IPurchaseOrderHeaderRepository purchaseOrderHeaderRepository,
+    IPurchaseOrderRepository purchaseOrderHeaderRepository,
     IDateTimeProvider dateTimeProvider,
     ISupplierApi supplierApi,
     ISupplierProductApi supplierProductApi,
@@ -27,7 +26,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             return Result.Failure<Guid>(SupplierErrors.NotFound(request.PurchaseOrder.SupplierId));
         }     
 
-        Result<PurchaseOrderHeader> result = PurchaseOrderHeader.Create(
+        Result<PurchaseOrderHeader> purchaseOrderHeader = PurchaseOrderHeader.Create(
             supplier.Id,
             supplier.SupplierName,
             $"{supplier.FirstName} {supplier.LastName}",
@@ -38,9 +37,9 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             request.UserId,
             dateTimeProvider.UtcNow);
 
-        if (result.IsFailure)
+        if (purchaseOrderHeader.IsFailure)
         {
-            return Result.Failure<Guid>(result.Error);
+            return Result.Failure<Guid>(purchaseOrderHeader.Error);
         }
 
         foreach (PurchaseOrderRequest.PurchaseOrderLine lineItem in request.PurchaseOrder.PurchaseOrderLines)
@@ -52,8 +51,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
                 return Result.Failure<Guid>(SupplierProductErrors.NotFound(request.PurchaseOrder.SupplierId, lineItem.ProductId));
             }
 
-            Result<PurchaseOrderLine> lineResult = PurchaseOrderLine.Create(
-                purchaseOrderHeader: result.Value,
+            Result result = purchaseOrderHeader.Value.AddLine(
                 productId: supplierProduct.Id,
                 productSku: supplierProduct.ProductSku,
                 productName: supplierProduct.ProductName,
@@ -65,18 +63,16 @@ internal sealed class CreatePurchaseOrderCommandHandler(
                 taxable: true,
                 comments: lineItem.Comments);
 
-            if (lineResult.IsFailure)
+            if (result.IsFailure)
             {
-                return Result.Failure<Guid>(lineResult.Error);
+                return Result.Failure<Guid>(result.Error);
             }
-
-            result.Value.AddPurchaseOrderLine(lineResult.Value);
         }
 
-        purchaseOrderHeaderRepository.Insert(result.Value);
+        purchaseOrderHeaderRepository.Insert(purchaseOrderHeader.Value);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return result.Value.Id;
+        return purchaseOrderHeader.Value.Id;
     }
 
 }

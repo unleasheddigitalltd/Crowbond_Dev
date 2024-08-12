@@ -45,6 +45,7 @@ COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Domain/Crowbond.Modules.CRM.Domain.c
 COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Infrastructure/Crowbond.Modules.CRM.Infrastructure.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.Infrastructure/"]
 COPY ["src/Modules/CRM/Crowbond.Modules.CRM.IntegrationEvents/Crowbond.Modules.CRM.IntegrationEvents.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.IntegrationEvents/"]
 COPY ["src/Modules/CRM/Crowbond.Modules.CRM.Presentation/Crowbond.Modules.CRM.Presentation.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.Presentation/"]
+COPY ["src/Modules/CRM/Crowbond.Modules.CRM.PublicApi/Crowbond.Modules.CRM.PublicApi.csproj", "src/Modules/CRM/Crowbond.Modules.WMS.PublicApi/"]
 
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Application/Crowbond.Modules.OMS.Application.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Application/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Domain/Crowbond.Modules.OMS.Domain.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Domain/"]

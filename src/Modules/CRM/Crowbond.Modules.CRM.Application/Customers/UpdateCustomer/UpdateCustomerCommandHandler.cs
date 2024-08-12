@@ -1,14 +1,18 @@
-﻿using System.Data.Common;
-using Crowbond.Common.Application.Clock;
+﻿using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.PriceTiers;
+using Crowbond.Modules.CRM.Domain.Reps;
+using MediatR;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 
 internal sealed class UpdateCustomerCommandHandler(
     ICustomerRepository customerRepository,
+    IRepRepository repRepository,
+    IPriceTierRepository priceTierRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerCommand>
@@ -20,6 +24,23 @@ internal sealed class UpdateCustomerCommandHandler(
         if (customer is null)
         {
             return Result.Failure(CustomerErrors.NotFound(request.CustomerId));
+        }
+
+        if (request.Customer.RepId is not null)
+        {
+            Rep? rep = await repRepository.GetAsync(request.Customer.RepId.Value, cancellationToken);
+
+            if (rep is null)
+            {
+                return Result.Failure(RepErrors.NotFound(request.Customer.RepId.Value));
+            }
+        }
+
+        PriceTier? priceTier = await priceTierRepository.GetAsync(request.Customer.PriceTierId, cancellationToken);
+
+        if (priceTier is null)
+        {
+            return Result.Failure(PriceTierErrors.NotFound(request.Customer.PriceTierId));
         }
 
         customer.Update(

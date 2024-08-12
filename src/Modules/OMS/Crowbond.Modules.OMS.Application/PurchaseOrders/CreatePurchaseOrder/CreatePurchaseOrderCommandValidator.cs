@@ -12,7 +12,7 @@ internal sealed class CreatePurchaseOrderCommandValidator : AbstractValidator<Cr
         RuleForEach(po => po.PurchaseOrder.PurchaseOrderLines)
             .ChildRules(l =>
             {
-                l.RuleFor(l => l.Qty).NotEmpty().GreaterThan(decimal.Zero);
+                l.RuleFor(l => l.Qty).GreaterThan(decimal.Zero);
                 l.RuleFor(l => l.ProductId).NotEmpty();
                 l.RuleFor(l => l.Comments).MaximumLength(255);
             });
