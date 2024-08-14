@@ -21,7 +21,7 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
         string orderByClause = request.Sort switch
         {
             "receivedDate" => "received_date",
-            "purchaseOrderNumber" => "received_date",
+            "purchaseOrderNo" => "purchase_order_no",
             "deliveryNoteNumber" => "delivery_note_number",
             "status" => "status",            
             _ => "receive_date" // Default sorting
@@ -37,16 +37,19 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
                     id AS {nameof(ReceiptHeader.Id)},
                     received_date AS {nameof(ReceiptHeader.ReceivedDate)},
                     delivery_note_number AS {nameof(ReceiptHeader.DeliveryNoteNumber)},
+                    purchase_order_no AS {nameof(ReceiptHeader.PurchaseOrderNo)},
                     CASE status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(ReceiptHeader.Status)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.receipt_headers
                 WHERE
                     delivery_note_number ILIKE '%' || @Search || '%'
+                    OR purchase_order_no ILIKE '%' || @Search || '%'
             )
             SELECT 
                 r.{nameof(ReceiptHeader.Id)},
                 r.{nameof(ReceiptHeader.ReceivedDate)},
                 r.{nameof(ReceiptHeader.DeliveryNoteNumber)},
+                r.{nameof(ReceiptHeader.PurchaseOrderNo)},
                 r.{nameof(ReceiptHeader.Status)}
             FROM FilteredReceiptHeaders r
             WHERE r.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
@@ -56,6 +59,7 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
                 FROM wms.receipt_headers
                 WHERE
                     delivery_note_number ILIKE '%' || @Search || '%'
+                    OR purchase_order_no ILIKE '%' || @Search || '%'
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

@@ -17,6 +17,7 @@ internal sealed class CreateReceiptCommandHandler(
         Result<ReceiptHeader> result = ReceiptHeader.Create(
             request.Receipt.ReceivedDate,
             request.Receipt.PurchaseOrderId,
+            request.Receipt.PurchaseOrderNo,
             request.Receipt.DeliveryNoteNumber,
             dateTimeProvider.UtcNow);
 

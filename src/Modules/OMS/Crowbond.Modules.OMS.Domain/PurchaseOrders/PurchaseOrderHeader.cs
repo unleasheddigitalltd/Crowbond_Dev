@@ -1,4 +1,5 @@
-﻿using Crowbond.Common.Domain;
+﻿using System;
+using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Domain.Payments;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
@@ -8,6 +9,7 @@ public sealed class PurchaseOrderHeader : Entity
     private PurchaseOrderHeader()
     {
         PurchaseOrderLines = new List<PurchaseOrderLine>();
+        StatusHistory = new List<PurchaseOrderStatusHistory>();
     }
 
     public Guid Id { get; private set; }
@@ -79,6 +81,8 @@ public sealed class PurchaseOrderHeader : Entity
     public DateTime? LastModifiedDate { get; private set; }
 
     public List<PurchaseOrderLine> PurchaseOrderLines { get; private set; }
+
+    public List<PurchaseOrderStatusHistory> StatusHistory { get; private set; }
 
     public static Result<PurchaseOrderHeader> Create(Guid supplierId, string supplierName, string? contactFullName, string? contactPhone,
         string? contactEmail, DateOnly requiredDate, string? purchaseOrderNotes, Guid createBy, DateTime createDate)
@@ -248,30 +252,78 @@ public sealed class PurchaseOrderHeader : Entity
         UpdateTotalAmount();
     }
 
-    public Result Pend()
-    {
-        if (Status != PurchaseOrderStatus.Draft)
-        {
-            return Result.Failure(PurchaseOrderErrors.NotDraft);
-        }
-
-        Status = PurchaseOrderStatus.Pending;
-
-        return Result.Success();
-    }
-
-    public Result Approve(string purchaseOrderNo, DateOnly purchaseDate)
+    public Result<PurchaseOrderStatusHistory> Draft(Guid userId, DateTime utcNow)
     {
         if (Status != PurchaseOrderStatus.Pending)
         {
-            return Result.Failure(PurchaseOrderErrors.NotPending);
+            return Result.Failure<PurchaseOrderStatusHistory>(PurchaseOrderErrors.NotPending);
+        }
+
+        Status = PurchaseOrderStatus.Draft;
+        LastModifiedBy = userId;
+        LastModifiedDate = utcNow;
+
+        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
+        StatusHistory.Add(newHistory);
+
+        return newHistory;
+    }
+
+    public Result<PurchaseOrderStatusHistory> Pend(Guid userId, DateTime utcNow)
+    {
+        if (Status != PurchaseOrderStatus.Draft)
+        {
+            return Result.Failure<PurchaseOrderStatusHistory>(PurchaseOrderErrors.NotDraft);
+        }
+
+        Status = PurchaseOrderStatus.Pending;
+        LastModifiedBy = userId;
+        LastModifiedDate = utcNow;
+
+        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
+        StatusHistory.Add(newHistory);
+
+        return newHistory;
+    }
+
+    public Result<PurchaseOrderStatusHistory> Approve(string purchaseOrderNo, Guid userId, DateTime utcNow)
+    {
+        if (Status != PurchaseOrderStatus.Pending)
+        {
+            return Result.Failure<PurchaseOrderStatusHistory>(PurchaseOrderErrors.NotPending);
         }
 
         Status = PurchaseOrderStatus.Approved;
         PurchaseOrderNo = purchaseOrderNo;
-        PurchaseDate = purchaseDate;
+        PurchaseDate = DateOnly.FromDateTime(utcNow);
+        LastModifiedBy = userId;
+        LastModifiedDate = utcNow;
 
-        return Result.Success();
+        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
+        StatusHistory.Add(newHistory);
+
+        Raise(new PurchaseOrderApprovedDomainEvent(Id));
+
+        return newHistory;
+    }
+
+    public Result<PurchaseOrderStatusHistory> Cancel(Guid userId, DateTime utcNow)
+    {
+        if (Status != PurchaseOrderStatus.Approved)
+        {
+            return Result.Failure<PurchaseOrderStatusHistory>(PurchaseOrderErrors.NotApproved);
+        }
+
+        Status = PurchaseOrderStatus.Cancelled;
+        LastModifiedBy = userId;
+        LastModifiedDate = utcNow;
+
+        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
+        StatusHistory.Add(newHistory);
+
+        Raise(new PurchaseOrderCancelledDomainEvent(Id, userId, utcNow));
+
+        return newHistory;
     }
 
     public void UpdateTags(string[] tags)

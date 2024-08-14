@@ -12,7 +12,9 @@ public sealed class ReceiptHeader : Entity
 
     public DateTime ReceivedDate { get; private set; }
 
-    public Guid PurchaseOrderId { get; private set; }
+    public Guid? PurchaseOrderId { get; private set; }
+
+    public string? PurchaseOrderNo { get; private set; }
 
     public string DeliveryNoteNumber { get; private set; }
 
@@ -23,6 +25,7 @@ public sealed class ReceiptHeader : Entity
     public static ReceiptHeader Create(
         DateTime receivedDate,
         Guid purchaseOrderId,
+        string? purchaseOrderNumber,
         string deliveryNoteNumber,
         DateTime createtimeStamp)
     {
@@ -31,11 +34,24 @@ public sealed class ReceiptHeader : Entity
             Id = Guid.NewGuid(),
             ReceivedDate = receivedDate,
             PurchaseOrderId = purchaseOrderId,
+            PurchaseOrderNo = purchaseOrderNumber,
             DeliveryNoteNumber = deliveryNoteNumber,
             Status = ReceiptStatus.Shipping,
             CreatetimeStamp = createtimeStamp
         };
 
         return receiptHeader;
+    }
+
+    public Result Cancel()
+    {
+        if (Status != ReceiptStatus.Shipping)
+        {
+            return Result.Failure(ReceiptErrors.NotShipping);
+        }
+
+        Status = ReceiptStatus.Cancelled;
+
+        return Result.Success();
     }
 }

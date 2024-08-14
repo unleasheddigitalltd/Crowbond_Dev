@@ -13,7 +13,7 @@ public static class PurchaseOrderErrors
 
     public static readonly Error NotPending = Error.Problem("PurchaseOrders.NotPending", "The purchase order is not in pending status");
 
-    public static readonly Error AlreadyPaid = Error.Problem(
-        "PurchaseOrders.AlreadyPaid",
-        "The purchase order was already paid");
+    public static readonly Error NotApproved = Error.Problem("PurchaseOrders.NotApproved", "The purchase order is not in approved status");
+
+    public static readonly Error AlreadyPaid = Error.Problem("PurchaseOrders.AlreadyPaid", "The purchase order was already paid");
 }
