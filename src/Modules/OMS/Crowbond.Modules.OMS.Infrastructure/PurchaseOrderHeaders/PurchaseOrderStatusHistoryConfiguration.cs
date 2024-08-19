@@ -1,4 +1,4 @@
-﻿using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
+﻿using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,7 +9,5 @@ internal sealed class PurchaseOrderStatusHistoryConfiguration : IEntityTypeConfi
     public void Configure(EntityTypeBuilder<PurchaseOrderStatusHistory> builder)
     {
         builder.HasKey(o => o.Id);
-
-        builder.HasOne<PurchaseOrderHeader>().WithMany().HasForeignKey(o => o.PurchaseOrderHeaderId);
     }
 }

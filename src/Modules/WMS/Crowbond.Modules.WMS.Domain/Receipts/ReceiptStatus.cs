@@ -3,5 +3,6 @@
 public enum ReceiptStatus
 {
     Shipping = 0,
-    Received = 1
+    Received = 1,
+    Cancelled = 2
 }

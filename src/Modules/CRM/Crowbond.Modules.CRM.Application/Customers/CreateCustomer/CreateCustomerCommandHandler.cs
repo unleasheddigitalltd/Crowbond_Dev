@@ -2,17 +2,14 @@
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
-using Crowbond.Modules.CRM.Domain.CustomerContacts;
-using Crowbond.Modules.CRM.Domain.CustomerOutlets;
 using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
 using Crowbond.Modules.CRM.Domain.Sequences;
 
 namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
 
 internal sealed class CreateCustomerCommandHandler(
     ICustomerRepository customerRepository,
-    ICustomerContactRepository customerContactRepository,
-    ICustomerOutletRepository customerShippingAddressRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCustomerCommand, Guid>
@@ -41,9 +38,9 @@ internal sealed class CreateCustomerCommandHandler(
              discount: request.Customer.Discount,
              repId: request.Customer.RepId,
              customPaymentTerm: request.Customer.CustomPaymentTerm,             
-             paymentTerms: request.Customer.PaymentTerms,
+             paymentTerms: (PaymentTerm)request.Customer.PaymentTerms,
              invoiceDueDays: request.Customer.InvoiceDueDays,
-             deliveryFeeSetting: request.Customer.DeliveryFeeSetting,
+             deliveryFeeSetting: (DeliveryFeeSetting)request.Customer.DeliveryFeeSetting,
              deliveryMinOrderValue: request.Customer.DeliveryMinOrderValue,
              deliveryCharge: request.Customer.DeliveryCharge,
              noDiscountSpecialItem: request.Customer.NoDiscountSpecialItem,
@@ -53,13 +50,10 @@ internal sealed class CreateCustomerCommandHandler(
              isHq: request.Customer.IsHq,
              showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
              showPriceInApp: request.Customer.ShowPriceInApp,
-             showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket,
+             showLogoInDeliveryDocket: (ShowLogoInDeliveryDocket)request.Customer.ShowLogoInDeliveryDocket,
              customerLogo: request.Customer.CustomerLogo,
              createBy: request.UserId,
              createDate: dateTimeProvider.UtcNow);
-
-
-
 
         customerRepository.Insert(result.Value);
 
@@ -67,47 +61,6 @@ internal sealed class CreateCustomerCommandHandler(
         {
             return Result.Failure<Guid>(result.Error);
         }
-
-        IEnumerable<CustomerContact> customerContacts = request.Customer.CustomerContacts
-            .Select(c => CustomerContact.Create(
-                result.Value.Id,
-                c.FirstName,
-                c.LastName,
-                c.Username,
-                c.PhoneNumber,
-                c.Mobile,
-                c.Email,
-                c.Primary,
-                c.ReceiveInvoice,
-                c.ReceiveOrder,
-                c.ReceivePriceList,
-                request.UserId,
-                dateTimeProvider.UtcNow));
-
-        customerContactRepository.InsertRange(customerContacts);
-
-        IEnumerable<CustomerOutlet> customerShippingAddresses = request.Customer.CustomerOutletAddresses
-            .Select(s => CustomerOutlet.Create(
-                result.Value.Id,
-                s.LocationName,
-                s.FullName,
-                s.Email,
-                s.PhoneNumber,
-                s.Mobile,
-                s.AddressLine1,
-                s.AddressLine2,
-                s.TownCity,
-                s.County,
-                s.Country,
-                s.PostalCode,
-                s.DeliveryNote,
-                s.DeliveryTimeFrom,
-                s.DeliveryTimeTo,
-                s.Is24HrsDelivery,
-                request.UserId,
-                dateTimeProvider.UtcNow));
-
-        customerShippingAddressRepository.InsertRange(customerShippingAddresses);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

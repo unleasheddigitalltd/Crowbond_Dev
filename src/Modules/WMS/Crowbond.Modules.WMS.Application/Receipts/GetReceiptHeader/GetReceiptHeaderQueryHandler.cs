@@ -22,10 +22,11 @@ internal sealed class GetReceiptHeaderQueryHandler(IDbConnectionFactory dbConnec
         string sql =
             $"""
              SELECT 
-                id AS {nameof(ReceiptHeader.Id)},
-                received_date AS {nameof(ReceiptHeader.ReceivedDate)},
-                elivery_note_number AS {nameof(ReceiptHeader.DeliveryNoteNumber)},
-                 CASE status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(ReceiptHeader.Status)},
+                id AS {nameof(ReceiptResponse.Id)},
+                received_date AS {nameof(ReceiptResponse.ReceivedDate)},
+                purchase_order_no AS {nameof(ReceiptResponse.PurchaseOrderNo)},
+                delivery_note_number AS {nameof(ReceiptResponse.DeliveryNoteNumber)},
+                CASE status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(ReceiptResponse.Status)}
              FROM wms.receipt_headers
              WHERE id = @ReceiptHeaderId
              """;

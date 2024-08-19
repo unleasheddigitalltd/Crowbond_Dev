@@ -1,6 +1,6 @@
 ﻿using Crowbond.Common.Application.Pagination;
 using Crowbond.Modules.OMS.Domain.Payments;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrders;
 

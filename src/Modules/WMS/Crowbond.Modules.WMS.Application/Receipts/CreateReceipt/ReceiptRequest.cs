@@ -3,6 +3,7 @@
 public sealed record ReceiptRequest(
     DateTime ReceivedDate,
     Guid PurchaseOrderId,
+    string? PurchaseOrderNo,
     string DeliveryNoteNumber,
     List<ReceiptRequest.ReceiptLineRequest> ReceiptLines)
 {

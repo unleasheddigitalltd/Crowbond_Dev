@@ -1,7 +1,4 @@
-﻿using Crowbond.Modules.OMS.Domain.Payments;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
-
-namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrder;
+﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrder;
 
 public sealed record PurchaseOrderResponse
 {

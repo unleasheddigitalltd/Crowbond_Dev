@@ -1,7 +1,6 @@
 ﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
 
 public sealed record CustomerOutletRequest(
-    Guid CustomerId,
     string LocationName,
     string FullName,
     string? Email,
@@ -14,6 +13,6 @@ public sealed record CustomerOutletRequest(
     string? Country,
     string PostalCode,
     string? DeliveryNote,
-    TimeOnly DeliveryTimeFrom,
-    TimeOnly DeliveryTimeTo,
+    string DeliveryTimeFrom,
+    string DeliveryTimeTo,
     bool Is24HrsDelivery);

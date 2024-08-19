@@ -16,38 +16,47 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
 
         const string sql =
             $"""
-             SELECT
-                 c.id AS {nameof(CustomerDetailsResponse.Id)}, 
-                 c.account_number AS {nameof(CustomerDetailsResponse.AccountNumber)},  
-                 c.business_name AS {nameof(CustomerDetailsResponse.BusinessName)},  
-                 c.billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},  
-                 c.billing_address_line2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},  
-                 c.billing_town_city AS {nameof(CustomerDetailsResponse.BillingTownCity)},  
-                 c.billing_county AS {nameof(CustomerDetailsResponse.BillingCounty)},  
-                 c.billing_country AS {nameof(CustomerDetailsResponse.BillingCountry)},  
-                 c.billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},  
-                 c.price_tier_id AS {nameof(CustomerDetailsResponse.PriceTierId)},  
-                 c.discount AS {nameof(CustomerDetailsResponse.Discount)},  
-                 c.rep_id AS {nameof(CustomerDetailsResponse.RepId)},  
-                 c.custom_payment_term AS {nameof(CustomerDetailsResponse.CustomPaymentTerm)},  
-                 c.payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},  
-                 c.invoice_due_days AS {nameof(CustomerDetailsResponse.InvoiceDueDays)},  
-                 c.delivery_fee_setting AS {nameof(CustomerDetailsResponse.DeliveryFeeSetting)},  
-                 c.delivery_min_order_value AS {nameof(CustomerDetailsResponse.DeliveryMinOrderValue)},  
-                 c.delivery_charge AS {nameof(CustomerDetailsResponse.DeliveryCharge)},  
-                 c.no_discount_special_item AS {nameof(CustomerDetailsResponse.NoDiscountSpecialItem)},  
-                 c.no_discount_fixed_price AS {nameof(CustomerDetailsResponse.NoDiscountFixedPrice)},  
-                 c.detailed_invoice AS {nameof(CustomerDetailsResponse.DetailedInvoice)},  
-                 c.customer_notes AS {nameof(CustomerDetailsResponse.CustomerNotes)},  
-                 c.is_hq AS {nameof(CustomerDetailsResponse.IsHq)},  
-                 c.is_active AS {nameof(CustomerDetailsResponse.IsActive)},
-                 cs.show_prices_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowPricesInDeliveryDocket)},  
-                 cs.show_price_in_app AS {nameof(CustomerDetailsResponse.ShowPriceInApp)}, 
-                 cs.show_logo_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowLogoInDeliveryDocket)}, 
-                 cs.customer_logo AS {nameof(CustomerDetailsResponse.CustomerLogo)}
-             FROM crm.customers c
-             INNER JOIN crm.customer_settings cs ON c.id = cs.customer_id
-             WHERE c.id = @CustomerId;
+             WITH FilteredCustomers AS (
+                SELECT
+                    c.id AS {nameof(CustomerDetailsResponse.Id)}, 
+                    c.account_number AS {nameof(CustomerDetailsResponse.AccountNumber)},  
+                    c.business_name AS {nameof(CustomerDetailsResponse.BusinessName)},  
+                    c.billing_address_line1 AS {nameof(CustomerDetailsResponse.BillingAddressLine1)},  
+                    c.billing_address_line2 AS {nameof(CustomerDetailsResponse.BillingAddressLine2)},  
+                    c.billing_town_city AS {nameof(CustomerDetailsResponse.BillingTownCity)},  
+                    c.billing_county AS {nameof(CustomerDetailsResponse.BillingCounty)},  
+                    c.billing_country AS {nameof(CustomerDetailsResponse.BillingCountry)},  
+                    c.billing_postal_code AS {nameof(CustomerDetailsResponse.BillingPostalCode)},  
+                    c.price_tier_id AS {nameof(CustomerDetailsResponse.PriceTierId)},  
+                    c.discount AS {nameof(CustomerDetailsResponse.Discount)},  
+                    c.rep_id AS {nameof(CustomerDetailsResponse.RepId)},  
+                    c.custom_payment_term AS {nameof(CustomerDetailsResponse.CustomPaymentTerm)},  
+                    c.payment_terms AS {nameof(CustomerDetailsResponse.PaymentTerms)},  
+                    c.invoice_due_days AS {nameof(CustomerDetailsResponse.InvoiceDueDays)},  
+                    c.delivery_fee_setting AS {nameof(CustomerDetailsResponse.DeliveryFeeSetting)},  
+                    c.delivery_min_order_value AS {nameof(CustomerDetailsResponse.DeliveryMinOrderValue)},  
+                    c.delivery_charge AS {nameof(CustomerDetailsResponse.DeliveryCharge)},  
+                    c.no_discount_special_item AS {nameof(CustomerDetailsResponse.NoDiscountSpecialItem)},  
+                    c.no_discount_fixed_price AS {nameof(CustomerDetailsResponse.NoDiscountFixedPrice)},  
+                    c.detailed_invoice AS {nameof(CustomerDetailsResponse.DetailedInvoice)},  
+                    c.customer_notes AS {nameof(CustomerDetailsResponse.CustomerNotes)},  
+                    c.is_hq AS {nameof(CustomerDetailsResponse.IsHq)},  
+                    c.is_active AS {nameof(CustomerDetailsResponse.IsActive)},
+                    t.first_name AS {nameof(CustomerDetailsResponse.FirstName)},
+                    t.last_name AS {nameof(CustomerDetailsResponse.LastName)},
+                    t.phone_number AS {nameof(CustomerDetailsResponse.PhoneNumber)},
+                    t.email AS {nameof(CustomerDetailsResponse.Email)},
+                    cs.show_prices_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowPricesInDeliveryDocket)},  
+                    cs.show_price_in_app AS {nameof(CustomerDetailsResponse.ShowPriceInApp)}, 
+                    cs.show_logo_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowLogoInDeliveryDocket)}, 
+                    cs.customer_logo AS {nameof(CustomerDetailsResponse.CustomerLogo)},
+                    ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY t.primary DESC) AS FilterRowNum
+                FROM crm.customers c
+                INNER JOIN crm.customer_settings cs ON c.id = cs.customer_id
+                LEFT JOIN crm.customer_contacts t ON c.id = t.customer_id
+                WHERE c.id = @CustomerId
+             )
+             SELECT * FROM FilteredCustomers  WHERE FilterRowNum = 1;
 
              SELECT
                  t.id AS {nameof(CustomerContactResponse.Id)},
@@ -55,6 +64,7 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                  t.first_name AS {nameof(CustomerContactResponse.FirstName)},
                  t.last_name AS {nameof(CustomerContactResponse.LastName)},
                  t.phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
+                 t.email AS {nameof(CustomerContactResponse.Email)},
                  t.primary AS {nameof(CustomerContactResponse.Primary)},
                  t.is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts t

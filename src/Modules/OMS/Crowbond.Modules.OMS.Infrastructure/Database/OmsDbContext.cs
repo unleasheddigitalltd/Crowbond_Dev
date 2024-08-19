@@ -4,7 +4,6 @@ using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Drivers;
 using Crowbond.Modules.OMS.Domain.Orders;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.Routes;
 using Crowbond.Modules.OMS.Infrastructure.Drivers;
 using Crowbond.Modules.OMS.Infrastructure.Orders;
@@ -21,9 +20,8 @@ using Crowbond.Modules.OMS.Domain.Deliveries;
 using Crowbond.Modules.OMS.Infrastructure.Deliveries;
 using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
-using Crowbond.Modules.OMS.Domain.PurchaseOrderLines;
-using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderLines;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 

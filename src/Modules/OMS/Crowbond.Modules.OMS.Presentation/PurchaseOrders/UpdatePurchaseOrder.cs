@@ -15,9 +15,9 @@ internal sealed class UpdatePurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchase-orders/{id}", async (Guid id, PurchaseOrderHeaderRequest request, ClaimsPrincipal claims, ISender sender) =>
+        app.MapPut("purchase-orders/{id}", async (Guid id, PurchaseOrderRequest request, ClaimsPrincipal claims, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdatePurchaseOrderCommand(id, claims.GetUserId(), request));
+            Result result = await sender.Send(new UpdatePurchaseOrderCommand(claims.GetUserId(), id, request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

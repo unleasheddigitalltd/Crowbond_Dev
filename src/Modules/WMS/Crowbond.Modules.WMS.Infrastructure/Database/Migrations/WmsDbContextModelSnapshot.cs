@@ -445,9 +445,14 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("delivery_note_number");
 
-                    b.Property<Guid>("PurchaseOrderId")
+                    b.Property<Guid?>("PurchaseOrderId")
                         .HasColumnType("uuid")
                         .HasColumnName("purchase_order_id");
+
+                    b.Property<string>("PurchaseOrderNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("purchase_order_no");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("timestamp with time zone")
@@ -537,8 +542,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c1f962a8-5ad6-4a3a-9921-d085f31c4c5c"),
-                            CreatedDate = new DateTime(2024, 7, 2, 11, 26, 46, 786, DateTimeKind.Utc).AddTicks(1521),
+                            Id = new Guid("037b725f-2110-40f8-a1b3-06ca5722cb83"),
+                            CreatedDate = new DateTime(2024, 8, 12, 20, 15, 30, 448, DateTimeKind.Utc).AddTicks(5086),
                             HasMixBatchLocation = false,
                             IsActive = true
                         });

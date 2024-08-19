@@ -22,15 +22,15 @@ internal sealed class GetCustomerContactDetailsQueryHandler(IDbConnectionFactory
                  first_name AS {nameof(CustomerContactDetailsResponse.FirstName)},
                  last_name AS {nameof(CustomerContactDetailsResponse.LastName)},
                  phone_number AS {nameof(CustomerContactDetailsResponse.PhoneNumber)},
-                 mobile AS {nameof(CustomerContactDetailsResponse.Mobile)},
-                 username AS {nameof(CustomerContactDetailsResponse.Username)},
+                 mobile AS {nameof(CustomerContactDetailsResponse.Mobile)}, 
+                 username AS {nameof(CustomerContactDetailsResponse.Username)}, 
                  email AS {nameof(CustomerContactDetailsResponse.Email)},
-                 primary AS {nameof(CustomerContactDetailsResponse.Primary)},             
-                 receive_invoice AS {nameof(CustomerContactDetailsResponse.ReceiveInvoice)}, 
-                 receive_order AS {nameof(CustomerContactDetailsResponse.ReceiveOrder)}, 
+                 "primary" AS {nameof(CustomerContactDetailsResponse.Primary)},
+                 receive_invoice AS {nameof(CustomerContactDetailsResponse.ReceiveInvoice)},
+                 receive_order AS {nameof(CustomerContactDetailsResponse.ReceiveOrder)},
                  receive_price_list AS {nameof(CustomerContactDetailsResponse.ReceivePriceList)},
                  is_active AS {nameof(CustomerContactDetailsResponse.IsActive)}
-             FROM crm.customer_contacts t
+             FROM crm.customer_contacts
              WHERE id = @CustomerContactId             
              """;
 

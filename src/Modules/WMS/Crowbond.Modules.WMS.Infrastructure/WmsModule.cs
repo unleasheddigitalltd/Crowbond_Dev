@@ -25,6 +25,7 @@ using Crowbond.Modules.WMS.Domain.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Settings;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Infrastructure.Receipts;
+using Crowbond.Modules.OMS.IntegrationEvents;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -43,6 +44,12 @@ public static class WmsModule
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
+    }
+
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderApprovedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderCancelledIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

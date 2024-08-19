@@ -10,4 +10,9 @@ public sealed class PriceTierRepository(CrmDbContext context) : IPriceTierReposi
     {
         return await context.PriceTiers.ToListAsync(cancellationToken);
     }
+
+    public async Task<PriceTier?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.PriceTiers.SingleOrDefaultAsync(pt => pt.Id == id, cancellationToken);
+    }
 }

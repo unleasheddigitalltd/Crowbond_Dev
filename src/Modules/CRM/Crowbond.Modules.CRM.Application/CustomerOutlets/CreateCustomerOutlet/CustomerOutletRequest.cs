@@ -13,6 +13,6 @@ public sealed record CustomerOutletRequest(
     string? Country,
     string PostalCode,
     string? DeliveryNote,
-    TimeOnly DeliveryTimeFrom,
-    TimeOnly DeliveryTimeTo,
+    string DeliveryTimeFrom,
+    string DeliveryTimeTo,
     bool Is24HrsDelivery);

@@ -20,6 +20,5 @@ internal sealed class UpdateCustomerOutletCommandValidator : AbstractValidator<U
         RuleFor(c => c.CustomerOutlet.DeliveryNote).MaximumLength(500);
         RuleFor(c => c.CustomerOutlet.DeliveryTimeFrom).NotEmpty();
         RuleFor(c => c.CustomerOutlet.DeliveryTimeTo).NotEmpty();
-        RuleFor(c => c.CustomerOutlet.Is24HrsDelivery).NotEmpty();
     }
 }

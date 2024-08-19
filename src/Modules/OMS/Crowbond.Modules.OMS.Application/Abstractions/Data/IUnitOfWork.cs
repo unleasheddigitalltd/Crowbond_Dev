@@ -1,4 +1,6 @@
-﻿namespace Crowbond.Modules.OMS.Application.Abstractions.Data;
+﻿using System.Data.Common;
+
+namespace Crowbond.Modules.OMS.Application.Abstractions.Data;
 
 public interface IUnitOfWork
 {

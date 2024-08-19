@@ -54,6 +54,9 @@ public sealed class Permission
     public static readonly Permission ModifyPurchaseOrders = new("purchaseorders:update");
     public static readonly Permission CreatePurchaseOrders = new("purchaseorders:create");
 
+    public static readonly Permission ApprovePurchaseOrders = new("purchaseorders:approve");
+    public static readonly Permission CancelPurchaseOrders = new("purchaseorders:cancel");
+
     public static readonly Permission GetDrivers = new("drivers:read");
     public static readonly Permission ModifyDrivers = new("drivers:update");
     public static readonly Permission CreateDrivers = new("drivers:create");

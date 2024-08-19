@@ -49,6 +49,7 @@ public static class DependencyInjection
                 TicketingModule.ConfigureConsumers,
                 UsersModule.ConfigureConsumers,
                 AttendanceModule.ConfigureConsumers,
+                WmsModule.ConfigureConsumers,
             ],
             databaseConnectionString,
             redisConnectionString);

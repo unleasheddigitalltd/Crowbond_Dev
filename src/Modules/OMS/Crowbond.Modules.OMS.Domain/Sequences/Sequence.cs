@@ -12,9 +12,10 @@ public sealed class Sequence : Entity
     public SequenceContext Context { get; private set; }
     public int LastNumber { get; private set; }
 
-    public void IncreaseSequence()
+    public int GetNewSequence()
     {
         LastNumber++;
+        return LastNumber;
     }
 
     public Sequence Create(SequenceContext context, int lastNumber)

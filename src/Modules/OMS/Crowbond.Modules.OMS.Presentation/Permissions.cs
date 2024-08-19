@@ -7,7 +7,10 @@ internal static class Permissions
     internal const string GetPurchaseOrders = "purchaseorders:read";
     internal const string ModifyPurchaseOrders = "purchaseorders:update";
     internal const string CreatePurchaseOrders = "purchaseorders:create";
-    
+
+    internal const string ApprovePurchaseOrders = "purchaseorders:approve";
+    internal const string CancelPurchaseOrders = "purchaseorders:cancel";
+
     internal const string GetRoutes = "routes:read";
     internal const string ModifyRoutes = "routes:update";
     internal const string CreateRoutes = "routes:create";

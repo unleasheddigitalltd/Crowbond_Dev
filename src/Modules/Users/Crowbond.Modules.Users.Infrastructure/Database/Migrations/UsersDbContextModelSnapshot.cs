@@ -312,6 +312,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "purchaseorders:approve"
+                        },
+                        new
+                        {
+                            Code = "purchaseorders:cancel"
+                        },
+                        new
+                        {
                             Code = "drivers:read"
                         },
                         new
@@ -674,6 +682,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "purchaseorders:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "purchaseorders:approve",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "purchaseorders:cancel",
                             RoleName = "Administrator"
                         },
                         new

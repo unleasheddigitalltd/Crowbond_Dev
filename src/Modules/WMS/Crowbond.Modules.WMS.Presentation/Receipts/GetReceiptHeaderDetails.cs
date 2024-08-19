@@ -13,7 +13,7 @@ internal sealed class GetReceiptHeaderDetails : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("receipts/{id}", async (Guid id, ISender sender) =>
+        app.MapGet("receipts/{id}/details", async (Guid id, ISender sender) =>
         {
             Result<ReceiptHeaderDetailsResponse> result = await sender.Send(new GetReceiptHeaderDetailsQuery(id));
 

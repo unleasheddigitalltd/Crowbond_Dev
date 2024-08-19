@@ -33,7 +33,7 @@ public sealed record CustomerDetailsResponse
 
     public decimal Discount { get; }
 
-    public Guid RepId { get; }
+    public Guid? RepId { get; }
 
     public bool CustomPaymentTerm { get; }
 
@@ -59,6 +59,14 @@ public sealed record CustomerDetailsResponse
 
     public bool IsActive { get; }
 
+    public string? FirstName { get; }
+
+    public string? LastName { get; }
+
+    public string? PhoneNumber { get; }
+
+    public string? Email { get; }
+
     public bool ShowPricesInDeliveryDocket { get; }
 
     public bool ShowPriceInApp { get; }
@@ -77,6 +85,7 @@ public sealed record CustomerContactResponse(
     string FirstName,
     string LastName,
     string PhoneNumber,
+    string Email,
     bool Primary,
     bool IsActive);
 
