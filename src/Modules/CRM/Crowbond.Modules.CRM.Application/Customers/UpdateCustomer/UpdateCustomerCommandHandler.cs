@@ -63,12 +63,10 @@ internal sealed class UpdateCustomerCommandHandler(
             noDiscountFixedPrice: request.Customer.NoDiscountFixedPrice,
             detailedInvoice: request.Customer.DetailedInvoice,
             customerNotes: request.Customer.CustomerNotes,
-            isHq: request.Customer.IsHq,
             showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
             showPriceInApp: request.Customer.ShowPriceInApp,
             showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket,
             customerLogo: request.Customer.CustomerLogo,
-            isActive: request.Customer.IsActive,
             lastModifiedBy: request.UserName,
             lastModifiedDate: dateTimeProvider.UtcNow);
 

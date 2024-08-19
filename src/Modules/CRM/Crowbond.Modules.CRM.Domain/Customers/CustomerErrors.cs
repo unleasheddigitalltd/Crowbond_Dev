@@ -9,9 +9,9 @@ public static class CustomerErrors
     public static Error FilterTypeNotFound(string filterTypeName) =>
     Error.NotFound("Customers.NotFound", $"The filter type with the name {filterTypeName} was not found");
 
-    public static readonly Error AlreadyHeld = Error.Problem(
-        "Customer.AlreadyHeld",
-        "The customer was already held");
+    public static readonly Error AlreadyDeactivated = Error.Problem(
+        "Customer.AlreadyDeactivate",
+        "The customer was already deactivated");
 
     public static readonly Error AlreadyActivated = Error.Problem(
         "Customer.AlreadyActivated",
