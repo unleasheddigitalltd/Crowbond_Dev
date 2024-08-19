@@ -5,7 +5,7 @@ using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Users.CreateUser;
 using MediatR;
 
-namespace Crowbond.Modules.Users.Presentation.Users;
+namespace Crowbond.Modules.Users.Presentation.Drivers;
 
 internal sealed class DriverCreatedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<DriverCreatedIntegrationEvent>

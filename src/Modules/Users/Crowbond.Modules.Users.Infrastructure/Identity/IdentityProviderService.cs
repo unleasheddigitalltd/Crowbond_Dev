@@ -51,4 +51,10 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
         return Result.Success();
     }
 
+    // DELETE /{realm}/users/{id}
+    public async Task<Result> DeleteUser(string identityId, CancellationToken cancellationToken = default)
+    {
+        await keyCloakClient.DeleteUserAsync(identityId, cancellationToken);
+        return Result.Success();
+    }
 }
