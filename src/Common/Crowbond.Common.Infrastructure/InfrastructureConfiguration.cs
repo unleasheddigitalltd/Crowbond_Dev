@@ -42,6 +42,7 @@ public static class InfrastructureConfiguration
         services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
 
         SqlMapper.AddTypeHandler(new GenericArrayHandler<string>());
+        SqlMapper.AddTypeHandler(new TimeOnlyHandler());
 
         services.AddQuartz();
 
@@ -75,7 +76,7 @@ public static class InfrastructureConfiguration
             {
                 cfg.ConfigureEndpoints(context);
             });
-        });
+        });        
 
         return services;
     }
