@@ -5,7 +5,6 @@ using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Domain.Reps;
-using MediatR;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 
