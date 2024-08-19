@@ -1,8 +1,8 @@
-﻿using Crowbond.Common.Application.Clock;
+﻿using System.Globalization;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
-using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
 using Crowbond.Modules.CRM.Domain.Customers;
 
@@ -17,6 +17,18 @@ internal sealed class CreateCustomerOutletCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreateCustomerOutletCommand request, CancellationToken cancellationToken)
     {
+        string[] validFormats = ["HH:mm", "HH:mm:ss"];
+
+        if (!TimeOnly.TryParseExact(request.CustomerOutlet.DeliveryTimeFrom, validFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out TimeOnly deliveryTimeFrom))
+        {
+            return Result.Failure<Guid>(CustomerOutletErrors.InvalitTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeFrom)));
+        }
+
+        if (!TimeOnly.TryParseExact(request.CustomerOutlet.DeliveryTimeTo, validFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out TimeOnly deliveryTimeTo))
+        {
+            return Result.Failure<Guid>(CustomerOutletErrors.InvalitTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeTo)));
+        }
+
         Customer? customer = await customerRepository.GetAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
@@ -38,8 +50,8 @@ internal sealed class CreateCustomerOutletCommandHandler(
             request.CustomerOutlet.Country,
             request.CustomerOutlet.PostalCode,
             request.CustomerOutlet.DeliveryNote,
-            request.CustomerOutlet.DeliveryTimeFrom,
-            request.CustomerOutlet.DeliveryTimeTo,
+            deliveryTimeFrom,
+            deliveryTimeTo,
             request.CustomerOutlet.Is24HrsDelivery,
             request.UserId,
             dateTimeProvider.UtcNow);

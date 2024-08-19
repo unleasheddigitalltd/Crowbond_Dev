@@ -22,7 +22,8 @@ internal sealed class GetCustomerContactQueryHandler(IDbConnectionFactory dbConn
                  first_name AS {nameof(CustomerContactResponse.FirstName)},
                  last_name AS {nameof(CustomerContactResponse.LastName)},
                  phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
-                 primary AS {nameof(CustomerContactResponse.Primary)},
+                 email AS {nameof(CustomerContactResponse.Email)},
+                 "primary" AS {nameof(CustomerContactResponse.Primary)},
                  is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts t
              WHERE id = @CustomerContactId

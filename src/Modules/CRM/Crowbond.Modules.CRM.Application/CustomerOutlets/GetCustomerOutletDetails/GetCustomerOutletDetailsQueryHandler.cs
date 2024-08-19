@@ -31,6 +31,8 @@ internal sealed class GetCustomerOutletDetailsQueryHandler(IDbConnectionFactory 
                  country AS {nameof(CustomerOutletDetailsResponse.Country)}, 
                  postal_code AS {nameof(CustomerOutletDetailsResponse.PostalCode)}, 
                  delivery_note AS {nameof(CustomerOutletDetailsResponse.DeliveryNote)}, 
+                 delivery_time_from AS {nameof(CustomerOutletDetailsResponse.DeliveryTimeFrom)}, 
+                 delivery_time_to AS {nameof(CustomerOutletDetailsResponse.DeliveryTimeTo)}, 
                  is24hrs_delivery AS {nameof(CustomerOutletDetailsResponse.Is24HrsDelivery)}
              FROM crm.customer_outlets
              WHERE id = @CustomerOutletId            

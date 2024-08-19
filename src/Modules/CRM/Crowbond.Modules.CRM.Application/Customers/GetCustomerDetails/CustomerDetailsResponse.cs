@@ -85,6 +85,7 @@ public sealed record CustomerContactResponse(
     string FirstName,
     string LastName,
     string PhoneNumber,
+    string Email,
     bool Primary,
     bool IsActive);
 

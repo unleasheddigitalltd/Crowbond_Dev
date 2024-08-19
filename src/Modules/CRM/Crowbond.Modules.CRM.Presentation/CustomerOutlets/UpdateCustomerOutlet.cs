@@ -1,15 +1,15 @@
 ﻿using System.Security.Claims;
 using Crowbond.Common.Domain;
+using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Crowbond.Modules.CRM.Presentation.CustomerOutlets;
+namespace Crowbond.Modules.CRM.Presentation.CustomerContacts;
 
 internal sealed class UpdateCustomerOutlet : IEndpoint
 {
@@ -21,7 +21,7 @@ internal sealed class UpdateCustomerOutlet : IEndpoint
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.ModifyCustomerOutlets)
+            .RequireAuthorization(Permissions.ModifyCustomerContacts)
             .WithTags(Tags.Customers);
     }
 }
