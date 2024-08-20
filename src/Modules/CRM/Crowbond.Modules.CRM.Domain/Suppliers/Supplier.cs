@@ -3,7 +3,7 @@ using Crowbond.Modules.CRM.Domain.Customers;
 
 namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
-    public sealed class Supplier : Entity
+public sealed class Supplier : Entity
 {
     private Supplier()
     {
@@ -29,7 +29,17 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
     public PaymentTerm PaymentTerms { get; private set; }
 
+    public bool IsActive { get; private set; }
+
     public string? SupplierNotes { get; private set; }
+
+    public Guid CreateBy { get; private set; }
+
+    public DateTime CreateDate { get; private set; }
+
+    public Guid? LastModifiedBy { get; private set; }
+
+    public DateTime? LastModifiedDate { get; private set; }
 
 
     public static Result<Supplier> Create(
@@ -42,7 +52,9 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
      string? country,
      string postalCode,
      PaymentTerm paymentTerms,
-     string? supplierNotes)
+     string? supplierNotes,
+     Guid createBy,
+     DateTime createDate)
     {
         var supplier = new Supplier
         {
@@ -56,7 +68,10 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
             Country = country,
             PostalCode = postalCode,
             PaymentTerms = paymentTerms,
-            SupplierNotes = supplierNotes
+            IsActive = true,
+            SupplierNotes = supplierNotes,
+            CreateBy = createBy,
+            CreateDate = createDate
         };
 
         return supplier;
@@ -71,7 +86,9 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
          string? country,
          string postalcode,
          PaymentTerm paymentterms,
-         string? suppliernotes)
+         string? suppliernotes,
+         Guid lastModifiedBy,
+         DateTime lastModifiedDate)
     {
 
         SupplierName = suppliername;
@@ -83,6 +100,36 @@ namespace Crowbond.Modules.CRM.Domain.Suppliers;
         PostalCode = postalcode;
         PaymentTerms = paymentterms;
         SupplierNotes = suppliernotes;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+    }
+
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (IsActive)
+        {
+            return Result.Failure(SupplierErrors.AlreadyActivated);
+        }
+
+        IsActive = true;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
+    }
+
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive)
+        {
+            return Result.Failure(SupplierErrors.AlreadyDeactivated);
+        }
+
+        IsActive = false;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
     }
 }
 

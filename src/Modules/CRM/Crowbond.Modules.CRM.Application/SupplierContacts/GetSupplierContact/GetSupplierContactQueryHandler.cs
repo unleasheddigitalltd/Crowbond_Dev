@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Application.CustomerContacts.GetCustomerContactDetails;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Dapper;
 
@@ -20,19 +19,13 @@ internal sealed class GetSupplierContactQueryHandler(IDbConnectionFactory dbConn
              SELECT
                  id AS {nameof(SupplierContactResponse.Id)},
                  supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
-                 first_name AS {nameof(CustomerContactDetailsResponse.FirstName)},
-                 last_name AS {nameof(CustomerContactDetailsResponse.LastName)},
-                 phone_number AS {nameof(CustomerContactDetailsResponse.PhoneNumber)},
-                 mobile AS {nameof(CustomerContactDetailsResponse.Mobile)},
-                 username AS {nameof(CustomerContactDetailsResponse.Username)},
-                 email AS {nameof(CustomerContactDetailsResponse.Email)},
-                 primary AS {nameof(CustomerContactDetailsResponse.Primary)},             
-                 receive_invoice AS {nameof(CustomerContactDetailsResponse.ReceiveInvoice)}, 
-                 receive_order AS {nameof(CustomerContactDetailsResponse.ReceiveOrder)}, 
-                 receive_price_list AS {nameof(CustomerContactDetailsResponse.ReceivePriceList)},
-                 is_active AS {nameof(CustomerContactDetailsResponse.IsActive)}
-             FROM crm.supplier_contacts t
-             WHERE id = @supplierContactId
+                 first_name AS {nameof(SupplierContactResponse.FirstName)},
+                 last_name AS {nameof(SupplierContactResponse.LastName)},
+                 phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
+                 "primary" AS {nameof(SupplierContactResponse.Primary)},             
+                 is_active AS {nameof(SupplierContactResponse.IsActive)}
+             FROM crm.supplier_contacts
+             WHERE id = @SupplierContactId
              """;
 
         SupplierContactResponse? supplierContact = await connection.QuerySingleOrDefaultAsync<SupplierContactResponse>(sql, request);

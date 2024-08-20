@@ -20,6 +20,7 @@ public sealed record SupplierDetailsResponse
     public string PostalCode { get; }
     public PaymentTerm PaymentTerms { get; }
     public string? SupplierNotes { get; }
+    public bool IsActive { get; }
 
     public List<SupplierContactResponse> SupplierContacts { get; set; }
 }

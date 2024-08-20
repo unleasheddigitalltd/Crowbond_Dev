@@ -22,7 +22,7 @@ internal sealed class UpdateCustomerActivation : IEndpoint
             return result.Match(Results.NoContent, ApiResults.Problem);
         }
         )
-        .RequireAuthorization(Permissions.ModifyCustomerContacts)
+        .RequireAuthorization(Permissions.ModifyCustomers)
         .WithTags(Tags.Customers);
     }
 }

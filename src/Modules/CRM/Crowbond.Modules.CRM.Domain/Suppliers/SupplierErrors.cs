@@ -9,9 +9,9 @@ public static class SupplierErrors
     public static Error FilterTypeNotFound(string filterTypeName) =>
     Error.NotFound("Suppliers.NotFound", $"The filter type with the name {filterTypeName} was not found");
 
-    public static readonly Error AlreadyHeld = Error.Problem(
-        "Supplier.AlreadyHeld",
-        "The supplier was already held");
+    public static readonly Error AlreadyDeactivated = Error.Problem(
+        "Supplier.AlreadyDeactivated",
+        "The supplier was already deactivated");
 
     public static readonly Error AlreadyActivated = Error.Problem(
         "Supplier.AlreadyActivated",

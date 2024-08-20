@@ -3,6 +3,7 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
+using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Dapper;
 
 namespace Crowbond.Modules.CRM.Application.SupplierContacts.GetSupplierContactDetails;
@@ -35,7 +36,7 @@ internal sealed class GetSupplierContactDetailsQueryHandler(IDbConnectionFactory
 
         if (supplierContact is null)
         {
-            return Result.Failure<SupplierContactDetailsResponse>(CustomerContactErrors.NotFound(request.SupplierContactId));
+            return Result.Failure<SupplierContactDetailsResponse>(SupplierContactErrors.NotFound(request.SupplierContactId));
         }
 
         return supplierContact;

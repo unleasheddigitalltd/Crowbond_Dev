@@ -15,4 +15,5 @@ public sealed record SupplierResponse
     public string LastName { get; }
     public string PhoneNumber { get; }
     public string Email { get; }
+    public bool IsActive { get; }
 };
