@@ -2,6 +2,7 @@
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.Outbox;
+using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.OMS.IntegrationEvents;
@@ -46,10 +47,15 @@ public static class UsersModule
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactUpdatedIntegrationEvent>>();
+
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverUpdatedIntegrationEvent>>();
+
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactUpdatedIntegrationEvent>>();
+
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactDeactivatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -79,6 +85,7 @@ public static class UsersModule
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Users))
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUserRepository, UserRepository>();
@@ -92,6 +99,7 @@ public static class UsersModule
         services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
 
         services.ConfigureOptions<ConfigureProcessInboxJob>();
+
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)

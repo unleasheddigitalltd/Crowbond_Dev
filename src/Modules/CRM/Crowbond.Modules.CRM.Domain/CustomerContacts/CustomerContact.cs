@@ -109,4 +109,55 @@ public sealed class CustomerContact : Entity
 
         Raise(new CustomerContactUpdatedDomainEvent(Id, FirstName, LastName));
     }
+
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (IsActive)
+        {
+            return Result.Failure(CustomerContactErrors.AlreadyActivated);
+        }
+
+        IsActive = true;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        Raise(new CustomerContactActivatedDomainEvent(Id));
+
+        return Result.Success();
+    }
+
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive)
+        {
+            return Result.Failure(CustomerContactErrors.AlreadyDeactivated);
+        }
+
+        if (Primary)
+        {
+            return Result.Failure(CustomerContactErrors.IsPrimary);
+        }
+
+        IsActive = false;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        Raise(new CustomerContactDeactivatedDomainEvent(Id));
+
+        return Result.Success();
+    }
+
+    public Result ChangePrimary(bool primary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive && primary)
+        {
+            return Result.Failure(CustomerContactErrors.IsNotActive);
+        }
+
+        Primary = primary;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
+    }
 }

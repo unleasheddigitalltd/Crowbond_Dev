@@ -1,5 +1,4 @@
 ﻿using Crowbond.Modules.CRM.Domain.CustomerContacts;
-using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +11,9 @@ internal sealed class CustomerContactRepository(CrmDbContext context) : ICustome
         return await context.CustomerContacts.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<CustomerContact>> GetForCustomerAsync(Customer customer, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CustomerContact>> GetByCustomerIdAsync(Guid customerId, CancellationToken cancellationToken = default)
     {
-        return await context.CustomerContacts.Where(c => c.CustomerId == customer.Id).ToListAsync(cancellationToken);
+        return await context.CustomerContacts.Where(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
     }
 
     public void Insert(CustomerContact customerContact)

@@ -42,6 +42,8 @@ public sealed class CustomerOutlet : Entity
 
     public bool Is24HrsDelivery { get; private set; }
 
+    public bool IsActive { get; private set; }
+
     public Guid CreateBy { get; private set; }
 
     public DateTime CreateDate { get; private set; }
@@ -89,6 +91,7 @@ public sealed class CustomerOutlet : Entity
             DeliveryTimeFrom = deliveryTimeFrom,
             DeliveryTimeTo = deliveryTimeTo,
             Is24HrsDelivery = is24HrsDelivery,
+            IsActive = true,
             CreateBy = createBy,
             CreateDate = createDate
         };
@@ -131,5 +134,33 @@ public sealed class CustomerOutlet : Entity
         Is24HrsDelivery = is24HrsDelivery;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
+    }
+
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (IsActive)
+        {
+            return Result.Failure(CustomerOutletErrors.AlreadyActivated);
+        }
+
+        IsActive = true;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
+    }
+
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive)
+        {
+            return Result.Failure(CustomerOutletErrors.AlreadyDeactivated);
+        }
+
+        IsActive = false;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
     }
 }

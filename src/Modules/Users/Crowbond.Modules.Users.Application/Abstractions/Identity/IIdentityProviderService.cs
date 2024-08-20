@@ -9,4 +9,6 @@ public interface IIdentityProviderService
     Task<Result> ResetUserPasswordAsync(string identityId, CancellationToken cancellationToken = default);
 
     Task<Result> LogOutUserAsync(string identityId, CancellationToken cancellationToken = default);
+    
+    Task<Result> DeleteUser(string identityId, CancellationToken cancellationToken = default);
 }

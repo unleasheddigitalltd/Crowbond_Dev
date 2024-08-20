@@ -60,4 +60,13 @@ internal sealed class KeyCloakClient(HttpClient httpClient)
 
         return identityId;
     }
+
+    internal async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        HttpResponseMessage httpResponseMessage = await httpClient.DeleteAsync(
+            $"users/{userId}",
+            cancellationToken);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+    }
 }

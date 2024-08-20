@@ -8,6 +8,7 @@ using Crowbond.Common.Infrastructure.Caching;
 using Crowbond.Common.Infrastructure.Clock;
 using Crowbond.Common.Infrastructure.Data;
 using Crowbond.Common.Infrastructure.Outbox;
+using Crowbond.Common.Infrastructure.SoftDelete;
 using Dapper;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
+
+        services.TryAddSingleton<SoftDeleteInterceptor>();
 
         NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
         services.TryAddSingleton(npgsqlDataSource);

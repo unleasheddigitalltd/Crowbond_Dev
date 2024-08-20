@@ -161,8 +161,6 @@ public sealed class Customer : Entity
          bool noDiscountFixedPrice,
          bool detailedInvoice,
          string? customerNotes,
-         bool isHq,
-         bool isActive,
          Guid lastModifiedBy,
          DateTime lastModifiedDate,
          bool showPricesInDeliveryDocket,
@@ -190,8 +188,6 @@ public sealed class Customer : Entity
         NoDiscountFixedPrice = noDiscountFixedPrice;
         DetailedInvoice = detailedInvoice;
         CustomerNotes = customerNotes;
-        IsHq = isHq;
-        IsActive = isActive;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;        
         CustomerSetting.Update(
@@ -199,6 +195,34 @@ public sealed class Customer : Entity
             showPriceInApp,
             showLogoInDeliveryDocket,
             customerLogo );        
+    }
+
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (IsActive)
+        {
+            return Result.Failure(CustomerErrors.AlreadyActivated);
+        }
+
+        IsActive = true;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
+    }
+
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive)
+        {
+            return Result.Failure(CustomerErrors.AlreadyDeactivated);
+        }
+
+        IsActive = false;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
     }
 }
 

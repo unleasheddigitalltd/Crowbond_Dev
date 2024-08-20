@@ -5,7 +5,7 @@ using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Users.UpdateUser;
 using MediatR;
 
-namespace Crowbond.Modules.Users.Presentation.Users;
+namespace Crowbond.Modules.Users.Presentation.SupplierContacts;
 
 internal sealed class SupplierContactUpdatedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<SupplierContactUpdatedIntegrationEvent>

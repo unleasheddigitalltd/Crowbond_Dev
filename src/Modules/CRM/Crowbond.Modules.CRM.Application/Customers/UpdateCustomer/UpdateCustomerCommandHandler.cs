@@ -5,7 +5,6 @@ using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Domain.Reps;
-using MediatR;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 
@@ -64,12 +63,10 @@ internal sealed class UpdateCustomerCommandHandler(
             noDiscountFixedPrice: request.Customer.NoDiscountFixedPrice,
             detailedInvoice: request.Customer.DetailedInvoice,
             customerNotes: request.Customer.CustomerNotes,
-            isHq: request.Customer.IsHq,
             showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
             showPriceInApp: request.Customer.ShowPriceInApp,
             showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket,
             customerLogo: request.Customer.CustomerLogo,
-            isActive: request.Customer.IsActive,
             lastModifiedBy: request.UserName,
             lastModifiedDate: dateTimeProvider.UtcNow);
 

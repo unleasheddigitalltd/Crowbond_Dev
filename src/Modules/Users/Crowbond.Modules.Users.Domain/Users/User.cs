@@ -23,6 +23,8 @@ public sealed class User : Entity
 
     public string IdentityId { get; private set; }
 
+    public bool IsActive { get; private set; }
+
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
     public static User Create(Guid id, string username, string email, string firstName, string lastName, string identityId)
@@ -35,6 +37,7 @@ public sealed class User : Entity
             FirstName = firstName,
             LastName = lastName,
             IdentityId = identityId,
+            IsActive = true,
         };
 
         user.Raise(new UserRegisteredDomainEvent(user.Id));
@@ -58,5 +61,25 @@ public sealed class User : Entity
         LastName = lastName;
 
         Raise(new UserProfileUpdatedDomainEvent(Id, FirstName, LastName));
+    }
+
+    public void Activate(string identityId)
+    {
+        if (IsActive)
+        {
+            return;
+        }
+        IdentityId = identityId;
+        IsActive = true;
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        IsActive = false;
     }
 }
