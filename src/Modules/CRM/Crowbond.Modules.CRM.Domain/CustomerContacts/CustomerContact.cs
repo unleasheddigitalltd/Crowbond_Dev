@@ -133,11 +133,30 @@ public sealed class CustomerContact : Entity
             return Result.Failure(CustomerContactErrors.AlreadyDeactivated);
         }
 
+        if (Primary)
+        {
+            return Result.Failure(CustomerContactErrors.IsPrimary);
+        }
+
         IsActive = false;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 
         Raise(new CustomerContactDeactivatedDomainEvent(Id));
+
+        return Result.Success();
+    }
+
+    public Result ChangePrimary(bool primary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive && primary)
+        {
+            return Result.Failure(CustomerContactErrors.IsNotActive);
+        }
+
+        Primary = primary;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

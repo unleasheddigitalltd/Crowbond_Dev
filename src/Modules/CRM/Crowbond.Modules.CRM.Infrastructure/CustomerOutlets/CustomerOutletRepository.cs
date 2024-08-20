@@ -1,5 +1,4 @@
 ﻿using Crowbond.Modules.CRM.Domain.CustomerOutlets;
-using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +11,9 @@ internal sealed class CustomerOutletRepository(CrmDbContext context) : ICustomer
         return await context.CustomerOutlets.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<CustomerOutlet>> GetForCustomerAsync(
-        Customer customer,
-        CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CustomerOutlet>> GetByCustomerIdAsync(Guid customerId, CancellationToken cancellationToken = default)
     {
-        return await context.CustomerOutlets.Where(c => c.CustomerId == customer.Id).ToListAsync(cancellationToken);
+        return await context.CustomerOutlets.Where(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
     }
 
     public void Insert(CustomerOutlet customerOutlet)
