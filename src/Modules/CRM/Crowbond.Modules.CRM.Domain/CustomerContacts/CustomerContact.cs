@@ -50,7 +50,6 @@ public sealed class CustomerContact : Entity
         string mobile,
         string email,
         string username,
-        bool primary,
         bool receiveInvoice,
         bool receiveOrder,
         bool receivePriceList,
@@ -67,10 +66,10 @@ public sealed class CustomerContact : Entity
             Mobile = mobile,
             Email = email,
             Username = username,
-            Primary = primary,
             ReceiveInvoice = receiveInvoice,
             ReceiveOrder = receiveOrder,
             ReceivePriceList = receivePriceList,
+            Primary = false,
             IsActive = true,
             CreateBy = createBy,
             CreateDate = createDate
@@ -87,11 +86,9 @@ public sealed class CustomerContact : Entity
         string lastName,
         string phoneNumber,
         string mobile,
-        bool primary,
         bool receiveInvoice,
         bool receiveOrder,
         bool receivePriceList,
-        bool isActive,
         Guid lastModifiedBy,
         DateTime lastModifiedDate)
     {
@@ -99,11 +96,9 @@ public sealed class CustomerContact : Entity
         LastName = lastName;
         PhoneNumber = phoneNumber;
         Mobile = mobile;
-        Primary = primary;
         ReceiveInvoice = receiveInvoice;
         ReceiveOrder = receiveOrder;
         ReceivePriceList = receivePriceList;
-        IsActive = isActive;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 

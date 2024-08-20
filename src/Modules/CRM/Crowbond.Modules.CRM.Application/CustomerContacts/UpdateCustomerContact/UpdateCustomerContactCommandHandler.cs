@@ -27,11 +27,9 @@ internal sealed class UpdateCustomerContactCommandHandler(
         lastName: request.CustomerContact.LastName,
         phoneNumber: request.CustomerContact.PhoneNumber,
         mobile: request.CustomerContact.Mobile,
-        primary: request.CustomerContact.Primary,
         receiveInvoice: request.CustomerContact.ReceiveInvoice,
         receiveOrder: request.CustomerContact.ReceiveOrder,
         receivePriceList: request.CustomerContact.ReceivePriceList,
-        isActive: request.CustomerContact.IsActive,
         lastModifiedBy: request.UserId,
         lastModifiedDate: dateTimeProvider.UtcNow);
 

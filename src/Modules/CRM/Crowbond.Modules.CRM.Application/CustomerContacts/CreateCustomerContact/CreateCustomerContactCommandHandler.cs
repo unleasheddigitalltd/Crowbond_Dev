@@ -31,7 +31,6 @@ internal sealed class CreateCustomerContactCommandHandler(
             mobile: request.CustomerContact.Mobile,
             email: request.CustomerContact.Email,
             username: request.CustomerContact.Username,
-            primary: request.CustomerContact.Primary,
             receiveInvoice: request.CustomerContact.ReceiveInvoice,
             receiveOrder: request.CustomerContact.ReceiveOrder,
             receivePriceList: request.CustomerContact.ReceivePriceList,
