@@ -3,7 +3,6 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
-using Crowbond.Modules.CRM.Domain.Suppliers;
 
 namespace Crowbond.Modules.CRM.Application.SupplierContacts.UpdateSupplierContact;
 
@@ -27,8 +26,6 @@ internal sealed class UpdateSupplierContactCommandHandler(
             lastName: request.SupplierContact.LastName,
             phoneNumber: request.SupplierContact.PhoneNumber,
             mobile: request.SupplierContact.Mobile,
-            primary: request.SupplierContact.Primary,
-            isActive: request.SupplierContact.IsActive,
             lastModifiedBy: request.UserId,
             lastModifiedDate: dateTimeProvider.UtcNow);
 

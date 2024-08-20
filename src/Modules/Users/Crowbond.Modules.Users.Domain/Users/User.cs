@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Domain;
-using Crowbond.Modules.Users.Domain.Users;
 
 namespace Crowbond.Modules.Users.Domain.Users;
 

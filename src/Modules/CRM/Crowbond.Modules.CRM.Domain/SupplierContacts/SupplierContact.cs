@@ -44,7 +44,6 @@ public sealed class SupplierContact : Entity
         string? mobile,
         string email,
         string username,
-        bool primary,
         Guid createBy,
         DateTime createDate)
     {
@@ -58,7 +57,7 @@ public sealed class SupplierContact : Entity
             Mobile = mobile,
             Email = email,
             Username = username,
-            Primary = primary,
+            Primary = false,
             IsActive = true,
             CreateBy = createBy,
             CreateDate = createDate
@@ -75,8 +74,6 @@ public sealed class SupplierContact : Entity
         string lastName,
         string phoneNumber,
         string? mobile,
-        bool primary,
-        bool isActive,
         Guid lastModifiedBy,
         DateTime lastModifiedDate)
     {
@@ -84,11 +81,60 @@ public sealed class SupplierContact : Entity
         LastName = lastName;
         PhoneNumber = phoneNumber;
         Mobile = mobile;
-        Primary = primary;
-        IsActive = isActive;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 
         Raise(new SupplierContactUpdatedDomainEvent(Id, FirstName, LastName));
+    }
+
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (IsActive)
+        {
+            return Result.Failure(SupplierContactErrors.AlreadyActivated);
+        }
+
+        IsActive = true;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        Raise(new SupplierContactActivatedDomainEvent(Id));
+
+        return Result.Success();
+    }
+
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive)
+        {
+            return Result.Failure(SupplierContactErrors.AlreadyDeactivated);
+        }
+
+        if (Primary)
+        {
+            return Result.Failure(SupplierContactErrors.IsPrimary);
+        }
+
+        IsActive = false;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        Raise(new SupplierContactDeactivatedDomainEvent(Id));
+
+        return Result.Success();
+    }
+
+    public Result ChangePrimary(bool primary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (!IsActive && primary)
+        {
+            return Result.Failure(SupplierContactErrors.IsNotActive);
+        }
+
+        Primary = primary;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
     }
 }

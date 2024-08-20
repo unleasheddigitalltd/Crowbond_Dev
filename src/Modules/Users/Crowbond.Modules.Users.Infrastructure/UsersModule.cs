@@ -56,6 +56,9 @@ public static class UsersModule
 
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactActivatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactDeactivatedIntegrationEvent>>();
+
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactDeactivatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
