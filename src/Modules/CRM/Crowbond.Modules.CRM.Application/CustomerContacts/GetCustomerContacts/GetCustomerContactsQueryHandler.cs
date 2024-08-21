@@ -25,7 +25,8 @@ internal sealed class GetCustomerContactsQueryHandler(IDbConnectionFactory dbCon
                  "primary" AS {nameof(CustomerContactResponse.Primary)},
                  is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts
-             WHERE customer_id = @CustomerId;
+             WHERE customer_id = @CustomerId
+             ORDER BY "primary" DESC, is_active DESC;
              """;
 
         List<CustomerContactResponse> customerContacts = (await connection.QueryAsync<CustomerContactResponse>(sql, request)).AsList();

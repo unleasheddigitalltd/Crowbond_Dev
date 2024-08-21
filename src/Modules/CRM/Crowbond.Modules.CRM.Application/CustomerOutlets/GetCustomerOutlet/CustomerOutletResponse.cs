@@ -9,4 +9,5 @@ public sealed record CustomerOutletResponse(
     string TownCity,
     string County,
     string? Country,
-    string PostalCode);
+    string PostalCode,
+    bool IsActive);
