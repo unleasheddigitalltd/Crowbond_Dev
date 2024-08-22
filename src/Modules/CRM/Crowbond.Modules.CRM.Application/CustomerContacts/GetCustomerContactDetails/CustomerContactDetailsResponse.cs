@@ -10,7 +10,7 @@ public sealed record CustomerContactDetailsResponse
     public string Mobile { get; }
     public string Username { get; }
     public string Email { get; }
-    public bool Primary { get; }
+    public bool IsPrimary { get; }
     public bool ReceiveInvoice { get; }
     public bool ReceiveOrder { get; }
     public bool ReceivePriceList { get; }

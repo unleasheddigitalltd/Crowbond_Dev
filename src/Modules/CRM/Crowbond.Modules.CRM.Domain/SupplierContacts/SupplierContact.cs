@@ -24,7 +24,7 @@ public sealed class SupplierContact : Entity
 
     public string Email { get; private set; }
 
-    public bool Primary { get; private set; }
+    public bool IsPrimary { get; private set; }
 
     public bool IsActive { get; private set; }
 
@@ -57,7 +57,7 @@ public sealed class SupplierContact : Entity
             Mobile = mobile,
             Email = email,
             Username = username,
-            Primary = false,
+            IsPrimary = false,
             IsActive = true,
             CreateBy = createBy,
             CreateDate = createDate
@@ -110,7 +110,7 @@ public sealed class SupplierContact : Entity
             return Result.Failure(SupplierContactErrors.AlreadyDeactivated);
         }
 
-        if (Primary)
+        if (IsPrimary)
         {
             return Result.Failure(SupplierContactErrors.IsPrimary);
         }
@@ -124,14 +124,14 @@ public sealed class SupplierContact : Entity
         return Result.Success();
     }
 
-    public Result ChangePrimary(bool primary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result ChangePrimary(bool isPrimary, Guid lastModifiedBy, DateTime lastModifiedDate)
     {
-        if (!IsActive && primary)
+        if (!IsActive && isPrimary)
         {
             return Result.Failure(SupplierContactErrors.IsNotActive);
         }
 
-        Primary = primary;
+        IsPrimary = isPrimary;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 

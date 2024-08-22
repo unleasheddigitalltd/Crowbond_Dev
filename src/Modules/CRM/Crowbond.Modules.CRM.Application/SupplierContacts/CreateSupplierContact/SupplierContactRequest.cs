@@ -6,5 +6,4 @@ public sealed record SupplierContactRequest(
     string PhoneNumber,    
     string? Mobile,    
     string Username,    
-    string Email,    
-    bool Primary);
+    string Email);

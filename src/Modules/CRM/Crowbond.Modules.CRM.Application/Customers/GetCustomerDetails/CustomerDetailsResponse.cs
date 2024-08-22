@@ -86,7 +86,7 @@ public sealed record CustomerContactResponse(
     string LastName,
     string PhoneNumber,
     string Email,
-    bool Primary,
+    bool IsPrimary,
     bool IsActive);
 
 public sealed record CustomerOutletResponse(
@@ -98,5 +98,6 @@ public sealed record CustomerOutletResponse(
     string TownCity,    
     string County,  
     string? Country,
-    string PostalCode);
+    string PostalCode,
+    bool IsActive);
 

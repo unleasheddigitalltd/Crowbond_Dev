@@ -26,7 +26,7 @@ internal sealed class GetSupplierContactDetailsQueryHandler(IDbConnectionFactory
                  mobile AS {nameof(SupplierContactDetailsResponse.Mobile)},
                  username AS {nameof(SupplierContactDetailsResponse.Username)},
                  email AS {nameof(SupplierContactDetailsResponse.Email)},
-                 "primary" AS {nameof(SupplierContactDetailsResponse.Primary)},
+                 is_primary AS {nameof(SupplierContactDetailsResponse.Primary)},
                  is_active AS {nameof(SupplierContactDetailsResponse.IsActive)}
              FROM crm.supplier_contacts
              WHERE id = @SupplierContactId
