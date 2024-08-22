@@ -11,3 +11,4 @@ public sealed record SupplierRequest(
      string PostalCode,
      PaymentTerm PaymentTerms,
      string? SupplierNotes);
+

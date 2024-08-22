@@ -21,6 +21,7 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
         {
             "supplierName" => nameof(Supplier.SupplierName),
             "accountNumber" => nameof(Supplier.AccountNumber),
+            "isActive" => nameof(Supplier.IsActive),
             _ => nameof(Supplier.AccountNumber) // Default sorting
         };
 
@@ -36,6 +37,7 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
                     s.county AS {nameof(Supplier.County)},
                     s.country AS {nameof(Supplier.Country)},
                     s.postal_code AS {nameof(Supplier.PostalCode)},
+                    s.is_active AS {nameof(Supplier.IsActive)},
                     t.first_name AS {nameof(Supplier.FirstName)},
                     t.last_name AS {nameof(Supplier.LastName)},
                     t.phone_number AS {nameof(Supplier.PhoneNumber)},

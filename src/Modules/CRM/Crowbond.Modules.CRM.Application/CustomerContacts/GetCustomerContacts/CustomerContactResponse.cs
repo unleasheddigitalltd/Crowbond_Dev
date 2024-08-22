@@ -8,7 +8,7 @@ public sealed record CustomerContactResponse
     public string LastName { get; }
     public string PhoneNumber { get; }
     public string Email { get; }
-    public bool Primary { get; }
+    public bool IsPrimary { get; }
     public bool IsActive { get; }
 }
 

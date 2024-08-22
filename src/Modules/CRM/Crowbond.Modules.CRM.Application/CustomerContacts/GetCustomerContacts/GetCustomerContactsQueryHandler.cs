@@ -22,10 +22,11 @@ internal sealed class GetCustomerContactsQueryHandler(IDbConnectionFactory dbCon
                  last_name AS {nameof(CustomerContactResponse.LastName)},
                  phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
                  email AS {nameof(CustomerContactResponse.Email)},
-                 "primary" AS {nameof(CustomerContactResponse.Primary)},
+                 is_primary AS {nameof(CustomerContactResponse.IsPrimary)},
                  is_active AS {nameof(CustomerContactResponse.IsActive)}
              FROM crm.customer_contacts
-             WHERE customer_id = @CustomerId;
+             WHERE customer_id = @CustomerId
+             ORDER BY is_primary DESC, is_active DESC;
              """;
 
         List<CustomerContactResponse> customerContacts = (await connection.QueryAsync<CustomerContactResponse>(sql, request)).AsList();

@@ -31,7 +31,6 @@ internal sealed class CreateSupplierContactCommandHandler(
             mobile: request.SupplierContact.Mobile,
             email: request.SupplierContact.Email,
             username: request.SupplierContact.Username,
-            primary: request.SupplierContact.Primary,
             createBy: request.UserId,
             createDate: dateTimeProvider.UtcNow);
 

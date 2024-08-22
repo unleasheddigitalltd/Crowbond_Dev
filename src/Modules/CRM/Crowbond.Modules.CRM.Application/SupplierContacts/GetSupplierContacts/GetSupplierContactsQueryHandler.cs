@@ -16,16 +16,16 @@ internal sealed class GetSupplierContactsQueryHandler(IDbConnectionFactory dbCon
         const string sql =
             $"""
              SELECT
-                 t.id AS {nameof(SupplierContactResponse.Id)},
-                 t.supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
-                 t.first_name AS {nameof(SupplierContactResponse.FirstName)},
-                 t.last_name AS {nameof(SupplierContactResponse.LastName)},
-                 t.phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
-                 t.primary AS {nameof(SupplierContactResponse.Primary)},
-                 t.is_active AS {nameof(SupplierContactResponse.IsActive)}
-             FROM crm.supplier_contacts t
-             INNER JOIN crm.suppliers c ON c.id = t.supplier_id
-             WHERE c.id = @SupplierId;
+                 id AS {nameof(SupplierContactResponse.Id)},
+                 supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
+                 first_name AS {nameof(SupplierContactResponse.FirstName)},
+                 last_name AS {nameof(SupplierContactResponse.LastName)},
+                 phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
+                 is_primary AS {nameof(SupplierContactResponse.IsPrimary)},
+                 is_active AS {nameof(SupplierContactResponse.IsActive)}
+             FROM crm.supplier_contacts
+             WHERE supplier_id = @SupplierId             
+             ORDER BY is_primary DESC, is_active DESC;
              """;
 
         List<SupplierContactResponse> supplierContacts = (await connection.QueryAsync<SupplierContactResponse>(sql, request)).AsList();

@@ -27,6 +27,7 @@ internal sealed class GetSupplierQueryHandler(IDbConnectionFactory dbConnectionF
                      s.county AS {nameof(SupplierResponse.County)},
                      s.country AS {nameof(SupplierResponse.Country)},
                      s.postal_code AS {nameof(SupplierResponse.PostalCode)},
+                     s.is_active AS {nameof(SupplierResponse.IsActive)},
                      t.first_name AS {nameof(SupplierResponse.FirstName)},
                      t.last_name AS {nameof(SupplierResponse.LastName)},
                      t.phone_number AS {nameof(SupplierResponse.PhoneNumber)},

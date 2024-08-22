@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.Suppliers.CreateSupplier;
 
-public sealed record CreateSupplierCommand(SupplierRequest Supplier) : ICommand<Guid>;
+public sealed record CreateSupplierCommand(Guid UserId, SupplierRequest Supplier) : ICommand<Guid>;

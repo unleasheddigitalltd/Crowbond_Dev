@@ -24,7 +24,7 @@ public sealed class CustomerContact : Entity
 
     public string Email { get; private set; }
 
-    public bool Primary { get; private set; }
+    public bool IsPrimary { get; private set; }
 
     public bool ReceiveInvoice { get; private set; }
 
@@ -50,7 +50,6 @@ public sealed class CustomerContact : Entity
         string mobile,
         string email,
         string username,
-        bool primary,
         bool receiveInvoice,
         bool receiveOrder,
         bool receivePriceList,
@@ -67,10 +66,10 @@ public sealed class CustomerContact : Entity
             Mobile = mobile,
             Email = email,
             Username = username,
-            Primary = primary,
             ReceiveInvoice = receiveInvoice,
             ReceiveOrder = receiveOrder,
             ReceivePriceList = receivePriceList,
+            IsPrimary = false,
             IsActive = true,
             CreateBy = createBy,
             CreateDate = createDate
@@ -87,11 +86,9 @@ public sealed class CustomerContact : Entity
         string lastName,
         string phoneNumber,
         string mobile,
-        bool primary,
         bool receiveInvoice,
         bool receiveOrder,
         bool receivePriceList,
-        bool isActive,
         Guid lastModifiedBy,
         DateTime lastModifiedDate)
     {
@@ -99,11 +96,9 @@ public sealed class CustomerContact : Entity
         LastName = lastName;
         PhoneNumber = phoneNumber;
         Mobile = mobile;
-        Primary = primary;
         ReceiveInvoice = receiveInvoice;
         ReceiveOrder = receiveOrder;
         ReceivePriceList = receivePriceList;
-        IsActive = isActive;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 
@@ -133,7 +128,7 @@ public sealed class CustomerContact : Entity
             return Result.Failure(CustomerContactErrors.AlreadyDeactivated);
         }
 
-        if (Primary)
+        if (IsPrimary)
         {
             return Result.Failure(CustomerContactErrors.IsPrimary);
         }
@@ -147,14 +142,14 @@ public sealed class CustomerContact : Entity
         return Result.Success();
     }
 
-    public Result ChangePrimary(bool primary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result ChangePrimary(bool isPrimary, Guid lastModifiedBy, DateTime lastModifiedDate)
     {
-        if (!IsActive && primary)
+        if (!IsActive && isPrimary)
         {
             return Result.Failure(CustomerContactErrors.IsNotActive);
         }
 
-        Primary = primary;
+        IsPrimary = isPrimary;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 

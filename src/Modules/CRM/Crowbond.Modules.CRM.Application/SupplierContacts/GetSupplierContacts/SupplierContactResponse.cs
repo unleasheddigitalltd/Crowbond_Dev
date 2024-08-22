@@ -6,5 +6,5 @@ public sealed record SupplierContactResponse(
     string FirstName,
     string LastName,
     string PhoneNumber,
-    bool Primary,
+    bool IsPrimary,
     bool IsActive);

@@ -25,7 +25,7 @@ internal sealed class GetCustomerContactDetailsQueryHandler(IDbConnectionFactory
                  mobile AS {nameof(CustomerContactDetailsResponse.Mobile)}, 
                  username AS {nameof(CustomerContactDetailsResponse.Username)}, 
                  email AS {nameof(CustomerContactDetailsResponse.Email)},
-                 "primary" AS {nameof(CustomerContactDetailsResponse.Primary)},
+                 is_primary AS {nameof(CustomerContactDetailsResponse.IsPrimary)},
                  receive_invoice AS {nameof(CustomerContactDetailsResponse.ReceiveInvoice)},
                  receive_order AS {nameof(CustomerContactDetailsResponse.ReceiveOrder)},
                  receive_price_list AS {nameof(CustomerContactDetailsResponse.ReceivePriceList)},

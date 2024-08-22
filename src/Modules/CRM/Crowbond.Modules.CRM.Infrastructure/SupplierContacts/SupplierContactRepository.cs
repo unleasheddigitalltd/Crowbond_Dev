@@ -12,9 +12,9 @@ internal sealed class SupplierContactRepository(CrmDbContext context) : ISupplie
         return await context.SupplierContacts.SingleOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<SupplierContact>> GetForCustomerAsync(Supplier supplier, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SupplierContact>> GetBySupplierIdAsync(Guid supplierId, CancellationToken cancellationToken = default)
     {
-        return await context.SupplierContacts.Where(s => s.SupplierId == supplier.Id).ToListAsync(cancellationToken);
+        return await context.SupplierContacts.Where(s => s.SupplierId == supplierId).ToListAsync(cancellationToken);
     }
 
     public void Insert(SupplierContact contact)

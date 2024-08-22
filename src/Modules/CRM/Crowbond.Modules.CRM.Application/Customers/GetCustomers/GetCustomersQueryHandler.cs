@@ -42,7 +42,7 @@ internal sealed class GetCustomersQueryHandler(IDbConnectionFactory dbConnection
                     t.phone_number AS {nameof(Customer.PhoneNumber)},
                     t.email AS {nameof(Customer.Email)},
                     c.is_active AS {nameof(Customer.IsActive)},
-                    ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY t.primary DESC) AS FilterRowNum
+                    ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY t.is_primary DESC) AS FilterRowNum
                 FROM crm.customers c
                 LEFT JOIN crm.customer_contacts t ON c.id = t.customer_id
                 WHERE                    

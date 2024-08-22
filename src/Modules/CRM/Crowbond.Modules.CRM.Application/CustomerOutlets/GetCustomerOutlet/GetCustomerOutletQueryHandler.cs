@@ -25,7 +25,8 @@ internal sealed class GetCustomerOutletQueryHandler(IDbConnectionFactory dbConne
                  town_city AS {nameof(CustomerOutletResponse.TownCity)},
                  county AS {nameof(CustomerOutletResponse.County)},
                  country AS {nameof(CustomerOutletResponse.Country)},
-                 postal_code AS {nameof(CustomerOutletResponse.PostalCode)}
+                 postal_code AS {nameof(CustomerOutletResponse.PostalCode)},
+                 is_active AS {nameof(CustomerOutletResponse.IsActive)}
              FROM crm.customer_outlets
              WHERE id = @CustomerOutletId
              """;

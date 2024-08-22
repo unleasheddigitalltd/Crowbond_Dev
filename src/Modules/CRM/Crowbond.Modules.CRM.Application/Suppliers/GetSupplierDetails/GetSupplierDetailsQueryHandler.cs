@@ -27,21 +27,22 @@ internal sealed class GetSupplierDetailsQueryHandler(IDbConnectionFactory dbConn
                  country AS {nameof(SupplierDetailsResponse.Country)},
                  postal_code AS {nameof(SupplierDetailsResponse.PostalCode)},
                  payment_terms AS {nameof(SupplierDetailsResponse.PaymentTerms)},
-                 supplier_notes AS {nameof(SupplierDetailsResponse.SupplierNotes)}                 
+                 supplier_notes AS {nameof(SupplierDetailsResponse.SupplierNotes)},
+                 is_active AS {nameof(SupplierDetailsResponse.IsActive)}
              FROM crm.suppliers
              WHERE id = @SupplierId;
 
              SELECT
-                 t.id AS {nameof(SupplierContactResponse.Id)},
-                 t.supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
-                 t.first_name AS {nameof(SupplierContactResponse.FirstName)},
-                 t.last_name AS {nameof(SupplierContactResponse.LastName)},
-                 t.phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
-                 t.primary AS {nameof(SupplierContactResponse.Primary)},
-                 t.is_active AS {nameof(SupplierContactResponse.IsActive)}
-             FROM crm.supplier_contacts t
-             INNER JOIN crm.suppliers s ON s.id = t.supplier_id
-             WHERE s.id = @SupplierId;
+                 id AS {nameof(SupplierContactResponse.Id)},
+                 supplier_id AS {nameof(SupplierContactResponse.SupplierId)},
+                 first_name AS {nameof(SupplierContactResponse.FirstName)},
+                 last_name AS {nameof(SupplierContactResponse.LastName)},
+                 phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
+                 primary AS {nameof(SupplierContactResponse.Primary)},
+                 is_active AS {nameof(SupplierContactResponse.IsActive)}
+             FROM crm.supplier_contacts
+             WHERE supplier_id = @SupplierId
+             ORDER BY is_primary DESC, is_active DESC;
              """;
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

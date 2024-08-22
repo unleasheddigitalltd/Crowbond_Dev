@@ -1,11 +1,15 @@
-﻿using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Suppliers;
 
 namespace Crowbond.Modules.CRM.Application.Suppliers.UpdateSupplier;
 
-internal sealed class UpdateSupplierCommandHandler(ISupplierRepository supplierRepository, IUnitOfWork unitOfWork)
+internal sealed class UpdateSupplierCommandHandler(
+    ISupplierRepository supplierRepository,
+    IDateTimeProvider dateTimeProvider,
+    IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateSupplierCommand>
 {
     public async Task<Result> Handle(UpdateSupplierCommand request, CancellationToken cancellationToken)
@@ -26,8 +30,9 @@ internal sealed class UpdateSupplierCommandHandler(ISupplierRepository supplierR
             country: request.Supplier.Country,
             postalcode: request.Supplier.PostalCode,
             suppliernotes: request.Supplier.SupplierNotes,
-            paymentterms: request.Supplier.PaymentTerms
-        );
+            paymentterms: request.Supplier.PaymentTerms,
+            lastModifiedBy: request.UserId,
+            lastModifiedDate: dateTimeProvider.UtcNow);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

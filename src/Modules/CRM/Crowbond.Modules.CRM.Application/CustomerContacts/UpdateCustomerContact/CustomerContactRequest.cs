@@ -7,8 +7,6 @@ public sealed record CustomerContactRequest(
     string Mobile,
     string Username,
     string Email,
-    bool Primary,
-    bool IsActive,
     bool ReceiveInvoice,
     bool ReceiveOrder,
     bool ReceivePriceList);

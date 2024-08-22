@@ -4,6 +4,4 @@ public sealed record SupplierContactRequest(
     string FirstName,
     string LastName,
     string PhoneNumber,
-    string? Mobile,
-    bool Primary,
-    bool IsActive);
+    string? Mobile);

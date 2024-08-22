@@ -50,7 +50,7 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
                     cs.show_price_in_app AS {nameof(CustomerDetailsResponse.ShowPriceInApp)}, 
                     cs.show_logo_in_delivery_docket AS {nameof(CustomerDetailsResponse.ShowLogoInDeliveryDocket)}, 
                     cs.customer_logo AS {nameof(CustomerDetailsResponse.CustomerLogo)},
-                    ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY t.primary DESC) AS FilterRowNum
+                    ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY t.is_primary DESC) AS FilterRowNum
                 FROM crm.customers c
                 INNER JOIN crm.customer_settings cs ON c.id = cs.customer_id
                 LEFT JOIN crm.customer_contacts t ON c.id = t.customer_id
@@ -59,31 +59,32 @@ internal sealed class GetCustomerDetailsQueryHandler(IDbConnectionFactory dbConn
              SELECT * FROM FilteredCustomers  WHERE FilterRowNum = 1;
 
              SELECT
-                 t.id AS {nameof(CustomerContactResponse.Id)},
-                 t.customer_id AS {nameof(CustomerContactResponse.CustomerId)},
-                 t.first_name AS {nameof(CustomerContactResponse.FirstName)},
-                 t.last_name AS {nameof(CustomerContactResponse.LastName)},
-                 t.phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
-                 t.email AS {nameof(CustomerContactResponse.Email)},
-                 t.primary AS {nameof(CustomerContactResponse.Primary)},
-                 t.is_active AS {nameof(CustomerContactResponse.IsActive)}
-             FROM crm.customer_contacts t
-             INNER JOIN crm.customers c ON c.id = t.customer_id
-             WHERE c.id = @CustomerId;
+                 id AS {nameof(CustomerContactResponse.Id)},
+                 customer_id AS {nameof(CustomerContactResponse.CustomerId)},
+                 first_name AS {nameof(CustomerContactResponse.FirstName)},
+                 last_name AS {nameof(CustomerContactResponse.LastName)},
+                 phone_number AS {nameof(CustomerContactResponse.PhoneNumber)},
+                 email AS {nameof(CustomerContactResponse.Email)},
+                 is_primary AS {nameof(CustomerContactResponse.IsPrimary)},
+                 is_active AS {nameof(CustomerContactResponse.IsActive)}
+             FROM crm.customer_contacts
+             WHERE customer_id = @CustomerId
+             ORDER BY is_primary DESC, is_active DESC;
 
              SELECT
-                 s.id AS {nameof(CustomerOutletResponse.Id)},
-                 s.customer_id AS {nameof(CustomerOutletResponse.CustomerId)},
-                 s.location_name AS {nameof(CustomerOutletResponse.LocationName)},
-                 s.address_line1 AS {nameof(CustomerOutletResponse.AddressLine1)},
-                 s.address_line2 AS {nameof(CustomerOutletResponse.AddressLine2)},
-                 s.town_city AS {nameof(CustomerOutletResponse.TownCity)},
-                 s.county AS {nameof(CustomerOutletResponse.County)},
-                 s.country AS {nameof(CustomerOutletResponse.Country)},
-                 s.postal_code AS {nameof(CustomerOutletResponse.PostalCode)}         
-             FROM crm.customer_outlets s
-             INNER JOIN crm.customers c ON c.id = s.customer_id
-             WHERE c.id = @CustomerId;
+                 id AS {nameof(CustomerOutletResponse.Id)},
+                 customer_id AS {nameof(CustomerOutletResponse.CustomerId)},
+                 location_name AS {nameof(CustomerOutletResponse.LocationName)},
+                 address_line1 AS {nameof(CustomerOutletResponse.AddressLine1)},
+                 address_line2 AS {nameof(CustomerOutletResponse.AddressLine2)},
+                 town_city AS {nameof(CustomerOutletResponse.TownCity)},
+                 county AS {nameof(CustomerOutletResponse.County)},
+                 country AS {nameof(CustomerOutletResponse.Country)},
+                 postal_code AS {nameof(CustomerOutletResponse.PostalCode)}, 
+                 is_active AS {nameof(CustomerOutletResponse.IsActive)}      
+             FROM crm.customer_outlets
+             WHERE customer_id = @CustomerId
+             ORDER BY is_active DESC;
              """;
 
 
