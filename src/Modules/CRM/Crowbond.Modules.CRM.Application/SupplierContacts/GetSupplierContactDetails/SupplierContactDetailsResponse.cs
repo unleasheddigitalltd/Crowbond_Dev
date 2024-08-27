@@ -9,5 +9,5 @@ public sealed record SupplierContactDetailsResponse(
     string? Mobile,
     string Username,
     string Email,
-    bool Primary,
+    bool IsPrimary,
     bool IsActive);

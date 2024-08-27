@@ -38,7 +38,7 @@ internal sealed class GetSupplierDetailsQueryHandler(IDbConnectionFactory dbConn
                  first_name AS {nameof(SupplierContactResponse.FirstName)},
                  last_name AS {nameof(SupplierContactResponse.LastName)},
                  phone_number AS {nameof(SupplierContactResponse.PhoneNumber)},
-                 primary AS {nameof(SupplierContactResponse.Primary)},
+                 is_primary AS {nameof(SupplierContactResponse.Primary)},
                  is_active AS {nameof(SupplierContactResponse.IsActive)}
              FROM crm.supplier_contacts
              WHERE supplier_id = @SupplierId

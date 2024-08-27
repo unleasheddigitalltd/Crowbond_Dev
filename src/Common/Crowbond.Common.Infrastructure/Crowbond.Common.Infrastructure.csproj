@@ -5,6 +5,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
     <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
+    <PackageReference Include="FluentFTP" Version="51.0.0" />
     <PackageReference Include="MassTransit" Version="8.2.1" />
     <PackageReference Include="MassTransit.Redis" Version="8.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
@@ -15,6 +16,10 @@
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\Crowbond.Common.Application\Crowbond.Common.Application.csproj" />
   </ItemGroup>

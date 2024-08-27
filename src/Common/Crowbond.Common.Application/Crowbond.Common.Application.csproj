@@ -8,6 +8,11 @@
     <PackageReference Include="Serilog" Version="3.1.1" />
   </ItemGroup>
 
+
+  <ItemGroup>
+  	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\Crowbond.Common.Domain\Crowbond.Common.Domain.csproj" />
   </ItemGroup>

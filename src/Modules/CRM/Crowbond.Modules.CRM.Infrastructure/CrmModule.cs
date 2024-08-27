@@ -42,6 +42,7 @@ using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.CRM.Infrastructure.PublicApi;
+using Crowbond.Modules.CRM.Infrastructure.FileStorage;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -87,13 +88,15 @@ public static class CrmModule
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
 
-
         services.AddScoped<ISupplierApi, SupplierApi>();
         services.AddScoped<ISupplierProductApi, SupplierProductsApi>();
+
+        services.AddScoped<ICustomerFileAccess, CustomerFileAccess>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<CrmDbContext>());
 
         services.Configure<OutboxOptions>(configuration.GetSection("CRM:Outbox"));
+        services.Configure<FileStorageOptions>(configuration.GetSection("CRM:FileSettings"));
 
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 

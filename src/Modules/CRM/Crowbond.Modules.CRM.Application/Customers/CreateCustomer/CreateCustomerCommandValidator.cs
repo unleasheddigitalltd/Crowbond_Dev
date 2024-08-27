@@ -17,7 +17,6 @@ internal sealed class CreateCustomerCommandValidator : AbstractValidator<CreateC
         RuleFor(c => c.Customer.DeliveryMinOrderValue).PrecisionScale(10, 2, false);
         RuleFor(c => c.Customer.DeliveryCharge).PrecisionScale(10, 2, false);
         RuleFor(c => c.Customer.CustomerNotes).MaximumLength(500);
-        RuleFor(c => c.Customer.CustomerLogo).MaximumLength(100);
     }
 }
 

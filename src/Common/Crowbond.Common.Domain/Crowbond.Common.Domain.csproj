@@ -5,4 +5,8 @@
     <PackageReference Include="Ulid" Version="1.3.3" />
   </ItemGroup>
 
+  <ItemGroup>
+  	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+	
 </Project>

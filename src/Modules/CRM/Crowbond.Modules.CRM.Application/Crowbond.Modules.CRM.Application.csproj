@@ -4,7 +4,4 @@
     <ProjectReference Include="..\Crowbond.Modules.CRM.Domain\Crowbond.Modules.CRM.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Elasticsearch.Net" Version="7.17.5" />
-  </ItemGroup>
 </Project>
