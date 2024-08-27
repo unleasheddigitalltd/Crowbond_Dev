@@ -57,7 +57,7 @@ public sealed class Customer : Entity
     public bool IsHq { get; private set; }
 
     public bool IsActive { get; private set; }
-    
+
     public CustomerSetting CustomerSetting { get; private set; }
 
     public Guid CreateBy { get; private set; }
@@ -95,7 +95,6 @@ public sealed class Customer : Entity
          bool showPricesInDeliveryDocket,
          bool showPriceInApp,
          ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-         string? customerLogo,
          Guid createBy,
          DateTime createDate)
     {
@@ -133,8 +132,7 @@ public sealed class Customer : Entity
                 customerId: customerId,
                 showPricesInDeliveryDocket: showPricesInDeliveryDocket,
                 showPriceInApp: showPriceInApp,
-                showLogoInDeliveryDocket: showLogoInDeliveryDocket,
-                customerLogo: customerLogo)
+                showLogoInDeliveryDocket: showLogoInDeliveryDocket)
         };
 
         return customer;
@@ -165,8 +163,7 @@ public sealed class Customer : Entity
          DateTime lastModifiedDate,
          bool showPricesInDeliveryDocket,
          bool showPriceInApp,
-         ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-         string? customerLogo)
+         ShowLogoInDeliveryDocket showLogoInDeliveryDocket)
     {
         BusinessName = businessName;
         BillingAddressLine1 = billingAddressLine1;
@@ -189,12 +186,11 @@ public sealed class Customer : Entity
         DetailedInvoice = detailedInvoice;
         CustomerNotes = customerNotes;
         LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;        
+        LastModifiedDate = lastModifiedDate;
         CustomerSetting.Update(
             showPricesInDeliveryDocket,
             showPriceInApp,
-            showLogoInDeliveryDocket,
-            customerLogo );        
+            showLogoInDeliveryDocket);
     }
 
     public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
@@ -223,6 +219,20 @@ public sealed class Customer : Entity
         LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
+    }
+
+    public void SetLogo(string customerLogo, Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        CustomerSetting.SetLogo(customerLogo);
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+    }
+
+    public void RemoveLogo(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        CustomerSetting.RemoveLogo();
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
     }
 }
 

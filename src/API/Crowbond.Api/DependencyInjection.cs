@@ -71,5 +71,8 @@ public static class DependencyInjection
 
         services.AddCors();
         services.ConfigureOptions<CorsOptionsSetup>();
+
+        services.AddAntiforgery();
+        services.ConfigureOptions<AntiForgeryOptionsSetup>();
     }
 }

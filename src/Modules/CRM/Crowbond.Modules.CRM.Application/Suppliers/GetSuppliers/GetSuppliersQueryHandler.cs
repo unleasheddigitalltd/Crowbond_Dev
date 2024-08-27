@@ -42,7 +42,7 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
                     t.last_name AS {nameof(Supplier.LastName)},
                     t.phone_number AS {nameof(Supplier.PhoneNumber)},
                     t.email AS {nameof(Supplier.Email)},
-                    ROW_NUMBER() OVER (PARTITION BY s.id ORDER BY t.primary DESC) AS FilterRowNum
+                    ROW_NUMBER() OVER (PARTITION BY s.id ORDER BY t.is_primary DESC) AS FilterRowNum
                 FROM crm.suppliers s
                 LEFT JOIN crm.supplier_contacts t ON s.id = t.supplier_id
                 WHERE

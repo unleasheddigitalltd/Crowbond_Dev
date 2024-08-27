@@ -14,6 +14,5 @@ internal sealed class UpdateCustomerCommandValidator : AbstractValidator<UpdateC
         RuleFor(c => c.Customer.BillingCountry).MaximumLength(100);
         RuleFor(c => c.Customer.BillingPostalCode).NotEmpty().MaximumLength(16);
         RuleFor(c => c.Customer.CustomerNotes).MaximumLength(500);
-        RuleFor(c => c.Customer.CustomerLogo).MaximumLength(100);
     }
 }

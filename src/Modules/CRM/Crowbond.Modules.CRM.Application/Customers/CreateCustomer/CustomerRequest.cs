@@ -24,5 +24,4 @@ public sealed record CustomerRequest(
     bool IsHq,
     bool ShowPricesInDeliveryDocket,
     bool ShowPriceInApp,
-    int ShowLogoInDeliveryDocket,
-    string? CustomerLogo);
+    int ShowLogoInDeliveryDocket);

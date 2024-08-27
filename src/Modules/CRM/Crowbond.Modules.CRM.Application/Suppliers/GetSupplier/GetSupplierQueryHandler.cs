@@ -32,7 +32,7 @@ internal sealed class GetSupplierQueryHandler(IDbConnectionFactory dbConnectionF
                      t.last_name AS {nameof(SupplierResponse.LastName)},
                      t.phone_number AS {nameof(SupplierResponse.PhoneNumber)},
                      t.email AS {nameof(SupplierResponse.Email)},
-                     ROW_NUMBER() OVER (PARTITION BY s.id ORDER BY t.primary DESC) AS FilterRowNum
+                     ROW_NUMBER() OVER (PARTITION BY s.id ORDER BY t.is_primary DESC) AS FilterRowNum
                  FROM crm.suppliers s
                  LEFT JOIN crm.supplier_contacts t ON s.id = t.supplier_id
                  WHERE s.id = @SupplierId

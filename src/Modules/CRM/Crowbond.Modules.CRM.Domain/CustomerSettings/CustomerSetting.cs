@@ -20,12 +20,11 @@ public sealed class CustomerSetting : Entity
 
     public string? CustomerLogo { get; private set; }
 
-    public static CustomerSetting Create(
+    internal static CustomerSetting Create(
         Guid customerId,
         bool showPricesInDeliveryDocket,
         bool showPriceInApp,
-        ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-        string? customerLogo)
+        ShowLogoInDeliveryDocket showLogoInDeliveryDocket)
     {
         var customerSetting = new CustomerSetting
         {
@@ -33,22 +32,30 @@ public sealed class CustomerSetting : Entity
             CustomerId = customerId,
             ShowPricesInDeliveryDocket = showPricesInDeliveryDocket,
             ShowPriceInApp = showPriceInApp,
-            ShowLogoInDeliveryDocket = showLogoInDeliveryDocket,
-            CustomerLogo = customerLogo
+            ShowLogoInDeliveryDocket = showLogoInDeliveryDocket
         };
 
         return customerSetting;
     }
 
-    public void Update(
+    internal void Update(
         bool showPricesInDeliveryDocket,
         bool showPriceInApp,
-        ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-        string? customerLogo)
+        ShowLogoInDeliveryDocket showLogoInDeliveryDocket)
     {
         ShowPricesInDeliveryDocket = showPricesInDeliveryDocket;
         ShowPriceInApp = showPriceInApp;
         ShowLogoInDeliveryDocket = showLogoInDeliveryDocket;
+    }
+
+    internal void SetLogo(string customerLogo)
+    {
         CustomerLogo = customerLogo;
     }
+
+    internal void RemoveLogo()
+    {
+        CustomerLogo = null;
+    }
+
 }

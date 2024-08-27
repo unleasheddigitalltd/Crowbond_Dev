@@ -28,5 +28,4 @@ public sealed record CustomerRequest(
      bool ShowPricesInDeliveryDocket,
      bool ShowPriceInApp,
      ShowLogoInDeliveryDocket ShowLogoInDeliveryDocket,
-     string? CustomerLogo,
      bool IsActive);

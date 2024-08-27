@@ -66,7 +66,6 @@ internal sealed class UpdateCustomerCommandHandler(
             showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
             showPriceInApp: request.Customer.ShowPriceInApp,
             showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket,
-            customerLogo: request.Customer.CustomerLogo,
             lastModifiedBy: request.UserName,
             lastModifiedDate: dateTimeProvider.UtcNow);
 

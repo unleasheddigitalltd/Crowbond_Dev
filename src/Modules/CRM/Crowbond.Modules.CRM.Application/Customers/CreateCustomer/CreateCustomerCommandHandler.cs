@@ -72,7 +72,6 @@ internal sealed class CreateCustomerCommandHandler(
              showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
              showPriceInApp: request.Customer.ShowPriceInApp,
              showLogoInDeliveryDocket: (ShowLogoInDeliveryDocket)request.Customer.ShowLogoInDeliveryDocket,
-             customerLogo: request.Customer.CustomerLogo,
              createBy: request.UserId,
              createDate: dateTimeProvider.UtcNow);
 
