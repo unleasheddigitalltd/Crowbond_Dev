@@ -1,8 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Domain.Locations;
-using Crowbond.Modules.WMS.Domain.Products;
-using Crowbond.Modules.WMS.Domain.Receipts;
+﻿using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.WMS.Domain.Stocks;
 
@@ -30,49 +26,63 @@ public sealed class Stock : Entity
 
     public DateTime? UseByDate { get; private set; }
 
-    public Guid ReceiptId { get; private set; }
+    public Guid ReceiptLineId { get; private set; }
 
     public string? Note { get; private set; }
 
     public StockStatus Status { get; private set; }
 
+    public Guid CreatedBy { get; private set; }
+
+    public DateTime CreatedDate { get; private set; }
+
+    public Guid? LastModifiedBy { get; private set; }
+
+    public DateTime? LastModifiedDate { get; private set; }
+
     public static Stock Create(
-        Product product,
-        Location location,
+        Guid productId,
+        Guid locationId,
         decimal originalQty,
         decimal currentQty,
         string batchNumber,
         DateTime receivedDate,
         DateTime? sellByDate,
         DateTime? useByDate,
-        ReceiptLine receipt,
-        string? note)
+        Guid receiptLineId,
+        string? note, 
+        Guid createdBy,
+        DateTime createdDate)
     {
         var stock = new Stock
         {
             Id = Guid.NewGuid(),
-            ProductId = product.Id,
-            LocationId = location.Id,
+            ProductId = productId,
+            LocationId = locationId,
             OriginalQty = originalQty,
             CurrentQty = currentQty,
             BatchNumber = batchNumber,
             ReceivedDate = receivedDate,
             SellByDate = sellByDate,
             UseByDate = useByDate,
-            ReceiptId = receipt.Id,
+            ReceiptLineId = receiptLineId,
             Note = note,
-            Status = StockStatus.Active
+            Status = StockStatus.Active,
+            CreatedBy = createdBy,
+            CreatedDate = createdDate
         };
 
         return stock;
     }
 
-    public void Adjust(bool posAdjustment, decimal quantity)
+    public void Adjust(Guid lastModifiedBy, DateTime lastModifiedDate, bool posAdjustment, decimal quantity)
     {        
         CurrentQty = posAdjustment ? CurrentQty + quantity : CurrentQty - quantity;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
     }
 
-    public Result Hold()
+    public Result Hold(Guid lastModifiedBy, DateTime lastModifiedDate)
     {
         if (Status != StockStatus.Active)
         {
@@ -80,11 +90,13 @@ public sealed class Stock : Entity
         }
 
         Status = StockStatus.Held;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result Activate()
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
     {
         if (Status != StockStatus.Held)
         {
@@ -92,13 +104,17 @@ public sealed class Stock : Entity
         }
 
         Status = StockStatus.Active;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result MarkAsDamaged()
+    public Result MarkAsDamaged(Guid lastModifiedBy, DateTime lastModifiedDate)
     {
         Status = StockStatus.Damaged;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

@@ -26,6 +26,7 @@ using Crowbond.Modules.WMS.Infrastructure.Settings;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Infrastructure.Receipts;
 using Crowbond.Modules.OMS.IntegrationEvents;
+using Crowbond.Common.Infrastructure.SoftDelete;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -61,7 +62,8 @@ public static class WmsModule
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.WMS))
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WmsDbContext>());
 

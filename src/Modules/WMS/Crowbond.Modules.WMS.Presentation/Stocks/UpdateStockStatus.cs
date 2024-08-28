@@ -1,4 +1,6 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Security.Claims;
+using Crowbond.Common.Domain;
+using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.WMS.Application.Stocks.UpdateStockStatus;
@@ -13,9 +15,9 @@ internal sealed class UpdateStockStatus : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("stocks/{id}/{statusType}", async(Guid id, string statusType, ISender sender) =>
+        app.MapPut("stocks/{id}/{statusType}", async(ClaimsPrincipal claims, Guid id, string statusType, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateStockStatusCommand(id, statusType));
+            Result result = await sender.Send(new UpdateStockStatusCommand(claims.GetUserId(), id, statusType));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

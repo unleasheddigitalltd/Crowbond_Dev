@@ -10,9 +10,7 @@ internal sealed class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
         builder.HasKey(l => l.Id);
         builder.Property(l => l.Name).IsRequired().HasMaxLength(100);
-        builder.Property(l => l.LocationTypeName).IsRequired().HasMaxLength(100);
 
-        builder.HasOne<LocationType>().WithMany().HasForeignKey(l => l.LocationTypeName);
         builder.HasOne<Location>().WithMany().HasForeignKey(l => l.ParentId);
     }
 }

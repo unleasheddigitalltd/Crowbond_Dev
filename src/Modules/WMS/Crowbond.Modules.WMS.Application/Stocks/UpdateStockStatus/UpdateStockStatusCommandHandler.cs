@@ -3,11 +3,13 @@ using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Common.Application.Extentions;
+using Crowbond.Common.Application.Clock;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockStatus;
 
 internal sealed class UpdateStockStatusCommandHandler(
     IStockRepository stockRepository,
+    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateStockStatusCommand>
 {
@@ -27,9 +29,9 @@ internal sealed class UpdateStockStatusCommandHandler(
 
         var stockActions = new Dictionary<StockStatus, Func<Result>>
         {
-            { StockStatus.Active, stock.Activate },
-            { StockStatus.Held, stock.Hold },
-            { StockStatus.Damaged, stock.MarkAsDamaged }
+            { StockStatus.Active, () => stock.Activate(request.UserId, dateTimeProvider.UtcNow) },
+            { StockStatus.Held, () => stock.Hold(request.UserId, dateTimeProvider.UtcNow) },
+            { StockStatus.Damaged, () => stock.MarkAsDamaged(request.UserId, dateTimeProvider.UtcNow) }
         };
 
         Result result = stockActions[statusType]();

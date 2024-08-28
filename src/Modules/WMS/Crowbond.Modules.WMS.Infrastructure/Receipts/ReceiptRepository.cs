@@ -1,4 +1,5 @@
 ﻿using Crowbond.Modules.WMS.Domain.Receipts;
+using Crowbond.Modules.WMS.Domain.Sequences;
 using Crowbond.Modules.WMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,28 +7,29 @@ namespace Crowbond.Modules.WMS.Infrastructure.Receipts;
 
 internal sealed class ReceiptRepository(WmsDbContext context) : IReceiptRepository
 {
+    public void AddLines(IEnumerable<ReceiptLine> purchaseOrderLines)
+    {
+        context.ReceiptLines.AddRange(purchaseOrderLines);
+    }
+
+    public async Task<ReceiptHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.ReceiptHeaders.SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
+    }
+
     public async Task<ReceiptHeader?> GetByPurchaseOrderIdAsync(Guid purchaseOrderId, CancellationToken cancellationToken = default)
     {
-        return await context.ReceiptHeaders.SingleOrDefaultAsync(e => e.PurchaseOrderId == purchaseOrderId, cancellationToken);
+        return await context.ReceiptHeaders.SingleOrDefaultAsync(r => r.PurchaseOrderId == purchaseOrderId, cancellationToken);
     }
 
-    public async Task<ReceiptLine?> GetReceiptLineAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
     {
-        return await context.ReceiptLines.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+        return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Receipt, cancellationToken);
     }
 
-    public void InsertRangeReceiptLines(IEnumerable<ReceiptLine> receiptLines)
+    public void Insert(ReceiptHeader purchaseorderheader)
     {
-        context.ReceiptLines.AddRange(receiptLines);
+        context.ReceiptHeaders.Add(purchaseorderheader);
     }
 
-    public void InsertReceiptHeader(ReceiptHeader receiptHeader)
-    {
-        context.ReceiptHeaders.Add(receiptHeader);
-    }
-
-    public void InsertReceiptLine(ReceiptLine receiptLine)
-    {
-        context.ReceiptLines.Add(receiptLine);
-    }
 }

@@ -1,14 +1,17 @@
-﻿namespace Crowbond.Modules.WMS.Domain.Receipts;
+﻿using Crowbond.Modules.WMS.Domain.Sequences;
+
+namespace Crowbond.Modules.WMS.Domain.Receipts;
 
 public interface IReceiptRepository
 {
-    Task<ReceiptLine?> GetReceiptLineAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<ReceiptHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<ReceiptHeader?> GetByPurchaseOrderIdAsync(Guid purchaseOrderId, CancellationToken cancellationToken = default);
 
-    void InsertReceiptHeader(ReceiptHeader receiptHeader);
+    void AddLines(IEnumerable<ReceiptLine> purchaseOrderLines);
 
-    void InsertReceiptLine(ReceiptLine receiptLine);
+    Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default);
 
-    void InsertRangeReceiptLines(IEnumerable<ReceiptLine> receiptLines);
+    void Insert(ReceiptHeader purchaseorderheader);
+
 }

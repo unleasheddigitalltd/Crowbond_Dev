@@ -10,6 +10,8 @@ public sealed class ReceiptHeader : Entity
 
     public Guid Id { get; private set; }
 
+    public string ReceiptNo { get; private set; }
+
     public DateTime ReceivedDate { get; private set; }
 
     public Guid? PurchaseOrderId { get; private set; }
@@ -20,30 +22,40 @@ public sealed class ReceiptHeader : Entity
 
     public ReceiptStatus Status { get; private set; }
 
-    public DateTime CreatetimeStamp { get; private set; }
+    public Guid CreatedBy { get; private set; }
+
+    public DateTime CreatedDate { get; private set; }
+
+    public Guid? LastModifiedBy { get; private set; }
+
+    public DateTime? LastModifiedDate { get; private set; }
 
     public static ReceiptHeader Create(
+        string receiptNo,
         DateTime receivedDate,
         Guid purchaseOrderId,
         string? purchaseOrderNumber,
         string deliveryNoteNumber,
-        DateTime createtimeStamp)
+        Guid createdBy,
+        DateTime createdDate)
     {
         var receiptHeader = new ReceiptHeader
         {
             Id = Guid.NewGuid(),
+            ReceiptNo = receiptNo,
             ReceivedDate = receivedDate,
             PurchaseOrderId = purchaseOrderId,
             PurchaseOrderNo = purchaseOrderNumber,
             DeliveryNoteNumber = deliveryNoteNumber,
             Status = ReceiptStatus.Shipping,
-            CreatetimeStamp = createtimeStamp
+            CreatedBy = createdBy,
+            CreatedDate = createdDate
         };
 
         return receiptHeader;
     }
 
-    public Result Cancel()
+    public Result Cancel(Guid lastModifiedBy, DateTime lastModifiedDate)
     {
         if (Status != ReceiptStatus.Shipping)
         {
@@ -51,6 +63,8 @@ public sealed class ReceiptHeader : Entity
         }
 
         Status = ReceiptStatus.Cancelled;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

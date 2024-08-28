@@ -10,4 +10,9 @@ internal sealed class LocationRepository(WmsDbContext context) : ILocationReposi
     {
         return await context.Locations.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
+
+    public void Insert(Location location)
+    {
+        context.Locations.Add(location);
+    }
 }
