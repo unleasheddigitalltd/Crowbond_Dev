@@ -55,6 +55,20 @@ public sealed class ReceiptHeader : Entity
         return receiptHeader;
     }
 
+    public Result Receive(Guid lastModifiedBy, DateTime lastModifiedDate)
+    {
+        if (Status != ReceiptStatus.Shipping)
+        {
+            return Result.Failure(ReceiptErrors.NotShipping);
+        }
+
+        Status = ReceiptStatus.Received;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedDate = lastModifiedDate;
+
+        return Result.Success();
+    }
+
     public Result Cancel(Guid lastModifiedBy, DateTime lastModifiedDate)
     {
         if (Status != ReceiptStatus.Shipping)
