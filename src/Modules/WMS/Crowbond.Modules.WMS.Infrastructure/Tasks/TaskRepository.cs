@@ -20,4 +20,9 @@ internal sealed class TaskRepository(WmsDbContext context) : ITaskRepository
     {
         context.TaskHeaders.Add(taskHeader);
     }
+
+    public void AddAssignment(TaskAssignment assignment)
+    {
+        context.TaskAssignments.Add(assignment);
+    }
 }

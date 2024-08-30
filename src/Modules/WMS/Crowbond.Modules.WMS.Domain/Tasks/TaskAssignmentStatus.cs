@@ -2,7 +2,7 @@
 
 public enum TaskAssignmentStatus
 {
-    None = 0,
+    Pending = 0,
     InProgress = 1,
     Paused = 2,
     Quit = 3,

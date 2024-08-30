@@ -10,7 +10,7 @@ using Crowbond.Modules.OMS.Domain.Suppliers;
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.CreatePurchaseOrder;
 
 internal sealed class CreatePurchaseOrderCommandHandler(
-    IPurchaseOrderRepository purchaseOrderHeaderRepository,
+    IPurchaseOrderRepository purchaseOrderRepository,
     IDateTimeProvider dateTimeProvider,
     ISupplierApi supplierApi,
     ISupplierProductApi supplierProductApi,
@@ -69,7 +69,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             }
         }
 
-        purchaseOrderHeaderRepository.Insert(purchaseOrderHeader.Value);
+        purchaseOrderRepository.Insert(purchaseOrderHeader.Value);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return purchaseOrderHeader.Value.Id;

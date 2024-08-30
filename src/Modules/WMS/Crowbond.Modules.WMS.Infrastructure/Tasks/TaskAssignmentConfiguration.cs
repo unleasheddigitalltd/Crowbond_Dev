@@ -13,7 +13,6 @@ internal sealed class TaskAssignmentConfiguration : IEntityTypeConfiguration<Tas
         builder.Property(t => t.LastModifiedBy).IsRequired(false);
         builder.Property(t => t.LastModifiedDate).IsRequired(false);
 
-        builder.HasOne<TaskHeader>().WithMany().HasForeignKey(t => t.TaskHeaderId);
         builder.HasOne<WarehouseOperator>().WithMany().HasForeignKey(t => t.AssignedOperatorId);
     }
 }

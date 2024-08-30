@@ -13,6 +13,6 @@ internal sealed class WarehouseOperatorRepository(WmsDbContext context) : IWareh
 
     public void Insert(WarehouseOperator @operator)
     {
-        throw new NotImplementedException();
+        context.WarehouseOperators.Add(@operator);
     }
 }

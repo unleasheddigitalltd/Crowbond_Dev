@@ -9,4 +9,6 @@ public interface ITaskRepository
     Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default);
 
     void Insert(TaskHeader taskHeader);
+
+    void AddAssignment(TaskAssignment assignment);
 }

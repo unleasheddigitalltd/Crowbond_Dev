@@ -16,7 +16,7 @@ public sealed class TaskAssignmentLine : Entity
 
     public DateTime? EndDateTime { get; private set; }
 
-    public Guid FromLocationId { get; private set; }
+    public Guid? FromLocationId { get; private set; }
 
     public Guid? ToLocationId { get; private set; }
 
@@ -30,17 +30,13 @@ public sealed class TaskAssignmentLine : Entity
 
     public TaskAssignmentLineStatus Status { get; private set; }
 
-    public static TaskAssignmentLine Create(
-        Guid taskAssignmentId,
-        Guid fromLocationId,
+    internal static TaskAssignmentLine Create(
         Guid productId,
         decimal requestedQty)
     {
         var taskAssignmentLine = new TaskAssignmentLine
         {
             Id = Guid.NewGuid(),
-            TaskAssignmentId = taskAssignmentId,
-            FromLocationId = fromLocationId,
             ProductId = productId,
             RequestedQty = requestedQty,
             Status = TaskAssignmentLineStatus.Notstarted
