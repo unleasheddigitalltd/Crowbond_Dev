@@ -1,4 +1,5 @@
 ﻿using Crowbond.Modules.WMS.Domain.Tasks;
+using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,5 +14,6 @@ internal sealed class TaskAssignmentConfiguration : IEntityTypeConfiguration<Tas
         builder.Property(t => t.LastModifiedDate).IsRequired(false);
 
         builder.HasOne<TaskHeader>().WithMany().HasForeignKey(t => t.TaskHeaderId);
+        builder.HasOne<WarehouseOperator>().WithMany().HasForeignKey(t => t.AssignedOperatorId);
     }
 }

@@ -6,7 +6,7 @@ using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Sequences;
 using Crowbond.Modules.WMS.Domain.Tasks;
 
-namespace Crowbond.Modules.WMS.Application.ReceiveReceipt;
+namespace Crowbond.Modules.WMS.Application.Receipts.ReceiveReceipt;
 
 internal sealed class ReceiveReceiptCommandHandler(
     IReceiptRepository receiptRepository,
@@ -37,11 +37,16 @@ internal sealed class ReceiveReceiptCommandHandler(
             return Result.Failure(TaskErrors.SequenceNotFound());
         }
 
-        string taskNo = $"TSK-{sequence.GetNewSequence()}";
+        string taskNo = $"{sequence.Prefix}-{sequence.GetNewSequence()}";
         Result<TaskHeader> taskResult = TaskHeader.Create(
             taskNo,
             receipt.Id,
             TaskType.putaway);
+
+        if (taskResult.IsFailure)
+        {
+            return Result.Failure(taskResult.Error);
+        }
 
         taskRepository.Insert(taskResult.Value);
 

@@ -4,6 +4,7 @@ public sealed class Permission
 {
     public static readonly Permission GetUser = new("users:read");
     public static readonly Permission ModifyUser = new("users:update");
+
     public static readonly Permission GetEvents = new("events:read");
     public static readonly Permission SearchEvents = new("events:search");
     public static readonly Permission ModifyEvents = new("events:update");
@@ -25,7 +26,7 @@ public sealed class Permission
     public static readonly Permission ModifyProducts = new("products:update");
 
     public static readonly Permission GetStocks = new("stocks:read");
-    public static readonly Permission GetStockTransactions = new("stocktransactions:read");
+    public static readonly Permission GetStockTransactions = new("stock-transactions:read");
     public static readonly Permission AdjustStocks = new("stocks:adjust");
     public static readonly Permission RelocateStocks = new("stocks:relocate");
 
@@ -50,12 +51,12 @@ public sealed class Permission
     public static readonly Permission ModifySupplierContacts = new("suppliers:contacts:update");
     public static readonly Permission CreateSupplierContacts = new("suppliers:contacts:create");
 
-    public static readonly Permission GetPurchaseOrders = new("purchaseorders:read");
-    public static readonly Permission ModifyPurchaseOrders = new("purchaseorders:update");
-    public static readonly Permission CreatePurchaseOrders = new("purchaseorders:create");
+    public static readonly Permission GetPurchaseOrders = new("purchase-orders:read");
+    public static readonly Permission ModifyPurchaseOrders = new("purchase-orders:update");
+    public static readonly Permission CreatePurchaseOrders = new("purchase-orders:create");
 
-    public static readonly Permission ApprovePurchaseOrders = new("purchaseorders:approve");
-    public static readonly Permission CancelPurchaseOrders = new("purchaseorders:cancel");
+    public static readonly Permission ApprovePurchaseOrders = new("purchase-orders:approve");
+    public static readonly Permission CancelPurchaseOrders = new("purchase-orders:cancel");
 
     public static readonly Permission GetDrivers = new("drivers:read");
     public static readonly Permission ModifyDrivers = new("drivers:update");
@@ -65,12 +66,21 @@ public sealed class Permission
     public static readonly Permission ModifyRoutes = new("routes:update");
     public static readonly Permission CreateRoutes = new("routes:create");
 
-    public static readonly Permission GetRouteTrips = new("routetrip:read");
-    public static readonly Permission ModifyRouteTrips = new("routetrip:update");
-    public static readonly Permission CreateRouteTrips = new("routetrip:create");
+    public static readonly Permission GetRouteTrips = new("route-trip:read");
+    public static readonly Permission ModifyRouteTrips = new("route-trip:update");
+    public static readonly Permission CreateRouteTrips = new("route-trip:create");
 
-    public static readonly Permission ModifyRouteTriplogs = new("routetriplog:update");
-    public static readonly Permission ModifyOtherRouteTripLogs = new("routetriplog:update:other");
+    public static readonly Permission ModifyRouteTriplogs = new("route-trip-log:update");
+    public static readonly Permission ModifyOtherRouteTripLogs = new("route-trip-log:update:other");
+
+    public static readonly Permission GetPutAwayTasks = new("tasks:putaway:read");
+    public static readonly Permission ModifyPutAwayTasks = new("tasks:putaway:update");
+    public static readonly Permission ManagePutAwayTasks = new("tasks:putaway:manage");
+    public static readonly Permission ExecutePutAwayTasks = new("tasks:putaway:execute");
+
+    public static readonly Permission GetWarehouseOperators = new("warehouse-operators:read");
+    public static readonly Permission ModifyWarehouseOperators = new("warehouse-operators:update");
+    public static readonly Permission CreateWarehouseOperators = new("warehouse-operators:create");
 
     public Permission(string code)
     {

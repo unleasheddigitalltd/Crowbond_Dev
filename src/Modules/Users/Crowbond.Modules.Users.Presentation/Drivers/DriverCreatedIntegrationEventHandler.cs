@@ -3,6 +3,7 @@ using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Users.CreateUser;
+using Crowbond.Modules.Users.Domain.Users;
 using MediatR;
 
 namespace Crowbond.Modules.Users.Presentation.Drivers;
@@ -20,7 +21,8 @@ internal sealed class DriverCreatedIntegrationEventHandler(ISender sender)
                 integrationEvent.Email,
                 integrationEvent.Username,
                 integrationEvent.FirstName,
-                integrationEvent.LastName),
+                integrationEvent.LastName,
+                Role.Driver),
             cancellationToken);
 
         if (result.IsFailure)

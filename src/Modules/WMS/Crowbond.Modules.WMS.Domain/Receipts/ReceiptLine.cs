@@ -28,9 +28,7 @@ public sealed class ReceiptLine : Entity
         Guid receiptHeaderId,
         Guid productId,
         decimal quantityReceived,
-        decimal unitPrice,
-        DateOnly? sellByDate,
-        DateOnly? useByDate)
+        decimal unitPrice)
     {
         var receiptLine = new ReceiptLine
         {
@@ -39,8 +37,6 @@ public sealed class ReceiptLine : Entity
             ProductId = productId,
             QuantityReceived = quantityReceived,
             UnitPrice = unitPrice,
-            SellByDate = sellByDate,
-            UseByDate = useByDate,
             BatchNumber = GenerateBatchNumber()
         };
 

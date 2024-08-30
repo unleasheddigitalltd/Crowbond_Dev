@@ -2,10 +2,9 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Categories.Dtos;
 using Dapper;
 
-namespace Crowbond.Modules.WMS.Application.Categories;
+namespace Crowbond.Modules.WMS.Application.Categories.GetCategories;
 
 internal sealed class GetCategoriesQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetCategoriesQuery, IReadOnlyCollection<CategoryResponse>>

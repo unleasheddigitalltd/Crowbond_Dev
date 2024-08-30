@@ -27,7 +27,7 @@ internal sealed class CreateUserCommandHandler(
 
         var user = User.Create(request.UserId, request.Username, request.Email, request.FirstName, request.LastName, result.Value);
 
-        user.AddRole(Role.Customer);
+        user.AddRole(request.Role);
 
         userRepository.Insert(user);
 

@@ -52,7 +52,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             }
 
             Result result = purchaseOrderHeader.Value.AddLine(
-                productId: supplierProduct.Id,
+                productId: supplierProduct.ProductId,
                 productSku: supplierProduct.ProductSku,
                 productName: supplierProduct.ProductName,
                 unitOfMeasureName: supplierProduct.UnitOfMeasureName,

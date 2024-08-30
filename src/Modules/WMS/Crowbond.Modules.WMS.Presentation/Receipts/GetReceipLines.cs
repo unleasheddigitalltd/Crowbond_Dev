@@ -2,7 +2,6 @@
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.WMS.Application.Receipts.GetReceiptLines;
-using Crowbond.Modules.WMS.Application.Receipts.GetReceiptLines.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

@@ -3,6 +3,7 @@ using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Users.CreateUser;
+using Crowbond.Modules.Users.Domain.Users;
 using MediatR;
 
 namespace Crowbond.Modules.Users.Presentation.SupplierContacts;
@@ -20,7 +21,8 @@ internal sealed class SupplierContactCreatedIntegrationEventHandler(ISender send
                 integrationEvent.Email,
                 integrationEvent.Username,
                 integrationEvent.FirstName,
-                integrationEvent.LastName),
+                integrationEvent.LastName,
+                Role.Supplier),
             cancellationToken);
 
         if (result.IsFailure)

@@ -22,7 +22,7 @@ internal sealed class CreateReceiptCommandHandler(
             return Result.Failure<Guid>(ReceiptErrors.SequenceNotFound());
         }
 
-        string receiptNo = $"RC-{sequence.GetNewSequence()}";
+        string receiptNo = $"{sequence.Prefix}-{sequence.GetNewSequence()}";
 
         Result<ReceiptHeader> result = ReceiptHeader.Create(
             receiptNo,
@@ -36,7 +36,7 @@ internal sealed class CreateReceiptCommandHandler(
         receiptRepository.Insert(result.Value);
 
         IEnumerable<ReceiptLine> receiptLines = request.Receipt.ReceiptLines
-            .Select(r => ReceiptLine.Create(result.Value.Id, r.ProductId, r.QuantityReceived, r.UnitPrice, r.SellByDate, r.UseByDate));
+            .Select(r => ReceiptLine.Create(result.Value.Id, r.ProductId, r.QuantityReceived, r.UnitPrice));
 
         receiptRepository.AddLines(receiptLines);
 

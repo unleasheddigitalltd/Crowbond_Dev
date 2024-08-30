@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.IntegrationEvents;
-using Crowbond.Modules.Users.Application.Users.CreateUser;
 using Crowbond.Modules.Users.Application.Users.DeactivateUser;
 using MediatR;
 
@@ -21,7 +20,7 @@ internal sealed class SupplierContactDeactivatedIntegrationEventHandler(ISender 
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(CreateUserCommand), result.Error);
+            throw new CrowbondException(nameof(DeactivateUserCommand), result.Error);
         }
     }
 }

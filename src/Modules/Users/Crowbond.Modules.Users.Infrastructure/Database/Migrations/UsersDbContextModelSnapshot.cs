@@ -228,7 +228,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "stocktransactions:read"
+                            Code = "stock-transactions:read"
                         },
                         new
                         {
@@ -245,6 +245,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "receipts:update"
+                        },
+                        new
+                        {
+                            Code = "receipts:create"
                         },
                         new
                         {
@@ -296,27 +300,23 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "receipts:create"
+                            Code = "purchase-orders:create"
                         },
                         new
                         {
-                            Code = "purchaseorders:create"
+                            Code = "purchase-orders:read"
                         },
                         new
                         {
-                            Code = "purchaseorders:read"
+                            Code = "purchase-orders:update"
                         },
                         new
                         {
-                            Code = "purchaseorders:update"
+                            Code = "purchase-orders:approve"
                         },
                         new
                         {
-                            Code = "purchaseorders:approve"
-                        },
-                        new
-                        {
-                            Code = "purchaseorders:cancel"
+                            Code = "purchase-orders:cancel"
                         },
                         new
                         {
@@ -344,23 +344,51 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "routetrip:read"
+                            Code = "route-trip:read"
                         },
                         new
                         {
-                            Code = "routetrip:update"
+                            Code = "route-trip:update"
                         },
                         new
                         {
-                            Code = "routetrip:create"
+                            Code = "route-trip:create"
                         },
                         new
                         {
-                            Code = "routetriplog:update"
+                            Code = "route-trip-log:update"
                         },
                         new
                         {
-                            Code = "routetriplog:update:other"
+                            Code = "route-trip-log:update:other"
+                        },
+                        new
+                        {
+                            Code = "tasks:putaway:read"
+                        },
+                        new
+                        {
+                            Code = "tasks:putaway:update"
+                        },
+                        new
+                        {
+                            Code = "tasks:putaway:manage"
+                        },
+                        new
+                        {
+                            Code = "tasks:putaway:execute"
+                        },
+                        new
+                        {
+                            Code = "warehouse-operators:read"
+                        },
+                        new
+                        {
+                            Code = "warehouse-operators:update"
+                        },
+                        new
+                        {
+                            Code = "warehouse-operators:create"
                         });
                 });
 
@@ -379,7 +407,15 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
+                            Name = "Administrator"
+                        },
+                        new
+                        {
                             Name = "Customer"
+                        },
+                        new
+                        {
+                            Name = "Supplier"
                         },
                         new
                         {
@@ -387,7 +423,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Name = "Administrator"
+                            Name = "WarhouseOperator"
+                        },
+                        new
+                        {
+                            Name = "WarhouseManager"
                         });
                 });
 
@@ -470,13 +510,33 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                     b.HasData(
                         new
                         {
-                            PermissionCode = "routetrip:read",
+                            PermissionCode = "route-trip:read",
                             RoleName = "Driver"
                         },
                         new
                         {
-                            PermissionCode = "routetriplog:update",
+                            PermissionCode = "route-trip-log:update",
                             RoleName = "Driver"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:read",
+                            RoleName = "WarhouseOperator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:execute",
+                            RoleName = "WarhouseOperator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:read",
+                            RoleName = "WarhouseManager"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:manage",
+                            RoleName = "WarhouseManager"
                         },
                         new
                         {
@@ -585,7 +645,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "stocktransactions:read",
+                            PermissionCode = "stock-transactions:read",
                             RoleName = "Administrator"
                         },
                         new
@@ -675,27 +735,27 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "purchaseorders:create",
+                            PermissionCode = "purchase-orders:create",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "purchaseorders:update",
+                            PermissionCode = "purchase-orders:update",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "purchaseorders:read",
+                            PermissionCode = "purchase-orders:read",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "purchaseorders:approve",
+                            PermissionCode = "purchase-orders:approve",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "purchaseorders:cancel",
+                            PermissionCode = "purchase-orders:cancel",
                             RoleName = "Administrator"
                         },
                         new
@@ -730,27 +790,62 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "routetrip:read",
+                            PermissionCode = "route-trip:read",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "routetrip:update",
+                            PermissionCode = "route-trip:update",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "routetrip:create",
+                            PermissionCode = "route-trip:create",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "routetriplog:update",
+                            PermissionCode = "route-trip-log:update",
                             RoleName = "Administrator"
                         },
                         new
                         {
-                            PermissionCode = "routetriplog:update:other",
+                            PermissionCode = "route-trip-log:update:other",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:manage",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:putaway:execute",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "warehouse-operators:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "warehouse-operators:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "warehouse-operators:create",
                             RoleName = "Administrator"
                         });
                 });

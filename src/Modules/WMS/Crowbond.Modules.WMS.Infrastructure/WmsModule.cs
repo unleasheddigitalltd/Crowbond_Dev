@@ -27,6 +27,10 @@ using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Infrastructure.Receipts;
 using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Modules.WMS.Infrastructure.WarehouseOperators;
+using Crowbond.Modules.WMS.Domain.WarehouseOperators;
+using Crowbond.Modules.WMS.Domain.Tasks;
+using Crowbond.Modules.WMS.Infrastructure.Tasks;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -78,6 +82,10 @@ public static class WmsModule
         services.AddScoped<ISettingRepository, SettingRepository>();
 
         services.AddScoped<IReceiptRepository, ReceiptRepository>();
+
+        services.AddScoped<IWarehouseOperatorRepository, WarehouseOperatorRepository> ();
+
+        services.AddScoped<ITaskRepository, TaskRepository>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 

@@ -18,8 +18,10 @@ using Crowbond.Modules.WMS.Domain.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Sequences;
 using Crowbond.Modules.WMS.Domain.Sequences;
-using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Modules.WMS.Infrastructure.Tasks;
+using Crowbond.Modules.WMS.Domain.WarehouseOperators;
+using Crowbond.Modules.WMS.Infrastructure.WarehouseOperators;
+using Crowbond.Modules.WMS.Domain.Tasks;
 
 namespace Crowbond.Modules.WMS.Infrastructure.Database;
 
@@ -40,6 +42,12 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<StockTransactionReason> StockTransactionReasons { get; set; }
     internal DbSet<Setting> Settings { get; set; }
     internal DbSet<Sequence> Sequences { get; set; }
+    internal DbSet<WarehouseOperator> WarehouseOperators { get; set; }
+    internal DbSet<TaskHeader> TaskHeaders { get; set; }
+    internal DbSet<TaskAssignment> TaskAssignments { get; set; }
+    internal DbSet<TaskAssignmentLine> TaskAssignmentLines { get; set; }
+    internal DbSet<TaskAssignmentStatusHistory> TaskAssignmentStatusHistories { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,6 +82,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new TaskAssignmentConfiguration());
         modelBuilder.ApplyConfiguration(new TaskAssignmentLineConfiguration());
         modelBuilder.ApplyConfiguration(new TaskAssignmentStatusHistoryConfiguration());
+
+        modelBuilder.ApplyConfiguration(new WarehouseOperatorConfiguration());
     }
     public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
     {

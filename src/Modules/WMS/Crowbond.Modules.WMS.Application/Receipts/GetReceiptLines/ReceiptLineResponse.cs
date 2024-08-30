@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptLines.Dtos;
+﻿namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptLines;
 
 public sealed record ReceiptLineResponse(
     Guid Id,
@@ -7,7 +7,7 @@ public sealed record ReceiptLineResponse(
     string UnitOfMeasure,
     decimal QuantityReceived,
     decimal UnitPrice,
-    DateTime SellByDate,
-    DateTime UseByDate,
+    DateTime? SellByDate,
+    DateTime? UseByDate,
     string Batch);
 

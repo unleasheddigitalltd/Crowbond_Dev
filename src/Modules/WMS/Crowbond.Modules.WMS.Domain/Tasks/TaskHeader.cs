@@ -21,7 +21,7 @@ public sealed class TaskHeader : Entity
         Guid entityId,
         TaskType taskType)
     {
-        var task = new TaskHeader
+        var taskHeader = new TaskHeader
         {
             Id = Guid.NewGuid(),
             TaskNo = taskNo,
@@ -29,6 +29,6 @@ public sealed class TaskHeader : Entity
             TaskType = taskType
         };
 
-        return task;
+        return taskHeader;
     }
 }

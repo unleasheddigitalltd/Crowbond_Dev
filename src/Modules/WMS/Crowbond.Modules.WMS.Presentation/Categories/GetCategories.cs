@@ -1,8 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.WMS.Application.Categories;
-using Crowbond.Modules.WMS.Application.Categories.Dtos;
+using Crowbond.Modules.WMS.Application.Categories.GetCategories;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

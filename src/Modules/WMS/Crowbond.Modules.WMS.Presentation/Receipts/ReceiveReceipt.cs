@@ -3,6 +3,7 @@ using Crowbond.Common.Domain;
 using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
+using Crowbond.Modules.WMS.Application.Receipts.ReceiveReceipt;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +17,7 @@ internal sealed class ReceiveReceipt : IEndpoint
     {
         app.MapPut("receipts/{id}/receive", async (ClaimsPrincipal claims, Guid id, ISender sender) =>
         {
-            Result result = await sender.Send(new ReceiveReceiptCommand(claims.GetUserId, id));
+            Result result = await sender.Send(new ReceiveReceiptCommand(claims.GetUserId(), id));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

@@ -19,7 +19,7 @@ internal sealed class GetLocationsQueryHandler(IDbConnectionFactory dbConnection
                  id AS {nameof(LocationResponse.Id)},
                  name AS {nameof(LocationResponse.Name)}
              FROM wms.locations
-             WHERE location_type_name = @LocationType
+             WHERE location_Type = @LocationType
              """;
 
         List<LocationResponse> locations = (await connection.QueryAsync<LocationResponse>(sql, request)).AsList();

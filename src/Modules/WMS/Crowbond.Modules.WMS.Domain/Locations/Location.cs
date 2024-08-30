@@ -14,7 +14,7 @@ public sealed class Location : Entity
 
     public string Name { get; private set; }
 
-    public LocationType LocationType { get; private set; }
+    public LocationType? LocationType { get; private set; }
 
     public LocationLayer LocationLeyer { get; private set; }
 
@@ -24,7 +24,7 @@ public sealed class Location : Entity
     public static Location Create(
         Guid parentId,
         string name,
-        LocationType locationType,
+        LocationType? locationType,
         LocationLayer locationLayer)
     {
         var location = new Location

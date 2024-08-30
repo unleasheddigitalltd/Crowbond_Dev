@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Stocks.GetTransactionReasons.Dtos;
 using Dapper;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.GetTransactionReasons;

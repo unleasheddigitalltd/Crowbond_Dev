@@ -12,7 +12,7 @@ public sealed class TaskAssignment : Entity
 
     public Guid TaskHeaderId { get; private set; }
 
-    public Guid AssignedUserId { get; private set; }
+    public Guid AssignedOperatorId { get; private set; }
 
     public TaskAssignmentStatus Status { get; private set; }
 
@@ -26,7 +26,7 @@ public sealed class TaskAssignment : Entity
 
     public TaskAssignment Create(
         Guid taskHeaderId,
-        Guid assignedUserId,
+        Guid assignedOperatorId,
         TaskAssignmentStatus status,
         Guid createdBy,
         DateTime createdDate)
@@ -35,7 +35,7 @@ public sealed class TaskAssignment : Entity
         {
             Id = Guid.NewGuid(),
             TaskHeaderId = taskHeaderId,
-            AssignedUserId = assignedUserId,
+            AssignedOperatorId = assignedOperatorId,
             Status = status,
             CreatedBy = createdBy,
             CreatedDate = createdDate
