@@ -16,12 +16,14 @@ internal sealed class GetPutAwayTaskAssignmentsQueryHandler(IDbConnectionFactory
         const string sql =
             $"""
              SELECT
-                 ta.id AS {nameof(TaskAssignmentResponse.Id)},
+                 t.id AS {nameof(TaskAssignmentResponse.TaskId)},
                  t.task_no AS {nameof(TaskAssignmentResponse.TaskNo)},
                  ta.status AS {nameof(TaskAssignmentResponse.Status)}
              FROM wms.task_assignments ta
              INNER JOIN wms.task_headers t ON ta.task_header_id = t.id
-             WHERE ta.assigned_operator_id = @WarehouseOperatorId
+             WHERE 
+                ta.assigned_operator_id = @WarehouseOperatorId AND
+                ta.status IN (0, 1, 2)
              """;
 
         List<TaskAssignmentResponse> taskAssignments = (await connection.QueryAsync<TaskAssignmentResponse>(sql, request)).AsList();

@@ -68,7 +68,8 @@ public sealed class TaskHeader : Entity
         Guid productId,
         decimal requestedQty)
     {
-        TaskAssignment? assignment = _assignments.Find(a => a.Status == TaskAssignmentStatus.Pending);
+        TaskAssignment? assignment = _assignments.Find(a =>
+            a.Status == TaskAssignmentStatus.Pending);
 
         if (assignment is null)
         {
@@ -78,5 +79,19 @@ public sealed class TaskHeader : Entity
         Result<TaskAssignmentLine> result = assignment.AddLine(productId, requestedQty);
 
         return result;
+    }
+
+    public Result Start(Guid modifiedBy, DateTime modifiedDate)
+    {
+        TaskAssignment? assignment = _assignments.Find(a => 
+            a.Status == TaskAssignmentStatus.Pending ||
+            a.Status == TaskAssignmentStatus.Paused);
+
+        if (assignment is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.HasNoPendingAssignment(Id));
+        }
+
+        return assignment.Start(modifiedBy, modifiedDate);
     }
 }

@@ -65,4 +65,18 @@ public sealed class TaskAssignment : Entity
         return result.Value;
     }
 
+    public Result Start(Guid modifiedBy, DateTime modifiedDate)
+    {
+        if (Status != TaskAssignmentStatus.Pending && Status != TaskAssignmentStatus.Paused)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.alreadyStarted);
+        }
+
+        Status = TaskAssignmentStatus.InProgress;
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modifiedDate;
+
+        return Result.Success();
+    }
+
 }

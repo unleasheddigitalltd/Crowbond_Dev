@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTaskAssignments;
 
-public sealed record TaskAssignmentResponse(Guid Id, string TaskNo, TaskAssignmentStatus Status);
+public sealed record TaskAssignmentResponse(Guid TaskId, string TaskNo, TaskAssignmentStatus Status);
