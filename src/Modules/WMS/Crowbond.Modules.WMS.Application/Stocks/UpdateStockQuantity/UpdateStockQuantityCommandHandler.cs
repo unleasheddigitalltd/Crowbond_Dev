@@ -29,24 +29,23 @@ internal sealed class UpdateStockQuantityCommandHandler(
             return Result.Failure(StockErrors.NotFound(request.StockId));
         }
 
+        // Determine if the adjustment is positive or negative
         bool posAdjustment = stock.CurrentQty < request.Quantity;
         decimal quantity = Math.Abs(stock.CurrentQty - request.Quantity);
 
-        var transaction = StockTransaction.Create(
-            null,
-            ActionType.Adjustment.Name,
-            posAdjustment,
-            dateTimeProvider.UtcNow,
-            request.TransactionNote,
-            transactionReason.Id,
-            quantity,
-            stock.ProductId,
-            stock.Id);
+        // Apply stock adjustment
+        Result<StockTransaction> result = posAdjustment
+            ? stock.StockIn(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
+                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow)
+            : stock.StockOut(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
+                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow);
 
-        stockRepository.InsertStockTransaction(transaction);
+        if (result.IsFailure)
+        {
+            return Result.Failure(result.Error);
+        }
 
-        stock.Adjust(request.UserId, dateTimeProvider.UtcNow, posAdjustment, quantity);
-
+        stockRepository.AddStockTransaction(result.Value);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

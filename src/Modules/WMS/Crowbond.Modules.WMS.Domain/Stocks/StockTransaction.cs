@@ -6,7 +6,7 @@ namespace Crowbond.Modules.WMS.Domain.Stocks;
 
 public sealed class StockTransaction : Entity
 {
-    public StockTransaction()
+    private StockTransaction()
     {
     }
 
@@ -30,7 +30,7 @@ public sealed class StockTransaction : Entity
 
     public Guid StockId { get; private set; }
 
-    public static StockTransaction Create(
+    internal StockTransaction(
         Guid? taskAssignmentLineId,
         string actionTypeName,
         bool posAdjustment,
@@ -38,23 +38,16 @@ public sealed class StockTransaction : Entity
         string? transactionNote,
         Guid reasonId,
         decimal quantity,
-        Guid productId,
-        Guid stockId)
+        Guid productId)
     {
-        var stockTransaction = new StockTransaction
-        {
-            Id = Guid.NewGuid(),
-            TaskAssignmentLineId = taskAssignmentLineId,
-            ActionTypeName = actionTypeName,
-            PosAdjustment = posAdjustment,
-            TransactionDate = transactionDate,
-            TransactionNote = transactionNote,
-            ReasonId = reasonId,
-            Quantity = quantity,
-            ProductId = productId,
-            StockId = stockId
-        };
-
-        return stockTransaction;
+        Id = Guid.NewGuid();
+        TaskAssignmentLineId = taskAssignmentLineId;
+        ActionTypeName = actionTypeName;
+        PosAdjustment = posAdjustment;
+        TransactionDate = transactionDate;
+        TransactionNote = transactionNote;
+        ReasonId = reasonId;
+        Quantity = quantity;
+        ProductId = productId;
     }
 }

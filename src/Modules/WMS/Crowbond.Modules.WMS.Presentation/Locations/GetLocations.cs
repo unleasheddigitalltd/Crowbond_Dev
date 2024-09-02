@@ -14,9 +14,9 @@ internal sealed class GetLocations : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("locations/{locationType}", async (LocationType locationType, ISender sender) =>
+        app.MapGet("locations", async (LocationLayer locationLayer, LocationType locationType, ISender sender) =>
         {
-            Result<IReadOnlyCollection<LocationResponse>> result = await sender.Send(new GetLocationsQuery(locationType));
+            Result<IReadOnlyCollection<LocationResponse>> result = await sender.Send(new GetLocationsQuery(locationLayer, locationType));
             return result.Match(Results.Ok, ApiResults.Problem);
         }).RequireAuthorization(Permissions.GetStocks)
         .WithTags(Tags.Stocks);

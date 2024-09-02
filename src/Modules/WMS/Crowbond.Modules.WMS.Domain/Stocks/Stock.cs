@@ -4,7 +4,8 @@ namespace Crowbond.Modules.WMS.Domain.Stocks;
 
 public sealed class Stock : Entity
 {
-    public Stock()
+    private readonly List<StockTransaction> _stockTransactions = new();
+    private Stock()
     {
     }
 
@@ -40,17 +41,17 @@ public sealed class Stock : Entity
 
     public DateTime? LastModifiedDate { get; private set; }
 
-    public static Stock Create(
+    public IReadOnlyCollection<StockTransaction> StockTransactions => _stockTransactions;
+
+    public static Result<Stock> Create(
         Guid productId,
         Guid locationId,
-        decimal originalQty,
-        decimal currentQty,
         string batchNumber,
         DateTime receivedDate,
         DateTime? sellByDate,
         DateTime? useByDate,
         Guid receiptLineId,
-        string? note, 
+        string? note,
         Guid createdBy,
         DateTime createdDate)
     {
@@ -59,8 +60,8 @@ public sealed class Stock : Entity
             Id = Guid.NewGuid(),
             ProductId = productId,
             LocationId = locationId,
-            OriginalQty = originalQty,
-            CurrentQty = currentQty,
+            OriginalQty = 0,
+            CurrentQty = 0,
             BatchNumber = batchNumber,
             ReceivedDate = receivedDate,
             SellByDate = sellByDate,
@@ -75,8 +76,76 @@ public sealed class Stock : Entity
         return stock;
     }
 
-    public void Adjust(Guid lastModifiedBy, DateTime lastModifiedDate, bool posAdjustment, decimal quantity)
-    {        
+    public Result<StockTransaction> StockIn(
+        Guid? taskAssignmentLineId,
+        string actionTypeName,
+        DateTime transactionDate,
+        string? transactionNote,
+        Guid reasonId,
+        decimal quantity,
+        Guid modifiedBy,
+        DateTime modifiedDate)
+    {
+        if (quantity <= 0)
+        {
+            return Result.Failure<StockTransaction>(StockErrors.NonPositiveQty);
+        }
+
+        var transaction = new StockTransaction(
+            taskAssignmentLineId,
+            actionTypeName,
+            true,
+            transactionDate,
+            transactionNote,
+            reasonId,
+            quantity,
+            ProductId);
+
+        _stockTransactions.Add(transaction);
+        ApplyTransaction(modifiedBy, modifiedDate, quantity, true);
+
+        return Result.Success(transaction);
+    }
+
+    public Result<StockTransaction> StockOut(
+        Guid? taskAssignmentLineId,
+        string actionTypeName,
+        DateTime transactionDate,
+        string? transactionNote,
+        Guid reasonId,
+        decimal quantity,
+        Guid modifiedBy,
+        DateTime modifiedDate)
+    {
+        if (quantity <= 0)
+        {
+            return Result.Failure<StockTransaction>(StockErrors.NonPositiveQty);
+        }
+
+        if (quantity > CurrentQty)
+        {
+            return Result.Failure<StockTransaction>(StockErrors.OverdrawnStock);
+        }
+
+        var transaction = new StockTransaction(
+            taskAssignmentLineId,
+            actionTypeName,
+            false,
+            transactionDate,
+            transactionNote,
+            reasonId,
+            quantity,
+            ProductId);
+
+        _stockTransactions.Add(transaction);
+        ApplyTransaction(modifiedBy, modifiedDate, quantity, false);
+
+        return Result.Success(transaction);
+    }
+
+
+    private void ApplyTransaction(Guid lastModifiedBy, DateTime lastModifiedDate, decimal quantity, bool posAdjustment)
+    {
         CurrentQty = posAdjustment ? CurrentQty + quantity : CurrentQty - quantity;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
@@ -104,15 +173,6 @@ public sealed class Stock : Entity
         }
 
         Status = StockStatus.Active;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
-
-        return Result.Success();
-    }
-
-    public Result MarkAsDamaged(Guid lastModifiedBy, DateTime lastModifiedDate)
-    {
-        Status = StockStatus.Damaged;
         LastModifiedBy = lastModifiedBy;
         LastModifiedDate = lastModifiedDate;
 

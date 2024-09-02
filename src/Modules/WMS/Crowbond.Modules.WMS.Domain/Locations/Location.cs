@@ -16,7 +16,7 @@ public sealed class Location : Entity
 
     public LocationType? LocationType { get; private set; }
 
-    public LocationLayer LocationLeyer { get; private set; }
+    public LocationLayer LocationLayer { get; private set; }
 
     public LocationStatus Status { get; private set; }
 
@@ -33,7 +33,7 @@ public sealed class Location : Entity
             ParentId = parentId,
             Name = name,
             LocationType = locationType,
-            LocationLeyer = locationLayer,
+            LocationLayer = locationLayer,
             Status = LocationStatus.Active
         };
 

@@ -15,7 +15,6 @@ internal sealed class StockTransactionConfiguration : IEntityTypeConfiguration<S
         builder.Property(t => t.TransactionNote).IsRequired(false).HasMaxLength(255);
         builder.Property(t => t.Quantity).IsRequired().HasPrecision(10, 2);
 
-        builder.HasOne<Stock>().WithMany().HasForeignKey(t => t.StockId);
         builder.HasOne<ActionType>().WithMany().HasForeignKey(t => t.ActionTypeName);
         builder.HasOne<StockTransactionReason>().WithMany().HasForeignKey(t => t.ReasonId);
         builder.HasOne<TaskAssignmentLine>().WithMany().HasForeignKey(t => t.TaskAssignmentLineId);

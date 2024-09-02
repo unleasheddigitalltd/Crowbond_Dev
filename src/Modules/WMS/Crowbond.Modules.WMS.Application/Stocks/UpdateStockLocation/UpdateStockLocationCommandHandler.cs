@@ -25,13 +25,6 @@ internal sealed class UpdateStockLocationCommandHandler(
             return Result.Failure<Guid>(StockErrors.ReasonNotFound(request.ReasonId));
         }
 
-        Location? location = await locationRepository.GetAsync(request.Destination, cancellationToken);
-
-        if (location == null)
-        {
-            return Result.Failure<Guid>(StockErrors.LocationNotFound(request.Destination));
-        }
-
         Stock? stock = await stockRepository.GetAsync(request.StockId, cancellationToken);
 
         if (stock is null)
@@ -39,29 +32,43 @@ internal sealed class UpdateStockLocationCommandHandler(
             return Result.Failure<Guid>(StockErrors.NotFound(request.StockId));
         }
 
+        if (stock.LocationId == request.Destination)
+        {
+            return Result.Failure<Guid>(StockErrors.SameLocation);
+        }
+
+        Location? location = await locationRepository.GetAsync(request.Destination, cancellationToken);
+
+        if (location == null)
+        {
+            return Result.Failure<Guid>(StockErrors.LocationNotFound(request.Destination));
+        }
+
         Setting? setting = await settingRepository.GetAsync(cancellationToken);
 
         if (setting is null)
         {
-            return Result.Failure<Guid>(StockErrors.SettingNotFound());
+            return Result.Failure<Guid>(StockErrors.SettingNotFound);
         }
 
         IEnumerable<Stock> destStocks = await stockRepository.GetByLocationAsync(request.Destination, cancellationToken);
 
-        if (destStocks?.FirstOrDefault(s => s.BatchNumber != stock.BatchNumber) is not null && !setting.HasMixBatchLocation)
+        destStocks ??= Enumerable.Empty<Stock>();
+
+        // check the possiblity of the destination.
+        if (destStocks.FirstOrDefault(s => s.ReceiptLineId != stock.ReceiptLineId && stock.CurrentQty > 0) is not null && !setting.HasMixBatchLocation)
         {
             return Result.Failure<Guid>(StockErrors.LocationNotEmpty(request.Destination));
         }
 
-        Result<Stock> destStockResult = destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber);
+        // Check the existence of the destination.
+        Stock? destStock = destStocks.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber && stock.CurrentQty > 0);
 
-        if (destStocks?.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber) is null)
+        if (destStock is null)
         {
-            destStockResult = Stock.Create(
+            Result<Stock> result = Stock.Create(
                 stock.ProductId,
                 location.Id,
-                request.Quantity,
-                request.Quantity,
                 stock.BatchNumber,
                 stock.ReceivedDate,
                 stock.SellByDate,
@@ -71,49 +78,51 @@ internal sealed class UpdateStockLocationCommandHandler(
                 request.UserId,
                 dateTimeProvider.UtcNow);
 
-            if (destStockResult.IsFailure)
+            if (result.IsFailure)
             {
-                return Result.Failure<Guid>(destStockResult.Error);
+                return Result.Failure<Guid>(result.Error);
             }
 
-            stockRepository.InsertStock(destStockResult.Value);
+            destStock = result.Value;
+            stockRepository.InsertStock(destStock);
         }
-        else
+
+
+        Result<StockTransaction> orgTransResult = stock.StockOut(
+            null,
+            ActionType.Relocating.Name,
+            dateTimeProvider.UtcNow,
+            request.TransactionNote,
+            transactionReason.Id,
+            request.Quantity,
+            request.UserId,
+            dateTimeProvider.UtcNow);
+
+        if (orgTransResult.IsFailure)
         {
-            destStockResult.Value.Adjust(request.UserId, dateTimeProvider.UtcNow, true, request.Quantity);
+            return Result.Failure<Guid>(orgTransResult.Error);
         }
 
-        var originTransaction = StockTransaction.Create(
+        Result<StockTransaction> destTransResult = destStock.StockIn(
             null,
             ActionType.Relocating.Name,
-            false,
             dateTimeProvider.UtcNow,
             request.TransactionNote,
             transactionReason.Id,
             request.Quantity,
-            stock.ProductId,
-            stock.Id);
+            request.UserId,
+            dateTimeProvider.UtcNow);
 
-        stockRepository.InsertStockTransaction(originTransaction);
+        if (destTransResult.IsFailure)
+        {
+            return Result.Failure<Guid>(destTransResult.Error);
+        }
 
-        stock.Adjust(request.UserId, dateTimeProvider.UtcNow, false, request.Quantity);
-
-
-        var destTransaction = StockTransaction.Create(
-            null,
-            ActionType.Relocating.Name,
-            true,
-            dateTimeProvider.UtcNow,
-            request.TransactionNote,
-            transactionReason.Id,
-            request.Quantity,
-            stock.ProductId,
-            destStockResult.Value.Id);
-
-        stockRepository.InsertStockTransaction(destTransaction);
+        stockRepository.AddStockTransaction(orgTransResult.Value);
+        stockRepository.AddStockTransaction(destTransResult.Value);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return destStockResult.Value.Id;
+        return destStock.Id;
     }
 }

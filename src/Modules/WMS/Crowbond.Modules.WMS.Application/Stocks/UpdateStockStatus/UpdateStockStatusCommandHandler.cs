@@ -15,7 +15,7 @@ internal sealed class UpdateStockStatusCommandHandler(
 {
     public async Task<Result> Handle(UpdateStockStatusCommand request, CancellationToken cancellationToken)
     {
-        if (!request.StatusType.TryConvertToEnum<StockStatus>(out StockStatus statusType))
+        if (!request.StatusType.TryConvertToEnum(out StockStatus statusType))
         {
             return Result.Failure(StockErrors.StatusNotFound(request.StatusType));
         }
@@ -30,8 +30,7 @@ internal sealed class UpdateStockStatusCommandHandler(
         var stockActions = new Dictionary<StockStatus, Func<Result>>
         {
             { StockStatus.Active, () => stock.Activate(request.UserId, dateTimeProvider.UtcNow) },
-            { StockStatus.Held, () => stock.Hold(request.UserId, dateTimeProvider.UtcNow) },
-            { StockStatus.Damaged, () => stock.MarkAsDamaged(request.UserId, dateTimeProvider.UtcNow) }
+            { StockStatus.Held, () => stock.Hold(request.UserId, dateTimeProvider.UtcNow) }
         };
 
         Result result = stockActions[statusType]();

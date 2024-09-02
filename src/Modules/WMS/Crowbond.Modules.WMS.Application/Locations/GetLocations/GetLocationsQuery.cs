@@ -2,4 +2,4 @@
 using Crowbond.Modules.WMS.Domain.Locations;
 
 namespace Crowbond.Modules.WMS.Application.Locations.GetLocations;
-public sealed record GetLocationsQuery(LocationType locationType) : IQuery<IReadOnlyCollection<LocationResponse>>;
+public sealed record GetLocationsQuery(LocationLayer LocationLayer, LocationType locationType) : IQuery<IReadOnlyCollection<LocationResponse>>;
