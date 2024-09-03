@@ -24,8 +24,7 @@ public sealed class ReceiptLine : Entity
 
     public string BatchNumber { get; private set; }
 
-    public static ReceiptLine Create(
-        Guid receiptHeaderId,
+    internal static ReceiptLine Create(
         Guid productId,
         decimal quantityReceived,
         decimal unitPrice)
@@ -33,7 +32,6 @@ public sealed class ReceiptLine : Entity
         var receiptLine = new ReceiptLine
         {
             Id = Guid.NewGuid(),
-            ReceiptHeaderId = receiptHeaderId,
             ProductId = productId,
             QuantityReceived = quantityReceived,
             UnitPrice = unitPrice,
@@ -43,11 +41,11 @@ public sealed class ReceiptLine : Entity
         return receiptLine;
     }
 
-
     private static string GenerateBatchNumber()
     {
         string batchNumber = "";
         return batchNumber;
     }
+
 
 }

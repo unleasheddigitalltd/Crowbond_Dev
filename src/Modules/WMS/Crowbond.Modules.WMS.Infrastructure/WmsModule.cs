@@ -31,6 +31,7 @@ using Crowbond.Modules.WMS.Infrastructure.WarehouseOperators;
 using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Modules.WMS.Infrastructure.Tasks;
+using Crowbond.Common.Infrastructure.ChangeDetection;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -67,7 +68,8 @@ public static class WmsModule
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.WMS))
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WmsDbContext>());
 

@@ -14,7 +14,7 @@ internal sealed class ReceiptRepository(WmsDbContext context) : IReceiptReposito
 
     public async Task<ReceiptHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.ReceiptHeaders.SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
+        return await context.ReceiptHeaders.Include(r => r.Lines).SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<ReceiptLine>> GetLinesAsync(Guid id, CancellationToken cancellationToken = default)

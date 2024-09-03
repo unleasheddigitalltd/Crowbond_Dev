@@ -30,26 +30,22 @@ internal sealed class AssignPutAwayTaskCommandHandler(
             return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.EntityId));
         }
 
-        Result<TaskAssignment> result = taskHeader.AddAssignment(
-            request.WarehouseOperatorId,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+        // Prepare a list of product lines from receiptLines
+        var productLines = receiptLines.Select(line => (
+            productId: line.ProductId,
+            requestedQty: line.QuantityReceived,
+            receiptLineId: line.Id
+        )).ToList();
+
+        Result<TaskAssignment> result = taskHeader.AddAssignmentWithLines(
+            warehouseOperatorId: request.WarehouseOperatorId,
+            createdBy: request.UserId,
+            createdDate: dateTimeProvider.UtcNow,
+            productLines: productLines);
 
         if (result.IsFailure)
         {
             return Result.Failure<Guid>(result.Error);
-        }
-
-        foreach (ReceiptLine receiptLine in receiptLines)
-        {
-            Result resultLine = taskHeader.AddAssignmentLine(
-                productId: receiptLine.ProductId,
-                requestedQty: receiptLine.QuantityReceived);
-
-            if (resultLine.IsFailure)
-            {
-                return Result.Failure<Guid>(resultLine.Error);
-            }
         }
 
         taskRepository.AddAssignment(result.Value);

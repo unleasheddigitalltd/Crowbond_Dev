@@ -1,4 +1,5 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Data;
+using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Domain.Products;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
@@ -46,37 +47,81 @@ public sealed class TaskAssignment : Entity
         return taskAssignment;
     }
 
-    internal Result<TaskAssignmentLine> AddLine(Guid productId, decimal requestedQty)
+    internal Result<TaskAssignmentLine> AddLine(Guid productId, decimal requestedQty, Guid receiptLineId)
     {
+        // check the Task assignment was not started.
         if (Status != TaskAssignmentStatus.Pending)
         {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.alreadyStarted);
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyStarted);
         }
 
+        // create a task assignment line.
         Result<TaskAssignmentLine> result = 
-            TaskAssignmentLine.Create(productId, requestedQty);
+            TaskAssignmentLine.Create(productId, requestedQty, receiptLineId);
 
         if (result.IsFailure)
         {
             return Result.Failure<TaskAssignmentLine>(result.Error);
         }
 
+        // add the created line to the lines.
         _lines.Add(result.Value);
         return result.Value;
     }
 
-    public Result Start(Guid modifiedBy, DateTime modifiedDate)
+    internal Result Start(Guid modifiedBy, DateTime modificationDate)
     {
-        if (Status != TaskAssignmentStatus.Pending && Status != TaskAssignmentStatus.Paused)
+        // check the task not already started.
+        if (Status is not TaskAssignmentStatus.Pending and not TaskAssignmentStatus.Paused)
         {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.alreadyStarted);
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyStarted);
         }
 
+        // start all the lines.
+        foreach (TaskAssignmentLine line in _lines)
+        {
+            Result result = line.Start(modificationDate);
+            if (result.IsFailure)
+            {
+                return result;
+            }
+        }
+
+        // update the status.
         Status = TaskAssignmentStatus.InProgress;
         LastModifiedBy = modifiedBy;
-        LastModifiedDate = modifiedDate;
+        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
+    internal Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
+    {
+        // select the specific line with this product.
+        TaskAssignmentLine? line = _lines.Find(l => l.ProductId == productId);
+
+        if (line is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.LineForProductNotFound(productId));
+        }
+
+        // increament the complete quantity.
+        Result result = line.IncrementCompletedQty(modificationDate, Quantity);
+
+        if (result.IsFailure)
+        {
+            return Result.Failure<TaskAssignmentLine>(result.Error);
+        }
+
+        // change status to completed all lines are completed.
+        if (_lines.TrueForAll(l => l.Status is TaskAssignmentLineStatus.Completed))
+        {
+            Status = TaskAssignmentStatus.Completed;
+        }
+
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modificationDate;
+
+        return Result.Success(line);
+    }
 }

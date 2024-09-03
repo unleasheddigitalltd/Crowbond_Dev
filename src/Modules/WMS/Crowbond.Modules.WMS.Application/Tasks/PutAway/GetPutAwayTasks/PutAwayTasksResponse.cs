@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Application.Pagination;
+using Crowbond.Modules.WMS.Domain.Tasks;
 
 namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTasks;
 
@@ -17,5 +18,6 @@ public sealed record PutAwayTask
     public string ReceiptNo { get; }
     public string ReceivedDate { get; }
     public string DeliveryNoteNumber { get; }
+    public TaskHeaderStatus Status { get; }
 }
 

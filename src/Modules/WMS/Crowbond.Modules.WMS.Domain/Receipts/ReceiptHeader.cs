@@ -4,6 +4,8 @@ namespace Crowbond.Modules.WMS.Domain.Receipts;
 
 public sealed class ReceiptHeader : Entity
 {
+    private readonly List<ReceiptLine> _lines = new();
+
     public ReceiptHeader()
     {
     }
@@ -29,6 +31,8 @@ public sealed class ReceiptHeader : Entity
     public Guid? LastModifiedBy { get; private set; }
 
     public DateTime? LastModifiedDate { get; private set; }
+
+    public IReadOnlyCollection<ReceiptLine> Lines => _lines;
 
     public static ReceiptHeader Create(
         string receiptNo,
@@ -81,5 +85,21 @@ public sealed class ReceiptHeader : Entity
         LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
+    }
+
+    public Result<ReceiptLine> AddLine(
+        Guid modifiedBy, 
+        DateTime modiriedDate, 
+        Guid productId,
+        decimal quantityReceived,
+        decimal unitPrice)
+    {
+        var receiptLine = ReceiptLine.Create(productId, quantityReceived, unitPrice);
+
+        _lines.Add(receiptLine);
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modiriedDate;
+
+        return Result.Success(receiptLine);
     }
 }

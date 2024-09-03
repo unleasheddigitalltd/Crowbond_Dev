@@ -16,8 +16,8 @@ internal sealed class GetPutawayTasks : IEndpoint
         app.MapGet("tasks/putaway", async (
             ISender sender,
             string search = "",
-            string sort = "receiveddate",
-            string order = "decs",
+            string sort = "status",
+            string order = "asc",
             int page = 0,
             int size = 10) =>
         {

@@ -21,7 +21,8 @@ internal sealed class GetPutAwayTasksQueryHandler(IDbConnectionFactory dbConnect
             "ReceiptNo" => "r.receipt_no",
             "ReceivedDate" => "r.received_date",
             "DeliveryNoteNumber" => "r.delivery_note_number",
-            _ => "r.received_date" // Default sorting
+            "Status" => "t.status",
+            _ => "t.status" // Default sorting
         };
 
         string sql = $@"
@@ -31,7 +32,8 @@ internal sealed class GetPutAwayTasksQueryHandler(IDbConnectionFactory dbConnect
                     t.task_no AS {nameof(PutAwayTask.TaskNo)},
                     r.receipt_no AS {nameof(PutAwayTask.ReceiptNo)},
                     r.received_date AS {nameof(PutAwayTask.ReceivedDate)},
-                    r.delivery_note_number AS {nameof(PutAwayTask.DeliveryNoteNumber)},                    
+                    r.delivery_note_number AS {nameof(PutAwayTask.DeliveryNoteNumber)}, 
+                    t.status AS {nameof(PutAwayTask.Status)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.task_headers t
                 INNER JOIN wms.receipt_headers r ON r.id = t.entity_id
@@ -47,7 +49,8 @@ internal sealed class GetPutAwayTasksQueryHandler(IDbConnectionFactory dbConnect
                 t.{nameof(PutAwayTask.TaskNo)},
                 t.{nameof(PutAwayTask.ReceiptNo)},
                 t.{nameof(PutAwayTask.ReceivedDate)},
-                t.{nameof(PutAwayTask.DeliveryNoteNumber)}                
+                t.{nameof(PutAwayTask.DeliveryNoteNumber)},
+                t.{nameof(PutAwayTask.Status)}
             FROM FilteredPutAwayTasks t
             WHERE t.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY t.RowNum;

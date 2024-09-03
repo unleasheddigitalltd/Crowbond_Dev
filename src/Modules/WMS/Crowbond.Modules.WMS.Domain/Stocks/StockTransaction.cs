@@ -22,7 +22,7 @@ public sealed class StockTransaction : Entity
 
     public string? TransactionNote { get; private set; }
 
-    public Guid ReasonId { get; private set; }
+    public Guid? ReasonId { get; private set; }
 
     public decimal Quantity { get; private set; }
 
@@ -36,7 +36,7 @@ public sealed class StockTransaction : Entity
         bool posAdjustment,
         DateTime transactionDate,
         string? transactionNote,
-        Guid reasonId,
+        Guid? reasonId,
         decimal quantity,
         Guid productId)
     {

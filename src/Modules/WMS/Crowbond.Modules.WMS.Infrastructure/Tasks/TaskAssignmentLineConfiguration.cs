@@ -17,8 +17,8 @@ internal sealed class TaskAssignmentLineConfiguration : IEntityTypeConfiguration
         builder.Property(t => t.FromLocationId).IsRequired(false);
         builder.Property(t => t.ToLocationId).IsRequired(false);
         builder.Property(t => t.RequestedQty).IsRequired().HasPrecision(10, 2);
-        builder.Property(t => t.CompletedQty).IsRequired(false).HasPrecision(10, 2);
-        builder.Property(t => t.MissedQty).IsRequired(false).HasPrecision(10, 2);
+        builder.Property(t => t.CompletedQty).IsRequired().HasPrecision(10, 2);
+        builder.Property(t => t.MissedQty).IsRequired().HasPrecision(10, 2);
 
         builder.HasOne<Location>().WithMany().HasForeignKey(t => t.FromLocationId);
         builder.HasOne<Location>().WithMany().HasForeignKey(t => t.ToLocationId);

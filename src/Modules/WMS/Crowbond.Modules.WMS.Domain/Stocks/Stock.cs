@@ -23,9 +23,9 @@ public sealed class Stock : Entity
 
     public DateTime ReceivedDate { get; private set; }
 
-    public DateTime? SellByDate { get; private set; }
+    public DateOnly? SellByDate { get; private set; }
 
-    public DateTime? UseByDate { get; private set; }
+    public DateOnly? UseByDate { get; private set; }
 
     public Guid ReceiptLineId { get; private set; }
 
@@ -48,8 +48,8 @@ public sealed class Stock : Entity
         Guid locationId,
         string batchNumber,
         DateTime receivedDate,
-        DateTime? sellByDate,
-        DateTime? useByDate,
+        DateOnly? sellByDate,
+        DateOnly? useByDate,
         Guid receiptLineId,
         string? note,
         Guid createdBy,
@@ -81,10 +81,10 @@ public sealed class Stock : Entity
         string actionTypeName,
         DateTime transactionDate,
         string? transactionNote,
-        Guid reasonId,
+        Guid? reasonId,
         decimal quantity,
         Guid modifiedBy,
-        DateTime modifiedDate)
+        DateTime modificationDate)
     {
         if (quantity <= 0)
         {
@@ -102,7 +102,7 @@ public sealed class Stock : Entity
             ProductId);
 
         _stockTransactions.Add(transaction);
-        ApplyTransaction(modifiedBy, modifiedDate, quantity, true);
+        ApplyTransaction(modifiedBy, modificationDate, quantity, true);
 
         return Result.Success(transaction);
     }
@@ -112,10 +112,10 @@ public sealed class Stock : Entity
         string actionTypeName,
         DateTime transactionDate,
         string? transactionNote,
-        Guid reasonId,
+        Guid? reasonId,
         decimal quantity,
         Guid modifiedBy,
-        DateTime modifiedDate)
+        DateTime modificationDate)
     {
         if (quantity <= 0)
         {
@@ -138,7 +138,7 @@ public sealed class Stock : Entity
             ProductId);
 
         _stockTransactions.Add(transaction);
-        ApplyTransaction(modifiedBy, modifiedDate, quantity, false);
+        ApplyTransaction(modifiedBy, modificationDate, quantity, false);
 
         return Result.Success(transaction);
     }

@@ -33,12 +33,18 @@ internal sealed class CreateReceiptCommandHandler(
             request.Receipt.CreateBy,
             dateTimeProvider.UtcNow);
 
+
+        foreach (ReceiptRequest.ReceiptLineRequest line in request.Receipt.ReceiptLines)
+        {
+            result.Value.AddLine(
+                request.Receipt.CreateBy,
+                dateTimeProvider.UtcNow,
+                line.ProductId, 
+                line.QuantityReceived,
+                line.UnitPrice);
+        }
+
         receiptRepository.Insert(result.Value);
-
-        IEnumerable<ReceiptLine> receiptLines = request.Receipt.ReceiptLines
-            .Select(r => ReceiptLine.Create(result.Value.Id, r.ProductId, r.QuantityReceived, r.UnitPrice));
-
-        receiptRepository.AddLines(receiptLines);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

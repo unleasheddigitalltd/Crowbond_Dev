@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using Crowbond.Common.Infrastructure.Inbox;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Modules.WMS.Infrastructure.Locations;
@@ -12,8 +12,6 @@ using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Modules.WMS.Domain.Categories;
 using Crowbond.Modules.WMS.Domain.Products;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Crowbond.Modules.WMS.Domain.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Sequences;
@@ -84,14 +82,5 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new TaskAssignmentStatusHistoryConfiguration());
 
         modelBuilder.ApplyConfiguration(new WarehouseOperatorConfiguration());
-    }
-    public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        if (Database.CurrentTransaction is not null)
-        {
-            await Database.CurrentTransaction.DisposeAsync();
-        }
-
-        return (await Database.BeginTransactionAsync(cancellationToken)).GetDbTransaction();
     }
 }

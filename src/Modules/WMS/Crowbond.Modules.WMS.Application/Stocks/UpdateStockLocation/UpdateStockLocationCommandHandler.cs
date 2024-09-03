@@ -56,13 +56,13 @@ internal sealed class UpdateStockLocationCommandHandler(
         destStocks ??= Enumerable.Empty<Stock>();
 
         // check the possiblity of the destination.
-        if (destStocks.FirstOrDefault(s => s.ReceiptLineId != stock.ReceiptLineId && stock.CurrentQty > 0) is not null && !setting.HasMixBatchLocation)
+        if (destStocks.FirstOrDefault(s => s.ReceiptLineId != stock.ReceiptLineId && s.CurrentQty > 0) is not null && !setting.HasMixBatchLocation)
         {
             return Result.Failure<Guid>(StockErrors.LocationNotEmpty(request.Destination));
         }
 
         // Check the existence of the destination.
-        Stock? destStock = destStocks.FirstOrDefault(s => s.BatchNumber == stock.BatchNumber && stock.CurrentQty > 0);
+        Stock? destStock = destStocks.FirstOrDefault(s => s.ReceiptLineId == stock.ReceiptLineId);
 
         if (destStock is null)
         {
