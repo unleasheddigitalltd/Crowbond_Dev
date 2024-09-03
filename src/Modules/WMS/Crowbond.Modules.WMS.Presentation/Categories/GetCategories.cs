@@ -20,6 +20,6 @@ internal sealed class GetCategories : IEndpoint
             return result.Match(Results.Ok, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.GetProducts)
-        .WithTags(Tags.Categories);
+        .WithTags(Tags.Products);
     }
 }

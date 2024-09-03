@@ -137,10 +137,89 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
     }
 
+    public Result Pause(Guid modifiedBy, DateTime modificationDate)
+    {
+        if (Status is not TaskHeaderStatus.InProgress)
+        {
+            return Result.Failure(TaskErrors.NotInProgress);
+        }
+
+        // Attempt to find an assignment that is either Pending or Paused
+        TaskAssignment? assignment = _assignments
+            .Find(a => a.Status is TaskAssignmentStatus.InProgress);
+
+        if (assignment is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.HasNoInprogressAssignmet(Id));
+        }
+
+        // pause the found assignment
+        Result result = assignment.Pause(modifiedBy, modificationDate);
+        if (result.IsFailure)
+        {
+            return result;
+        }
+
+        return Result.Success();
+    }
+
+    public Result Unpause(Guid modifiedBy, DateTime modificationDate)
+    {
+        if (Status is not TaskHeaderStatus.InProgress)
+        {
+            return Result.Failure(TaskErrors.NotInProgress);
+        }
+
+        // Attempt to find an assignment that is either Pending or Paused
+        TaskAssignment? assignment = _assignments
+            .Find(a => a.Status is TaskAssignmentStatus.Paused);
+
+        if (assignment is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.HasNoPausedAssignmet(Id));
+        }
+
+        // pause the found assignment
+        Result result = assignment.Unpause(modifiedBy, modificationDate);
+        if (result.IsFailure)
+        {
+            return result;
+        }
+
+        return Result.Success();
+    }
+
+    public Result Quit(Guid modifiedBy, DateTime modificationDate)
+    {
+        if (Status is not TaskHeaderStatus.InProgress)
+        {
+            return Result.Failure(TaskErrors.NotInProgress);
+        }
+
+        // Attempt to find an assignment that is either Pending or Paused
+        TaskAssignment? assignment = _assignments
+            .Find(a => a.Status is TaskAssignmentStatus.InProgress or TaskAssignmentStatus.Paused);
+
+        if (assignment is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.HasNoInprogressAssignmet(Id));
+        }
+
+        // pause the found assignment
+        Result result = assignment.Quit(modifiedBy, modificationDate);
+        if (result.IsFailure)
+        {
+            return result;
+        }
+
+        Status = TaskHeaderStatus.NotAssigned;
+        return Result.Success();
+    }
+
     public Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // Find the single assignment that is currently in progress
-        TaskAssignment taskAssignment = Assignments.SingleOrDefault(a => a.Status is TaskAssignmentStatus.InProgress);
+        TaskAssignment taskAssignment = _assignments.SingleOrDefault(a => a.Status is TaskAssignmentStatus.InProgress);
 
         if (taskAssignment is null)
         {
@@ -157,4 +236,6 @@ public sealed class TaskHeader : Entity, IChangeDetectable
 
         return result;
     }
+
+
 }

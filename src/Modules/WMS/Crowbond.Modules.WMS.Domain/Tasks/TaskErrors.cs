@@ -27,6 +27,12 @@ public static class TaskErrors
     public static readonly Error IsStarted =
         Error.Problem("Tasks.IsStarted", "The task was was started");
 
+    public static readonly Error NotInProgress =
+        Error.Problem("Tasks.NotInProgress", "The task was not in progress");
+
+    public static readonly Error AlreadyInprogress = 
+        Error.Problem("Tasks.AlreadyInprogress", "The task was already in progress");
+
     public static readonly Error IsInProgress = 
         Error.Problem("Tasks.IsInProgress", "The task was in progress");
 
@@ -36,6 +42,8 @@ public static class TaskErrors
     public static readonly Error IsCanceled = 
         Error.Problem("Tasks.IsCanceled", "The task was canceled");
 
+    public static readonly Error LineIsCompleted = 
+        Error.Problem("Tasks.LineIsCompleted", "The task line was completed");
     public static Error UnknownStatus(TaskHeaderStatus status) => 
         Error.Problem("Tasks.UnknownStatus", $"The task is in an unknown status: {status}.");
 
@@ -47,6 +55,9 @@ public static class TaskErrors
 
     public static Error HasNoInprogressAssignmet(Guid taskHeaderId) =>
         Error.NotFound("Tasks.HasNoInprogressAssignmet", $"The task with the identifier {taskHeaderId} has no in-progress task assignment");
+
+    public static Error HasNoPausedAssignmet(Guid taskHeaderId) =>
+        Error.NotFound("Tasks.HasNoPausedAssignmet", $"The task with the identifier {taskHeaderId} has no paused task assignment");
 
     public static Error LineForProductIsNotInProgress(Guid productId) => 
         Error.Problem("Tasks.LineForProductIsNotInProgress", $"The task assignment line for product with the identifier {productId} was not in-progress");

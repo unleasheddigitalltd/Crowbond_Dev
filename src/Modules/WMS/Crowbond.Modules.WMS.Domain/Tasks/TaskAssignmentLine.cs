@@ -78,11 +78,11 @@ public sealed class TaskAssignmentLine : Entity
         return Result.Success();
     }
 
-    internal Result InComplete(DateTime modificationDate) 
+    internal Result Close(DateTime modificationDate) 
     {
-        if (Status is not TaskAssignmentLineStatus.InProgress and not TaskAssignmentLineStatus.Notstarted )
+        if (Status is TaskAssignmentLineStatus.Completed )
         {
-            return Result.Failure(TaskErrors.LineNotInProgress);
+            return Result.Failure(TaskErrors.LineIsCompleted);
         }
 
         Status = TaskAssignmentLineStatus.Incomplete;

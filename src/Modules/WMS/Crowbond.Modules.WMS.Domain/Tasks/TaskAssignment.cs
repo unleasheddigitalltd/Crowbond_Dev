@@ -95,6 +95,67 @@ public sealed class TaskAssignment : Entity
         return Result.Success();
     }
 
+    internal Result Pause(Guid modifiedBy, DateTime modificationDate)
+    {
+        // check the task not already started.
+        if (Status is not TaskAssignmentStatus.InProgress)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyStarted);
+        }
+
+        // update the status.
+        Status = TaskAssignmentStatus.Paused;
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modificationDate;
+
+        return Result.Success();
+    }
+
+    internal Result Unpause(Guid modifiedBy, DateTime modificationDate)
+    {
+        // check the task not already started.
+        if (Status is not TaskAssignmentStatus.Paused)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyInprogress);
+        }
+
+        // update the status.
+        Status = TaskAssignmentStatus.InProgress;
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modificationDate;
+
+        return Result.Success();
+    }
+
+    internal Result Quit(Guid modifiedBy, DateTime modificationDate)
+    {
+        // check the task not already started.
+        if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.NotInProgress);
+        }
+
+        // close all the incomplete lines.
+        IEnumerable<TaskAssignmentLine> notCompleteLines = 
+            _lines.Where(l => l.Status is not TaskAssignmentLineStatus.Completed);
+        
+        foreach (TaskAssignmentLine line in notCompleteLines)
+        {
+            Result result = line.Close(modificationDate);
+            if (result.IsFailure)
+            {
+                return result;
+            }
+        }
+
+        // update the status.
+        Status = TaskAssignmentStatus.Quit;
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modificationDate;
+
+        return Result.Success();
+    }
+
     internal Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // select the specific line with this product.
