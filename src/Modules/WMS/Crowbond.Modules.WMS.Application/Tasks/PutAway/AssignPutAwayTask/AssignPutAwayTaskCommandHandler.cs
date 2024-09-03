@@ -23,15 +23,20 @@ internal sealed class AssignPutAwayTaskCommandHandler(
             return Result.Failure<Guid>(TaskErrors.NotFound(request.TaskHeaderId));
         }
 
-        IEnumerable<ReceiptLine> receiptLines = await receiptRepository.GetLinesAsync(taskHeader.EntityId, cancellationToken);
+        ReceiptHeader? receipt = await receiptRepository.GetAsync(taskHeader.EntityId, cancellationToken);
 
-        if (!receiptLines.Any())
+        if (receipt is null)
+        {
+            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.EntityId));            
+        }
+
+        if (!receipt.Lines.Any())
         {
             return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.EntityId));
         }
 
         // Prepare a list of product lines from receiptLines
-        var productLines = receiptLines.Select(line => (
+        var productLines = receipt.Lines.Select(line => (
             productId: line.ProductId,
             requestedQty: line.QuantityReceived,
             receiptLineId: line.Id

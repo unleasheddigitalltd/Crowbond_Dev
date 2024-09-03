@@ -48,6 +48,17 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         switch (Status)
         {
             case TaskHeaderStatus.NotAssigned:
+
+                var productCompeletedQties = _assignments
+                    .SelectMany(a => a.Lines)       // Flatten to get all lines
+                    .GroupBy(line => line.ProductId) // Group by ProductId
+                    .Select(group => new
+                    {
+                        productId = group.Key, // The key is the ProductId
+                        totalCompleteQty = group.Sum(line => line.CompletedQty) // Sum of CompleteQty for each product
+                    })
+                    .ToList();
+
                 // Create a new task assignment
                 Result<TaskAssignment> createResult = TaskAssignment.Create(warehouseOperatorId, createdBy, createdDate);
 
@@ -61,12 +72,18 @@ public sealed class TaskHeader : Entity, IChangeDetectable
                 // Attempt to add lines for each product
                 foreach ((Guid productId, decimal requestedQty, Guid receiptLineId) in productLines)
                 {
-                    Result<TaskAssignmentLine> addLineResult = newAssignment.AddLine(productId, requestedQty, receiptLineId);
+                    // consider the compelete quantity of previous task assignments.
+                    decimal newRequestedQty = requestedQty - (productCompeletedQties.Find(p => p.productId == productId)?.totalCompleteQty ?? 0);
 
-                    if (!addLineResult.IsSuccess)
+                    if (newRequestedQty > 0)
                     {
-                        // If adding a line fails, return failure result
-                        return Result.Failure<TaskAssignment>(addLineResult.Error);
+                        Result<TaskAssignmentLine> addLineResult = newAssignment.AddLine(productId, newRequestedQty, receiptLineId);
+
+                        if (!addLineResult.IsSuccess)
+                        {
+                            // If adding a line fails, return failure result
+                            return Result.Failure<TaskAssignment>(addLineResult.Error);
+                        }
                     }
                 }
 
