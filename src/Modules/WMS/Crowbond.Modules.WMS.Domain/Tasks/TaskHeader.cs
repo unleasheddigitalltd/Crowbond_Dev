@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using MediatR;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
 
@@ -281,5 +282,11 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return result;
     }
 
+    public bool IsAssignedTo(Guid operatorId)
+    {
+        TaskAssignment? activeAssignment = _assignments.Find(a => 
+            a.Status is not TaskAssignmentStatus.Quit or TaskAssignmentStatus.Completed);
 
+        return activeAssignment?.AssignedOperatorId == operatorId;
+    }
 }

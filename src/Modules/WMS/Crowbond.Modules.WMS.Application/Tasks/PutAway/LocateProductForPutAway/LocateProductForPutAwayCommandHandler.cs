@@ -29,6 +29,10 @@ internal sealed class LocateProductForPutAwayCommandHandler(
             return Result.Failure<Guid>(TaskErrors.NotFound(request.TaskId));
         }
 
+        if (taskHeader.IsAssignedTo(request.UserId))
+        {
+            return Result.Failure<Guid>(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
+        }
 
         // Retrieve location
         Location? location = await locationRepository.GetAsync(request.LocationId, cancellationToken);

@@ -44,14 +44,22 @@ public static class TaskErrors
 
     public static readonly Error LineIsCompleted = 
         Error.Problem("Tasks.LineIsCompleted", "The task line was completed");
+    
+    public static readonly Error LineNotInProgress = 
+        Error.Problem("Tasks.LineNotInProgress", "The task assignment line is not in in-progress status");
+
+    public static readonly Error QuantityNotGreaterThanZero =
+        Error.Problem("Tasks.QuantityNotGreaterThanZero", "The quantity should be greater than zero");
+
     public static Error UnknownStatus(TaskHeaderStatus status) => 
         Error.Problem("Tasks.UnknownStatus", $"The task is in an unknown status: {status}.");
 
     public static Error LineForProductNotFound(Guid productId) => 
         Error.NotFound("Tasks.LineForProductNotFound", $"The task assignment line for product with the identifier {productId} was not found");
+    
+    public static Error ActiveAssignmentForOperatorNotFound(Guid operatorId) => 
+        Error.NotFound("Tasks.ActiveAssignmentForOperatorNotFound", $"The active task assignment for operator with the identifier {operatorId} was not found");
 
-    public static readonly Error QuantityNotGreaterThanZero =
-        Error.Problem("Tasks.QuantityNotGreaterThanZero", "The quantity should be greater than zero");
 
     public static Error HasNoInprogressAssignmet(Guid taskHeaderId) =>
         Error.NotFound("Tasks.HasNoInprogressAssignmet", $"The task with the identifier {taskHeaderId} has no in-progress task assignment");
@@ -64,6 +72,4 @@ public static class TaskErrors
 
     public static Error ProductCompleteQtyExceedsRequestQty(Guid productId) =>
         Error.Problem("Tasks.ProductCompleteQtyExceedsRequestQty", $"The task assignment line for the product with identifier {productId} has a completed quantity greater than the requested quantity.");
-
-    public static readonly Error LineNotInProgress = Error.Problem("Tasks.LineNotInProgress", "The task assignment line is not in in-progress status");
 }
