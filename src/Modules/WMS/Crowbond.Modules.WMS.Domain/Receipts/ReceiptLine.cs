@@ -4,7 +4,7 @@ namespace Crowbond.Modules.WMS.Domain.Receipts;
 
 public sealed class ReceiptLine : Entity
 {
-    public ReceiptLine()
+    private ReceiptLine()
     {
     }
 

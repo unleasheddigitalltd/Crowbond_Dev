@@ -7,7 +7,7 @@ using Dapper;
 namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTaskAssignments;
 
 internal sealed class GetPutAwayTaskAssignmentsQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : ICommandHandler<GetPutAwayTaskAssignmentsQuery, IReadOnlyCollection<TaskAssignmentResponse>>
+    : IQueryHandler<GetPutAwayTaskAssignmentsQuery, IReadOnlyCollection<TaskAssignmentResponse>>
 {
     public async Task<Result<IReadOnlyCollection<TaskAssignmentResponse>>> Handle(GetPutAwayTaskAssignmentsQuery request, CancellationToken cancellationToken)
     {

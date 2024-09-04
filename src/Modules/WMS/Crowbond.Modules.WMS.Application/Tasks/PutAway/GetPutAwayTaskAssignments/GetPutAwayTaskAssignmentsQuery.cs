@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTaskAssignments;
 
-public sealed record GetPutAwayTaskAssignmentsQuery(Guid WarehouseOperatorId) : ICommand<IReadOnlyCollection<TaskAssignmentResponse>>;
+public sealed record GetPutAwayTaskAssignmentsQuery(Guid WarehouseOperatorId) : IQuery<IReadOnlyCollection<TaskAssignmentResponse>>;

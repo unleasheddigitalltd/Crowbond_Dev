@@ -8,12 +8,12 @@ public sealed class ActionType : Entity
     public static readonly ActionType Relocating = new("Relocating");
     public static readonly ActionType PutAway = new("PutAway");
 
-    public ActionType(string name)
+    private ActionType(string name)
     {
         Name = name;
     }
 
-    public ActionType()
+    private ActionType()
     {
     }
 

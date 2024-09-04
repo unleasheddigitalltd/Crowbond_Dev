@@ -6,7 +6,7 @@ public sealed class ReceiptHeader : Entity
 {
     private readonly List<ReceiptLine> _lines = new();
 
-    public ReceiptHeader()
+    private ReceiptHeader()
     {
     }
 
