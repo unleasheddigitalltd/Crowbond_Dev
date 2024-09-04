@@ -12,8 +12,6 @@ public sealed class TaskAssignmentLine : Entity
 
     public Guid TaskAssignmentId { get; private set; }
 
-    public Guid ReceiptLineId { get; private set; }
-
     public DateTime? StartDateTime { get; private set; }
 
     public DateTime? EndDateTime { get; private set; }
@@ -34,15 +32,13 @@ public sealed class TaskAssignmentLine : Entity
 
     internal static TaskAssignmentLine Create(
         Guid productId,
-        decimal requestedQty,
-        Guid receiptLineId)
+        decimal requestedQty)
     {
         var taskAssignmentLine = new TaskAssignmentLine
         {
             Id = Guid.NewGuid(),
             ProductId = productId,
             RequestedQty = requestedQty,
-            ReceiptLineId = receiptLineId,
             CompletedQty = 0,
             MissedQty = 0,
             Status = TaskAssignmentLineStatus.Notstarted

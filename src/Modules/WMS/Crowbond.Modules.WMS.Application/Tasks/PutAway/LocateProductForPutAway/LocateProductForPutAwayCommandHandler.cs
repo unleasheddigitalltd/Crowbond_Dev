@@ -62,11 +62,11 @@ internal sealed class LocateProductForPutAwayCommandHandler(
         }
 
         // find and check the receipt line.
-        ReceiptLine? receiptLine = receiptHeader.Lines.SingleOrDefault(l => l.Id == assignmentLineResult.Value.ReceiptLineId);
+        ReceiptLine? receiptLine = receiptHeader.Lines.SingleOrDefault(l => l.ProductId == assignmentLineResult.Value.ProductId);
 
         if (receiptLine is null)
         {
-            return Result.Failure<Guid>(ReceiptErrors.LineNotFound(assignmentLineResult.Value.ReceiptLineId));
+            return Result.Failure<Guid>(ReceiptErrors.LineForProductNotFound(assignmentLineResult.Value.ProductId));
         }
 
         // Retrieve destination stock
@@ -75,13 +75,13 @@ internal sealed class LocateProductForPutAwayCommandHandler(
         destStocks ??= Enumerable.Empty<Stock>();
 
         // check the possiblity of the destination stock.
-        if (destStocks.FirstOrDefault(s => s.ReceiptLineId != assignmentLineResult.Value.ReceiptLineId && s.CurrentQty > 0) is not null && !setting.HasMixBatchLocation)
+        if (destStocks.FirstOrDefault(s => s.ReceiptLineId != receiptLine.Id && s.CurrentQty > 0) is not null && !setting.HasMixBatchLocation)
         {
             return Result.Failure<Guid>(StockErrors.LocationNotEmpty(request.LocationId));
         }
 
         // Check the existence of the destination stock.
-        Stock? destStock = destStocks.FirstOrDefault(s => s.ReceiptLineId == assignmentLineResult.Value.ReceiptLineId);
+        Stock? destStock = destStocks.FirstOrDefault(s => s.ReceiptLineId == receiptLine.Id);
 
         if (destStock is null)
         {

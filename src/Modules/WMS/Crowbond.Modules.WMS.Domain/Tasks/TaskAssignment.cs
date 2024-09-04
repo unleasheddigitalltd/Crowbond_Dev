@@ -47,7 +47,7 @@ public sealed class TaskAssignment : Entity
         return taskAssignment;
     }
 
-    internal Result<TaskAssignmentLine> AddLine(Guid productId, decimal requestedQty, Guid receiptLineId)
+    internal Result<TaskAssignmentLine> AddLine(Guid productId, decimal requestedQty)
     {
         // check the Task assignment was not started.
         if (Status != TaskAssignmentStatus.Pending)
@@ -57,7 +57,7 @@ public sealed class TaskAssignment : Entity
 
         // create a task assignment line.
         Result<TaskAssignmentLine> result = 
-            TaskAssignmentLine.Create(productId, requestedQty, receiptLineId);
+            TaskAssignmentLine.Create(productId, requestedQty);
 
         if (result.IsFailure)
         {

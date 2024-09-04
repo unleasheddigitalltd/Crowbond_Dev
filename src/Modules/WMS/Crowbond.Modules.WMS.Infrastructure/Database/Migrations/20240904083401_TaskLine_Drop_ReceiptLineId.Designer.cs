@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.WMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    partial class WmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240904083401_TaskLine_Drop_ReceiptLineId")]
+    partial class TaskLine_Drop_ReceiptLineId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

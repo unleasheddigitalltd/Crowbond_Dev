@@ -43,7 +43,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
     Guid warehouseOperatorId,
     Guid createdBy,
     DateTime createdDate,
-    List<(Guid productId, decimal requestedQty, Guid receiptLineId)> productLines)
+    List<(Guid productId, decimal requestedQty)> productLines)
     {
         switch (Status)
         {
@@ -70,14 +70,14 @@ public sealed class TaskHeader : Entity, IChangeDetectable
                 TaskAssignment newAssignment = createResult.Value;
 
                 // Attempt to add lines for each product
-                foreach ((Guid productId, decimal requestedQty, Guid receiptLineId) in productLines)
+                foreach ((Guid productId, decimal requestedQty) in productLines)
                 {
                     // consider the compelete quantity of previous task assignments.
                     decimal newRequestedQty = requestedQty - (productCompeletedQties.Find(p => p.productId == productId)?.totalCompleteQty ?? 0);
 
                     if (newRequestedQty > 0)
                     {
-                        Result<TaskAssignmentLine> addLineResult = newAssignment.AddLine(productId, newRequestedQty, receiptLineId);
+                        Result<TaskAssignmentLine> addLineResult = newAssignment.AddLine(productId, newRequestedQty);
 
                         if (!addLineResult.IsSuccess)
                         {

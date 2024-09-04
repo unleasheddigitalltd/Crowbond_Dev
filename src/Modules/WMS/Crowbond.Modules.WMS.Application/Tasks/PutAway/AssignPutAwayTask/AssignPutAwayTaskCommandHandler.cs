@@ -38,8 +38,7 @@ internal sealed class AssignPutAwayTaskCommandHandler(
         // Prepare a list of product lines from receiptLines
         var productLines = receipt.Lines.Select(line => (
             productId: line.ProductId,
-            requestedQty: line.QuantityReceived,
-            receiptLineId: line.Id
+            requestedQty: line.QuantityReceived
         )).ToList();
 
         Result<TaskAssignment> result = taskHeader.AddAssignmentWithLines(
