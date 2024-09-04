@@ -71,9 +71,9 @@ public sealed class TaskAssignmentLine : Entity
             return Result.Failure(TaskErrors.LineNotInProgress);
         }
 
+        MissedQty = RequestedQty - CompletedQty;
         Status = TaskAssignmentLineStatus.Completed;
         EndDateTime = modificationDate;
-        MissedQty = RequestedQty - CompletedQty;
 
         return Result.Success();
     }

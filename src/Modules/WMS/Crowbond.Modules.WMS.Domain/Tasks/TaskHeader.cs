@@ -233,6 +233,33 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return Result.Success();
     }
 
+    public Result Complete(Guid modifiedBy, DateTime modificationDate)
+    {
+        if (Status is not TaskHeaderStatus.InProgress)
+        {
+            return Result.Failure(TaskErrors.NotInProgress);
+        }
+
+        // Attempt to find an assignment that is either Pending or Paused
+        TaskAssignment? assignment = _assignments
+            .Find(a => a.Status is TaskAssignmentStatus.InProgress or TaskAssignmentStatus.Paused);
+
+        if (assignment is null)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.HasNoInprogressAssignmet(Id));
+        }
+
+        // pause the found assignment
+        Result result = assignment.Complete(modifiedBy, modificationDate);
+        if (result.IsFailure)
+        {
+            return result;
+        }
+
+        Status = TaskHeaderStatus.Completed;
+        return Result.Success();
+    }
+
     public Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // Find the single assignment that is currently in progress

@@ -156,6 +156,35 @@ public sealed class TaskAssignment : Entity
         return Result.Success();
     }
 
+    internal Result Complete(Guid modifiedBy, DateTime modificationDate)
+    {
+        // check the task not already started.
+        if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
+        {
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.NotInProgress);
+        }
+
+        // complete all the incomplete lines.
+        IEnumerable<TaskAssignmentLine> notCompleteLines = 
+            _lines.Where(l => l.Status is not TaskAssignmentLineStatus.Completed);
+        
+        foreach (TaskAssignmentLine line in notCompleteLines)
+        {
+            Result result = line.Complete(modificationDate);
+            if (result.IsFailure)
+            {
+                return result;
+            }
+        }
+
+        // update the status.
+        Status = TaskAssignmentStatus.Completed;
+        LastModifiedBy = modifiedBy;
+        LastModifiedDate = modificationDate;
+
+        return Result.Success();
+    }
+
     internal Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // select the specific line with this product.
