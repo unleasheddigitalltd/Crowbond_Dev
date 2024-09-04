@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockQuantity;
 
-public sealed record UpdateStockQuantityCommand(Guid StockId, string TransactionNote, Guid ReasonId, decimal Quantity) : ICommand;
+public sealed record UpdateStockQuantityCommand(Guid UserId, Guid StockId, string TransactionNote, Guid ReasonId, decimal Quantity) : ICommand;

@@ -1,6 +1,6 @@
-﻿using Crowbond.Common.Application.EventBus;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
+using Crowbond.Modules.Users.Domain.Users;
 
 namespace Crowbond.Modules.Users.Application.Users.CreateUser;
 
-public sealed record CreateUserCommand(Guid UserId,string Email, string Username, string FirstName, string LastName) : ICommand;
+public sealed record CreateUserCommand(Guid UserId,string Email, string Username, string FirstName, string LastName, Role Role) : ICommand;

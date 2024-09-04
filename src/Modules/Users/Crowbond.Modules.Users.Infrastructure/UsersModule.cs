@@ -16,6 +16,7 @@ using Crowbond.Modules.Users.Infrastructure.Inbox;
 using Crowbond.Modules.Users.Infrastructure.Outbox;
 using Crowbond.Modules.Users.Infrastructure.Users;
 using Crowbond.Modules.Users.Presentation;
+using Crowbond.Modules.WMS.IntegrationEvents;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -47,18 +48,18 @@ public static class UsersModule
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactDeactivatedIntegrationEvent>>();
 
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverUpdatedIntegrationEvent>>();
 
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactUpdatedIntegrationEvent>>();
-
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactActivatedIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactDeactivatedIntegrationEvent>>();
-
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactActivatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactDeactivatedIntegrationEvent>>();
+
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<WarehouseOperatorCreatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

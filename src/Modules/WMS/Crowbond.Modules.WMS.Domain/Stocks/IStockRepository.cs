@@ -7,7 +7,7 @@ public interface IStockRepository
 
     Task<IEnumerable<Stock>> GetByLocationAsync(Guid locationId, CancellationToken cancellationToken);
 
-    void InsertStockTransaction(StockTransaction transaction);
+    void AddStockTransaction(StockTransaction transaction);
 
     void InsertStock(Stock stock);
 }

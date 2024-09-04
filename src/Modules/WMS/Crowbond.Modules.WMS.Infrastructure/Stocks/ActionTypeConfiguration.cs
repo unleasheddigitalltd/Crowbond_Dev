@@ -13,6 +13,7 @@ internal sealed class ActionTypeConfiguration : IEntityTypeConfiguration<ActionT
 
         builder.HasData(
             ActionType.Adjustment,
-            ActionType.Relocating);
+            ActionType.Relocating,
+            ActionType.PutAway);
     }
 }

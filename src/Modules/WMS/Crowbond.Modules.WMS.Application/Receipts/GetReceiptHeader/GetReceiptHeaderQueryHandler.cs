@@ -23,6 +23,7 @@ internal sealed class GetReceiptHeaderQueryHandler(IDbConnectionFactory dbConnec
             $"""
              SELECT 
                 id AS {nameof(ReceiptResponse.Id)},
+                receipt_no AS {nameof(ReceiptResponse.ReceiptNo)},
                 received_date AS {nameof(ReceiptResponse.ReceivedDate)},
                 purchase_order_no AS {nameof(ReceiptResponse.PurchaseOrderNo)},
                 delivery_note_number AS {nameof(ReceiptResponse.DeliveryNoteNumber)},

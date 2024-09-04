@@ -1,10 +1,9 @@
 ﻿using System.Data.Common;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
+using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Products.GetProducts.Dto;
 using Dapper;
-using Product = Crowbond.Modules.WMS.Application.Products.GetProducts.Dto.Product;
 
 namespace Crowbond.Modules.WMS.Application.Products.GetProducts;
 

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Crowbond.Modules.WMS.Application.Products.GetProducts;
-using Crowbond.Modules.WMS.Application.Products.GetProducts.Dto;
 
 namespace Crowbond.Modules.WMS.Presentation.Products;
 

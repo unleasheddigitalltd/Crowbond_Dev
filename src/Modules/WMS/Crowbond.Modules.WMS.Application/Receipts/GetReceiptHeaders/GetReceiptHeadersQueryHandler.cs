@@ -20,6 +20,7 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
         string sortOrder = request.Order.Equals("ASC", StringComparison.OrdinalIgnoreCase) ? "ASC" : "DESC";
         string orderByClause = request.Sort switch
         {
+            "receiptNo" => "receipt_no",
             "receivedDate" => "received_date",
             "purchaseOrderNo" => "purchase_order_no",
             "deliveryNoteNumber" => "delivery_note_number",
@@ -35,6 +36,7 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
         string sql = $@"WITH FilteredReceiptHeaders AS (
                 SELECT 
                     id AS {nameof(ReceiptHeader.Id)},
+                    receipt_no AS {nameof(ReceiptHeader.ReceiptNo)},
                     received_date AS {nameof(ReceiptHeader.ReceivedDate)},
                     delivery_note_number AS {nameof(ReceiptHeader.DeliveryNoteNumber)},
                     purchase_order_no AS {nameof(ReceiptHeader.PurchaseOrderNo)},
@@ -44,9 +46,11 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
                 WHERE
                     delivery_note_number ILIKE '%' || @Search || '%'
                     OR purchase_order_no ILIKE '%' || @Search || '%'
+                    OR receipt_no ILIKE '%' || @Search || '%'
             )
             SELECT 
                 r.{nameof(ReceiptHeader.Id)},
+                r.{nameof(ReceiptHeader.ReceiptNo)},
                 r.{nameof(ReceiptHeader.ReceivedDate)},
                 r.{nameof(ReceiptHeader.DeliveryNoteNumber)},
                 r.{nameof(ReceiptHeader.PurchaseOrderNo)},
@@ -60,6 +64,7 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
                 WHERE
                     delivery_note_number ILIKE '%' || @Search || '%'
                     OR purchase_order_no ILIKE '%' || @Search || '%'
+                    OR receipt_no ILIKE '%' || @Search || '%'
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

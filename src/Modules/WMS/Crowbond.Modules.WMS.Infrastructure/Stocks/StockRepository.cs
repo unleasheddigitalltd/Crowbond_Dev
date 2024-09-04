@@ -27,7 +27,7 @@ internal sealed class StockRepository(WmsDbContext context) : IStockRepository
         context.Stocks.Add(stock);
     }
 
-    public void InsertStockTransaction(StockTransaction transaction)
+    public void AddStockTransaction(StockTransaction transaction)
     {
         context.StockTransactions.Add(transaction);
     }

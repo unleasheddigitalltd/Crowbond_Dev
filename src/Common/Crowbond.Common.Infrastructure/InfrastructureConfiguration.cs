@@ -5,6 +5,7 @@ using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Infrastructure.Authorization;
 using Crowbond.Common.Infrastructure.Caching;
+using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.Clock;
 using Crowbond.Common.Infrastructure.Data;
 using Crowbond.Common.Infrastructure.Outbox;
@@ -38,6 +39,8 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
         services.TryAddSingleton<SoftDeleteInterceptor>();
+
+        services.TryAddSingleton<ChangeDetectionInterceptor>();
 
         NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
         services.TryAddSingleton(npgsqlDataSource);

@@ -5,13 +5,11 @@ public sealed record ReceiptRequest(
     Guid PurchaseOrderId,
     string? PurchaseOrderNo,
     string DeliveryNoteNumber,
+    Guid CreateBy,
     List<ReceiptRequest.ReceiptLineRequest> ReceiptLines)
 {
     public sealed record ReceiptLineRequest(
         Guid ProductId,
         decimal QuantityReceived,
-        decimal UnitPrice,
-        DateOnly? SellByDate,
-        DateOnly? UseByDate,
-        string BatchNumber);       
+        decimal UnitPrice);       
 }

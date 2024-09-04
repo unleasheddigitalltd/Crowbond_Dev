@@ -5,7 +5,7 @@ namespace Crowbond.Modules.WMS.Domain.Products;
 
 public sealed class Product : Entity
 {
-    public Product()
+    private Product()
     {
     }
 

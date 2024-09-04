@@ -14,7 +14,5 @@ internal sealed class ReceiptLineConfiguration : IEntityTypeConfiguration<Receip
         builder.Property(r => r.SellByDate).IsRequired(false);
         builder.Property(r => r.UseByDate).IsRequired(false);
         builder.Property(r => r.BatchNumber).IsRequired(false).HasMaxLength(255);
-
-        builder.HasOne<ReceiptHeader>().WithMany().HasForeignKey(r => r.ReceiptHeaderId);
     }
 }

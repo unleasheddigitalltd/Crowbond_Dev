@@ -8,6 +8,6 @@ public sealed class SettingRepository(WmsDbContext context) : ISettingRepository
 {
     public async Task<Setting?> GetAsync(CancellationToken cancellationToken)
     {
-        return await context.Settings.OrderByDescending(s => s.CreatedDate).FirstOrDefaultAsync(s => s.IsActive, cancellationToken);
+        return await context.Settings.SingleOrDefaultAsync(cancellationToken);
     }
 }

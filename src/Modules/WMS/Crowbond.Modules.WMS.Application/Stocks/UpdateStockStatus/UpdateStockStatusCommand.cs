@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockStatus;
 
-public sealed record UpdateStockStatusCommand(Guid StockId, string StatusType) : ICommand;
+public sealed record UpdateStockStatusCommand(Guid UserId, Guid StockId, string StatusType) : ICommand;

@@ -159,11 +159,13 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("LocationTypeName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("location_type_name");
+                    b.Property<int>("LocationLayer")
+                        .HasColumnType("integer")
+                        .HasColumnName("location_layer");
+
+                    b.Property<int?>("LocationType")
+                        .HasColumnType("integer")
+                        .HasColumnName("location_type");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -182,40 +184,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_locations");
 
-                    b.HasIndex("LocationTypeName")
-                        .HasDatabaseName("ix_locations_location_type_name");
-
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_locations_parent_id");
 
                     b.ToTable("locations", "wms");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.LocationType", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Name")
-                        .HasName("pk_locations_type");
-
-                    b.ToTable("locations_type", "wms");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "Site"
-                        },
-                        new
-                        {
-                            Name = "Area"
-                        },
-                        new
-                        {
-                            Name = "Location"
-                        });
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.FilterType", b =>
@@ -435,15 +407,27 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatetimeStamp")
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("createtime_stamp");
+                        .HasColumnName("created_date");
 
                     b.Property<string>("DeliveryNoteNumber")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("delivery_note_number");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
 
                     b.Property<Guid?>("PurchaseOrderId")
                         .HasColumnType("uuid")
@@ -453,6 +437,12 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("purchase_order_no");
+
+                    b.Property<string>("ReceiptNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("receipt_no");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("timestamp with time zone")
@@ -515,6 +505,42 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.ToTable("receipt_lines", "wms");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Sequences.Sequence", b =>
+                {
+                    b.Property<int>("Context")
+                        .HasColumnType("integer")
+                        .HasColumnName("context");
+
+                    b.Property<int>("LastNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("last_number");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)")
+                        .HasColumnName("prefix");
+
+                    b.HasKey("Context")
+                        .HasName("pk_sequences");
+
+                    b.ToTable("sequences", "wms");
+
+                    b.HasData(
+                        new
+                        {
+                            Context = 0,
+                            LastNumber = 10001,
+                            Prefix = "RCP"
+                        },
+                        new
+                        {
+                            Context = 1,
+                            LastNumber = 10001,
+                            Prefix = "TSK"
+                        });
+                });
+
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Settings.Setting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -522,17 +548,17 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("deleted_on_utc");
 
                     b.Property<bool>("HasMixBatchLocation")
                         .HasColumnType("boolean")
                         .HasColumnName("has_mix_batch_location");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_active");
+                        .HasColumnName("is_deleted");
 
                     b.HasKey("Id")
                         .HasName("pk_settings");
@@ -543,9 +569,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         new
                         {
                             Id = new Guid("037b725f-2110-40f8-a1b3-06ca5722cb83"),
-                            CreatedDate = new DateTime(2024, 8, 12, 20, 15, 30, 448, DateTimeKind.Utc).AddTicks(5086),
                             HasMixBatchLocation = false,
-                            IsActive = true
+                            IsDeleted = false
                         });
                 });
 
@@ -569,6 +594,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         new
                         {
                             Name = "Relocating"
+                        },
+                        new
+                        {
+                            Name = "PutAway"
                         });
                 });
 
@@ -584,10 +613,26 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("batch_number");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
+
                     b.Property<decimal>("CurrentQty")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("current_qty");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uuid")
@@ -607,24 +652,24 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
-                    b.Property<Guid>("ReceiptId")
+                    b.Property<Guid>("ReceiptLineId")
                         .HasColumnType("uuid")
-                        .HasColumnName("receipt_id");
+                        .HasColumnName("receipt_line_id");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("received_date");
 
-                    b.Property<DateTime?>("SellByDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly?>("SellByDate")
+                        .HasColumnType("date")
                         .HasColumnName("sell_by_date");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
-                    b.Property<DateTime?>("UseByDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly?>("UseByDate")
+                        .HasColumnType("date")
                         .HasColumnName("use_by_date");
 
                     b.HasKey("Id")
@@ -633,8 +678,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasIndex("LocationId")
                         .HasDatabaseName("ix_stocks_location_id");
 
-                    b.HasIndex("ReceiptId")
-                        .HasDatabaseName("ix_stocks_receipt_id");
+                    b.HasIndex("ReceiptLineId")
+                        .HasDatabaseName("ix_stocks_receipt_line_id");
 
                     b.ToTable("stocks", "wms");
                 });
@@ -673,9 +718,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("stock_id");
 
-                    b.Property<Guid?>("TaskId")
+                    b.Property<Guid?>("TaskAssignmentLineId")
                         .HasColumnType("uuid")
-                        .HasColumnName("task_id");
+                        .HasColumnName("task_assignment_line_id");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp with time zone")
@@ -698,8 +743,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasIndex("StockId")
                         .HasDatabaseName("ix_stock_transactions_stock_id");
 
-                    b.HasIndex("TaskId")
-                        .HasDatabaseName("ix_stock_transactions_task_id");
+                    b.HasIndex("TaskAssignmentLineId")
+                        .HasDatabaseName("ix_stock_transactions_task_assignment_line_id");
 
                     b.ToTable("stock_transactions", "wms");
                 });
@@ -732,54 +777,240 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.ToTable("stock_transaction_reasons", "wms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.Task", b =>
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("TaskTypeName")
+                    b.Property<Guid>("AssignedOperatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("assigned_operator_id");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_date");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("TaskHeaderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("task_header_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_task_assignments");
+
+                    b.HasIndex("AssignedOperatorId")
+                        .HasDatabaseName("ix_task_assignments_assigned_operator_id");
+
+                    b.HasIndex("TaskHeaderId")
+                        .HasDatabaseName("ix_task_assignments_task_header_id");
+
+                    b.ToTable("task_assignments", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignmentLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("CompletedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("completed_qty");
+
+                    b.Property<DateTime?>("EndDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_date_time");
+
+                    b.Property<Guid?>("FromLocationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("from_location_id");
+
+                    b.Property<decimal>("MissedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("missed_qty");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<decimal>("RequestedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("requested_qty");
+
+                    b.Property<DateTime?>("StartDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date_time");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("TaskAssignmentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("task_assignment_id");
+
+                    b.Property<Guid?>("ToLocationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("to_location_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_task_assignment_lines");
+
+                    b.HasIndex("FromLocationId")
+                        .HasDatabaseName("ix_task_assignment_lines_from_location_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_task_assignment_lines_product_id");
+
+                    b.HasIndex("TaskAssignmentId")
+                        .HasDatabaseName("ix_task_assignment_lines_task_assignment_id");
+
+                    b.HasIndex("ToLocationId")
+                        .HasDatabaseName("ix_task_assignment_lines_to_location_id");
+
+                    b.ToTable("task_assignment_lines", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignmentStatusHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("changed_at");
+
+                    b.Property<Guid>("ChangedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("changed_by");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("TaskAssignmentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("task_assignment_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_task_assignment_status_histories");
+
+                    b.HasIndex("TaskAssignmentId")
+                        .HasDatabaseName("ix_task_assignment_status_histories_task_assignment_id");
+
+                    b.ToTable("task_assignment_status_histories", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskHeader", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entity_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TaskNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("task_no");
+
+                    b.Property<int>("TaskType")
+                        .HasColumnType("integer")
+                        .HasColumnName("task_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_task_headers");
+
+                    b.HasIndex("EntityId")
+                        .HasDatabaseName("ix_task_headers_entity_id");
+
+                    b.ToTable("task_headers", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.WarehouseOperators.WarehouseOperator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("task_type_name");
+                        .HasColumnName("first_name");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_tasks");
-
-                    b.HasIndex("TaskTypeName")
-                        .HasDatabaseName("ix_tasks_task_type_name");
-
-                    b.ToTable("tasks", "wms");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskType", b =>
-                {
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
+                        .HasColumnName("last_name");
 
-                    b.HasKey("Name")
-                        .HasName("pk_task_types");
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
 
-                    b.ToTable("task_types", "wms");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_warehouse_operators");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_warehouse_operators_email");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_warehouse_operators_username");
+
+                    b.ToTable("warehouse_operators", "wms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.Location", b =>
                 {
-                    b.HasOne("Crowbond.Modules.WMS.Domain.Locations.LocationType", null)
-                        .WithMany()
-                        .HasForeignKey("LocationTypeName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_locations_locations_type_location_type_name");
-
                     b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
                         .WithMany()
                         .HasForeignKey("ParentId")
@@ -826,7 +1057,7 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Receipts.ReceiptLine", b =>
                 {
                     b.HasOne("Crowbond.Modules.WMS.Domain.Receipts.ReceiptHeader", null)
-                        .WithMany()
+                        .WithMany("Lines")
                         .HasForeignKey("ReceiptHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -844,10 +1075,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
                     b.HasOne("Crowbond.Modules.WMS.Domain.Receipts.ReceiptLine", null)
                         .WithMany()
-                        .HasForeignKey("ReceiptId")
+                        .HasForeignKey("ReceiptLineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_stocks_receipt_lines_receipt_id");
+                        .HasConstraintName("fk_stocks_receipt_lines_receipt_line_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.StockTransaction", b =>
@@ -865,16 +1096,16 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_stock_transactions_stock_transaction_reasons_reason_id");
 
                     b.HasOne("Crowbond.Modules.WMS.Domain.Stocks.Stock", null)
-                        .WithMany()
+                        .WithMany("StockTransactions")
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_stock_transactions_stocks_stock_id");
 
-                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.Task", null)
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignmentLine", null)
                         .WithMany()
-                        .HasForeignKey("TaskId")
-                        .HasConstraintName("fk_stock_transactions_tasks_task_id");
+                        .HasForeignKey("TaskAssignmentLineId")
+                        .HasConstraintName("fk_stock_transactions_task_assignment_lines_task_assignment_li");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.StockTransactionReason", b =>
@@ -887,14 +1118,88 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_stock_transaction_reasons_action_types_action_type_name");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.Task", b =>
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignment", b =>
                 {
-                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.TaskType", null)
+                    b.HasOne("Crowbond.Modules.WMS.Domain.WarehouseOperators.WarehouseOperator", null)
                         .WithMany()
-                        .HasForeignKey("TaskTypeName")
+                        .HasForeignKey("AssignedOperatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_tasks_task_types_task_type_name");
+                        .HasConstraintName("fk_task_assignments_warehouse_operators_assigned_operator_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.TaskHeader", null)
+                        .WithMany("Assignments")
+                        .HasForeignKey("TaskHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_assignments_task_headers_task_header_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignmentLine", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
+                        .WithMany()
+                        .HasForeignKey("FromLocationId")
+                        .HasConstraintName("fk_task_assignment_lines_locations_from_location_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_assignment_lines_products_product_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignment", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("TaskAssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_assignment_lines_task_assignments_task_assignment_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
+                        .WithMany()
+                        .HasForeignKey("ToLocationId")
+                        .HasConstraintName("fk_task_assignment_lines_locations_to_location_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignmentStatusHistory", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignment", null)
+                        .WithMany()
+                        .HasForeignKey("TaskAssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_assignment_status_histories_task_assignments_task_assi");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskHeader", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Receipts.ReceiptHeader", null)
+                        .WithMany()
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_headers_receipt_headers_entity_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Receipts.ReceiptHeader", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Stocks.Stock", b =>
+                {
+                    b.Navigation("StockTransactions");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskAssignment", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskHeader", b =>
+                {
+                    b.Navigation("Assignments");
                 });
 #pragma warning restore 612, 618
         }

@@ -57,12 +57,13 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                     INNER JOIN wms.categories c ON c.id = p.category_id
                     INNER JOIN wms.locations l ON s.location_id = l.id
                     WHERE
-                        p.sku ILIKE '%' || @Search || '%'
+                        s.current_qty != 0 AND
+                        (p.sku ILIKE '%' || @Search || '%'
                         OR c.name ILIKE '%' || @Search || '%'
                         OR p.name ILIKE '%' || @Search || '%'
                         OR s.batch_number ILIKE '%' || @Search || '%'
                         OR l.name ILIKE '%' || @Search || '%'
-                        OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
+                        OR p.unit_of_measure_name ILIKE '%' || @Search || '%')
                 )
                 SELECT 
                     s.{nameof(Stock.Id)},
@@ -86,12 +87,13 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                 INNER JOIN wms.categories c ON c.id = p.category_id
                 INNER JOIN wms.locations l ON s.location_id = l.id
                 WHERE
-                    p.sku ILIKE '%' || @Search || '%'
+                    s.current_qty != 0 AND
+                    (p.sku ILIKE '%' || @Search || '%'
                     OR c.name ILIKE '%' || @Search || '%'
                     OR p.name ILIKE '%' || @Search || '%'
                     OR s.batch_number ILIKE '%' || @Search || '%'
                     OR l.name ILIKE '%' || @Search || '%'
-                    OR p.unit_of_measure_name ILIKE '%' || @Search || '%'
+                    OR p.unit_of_measure_name ILIKE '%' || @Search || '%')
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

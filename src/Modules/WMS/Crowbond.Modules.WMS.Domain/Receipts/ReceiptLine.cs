@@ -4,7 +4,7 @@ namespace Crowbond.Modules.WMS.Domain.Receipts;
 
 public sealed class ReceiptLine : Entity
 {
-    public ReceiptLine()
+    private ReceiptLine()
     {
     }
 
@@ -24,34 +24,28 @@ public sealed class ReceiptLine : Entity
 
     public string BatchNumber { get; private set; }
 
-    public static ReceiptLine Create(
-        Guid receiptHeaderId,
+    internal static ReceiptLine Create(
         Guid productId,
         decimal quantityReceived,
-        decimal unitPrice,
-        DateOnly? sellByDate,
-        DateOnly? useByDate)
+        decimal unitPrice)
     {
         var receiptLine = new ReceiptLine
         {
             Id = Guid.NewGuid(),
-            ReceiptHeaderId = receiptHeaderId,
             ProductId = productId,
             QuantityReceived = quantityReceived,
             UnitPrice = unitPrice,
-            SellByDate = sellByDate,
-            UseByDate = useByDate,
             BatchNumber = GenerateBatchNumber()
         };
 
         return receiptLine;
     }
 
-
     private static string GenerateBatchNumber()
     {
         string batchNumber = "";
         return batchNumber;
     }
+
 
 }

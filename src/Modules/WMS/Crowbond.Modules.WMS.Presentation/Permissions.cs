@@ -7,7 +7,7 @@ internal static class Permissions
     internal const string CreateProducts = "products:create";
 
     internal const string GetStocks = "stocks:read";
-    internal const string GetStockTransactions = "stocktransactions:read";
+    internal const string GetStockTransactions = "stock-transactions:read";
     internal const string AdjustStocks = "stocks:adjust";
     internal const string RelocateStocks = "stocks:relocate";
 
@@ -15,4 +15,13 @@ internal static class Permissions
     internal const string GetReceipts = "receipts:read";
     internal const string ModifyReceipts = "receipts:update";
     internal const string CreateReceipts = "receipts:create";
+
+    internal const string GetPutAwayTasks = "tasks:putaway:read";
+    internal const string ModifyPutAwayTasks = "tasks:putaway:update";
+    internal const string ManagePutAwayTasks = "tasks:putaway:manage";
+    internal const string ExecutePutAwayTasks = "tasks:putaway:execute";
+
+    internal const string GetWarehouseOperators = "warehouse-operators:read";
+    internal const string ModifyWarehouseOperators = "warehouse-operators:update";
+    internal const string CreateWarehouseOperators = "warehouse-operators:create";
 }

@@ -3,13 +3,11 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
-using Crowbond.Modules.WMS.Domain.Products;
 
 namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockQuantity;
 
 internal sealed class UpdateStockQuantityCommandHandler(
     IStockRepository stockRepository,
-    IProductRepository productRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateStockQuantityCommand>
@@ -31,31 +29,23 @@ internal sealed class UpdateStockQuantityCommandHandler(
             return Result.Failure(StockErrors.NotFound(request.StockId));
         }
 
-        Product? product = await productRepository.GetAsync(stock.ProductId, cancellationToken);
-
-        if (product is null)
-        {
-            return Result.Failure(StockErrors.ProductNotFound(stock.ProductId));
-        }
-
+        // Determine if the adjustment is positive or negative
         bool posAdjustment = stock.CurrentQty < request.Quantity;
         decimal quantity = Math.Abs(stock.CurrentQty - request.Quantity);
 
-        var transaction = StockTransaction.Create(
-            null,
-            ActionType.Adjustment.Name,
-            posAdjustment,
-            dateTimeProvider.UtcNow,
-            request.TransactionNote,
-            transactionReason,
-            quantity,
-            product,
-            stock);
+        // Apply stock adjustment
+        Result<StockTransaction> result = posAdjustment
+            ? stock.StockIn(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
+                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow)
+            : stock.StockOut(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
+                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow);
 
-        stockRepository.InsertStockTransaction(transaction);
+        if (result.IsFailure)
+        {
+            return Result.Failure(result.Error);
+        }
 
-        stock.Adjust(posAdjustment, quantity);
-
+        stockRepository.AddStockTransaction(result.Value);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

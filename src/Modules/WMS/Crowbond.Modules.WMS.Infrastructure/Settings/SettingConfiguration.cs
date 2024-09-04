@@ -8,14 +8,7 @@ public sealed class SettingConfiguration : IEntityTypeConfiguration<Setting>
 {
     public void Configure(EntityTypeBuilder<Setting> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.HasData(new Setting()
-        {
-            Id = Guid.NewGuid(),
-            HasMixBatchLocation = false,
-            CreatedDate = DateTime.UtcNow,
-            IsActive = true,
-        });
+        builder.HasKey(s => s.Id);
+        builder.HasData(Setting.Initial);
     }
 }

@@ -5,6 +5,7 @@
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Presentation\Crowbond.Common.Presentation.csproj" />
     <ProjectReference Include="..\..\CRM\Crowbond.Modules.CRM.IntegrationEvents\Crowbond.Modules.CRM.IntegrationEvents.csproj" />
     <ProjectReference Include="..\..\OMS\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\..\WMS\Crowbond.Modules.WMS.IntegrationEvents\Crowbond.Modules.WMS.IntegrationEvents.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.Users.Application\Crowbond.Modules.Users.Application.csproj" />
   </ItemGroup>
 
