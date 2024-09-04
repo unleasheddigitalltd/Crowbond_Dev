@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.WMS.Domain.Sequences;
 
-public sealed class Sequence
+public sealed class Sequence : Entity
 {
     public static readonly Sequence Receipt = new (SequenceContext.Receipt, 10001, "RCP");
     public static readonly Sequence Task = new(SequenceContext.Task, 10001, "TSK");
