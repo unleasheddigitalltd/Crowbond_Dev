@@ -25,6 +25,8 @@ public sealed class Product : Entity
 
     public string InventoryTypeName { get; private set; }
 
+    public TaxRateType TaxRateType { get; private set; }
+
     public int? Barcode { get; private set; }
 
     public decimal? PackSize { get; private set; }
@@ -45,7 +47,7 @@ public sealed class Product : Entity
 
     public bool WeightInput { get; private set; }
 
-    public bool Active { get; private set; }
+    public bool IsActive { get; private set; }
 
     public static Result<Product> Create(
         string sku,
@@ -55,6 +57,7 @@ public sealed class Product : Entity
         UnitOfMeasure unitOfMeasure,
         Category category,
         InventoryType inventoryType,
+        TaxRateType taxRateType,
         int? barcode,
         decimal? packSize,
         string handlingNote,
@@ -76,6 +79,7 @@ public sealed class Product : Entity
             UnitOfMeasureName = unitOfMeasure.Name,
             CategoryId = category.Id,
             InventoryTypeName = inventoryType.Name,
+            TaxRateType = taxRateType,
             Barcode = barcode,
             PackSize = packSize,
             HandlingNotes = handlingNote,
@@ -86,8 +90,10 @@ public sealed class Product : Entity
             Width = width,
             Length = length,
             WeightInput = weightInput,
-            Active = true
+            IsActive = true
         };
+
+        product.Raise(new ProductCreatedDomainEvent(product.Id));
 
         return product;
     }
@@ -100,6 +106,7 @@ public sealed class Product : Entity
         string unitOfMeasureName,
         Guid categoryId,
         string inventoryTypeName,
+        TaxRateType taxRateType,
         int? barcode,
         decimal? packSize,
         string handlingNotes,
@@ -110,9 +117,8 @@ public sealed class Product : Entity
         decimal? width,
         decimal? length,
         bool weightInput,
-        bool active)
+        bool isActive)
     {
-
         Sku = sku;
         Name = name;
         ParentId = parentId;
@@ -120,6 +126,7 @@ public sealed class Product : Entity
         UnitOfMeasureName = unitOfMeasureName;
         CategoryId = categoryId;
         InventoryTypeName = inventoryTypeName;
+        TaxRateType = taxRateType;
         Barcode = barcode;
         PackSize = packSize;
         HandlingNotes = handlingNotes;
@@ -130,6 +137,8 @@ public sealed class Product : Entity
         Width = width;
         Length = length;
         WeightInput = weightInput;
-        Active = active;
+        IsActive = isActive;
+
+        Raise(new ProductUpdatedDomainEvent(Id));
     }
 }

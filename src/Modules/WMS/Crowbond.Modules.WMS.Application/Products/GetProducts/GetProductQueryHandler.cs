@@ -22,9 +22,9 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
             "id" => "p.id",
             "sku" => "p.sku",
             "name" => "p.name",
-            "category" => "c.name",
+            "categoryName" => "c.name",
             "unitOfMeasure" => "p.unit_of_measure_name",
-            "active" => "p.active",
+            "isActive" => "p.is_active",
             _ => "p.name" // Default sorting
         };
 
@@ -34,10 +34,10 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                     p.id                            AS {nameof(Product.Id)},
                     p.sku                           AS {nameof(Product.Sku)},
                     p.name                          AS {nameof(Product.Name)},
-                    p.unit_of_measure_name          AS {nameof(Product.UnitOfMeasure)},
-                    c.name                          AS {nameof(Product.Category)},
+                    p.unit_of_measure_name          AS {nameof(Product.UnitOfMeasureName)},
+                    c.name                          AS {nameof(Product.CategoryName)},
                     p.reorder_level                 AS {nameof(Product.ReorderLevel)},
-                    p.active                        AS {nameof(Product.Active)},
+                    p.is_active                        AS {nameof(Product.IsActive)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.products p
                 INNER JOIN wms.categories c ON p.category_id = c.id
@@ -51,11 +51,11 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.Id)},
                 p.{nameof(Product.Sku)},
                 p.{nameof(Product.Name)},
-                p.{nameof(Product.UnitOfMeasure)},
-                p.{nameof(Product.Category)},
+                p.{nameof(Product.UnitOfMeasureName)},
+                p.{nameof(Product.CategoryName)},
                 COALESCE(SUM(s.current_qty), 0) AS {nameof(Product.Stock)},
                 p.{nameof(Product.ReorderLevel)},
-                p.{nameof(Product.Active)}
+                p.{nameof(Product.IsActive)}
             FROM FilteredProducts p
             LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id
             WHERE p.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
@@ -63,10 +63,10 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.Id)},
                 p.{nameof(Product.Sku)},
                 p.{nameof(Product.Name)},
-                p.{nameof(Product.UnitOfMeasure)},
-                p.{nameof(Product.Category)},
+                p.{nameof(Product.UnitOfMeasureName)},
+                p.{nameof(Product.CategoryName)},
                 p.{nameof(Product.ReorderLevel)},
-                p.{nameof(Product.Active)},
+                p.{nameof(Product.IsActive)},
 				p.RowNum
             ORDER BY p.RowNum;
 

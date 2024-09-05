@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Crowbond.Modules.WMS.Application.Products.GetInventoryTypes.Dtos;
 
 namespace Crowbond.Modules.WMS.Presentation.Products;
 internal sealed class GetInventoryTypes : IEndpoint

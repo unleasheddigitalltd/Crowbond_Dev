@@ -147,6 +147,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.CRM.Archit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.WMS.ArchitectureTests", "src\Modules\WMS\Crowbond.Modules.WMS.ArchitectureTests\Crowbond.Modules.WMS.ArchitectureTests.csproj", "{74AEA192-B07C-4FCF-BFB0-E317B57C69F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.WMS.PublicApi", "src\Modules\WMS\Crowbond.Modules.WMS.PublicApi\Crowbond.Modules.WMS.PublicApi.csproj", "{0107FCB3-64B8-4A60-BE90-D1A0D6083E80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -353,6 +355,10 @@ Global
 		{74AEA192-B07C-4FCF-BFB0-E317B57C69F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74AEA192-B07C-4FCF-BFB0-E317B57C69F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74AEA192-B07C-4FCF-BFB0-E317B57C69F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0107FCB3-64B8-4A60-BE90-D1A0D6083E80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0107FCB3-64B8-4A60-BE90-D1A0D6083E80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0107FCB3-64B8-4A60-BE90-D1A0D6083E80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0107FCB3-64B8-4A60-BE90-D1A0D6083E80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -424,6 +430,7 @@ Global
 		{D2FFA242-71E5-48FE-8CF8-F337663C0DA9} = {DE01AD95-46F7-41B7-BC41-CD83FDC7BC4B}
 		{D5E62DE5-4DA8-45E5-8350-D082CB4359D2} = {D2FFA242-71E5-48FE-8CF8-F337663C0DA9}
 		{74AEA192-B07C-4FCF-BFB0-E317B57C69F2} = {CD31215E-119A-453E-876A-F541676AF633}
+		{0107FCB3-64B8-4A60-BE90-D1A0D6083E80} = {D0CE1F31-E3AA-4746-90B5-CB9A3B5BC282}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E42AE86-7F3C-45F4-A386-AB71CC4446CB}

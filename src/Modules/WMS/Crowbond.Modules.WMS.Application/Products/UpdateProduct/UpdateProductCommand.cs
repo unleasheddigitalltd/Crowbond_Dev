@@ -2,5 +2,5 @@
 
 namespace Crowbond.Modules.WMS.Application.Products.UpdateProduct;
 
-public sealed record UpdateProductCommand(Guid Id, ProductDto Product) : ICommand;
+public sealed record UpdateProductCommand(Guid Id, ProductRequest Product) : ICommand;
 

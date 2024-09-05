@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Products.GetProductDetails.Dtos;
 using Crowbond.Modules.WMS.Domain.Products;
 using Dapper;
 
@@ -18,27 +17,30 @@ internal sealed class GetProductDetailsQueryHandler(IDbConnectionFactory dbConne
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(ProductDetailsResponse.Id)},
-                 sku AS {nameof(ProductDetailsResponse.Sku)},
-                 name AS {nameof(ProductDetailsResponse.Name)},
-                 parent_id AS {nameof(ProductDetailsResponse.Parent)},
-                 filter_type_name AS {nameof(ProductDetailsResponse.FilterType)},
-                 unit_of_measure_name AS {nameof(ProductDetailsResponse.UnitOfMeasure)},
-                 category_id AS {nameof(ProductDetailsResponse.Category)},
-                 inventory_type_name AS {nameof(ProductDetailsResponse.InventoryType)},
-                 barcode AS {nameof(ProductDetailsResponse.Barcode)},
-                 pack_size AS {nameof(ProductDetailsResponse.PackSize)},
-                 handling_notes AS {nameof(ProductDetailsResponse.HandlingNotes)},
-                 qi_check AS {nameof(ProductDetailsResponse.QiCheck)},
-                 notes AS {nameof(ProductDetailsResponse.Notes)},
-                 reorder_level AS {nameof(ProductDetailsResponse.ReorderLevel)},
-                 height AS {nameof(ProductDetailsResponse.Height)},
-                 width AS {nameof(ProductDetailsResponse.Width)},
-                 length AS {nameof(ProductDetailsResponse.Length)},
-                 weight_input AS {nameof(ProductDetailsResponse.WeightInput)},
-                 active AS {nameof(ProductDetailsResponse.Active)}
-             FROM wms.products
-             WHERE id = @ProductId
+                 p.id AS {nameof(ProductDetailsResponse.Id)},
+                 p.sku AS {nameof(ProductDetailsResponse.Sku)},
+                 p.name AS {nameof(ProductDetailsResponse.Name)},
+                 p.parent_id AS {nameof(ProductDetailsResponse.Parent)},
+                 p.filter_type_name AS {nameof(ProductDetailsResponse.FilterTypeName)},
+                 p.unit_of_measure_name AS {nameof(ProductDetailsResponse.UnitOfMeasureName)},
+                 c.id AS {nameof(ProductDetailsResponse.CategoryId)},
+                 c.name AS {nameof(ProductDetailsResponse.CategoryName)},
+                 p.inventory_type_name AS {nameof(ProductDetailsResponse.InventoryTypeName)},
+                 p.tax_rate_type AS {nameof(ProductDetailsResponse.TaxRateType)},
+                 p.barcode AS {nameof(ProductDetailsResponse.Barcode)},
+                 p.pack_size AS {nameof(ProductDetailsResponse.PackSize)},
+                 p.handling_notes AS {nameof(ProductDetailsResponse.HandlingNotes)},
+                 p.qi_check AS {nameof(ProductDetailsResponse.QiCheck)},
+                 p.notes AS {nameof(ProductDetailsResponse.Notes)},
+                 p.reorder_level AS {nameof(ProductDetailsResponse.ReorderLevel)},
+                 p.height AS {nameof(ProductDetailsResponse.Height)},
+                 p.width AS {nameof(ProductDetailsResponse.Width)},
+                 p.length AS {nameof(ProductDetailsResponse.Length)},
+                 p.weight_input AS {nameof(ProductDetailsResponse.WeightInput)},
+                 p.is_active AS {nameof(ProductDetailsResponse.IsActive)}
+             FROM wms.products p
+             INNER JOIN wms.categories c ON p.category_id = c.id
+             WHERE p.id = @ProductId
              """;
 
         ProductDetailsResponse? product = await connection.QuerySingleOrDefaultAsync<ProductDetailsResponse>(sql, request);

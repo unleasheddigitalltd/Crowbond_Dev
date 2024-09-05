@@ -30,8 +30,6 @@ using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
-using Crowbond.Modules.CRM.Domain.Categories;
-using Crowbond.Modules.CRM.Infrastructure.Categories;
 using Crowbond.Modules.CRM.Domain.CustomerProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.CustomerProductPrices;
 using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
@@ -43,6 +41,10 @@ using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.CRM.Infrastructure.PublicApi;
 using Crowbond.Modules.CRM.Infrastructure.FileStorage;
+using Crowbond.Modules.CRM.Domain.Products;
+using Crowbond.Modules.CRM.Infrastructure.Products;
+using Crowbond.Modules.CRM.Domain.SupplierProducts;
+using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -78,11 +80,12 @@ public static class CrmModule
         services.AddScoped<ICustomerOutletRepository,CustomerOutletRepository>();
         services.AddScoped<ISupplierRepository, SupplierRepository>();
         services.AddScoped<ISupplierContactRepository, SupplierContactRepository>();
+        services.AddScoped<ISupplierProductRepository, SupplierProductRepository>();
         services.AddScoped<IRepRepository, RepRepository>();
         services.AddScoped<IRecipientRepository, RecipientRepository>();
         services.AddScoped<IPriceTierRepository, PriceTierRepository>();
         services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
         services.AddScoped<ICustomerProductPriceRepository, CustomerProductPriceRepository>();
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();

@@ -19,7 +19,7 @@ internal sealed class GetProductBriefsQueryHandler(IDbConnectionFactory dbConnec
                  id AS {nameof(ProductResponse.Id)},
                  name AS {nameof(ProductResponse.Name)}
              FROM wms.products
-             WHERE active = true
+             WHERE is_active = true
              ORDER BY name
              """;
 
