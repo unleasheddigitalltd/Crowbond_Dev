@@ -32,6 +32,8 @@ using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Modules.WMS.Infrastructure.Tasks;
 using Crowbond.Common.Infrastructure.ChangeDetection;
+using Crowbond.Modules.WMS.Application.Abstractions.Authentication;
+using Crowbond.Modules.WMS.Infrastructure.Authentication;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -89,6 +91,8 @@ public static class WmsModule
         services.AddScoped<IWarehouseOperatorRepository, WarehouseOperatorRepository> ();
 
         services.AddScoped<ITaskRepository, TaskRepository>();
+
+        services.AddScoped<IWarehouseOperatorContext, WarehouseOperatorContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 
