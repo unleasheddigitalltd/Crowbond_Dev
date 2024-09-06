@@ -35,7 +35,7 @@ internal sealed class GetCustomerOutletDetailsQueryHandler(IDbConnectionFactory 
                  delivery_time_to AS {nameof(CustomerOutletDetailsResponse.DeliveryTimeTo)}, 
                  is24hrs_delivery AS {nameof(CustomerOutletDetailsResponse.Is24HrsDelivery)}
              FROM crm.customer_outlets
-             WHERE id = @CustomerOutletId            
+             WHERE id = @CustomerOutletId AND is_deleted = false           
              """;
 
         CustomerOutletDetailsResponse? customerOutlet = await connection.QuerySingleOrDefaultAsync<CustomerOutletDetailsResponse>(sql, request);

@@ -37,7 +37,7 @@ internal sealed class CustomerOutletConfiguration : IEntityTypeConfiguration<Cus
 
         builder.Property(c => c.LastModifiedBy).IsRequired(false);
 
-        builder.Property(c => c.LastModifiedDate).IsRequired(false);
+        builder.Property(c => c.LastModifiedOnUtc).IsRequired(false);
 
         builder.HasOne<Customer>().WithMany().HasForeignKey(c => c.CustomerId);
     }
