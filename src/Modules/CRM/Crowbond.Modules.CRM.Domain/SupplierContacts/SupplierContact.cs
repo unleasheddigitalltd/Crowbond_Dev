@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.SupplierContacts;
 
-public sealed class SupplierContact : Entity
+public sealed class SupplierContact : Entity, ISoftDeletable
 {
     private SupplierContact()
     {        
@@ -35,6 +35,12 @@ public sealed class SupplierContact : Entity
     public Guid? LastModifiedBy { get; private set; }
 
     public DateTime? LastModifiedDate { get; private set; }
+
+    public bool IsDeleted { get; set; }
+
+    public Guid? DeletedBy { get; set; }
+
+    public DateTime? DeletedOnUtc { get; set; }
 
     public static SupplierContact Create(
         Guid supplierId,

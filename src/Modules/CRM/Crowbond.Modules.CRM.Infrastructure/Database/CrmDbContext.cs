@@ -37,6 +37,7 @@ using Crowbond.Modules.CRM.Domain.SupplierProducts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
 using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Infrastructure.Products;
+using Crowbond.Common.Infrastructure.Configuration;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Database;
 public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbContext(options), IUnitOfWork
@@ -63,6 +64,8 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.CRM);
+
+        modelBuilder.ApplySoftDeleteFilter();
 
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());

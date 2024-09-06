@@ -54,6 +54,8 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
 
     public bool IsDeleted { get; set; }
 
+    public Guid? DeletedBy { get; set; }
+
     public DateTime? DeletedOnUtc { get; set; }
 
     public static CustomerOutlet Create(

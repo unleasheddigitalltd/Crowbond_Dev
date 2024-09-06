@@ -30,6 +30,8 @@ public sealed class SupplierProduct : Entity , ISoftDeletable
 
     public bool IsDeleted { get; set; }
 
+    public Guid? DeletedBy { get; set; }
+
     public DateTime? DeletedOnUtc { get ; set; }
 
     public static SupplierProduct Create(

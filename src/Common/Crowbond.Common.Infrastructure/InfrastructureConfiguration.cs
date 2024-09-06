@@ -1,4 +1,5 @@
-﻿using Crowbond.Common.Application.Caching;
+﻿using Crowbond.Common.Application.Authentication;
+using Crowbond.Common.Application.Caching;
 using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.EventBus;
@@ -33,6 +34,8 @@ public static class InfrastructureConfiguration
         services.AddAuthorizationInternal();
 
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.TryAddSingleton<ICurrentUserContext, CurrentUserContext>();
 
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 

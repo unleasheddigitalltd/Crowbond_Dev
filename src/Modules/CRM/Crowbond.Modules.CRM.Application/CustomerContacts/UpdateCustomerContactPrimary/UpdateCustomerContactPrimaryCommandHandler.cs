@@ -8,7 +8,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerContacts.UpdateCustomerContac
 
 internal sealed class UpdateCustomerContactPrimaryCommandHandler(
     ICustomerContactRepository customerContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerContactPrimaryCommand>
 {
@@ -25,7 +24,7 @@ internal sealed class UpdateCustomerContactPrimaryCommandHandler(
 
         foreach (CustomerContact contact in contacts)
         {
-            Result result = contact.ChangePrimary(contact.Id == primaryContact.Id, request.UserId, dateTimeProvider.UtcNow);
+            Result result = contact.ChangePrimary(contact.Id == primaryContact.Id);
 
             if (result.IsFailure)
             {

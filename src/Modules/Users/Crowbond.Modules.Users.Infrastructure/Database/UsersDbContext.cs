@@ -4,6 +4,7 @@ using Crowbond.Common.Infrastructure.Inbox;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Modules.Users.Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
+using Crowbond.Common.Infrastructure.Configuration;
 
 namespace Crowbond.Modules.Users.Infrastructure.Database;
 
@@ -14,6 +15,8 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Users);
+
+        modelBuilder.ApplySoftDeleteFilter();
 
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
