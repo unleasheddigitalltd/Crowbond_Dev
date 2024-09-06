@@ -1,6 +1,7 @@
 ﻿using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
+using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Presentation.Endpoints;
@@ -90,6 +91,7 @@ public static class UsersModule
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Users))
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUserRepository, UserRepository>();

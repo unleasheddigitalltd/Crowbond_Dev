@@ -30,6 +30,8 @@ using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Common.Infrastructure.ChangeDetection;
+using Crowbond.Common.Infrastructure.SoftDelete;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -59,7 +61,10 @@ public static class OmsModule
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.OMS))
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 

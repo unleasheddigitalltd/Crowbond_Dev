@@ -45,6 +45,10 @@ using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Infrastructure.Products;
 using Crowbond.Modules.CRM.Domain.SupplierProducts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
+using MassTransit;
+using Crowbond.Modules.WMS.IntegrationEvents;
+using Crowbond.Common.Infrastructure.ChangeDetection;
+using Crowbond.Common.Infrastructure.SoftDelete;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -64,6 +68,12 @@ public static class CrmModule
         return services;
     }
 
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<ProductCreatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<ProductUpdatedIntegrationEvent>>();
+    }
+
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<CrmDbContext>((sp, options) =>
@@ -73,7 +83,10 @@ public static class CrmModule
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.CRM))
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .UseSnakeCaseNamingConvention());
 
         services.AddScoped<ICustomerRepository,CustomerRepository>();
         services.AddScoped<ICustomerContactRepository,CustomerContactRepository>();

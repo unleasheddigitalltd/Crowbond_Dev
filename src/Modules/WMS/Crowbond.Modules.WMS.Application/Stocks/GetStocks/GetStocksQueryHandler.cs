@@ -20,14 +20,14 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
         {
             "sku" => "p.sku",
             "productDescription" => "p.name",
-            "category" => "c.name",
+            "categoryName" => "c.name",
             "batch" => "s.batch_number",
-            "unitOfNeasure" => "p.unit_of_measure_name",
+            "unitOfMeasureName" => "p.unit_of_measure_name",
             "location" => "l.name",
             "daysInStock" => "s.received_date",
             "sellByDate" => "s.sell_by_date",
             "useByDate" => "s.use_by_date",
-            "active" => "p.active",
+            "isActive" => "p.is_active",
             "status" => "s.status",
             _ => "p.sku" // Default sorting
         };
@@ -42,11 +42,11 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                         s.id            AS {nameof(Stock.Id)},
                         p.sku           AS {nameof(Stock.Sku)},
                         p.name          AS {nameof(Stock.Name)},	
-                        c.name          AS {nameof(Stock.Category)},
+                        c.name          AS {nameof(Stock.CategoryName)},
                         s.batch_number  AS {nameof(Stock.Batch)},
-                        p.unit_of_measure_name AS {nameof(Stock.UnitOfMeasure)},
+                        p.unit_of_measure_name AS {nameof(Stock.UnitOfMeasureName)},
                         l.name          AS {nameof(Stock.Location)},
-                        p.active        AS {nameof(Stock.Active)},
+                        p.is_active        AS {nameof(Stock.IsActive)},
                         CASE s.status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(Stock.Status)},
                         s.current_qty   AS {nameof(Stock.InStock)},
                         s.received_date,    
@@ -69,14 +69,14 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                     s.{nameof(Stock.Id)},
                     s.{nameof(Stock.Sku)},
                     s.{nameof(Stock.Name)},	
-                    s.{nameof(Stock.Category)},
+                    s.{nameof(Stock.CategoryName)},
                     s.{nameof(Stock.Batch)},
-                    s.{nameof(Stock.UnitOfMeasure)},
+                    s.{nameof(Stock.UnitOfMeasureName)},
                     s.{nameof(Stock.InStock)},
                     s.{nameof(Stock.Location)},               
                     CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(Stock.DaysInStock)},
                     s.{nameof(Stock.Status)},
-                    s.{nameof(Stock.Active)}
+                    s.{nameof(Stock.IsActive)}
                 FROM FilteredStocks s
                 WHERE s.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
                 ORDER BY s.RowNum;

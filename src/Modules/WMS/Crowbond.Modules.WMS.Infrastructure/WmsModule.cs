@@ -69,7 +69,8 @@ public static class WmsModule
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WmsDbContext>());
 
