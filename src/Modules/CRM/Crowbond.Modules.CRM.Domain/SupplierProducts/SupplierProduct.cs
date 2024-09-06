@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.SupplierProducts;
 
-public sealed class SupplierProduct : Entity
+public sealed class SupplierProduct : Entity , ISoftDeletable
 {
     private SupplierProduct()
     {        
@@ -14,61 +14,57 @@ public sealed class SupplierProduct : Entity
 
     public Guid ProductId { get; private set; }
 
-    public string ProductName { get; private set; }
-
-    public string ProductSku { get; private set; }
-
-    public string UnitOfMeasureName { get; private set; }
-
-    public Guid CategoryId { get; private set; }
-
     public decimal UnitPrice { get; private set; }
-
-    public TaxRateType TaxRateType { get; private set; }
 
     public bool IsDefault { get; private set; }
 
     public string? Comments {  get; private set; }
-    
+
+    public Guid CreatedBy { get; private set; }
+
+    public DateTime CreatedOnUtc { get; private set; }
+
+    public Guid? LastModifiedBy { get; private set; }
+
+    public DateTime? LastModifiedOnUtc { get; private set; }
+
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedOnUtc { get ; set; }
+
     public static SupplierProduct Create(
         Guid supplierId,
         Guid productId,
-        string productName,
-        string productSku,
-        string unitOfMeasureName,
-        Guid categoryId,
         decimal unitPrice,
-        TaxRateType taxRateType,
         bool isDefault,
-        string? comments)
+        string? comments,
+        Guid createdBy,
+        DateTime createOnUtc)
     {
         var supplierProduct = new SupplierProduct
         {
             Id = Guid.NewGuid(),
             SupplierId = supplierId,
             ProductId = productId,
-            ProductName = productName,
-            ProductSku = productSku,
-            UnitOfMeasureName = unitOfMeasureName,
-            CategoryId = categoryId,
             UnitPrice = unitPrice,
-            TaxRateType = taxRateType,
             IsDefault = isDefault,
-            Comments = comments
+            Comments = comments,
+            CreatedBy = createdBy,
+            CreatedOnUtc = createOnUtc
         };
 
         return supplierProduct;
     }
 
     public void Update(
-        decimal unitPrice,
-        TaxRateType taxRateType,
         bool isDefault,
-        string? comments)
+        string? comments,
+        Guid lastModifiedBy,
+        DateTime lastModifiedOnUtc)
     {
-        UnitPrice = unitPrice;
-        TaxRateType = taxRateType;
         IsDefault = isDefault;
         Comments = comments;
+        LastModifiedBy = lastModifiedBy;
+        LastModifiedOnUtc = lastModifiedOnUtc;
     }
 }

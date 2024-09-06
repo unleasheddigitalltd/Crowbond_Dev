@@ -15,12 +15,12 @@ public sealed record Stock
     public Guid Id { get; }
     public string Sku { get; }
     public string Name { get; }
-    public string Category { get; }
+    public string CategoryName { get; }
     public string Batch { get; }
-    public string UnitOfMeasure { get; }
+    public string UnitOfMeasureName { get; }
     public decimal InStock { get; }
     public string Location { get; }
     public int DaysInStock { get; }
-    public bool Active { get; }
+    public bool IsActive { get; }
     public string Status { get; }
 }

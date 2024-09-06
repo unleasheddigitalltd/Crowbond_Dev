@@ -21,10 +21,11 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
             sku: request.Product.Sku,
             name: request.Product.Name,
             parentId: request.Product.Parent,
-            filterTypeName: request.Product.FilterType,
-            unitOfMeasureName: request.Product.UnitOfMeasure,
-            categoryId: request.Product.Category,
-            inventoryTypeName: request.Product.InventoryType,
+            filterTypeName: request.Product.FilterTypeName,
+            unitOfMeasureName: request.Product.UnitOfMeasureName,
+            categoryId: request.Product.CategoryId,
+            inventoryTypeName: request.Product.InventoryTypeName,
+            taxRateType: request.Product.TaxRateType,
             barcode: request.Product.Barcode,
             packSize: request.Product.PackSize,
             handlingNotes: request.Product.HandlingNotes,
@@ -35,7 +36,7 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
             width: request.Product.Width,
             length: request.Product.Length,
             weightInput: request.Product.WeightInput,
-            active: request.Product.Active
+            isActive: request.Product.IsActive
         );
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

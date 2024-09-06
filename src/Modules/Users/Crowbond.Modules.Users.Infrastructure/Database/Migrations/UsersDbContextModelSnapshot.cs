@@ -300,6 +300,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "suppliers:products:update"
+                        },
+                        new
+                        {
                             Code = "purchase-orders:create"
                         },
                         new
@@ -731,6 +735,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "suppliers:contacts:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "suppliers:products:update",
                             RoleName = "Administrator"
                         },
                         new

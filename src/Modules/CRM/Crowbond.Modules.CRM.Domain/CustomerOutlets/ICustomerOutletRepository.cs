@@ -8,6 +8,6 @@ public interface ICustomerOutletRepository
 
     void Insert(CustomerOutlet customerOutlet);
 
-    void InsertRange(IEnumerable<CustomerOutlet> customerOutlets);
+    void Remove(CustomerOutlet customerOutlet);
 
 }

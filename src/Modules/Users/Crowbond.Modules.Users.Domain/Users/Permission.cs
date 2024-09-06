@@ -51,6 +51,8 @@ public sealed class Permission
     public static readonly Permission ModifySupplierContacts = new("suppliers:contacts:update");
     public static readonly Permission CreateSupplierContacts = new("suppliers:contacts:create");
 
+    public static readonly Permission ModifySupplierProducts = new("suppliers:products:update");
+
     public static readonly Permission GetPurchaseOrders = new("purchase-orders:read");
     public static readonly Permission ModifyPurchaseOrders = new("purchase-orders:update");
     public static readonly Permission CreatePurchaseOrders = new("purchase-orders:create");

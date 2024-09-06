@@ -255,10 +255,6 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
-
                     b.Property<int?>("Barcode")
                         .HasColumnType("integer")
                         .HasColumnName("barcode");
@@ -288,6 +284,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("inventory_type_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
 
                     b.Property<decimal?>("Length")
                         .HasPrecision(19)
@@ -328,6 +328,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("sku");
+
+                    b.Property<int>("TaxRateType")
+                        .HasColumnType("integer")
+                        .HasColumnName("tax_rate_type");
 
                     b.Property<string>("UnitOfMeasureName")
                         .IsRequired()

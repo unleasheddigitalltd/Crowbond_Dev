@@ -28,7 +28,7 @@ internal sealed class GetCustomerOutletQueryHandler(IDbConnectionFactory dbConne
                  postal_code AS {nameof(CustomerOutletResponse.PostalCode)},
                  is_active AS {nameof(CustomerOutletResponse.IsActive)}
              FROM crm.customer_outlets
-             WHERE id = @CustomerOutletId
+             WHERE id = @CustomerOutletId AND is_deleted = false
              """;
 
         CustomerOutletResponse? customerOutlet = await connection.QuerySingleOrDefaultAsync<CustomerOutletResponse>(sql, request);

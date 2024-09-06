@@ -18,4 +18,6 @@ internal static class Permissions
 
     internal const string ModifySupplierContacts = "suppliers:contacts:update";
     internal const string CreateSupplierContacts = "suppliers:contacts:create";
+
+    internal const string ModifySupplierProducts = "suppliers:products:update";
 }

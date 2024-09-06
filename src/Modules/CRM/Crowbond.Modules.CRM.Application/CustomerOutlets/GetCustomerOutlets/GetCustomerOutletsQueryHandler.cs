@@ -27,7 +27,7 @@ internal sealed class GetCustomerOutletsQueryHandler(IDbConnectionFactory dbConn
                  postal_code AS {nameof(CustomerOutletResponse.PostalCode)},
                  is_active AS {nameof(CustomerOutletResponse.IsActive)}                 
              FROM crm.customer_outlets
-             WHERE customer_id = @CustomerId
+             WHERE customer_id = @CustomerId AND is_deleted = false
              ORDER BY is_active DESC;
              """;
 

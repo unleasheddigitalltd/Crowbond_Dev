@@ -2,7 +2,6 @@
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.WMS.Application.Products.GetProduct;
-using Crowbond.Modules.WMS.Application.Products.GetProduct.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

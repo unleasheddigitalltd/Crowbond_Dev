@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Products.GetProduct.Dtos;
 using Crowbond.Modules.WMS.Domain.Products;
 using Dapper;
 
@@ -21,11 +20,11 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                  p.id                            AS {nameof(ProductResponse.Id)},
                  p.sku                           AS {nameof(ProductResponse.Sku)},
                  p.name                          AS {nameof(ProductResponse.Name)},
-                 p.unit_of_measure_name          AS {nameof(ProductResponse.UnitOfMeasure)},
-                 c.name                          AS {nameof(ProductResponse.Category)},                                 
+                 p.unit_of_measure_name          AS {nameof(ProductResponse.UnitOfMeasureName)},
+                 c.name                          AS {nameof(ProductResponse.CategoryName)},                                 
                  COALESCE(SUM(s.current_qty), 0) AS {nameof(ProductResponse.Stock)},
                  p.reorder_level                 AS {nameof(ProductResponse.ReorderLevel)},
-                 p.active                        AS {nameof(ProductResponse.Active)}
+                 p.is_active                        AS {nameof(ProductResponse.IsActive)}
              FROM wms.products p
              INNER JOIN wms.categories c ON c.id = p.category_id
              LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id             
@@ -37,7 +36,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                  p.unit_of_measure_name,
                  c.name, 
                  p.reorder_level,
-                 p.active
+                 p.is_active
              """;
 
         ProductResponse? product = await connection.QuerySingleOrDefaultAsync<ProductResponse>(sql, request);

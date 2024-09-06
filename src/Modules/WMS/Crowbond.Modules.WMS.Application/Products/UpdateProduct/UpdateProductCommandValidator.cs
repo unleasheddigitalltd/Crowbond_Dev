@@ -8,9 +8,9 @@ internal sealed class UpdateProductCommandValidator : AbstractValidator<UpdatePr
     {
         RuleFor(p => p.Product.Sku).NotEmpty();
         RuleFor(p => p.Product.Name).NotEmpty();
-        RuleFor(p => p.Product.FilterType).NotEmpty();
-        RuleFor(p => p.Product.UnitOfMeasure).NotEmpty();
-        RuleFor(p => p.Product.Category).NotEmpty();
-        RuleFor(p => p.Product.InventoryType).NotEmpty();
+        RuleFor(p => p.Product.FilterTypeName).NotEmpty();
+        RuleFor(p => p.Product.UnitOfMeasureName).NotEmpty();
+        RuleFor(p => p.Product.CategoryId).NotEmpty();
+        RuleFor(p => p.Product.InventoryTypeName).NotEmpty();
     }
 }

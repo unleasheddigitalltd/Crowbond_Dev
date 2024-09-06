@@ -18,8 +18,6 @@ using Crowbond.Modules.CRM.Domain.Recipients;
 using Crowbond.Modules.CRM.Infrastructure.Recipients;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
-using Crowbond.Modules.CRM.Domain.Categories;
-using Crowbond.Modules.CRM.Infrastructure.Categories;
 using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
@@ -37,6 +35,8 @@ using Crowbond.Modules.CRM.Domain.SupplierContacts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierContacts;
 using Crowbond.Modules.CRM.Domain.SupplierProducts;
 using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
+using Crowbond.Modules.CRM.Domain.Products;
+using Crowbond.Modules.CRM.Infrastructure.Products;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Database;
 public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbContext(options), IUnitOfWork
@@ -51,7 +51,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<Sequence> Sequences { get; set; }
     internal DbSet<Rep> Reps { get; set; }
     internal DbSet<Recipient> Recipients { get; set; }
-    internal DbSet<Category> Categories { get; set; }
+    internal DbSet<Product> Products { get; set; }
     internal DbSet<PriceTier> PriceTiers { get; set; }
     internal DbSet<ProductPrice> ProductPrices { get; set; }
     internal DbSet<CustomerProduct> CustomerProducts { get; set; }
@@ -63,6 +63,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.CRM);
+
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
@@ -76,7 +77,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new SequenceConfiguration());
         modelBuilder.ApplyConfiguration(new RepConfiguration());
         modelBuilder.ApplyConfiguration(new RecipientConfiguration());
-        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new PriceTierConfiguration());
         modelBuilder.ApplyConfiguration(new ProductPriceConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerProductConfiguration());

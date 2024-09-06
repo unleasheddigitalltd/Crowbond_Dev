@@ -20,6 +20,7 @@ using Crowbond.Modules.WMS.Infrastructure.Tasks;
 using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 using Crowbond.Modules.WMS.Infrastructure.WarehouseOperators;
 using Crowbond.Modules.WMS.Domain.Tasks;
+using Crowbond.Common.Infrastructure.Configuration;
 
 namespace Crowbond.Modules.WMS.Infrastructure.Database;
 
@@ -51,6 +52,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.WMS);
+
+        modelBuilder.ApplySoftDeleteFilter();
 
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());

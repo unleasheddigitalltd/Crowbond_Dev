@@ -50,6 +50,7 @@ public static class DependencyInjection
                 UsersModule.ConfigureConsumers,
                 AttendanceModule.ConfigureConsumers,
                 WmsModule.ConfigureConsumers,
+                CrmModule.ConfigureConsumers,
             ],
             databaseConnectionString,
             redisConnectionString);

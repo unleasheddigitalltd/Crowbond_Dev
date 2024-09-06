@@ -14,10 +14,10 @@ public sealed record Product()
     public Guid Id { get; }
     public string Sku { get; }
     public string Name { get; }
-    public string UnitOfMeasure { get; }
-    public string Category { get; }
+    public string UnitOfMeasureName { get; }
+    public string CategoryName { get; }
     public decimal Stock { get; }
     public decimal? ReorderLevel { get; }
-    public bool Active { get; }
+    public bool IsActive { get; }
 }
 

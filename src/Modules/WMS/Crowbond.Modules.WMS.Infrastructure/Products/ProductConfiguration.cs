@@ -9,8 +9,6 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("products");
-
         builder.HasKey(c => c.Id);
 
         builder.HasOne<UnitOfMeasure>().WithMany()

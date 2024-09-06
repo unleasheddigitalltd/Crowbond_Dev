@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
-public sealed class CustomerOutlet : Entity
+public sealed class CustomerOutlet : Entity , ISoftDeletable
 {
     private CustomerOutlet()
     {
@@ -46,11 +46,15 @@ public sealed class CustomerOutlet : Entity
 
     public Guid CreateBy { get; private set; }
 
-    public DateTime CreateDate { get; private set; }
+    public DateTime CreateOnUtc { get; private set; }
 
     public Guid? LastModifiedBy { get; private set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; private set; }
+
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedOnUtc { get; set; }
 
     public static CustomerOutlet Create(
         Guid customerId,
@@ -70,7 +74,7 @@ public sealed class CustomerOutlet : Entity
         TimeOnly deliveryTimeTo,
         bool is24HrsDelivery,
         Guid createBy,
-        DateTime createDate)
+        DateTime createOnUtc)
     {
         var shippingAddress = new CustomerOutlet
         {
@@ -93,7 +97,7 @@ public sealed class CustomerOutlet : Entity
             Is24HrsDelivery = is24HrsDelivery,
             IsActive = true,
             CreateBy = createBy,
-            CreateDate = createDate
+            CreateOnUtc = createOnUtc
         };
         return shippingAddress;
     }
@@ -115,7 +119,7 @@ public sealed class CustomerOutlet : Entity
         TimeOnly deliveryTimeTo,
         bool is24HrsDelivery,
         Guid lastModifiedBy,
-        DateTime lastModifiedDate)
+        DateTime lastModifiedOnUtc)
     {
         LocationName = locationName;
         FullName = fullName;
@@ -133,10 +137,10 @@ public sealed class CustomerOutlet : Entity
         DeliveryTimeTo = deliveryTimeTo;
         Is24HrsDelivery = is24HrsDelivery;
         LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
+        LastModifiedOnUtc = lastModifiedOnUtc;
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedOnUtc)
     {
         if (IsActive)
         {
@@ -145,12 +149,12 @@ public sealed class CustomerOutlet : Entity
 
         IsActive = true;
         LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
+        LastModifiedOnUtc = lastModifiedOnUtc;
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedOnUtc)
     {
         if (!IsActive)
         {
@@ -159,7 +163,7 @@ public sealed class CustomerOutlet : Entity
 
         IsActive = false;
         LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
+        LastModifiedOnUtc = lastModifiedOnUtc;
 
         return Result.Success();
     }

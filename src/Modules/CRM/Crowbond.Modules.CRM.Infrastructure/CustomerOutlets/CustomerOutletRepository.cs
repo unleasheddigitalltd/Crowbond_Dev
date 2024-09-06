@@ -21,9 +21,8 @@ internal sealed class CustomerOutletRepository(CrmDbContext context) : ICustomer
         context.CustomerOutlets.Add(customerOutlet);
     }
 
-    public void InsertRange(IEnumerable<CustomerOutlet> customerOutlets)
+    public void Remove(CustomerOutlet customerOutlet)
     {
-        context.CustomerOutlets.AddRange(customerOutlets);
+        context.CustomerOutlets.Remove(customerOutlet);
     }
-
 }
