@@ -26,7 +26,7 @@ internal sealed class StartPutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }
 
-        Result result = taskHeader.Start(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Start(dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

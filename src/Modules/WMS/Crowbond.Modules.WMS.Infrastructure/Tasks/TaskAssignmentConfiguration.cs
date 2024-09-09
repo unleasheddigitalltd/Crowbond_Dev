@@ -10,8 +10,6 @@ internal sealed class TaskAssignmentConfiguration : IEntityTypeConfiguration<Tas
     public void Configure(EntityTypeBuilder<TaskAssignment> builder)
     {
         builder.HasKey(t => t.Id);
-        builder.Property(t => t.LastModifiedBy).IsRequired(false);
-        builder.Property(t => t.LastModifiedDate).IsRequired(false);
 
         builder.HasOne<WarehouseOperator>().WithMany().HasForeignKey(t => t.AssignedOperatorId);
     }

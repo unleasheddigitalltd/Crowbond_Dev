@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.WMS.Domain.Stocks;
 
-public sealed class Stock : Entity
+public sealed class Stock : Entity , IAuditable
 {
     private readonly List<StockTransaction> _stockTransactions = new();
     private Stock()
@@ -33,13 +33,13 @@ public sealed class Stock : Entity
 
     public StockStatus Status { get; private set; }
 
-    public Guid CreatedBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreatedDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public IReadOnlyCollection<StockTransaction> StockTransactions => _stockTransactions;
 
@@ -51,9 +51,7 @@ public sealed class Stock : Entity
         DateOnly? sellByDate,
         DateOnly? useByDate,
         Guid receiptLineId,
-        string? note,
-        Guid createdBy,
-        DateTime createdDate)
+        string? note)
     {
         var stock = new Stock
         {
@@ -68,9 +66,7 @@ public sealed class Stock : Entity
             UseByDate = useByDate,
             ReceiptLineId = receiptLineId,
             Note = note,
-            Status = StockStatus.Active,
-            CreatedBy = createdBy,
-            CreatedDate = createdDate
+            Status = StockStatus.Active
         };
 
         return stock;
@@ -82,9 +78,7 @@ public sealed class Stock : Entity
         DateTime transactionDate,
         string? transactionNote,
         Guid? reasonId,
-        decimal quantity,
-        Guid modifiedBy,
-        DateTime modificationDate)
+        decimal quantity)
     {
         if (quantity <= 0)
         {
@@ -102,7 +96,7 @@ public sealed class Stock : Entity
             ProductId);
 
         _stockTransactions.Add(transaction);
-        ApplyTransaction(modifiedBy, modificationDate, quantity, true);
+        ApplyTransaction(quantity, true);
 
         return Result.Success(transaction);
     }
@@ -113,9 +107,7 @@ public sealed class Stock : Entity
         DateTime transactionDate,
         string? transactionNote,
         Guid? reasonId,
-        decimal quantity,
-        Guid modifiedBy,
-        DateTime modificationDate)
+        decimal quantity)
     {
         if (quantity <= 0)
         {
@@ -138,20 +130,18 @@ public sealed class Stock : Entity
             ProductId);
 
         _stockTransactions.Add(transaction);
-        ApplyTransaction(modifiedBy, modificationDate, quantity, false);
+        ApplyTransaction(quantity, false);
 
         return Result.Success(transaction);
     }
 
 
-    private void ApplyTransaction(Guid lastModifiedBy, DateTime lastModifiedDate, decimal quantity, bool posAdjustment)
+    private void ApplyTransaction(decimal quantity, bool posAdjustment)
     {
         CurrentQty = posAdjustment ? CurrentQty + quantity : CurrentQty - quantity;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
     }
 
-    public Result Hold(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Hold()
     {
         if (Status != StockStatus.Active)
         {
@@ -159,13 +149,11 @@ public sealed class Stock : Entity
         }
 
         Status = StockStatus.Held;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate()
     {
         if (Status != StockStatus.Held)
         {
@@ -173,8 +161,6 @@ public sealed class Stock : Entity
         }
 
         Status = StockStatus.Active;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

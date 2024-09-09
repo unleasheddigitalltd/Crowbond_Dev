@@ -26,7 +26,7 @@ internal sealed class QuitPutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }
 
-        Result result = taskHeader.Quit(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Quit(dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

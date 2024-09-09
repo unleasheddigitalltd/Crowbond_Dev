@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.WMS.Application.Stocks.UpdateStockQuantity;
@@ -15,9 +13,9 @@ internal sealed class UpdateStockQuantity : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("stocks/{id}/adjust", async (ClaimsPrincipal claims, Guid id, Request request, ISender sender) =>
+        app.MapPut("stocks/{id}/adjust", async (Guid id, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateStockQuantityCommand(claims.GetUserId(), id, request.TransactionNote, request.Reason, request.Quantity));
+            Result result = await sender.Send(new UpdateStockQuantityCommand(id, request.TransactionNote, request.Reason, request.Quantity));
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.AdjustStocks)

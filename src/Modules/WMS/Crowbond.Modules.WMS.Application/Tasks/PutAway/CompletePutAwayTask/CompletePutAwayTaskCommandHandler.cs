@@ -26,7 +26,7 @@ internal sealed class CompletePutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));            
         }
 
-        Result result = taskHeader.Complete(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Complete(dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

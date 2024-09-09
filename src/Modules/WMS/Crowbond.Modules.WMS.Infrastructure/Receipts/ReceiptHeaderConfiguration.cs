@@ -14,7 +14,5 @@ internal sealed class ReceiptHeaderConfiguration : IEntityTypeConfiguration<Rece
         builder.Property(r => r.DeliveryNoteNumber).IsRequired().HasMaxLength(255);
         builder.Property(r => r.PurchaseOrderId).IsRequired(false);
         builder.Property(r => r.PurchaseOrderNo).IsRequired(false).HasMaxLength(20);
-        builder.Property(r => r.LastModifiedBy).IsRequired(false);
-        builder.Property(r => r.LastModifiedDate).IsRequired(false);
     }
 }

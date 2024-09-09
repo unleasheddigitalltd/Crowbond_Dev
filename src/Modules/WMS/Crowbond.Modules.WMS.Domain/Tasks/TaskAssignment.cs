@@ -4,7 +4,7 @@ using Crowbond.Modules.WMS.Domain.Products;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
 
-public sealed class TaskAssignment : Entity
+public sealed class TaskAssignment : Entity , IAuditable
 {
     private readonly List<TaskAssignmentLine> _lines = new();
 
@@ -20,28 +20,24 @@ public sealed class TaskAssignment : Entity
 
     public TaskAssignmentStatus Status { get; private set; }
 
-    public Guid CreatedBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreatedDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public IReadOnlyCollection<TaskAssignmentLine> Lines => _lines;
 
     internal static Result<TaskAssignment> Create(
-        Guid assignedOperatorId,
-        Guid createdBy,
-        DateTime createdDate)
+        Guid assignedOperatorId)
     {
         var taskAssignment = new TaskAssignment
         {
             Id = Guid.NewGuid(),
             AssignedOperatorId = assignedOperatorId,
-            Status = TaskAssignmentStatus.Pending,
-            CreatedBy = createdBy,
-            CreatedDate = createdDate
+            Status = TaskAssignmentStatus.Pending
         };
 
         return taskAssignment;
@@ -69,7 +65,7 @@ public sealed class TaskAssignment : Entity
         return result.Value;
     }
 
-    internal Result Start(Guid modifiedBy, DateTime modificationDate)
+    internal Result Start(DateTime modificationDate)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.Pending and not TaskAssignmentStatus.Paused)
@@ -89,13 +85,11 @@ public sealed class TaskAssignment : Entity
 
         // update the status.
         Status = TaskAssignmentStatus.InProgress;
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
-    internal Result Pause(Guid modifiedBy, DateTime modificationDate)
+    internal Result Pause()
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.InProgress)
@@ -105,13 +99,11 @@ public sealed class TaskAssignment : Entity
 
         // update the status.
         Status = TaskAssignmentStatus.Paused;
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
-    internal Result Unpause(Guid modifiedBy, DateTime modificationDate)
+    internal Result Unpause()
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.Paused)
@@ -121,13 +113,11 @@ public sealed class TaskAssignment : Entity
 
         // update the status.
         Status = TaskAssignmentStatus.InProgress;
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
-    internal Result Quit(Guid modifiedBy, DateTime modificationDate)
+    internal Result Quit(DateTime modificationDate)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
@@ -150,13 +140,11 @@ public sealed class TaskAssignment : Entity
 
         // update the status.
         Status = TaskAssignmentStatus.Quit;
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
-    internal Result Complete(Guid modifiedBy, DateTime modificationDate)
+    internal Result Complete(DateTime modificationDate)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
@@ -179,13 +167,11 @@ public sealed class TaskAssignment : Entity
 
         // update the status.
         Status = TaskAssignmentStatus.Completed;
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success();
     }
 
-    internal Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
+    internal Result<TaskAssignmentLine> IncrementCompletedQty(DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // select the specific line with this product.
         TaskAssignmentLine? line = _lines.Find(l => l.ProductId == productId);
@@ -208,9 +194,6 @@ public sealed class TaskAssignment : Entity
         {
             Status = TaskAssignmentStatus.Completed;
         }
-
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modificationDate;
 
         return Result.Success(line);
     }

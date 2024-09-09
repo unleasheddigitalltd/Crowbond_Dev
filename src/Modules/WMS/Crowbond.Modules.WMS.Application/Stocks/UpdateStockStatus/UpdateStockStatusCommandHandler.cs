@@ -9,7 +9,6 @@ namespace Crowbond.Modules.WMS.Application.Stocks.UpdateStockStatus;
 
 internal sealed class UpdateStockStatusCommandHandler(
     IStockRepository stockRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateStockStatusCommand>
 {
@@ -29,8 +28,8 @@ internal sealed class UpdateStockStatusCommandHandler(
 
         var stockActions = new Dictionary<StockStatus, Func<Result>>
         {
-            { StockStatus.Active, () => stock.Activate(request.UserId, dateTimeProvider.UtcNow) },
-            { StockStatus.Held, () => stock.Hold(request.UserId, dateTimeProvider.UtcNow) }
+            { StockStatus.Active, () => stock.Activate() },
+            { StockStatus.Held, () => stock.Hold() }
         };
 
         Result result = stockActions[statusType]();

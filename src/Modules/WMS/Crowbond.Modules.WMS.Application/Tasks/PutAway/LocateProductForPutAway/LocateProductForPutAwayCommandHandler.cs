@@ -50,7 +50,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
             return Result.Failure<Guid>(SettingErrors.NotFound);
         }
 
-        Result<TaskAssignmentLine> assignmentLineResult = taskHeader.IncrementCompletedQty(request.UserId, dateTimeProvider.UtcNow, request.ProductId, request.Qty);
+        Result<TaskAssignmentLine> assignmentLineResult = taskHeader.IncrementCompletedQty(dateTimeProvider.UtcNow, request.ProductId, request.Qty);
 
         if (assignmentLineResult.IsFailure)
         {
@@ -97,9 +97,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
                 receiptLine.SellByDate,
                 receiptLine.UseByDate,
                 receiptLine.Id,
-                null,
-                request.UserId,
-                dateTimeProvider.UtcNow);
+                null);
 
             if (result.IsFailure)
             {
@@ -110,7 +108,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
             stockRepository.InsertStock(destStock);
         }
 
-        Result<StockTransaction> transResult = destStock.StockIn(assignmentLineResult.Value.Id, ActionType.PutAway.Name, dateTimeProvider.UtcNow, null, null, request.Qty, request.UserId, dateTimeProvider.UtcNow);
+        Result<StockTransaction> transResult = destStock.StockIn(assignmentLineResult.Value.Id, ActionType.PutAway.Name, dateTimeProvider.UtcNow, null, null, request.Qty);
 
         if (transResult.IsFailure)
         {

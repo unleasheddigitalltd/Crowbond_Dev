@@ -41,10 +41,8 @@ public sealed class TaskHeader : Entity, IChangeDetectable
     }
 
     public Result<TaskAssignment> AddAssignmentWithLines(
-    Guid warehouseOperatorId,
-    Guid createdBy,
-    DateTime createdDate,
-    List<(Guid productId, decimal requestedQty)> productLines)
+        Guid warehouseOperatorId,
+        List<(Guid productId, decimal requestedQty)> productLines)
     {
         switch (Status)
         {
@@ -61,7 +59,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
                     .ToList();
 
                 // Create a new task assignment
-                Result<TaskAssignment> createResult = TaskAssignment.Create(warehouseOperatorId, createdBy, createdDate);
+                Result<TaskAssignment> createResult = TaskAssignment.Create(warehouseOperatorId);
 
                 if (createResult.IsFailure)
                 {
@@ -112,7 +110,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
     }
 
-    public Result Start(Guid modifiedBy, DateTime modificationDate)
+    public Result Start(DateTime modificationDate)
     {
         switch (Status)
         {
@@ -130,7 +128,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
                 }
 
                 // start the found assignment
-                Result result = assignment.Start(modifiedBy, modificationDate);
+                Result result = assignment.Start(modificationDate);
                 if (result.IsFailure)
                 {
                     return result;
@@ -155,7 +153,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
     }
 
-    public Result Pause(Guid modifiedBy, DateTime modificationDate)
+    public Result Pause()
     {
         if (Status is not TaskHeaderStatus.InProgress)
         {
@@ -172,7 +170,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
 
         // pause the found assignment
-        Result result = assignment.Pause(modifiedBy, modificationDate);
+        Result result = assignment.Pause();
         if (result.IsFailure)
         {
             return result;
@@ -181,7 +179,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return Result.Success();
     }
 
-    public Result Unpause(Guid modifiedBy, DateTime modificationDate)
+    public Result Unpause()
     {
         if (Status is not TaskHeaderStatus.InProgress)
         {
@@ -198,7 +196,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
 
         // pause the found assignment
-        Result result = assignment.Unpause(modifiedBy, modificationDate);
+        Result result = assignment.Unpause();
         if (result.IsFailure)
         {
             return result;
@@ -207,7 +205,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return Result.Success();
     }
 
-    public Result Quit(Guid modifiedBy, DateTime modificationDate)
+    public Result Quit(DateTime modificationDate)
     {
         if (Status is not TaskHeaderStatus.InProgress)
         {
@@ -224,7 +222,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
 
         // pause the found assignment
-        Result result = assignment.Quit(modifiedBy, modificationDate);
+        Result result = assignment.Quit(modificationDate);
         if (result.IsFailure)
         {
             return result;
@@ -234,7 +232,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return Result.Success();
     }
 
-    public Result Complete(Guid modifiedBy, DateTime modificationDate)
+    public Result Complete(DateTime modificationDate)
     {
         if (Status is not TaskHeaderStatus.InProgress)
         {
@@ -251,7 +249,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
 
         // pause the found assignment
-        Result result = assignment.Complete(modifiedBy, modificationDate);
+        Result result = assignment.Complete(modificationDate);
         if (result.IsFailure)
         {
             return result;
@@ -261,7 +259,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return Result.Success();
     }
 
-    public Result<TaskAssignmentLine> IncrementCompletedQty(Guid modifiedBy, DateTime modificationDate, Guid productId, decimal Quantity)
+    public Result<TaskAssignmentLine> IncrementCompletedQty(DateTime modificationDate, Guid productId, decimal Quantity)
     {
         // Find the single assignment that is currently in progress
         TaskAssignment taskAssignment = _assignments.SingleOrDefault(a => a.Status is TaskAssignmentStatus.InProgress);
@@ -272,7 +270,7 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         }
 
         // Attempt to increase the assignment line with the specified parameters
-        Result<TaskAssignmentLine> result = taskAssignment.IncrementCompletedQty(modifiedBy, modificationDate, productId, Quantity);
+        Result<TaskAssignmentLine> result = taskAssignment.IncrementCompletedQty(modificationDate, productId, Quantity);
 
         if (_assignments.Any(l => l.Status is TaskAssignmentStatus.Completed))
         {

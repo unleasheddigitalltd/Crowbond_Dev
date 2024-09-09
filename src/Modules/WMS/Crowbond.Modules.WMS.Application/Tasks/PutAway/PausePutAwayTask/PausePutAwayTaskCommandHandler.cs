@@ -8,7 +8,6 @@ namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.PausePutAwayTask;
 
 internal sealed class PausePutAwayTaskCommandHandler(
     ITaskRepository taskRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<PausePutAwayTaskCommand>
 {
@@ -26,7 +25,7 @@ internal sealed class PausePutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }
 
-        Result result = taskHeader.Pause(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Pause();
 
         if (result.IsFailure)
         {

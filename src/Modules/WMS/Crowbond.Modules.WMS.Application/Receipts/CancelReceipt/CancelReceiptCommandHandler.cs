@@ -8,7 +8,6 @@ namespace Crowbond.Modules.WMS.Application.Receipts.CancelReceipt;
 
 internal sealed class CancelReceiptCommandHandler(
     IReceiptRepository receiptRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CancelReceiptCommand>
 {
@@ -21,7 +20,7 @@ internal sealed class CancelReceiptCommandHandler(
             return Result.Failure(ReceiptErrors.PurchaseOrderNotFound(request.PurchaseOrderId));
         }
 
-        receiptHeader.Cancel(request.UserId, dateTimeProvider.UtcNow);
+        receiptHeader.Cancel();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

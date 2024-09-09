@@ -11,7 +11,6 @@ namespace Crowbond.Modules.WMS.Application.Receipts.ReceiveReceipt;
 internal sealed class ReceiveReceiptCommandHandler(
     IReceiptRepository receiptRepository,
     ITaskRepository taskRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<ReceiveReceiptCommand>
 {
@@ -24,7 +23,7 @@ internal sealed class ReceiveReceiptCommandHandler(
             return Result.Failure(ReceiptErrors.NotFound(request.ReceiptId));
         }
 
-        Result receiptResult = receipt.Receive(request.UserId, dateTimeProvider.UtcNow);
+        Result receiptResult = receipt.Receive();
 
         if (receiptResult.IsFailure)
         {

@@ -21,7 +21,7 @@ internal sealed class UnassignPutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.NotFound(request.TaskHeaderId));
         }
 
-        Result result = taskHeader.Quit(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Quit(dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

@@ -74,9 +74,7 @@ internal sealed class UpdateStockLocationCommandHandler(
                 stock.SellByDate,
                 stock.UseByDate,
                 stock.ReceiptLineId,
-                stock.Note,
-                request.UserId,
-                dateTimeProvider.UtcNow);
+                stock.Note);
 
             if (result.IsFailure)
             {
@@ -94,9 +92,7 @@ internal sealed class UpdateStockLocationCommandHandler(
             dateTimeProvider.UtcNow,
             request.TransactionNote,
             transactionReason.Id,
-            request.Quantity,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+            request.Quantity);
 
         if (orgTransResult.IsFailure)
         {
@@ -109,9 +105,7 @@ internal sealed class UpdateStockLocationCommandHandler(
             dateTimeProvider.UtcNow,
             request.TransactionNote,
             transactionReason.Id,
-            request.Quantity,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+            request.Quantity);
 
         if (destTransResult.IsFailure)
         {
