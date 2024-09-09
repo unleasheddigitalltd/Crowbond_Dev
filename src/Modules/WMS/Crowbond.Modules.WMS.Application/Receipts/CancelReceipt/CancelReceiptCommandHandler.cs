@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Receipts;
@@ -20,7 +19,12 @@ internal sealed class CancelReceiptCommandHandler(
             return Result.Failure(ReceiptErrors.PurchaseOrderNotFound(request.PurchaseOrderId));
         }
 
-        receiptHeader.Cancel();
+        Result result = receiptHeader.Cancel(request.UserId, request.UtcNow);
+
+        if (result.IsFailure)
+        {
+            return result;
+        }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

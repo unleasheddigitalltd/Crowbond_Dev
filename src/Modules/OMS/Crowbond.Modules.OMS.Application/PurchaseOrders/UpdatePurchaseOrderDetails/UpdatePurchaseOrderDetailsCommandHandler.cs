@@ -8,7 +8,6 @@ namespace Crowbond.Modules.OMS.Application.PurchaseOrders.UpdatePurchaseOrderDet
 
 internal sealed class UpdatePurchaseOrderDetailsCommandHandler(
     IPurchaseOrderRepository purchaseOrderHeaderRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdatePurchaseOrderDetailsCommand>
 {
@@ -39,9 +38,7 @@ internal sealed class UpdatePurchaseOrderDetailsCommandHandler(
             request.PurchaseOrderHeader.DeliveryCharge,
             request.PurchaseOrderHeader.PaymentMethod,
             request.PurchaseOrderHeader.PurchaseOrderNotes,
-            request.PurchaseOrderHeader.SalesOrderRef,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+            request.PurchaseOrderHeader.SalesOrderRef);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

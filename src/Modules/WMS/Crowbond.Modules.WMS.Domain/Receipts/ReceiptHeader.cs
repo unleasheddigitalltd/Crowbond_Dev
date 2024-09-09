@@ -71,7 +71,7 @@ public sealed class ReceiptHeader : Entity , IAuditable
         return Result.Success();
     }
 
-    public Result Cancel()
+    public Result Cancel(Guid userId, DateTime utcNow)
     {
         if (Status != ReceiptStatus.Shipping)
         {
@@ -79,7 +79,8 @@ public sealed class ReceiptHeader : Entity , IAuditable
         }
 
         Status = ReceiptStatus.Cancelled;
-
+        LastModifiedBy = userId;
+        LastModifiedOnUtc = utcNow;
         return Result.Success();
     }
 

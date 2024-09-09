@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using MediatR;
@@ -15,9 +13,9 @@ internal sealed class PendPurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchase-order/{id}/pend", async (Guid id, ClaimsPrincipal claims, ISender sender) =>
+        app.MapPut("purchase-order/{id}/pend", async (Guid id, ISender sender) =>
         {
-            Result result = await sender.Send(new PendPurchaseOrderCommand(claims.GetUserId(), id));
+            Result result = await sender.Send(new PendPurchaseOrderCommand(id));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

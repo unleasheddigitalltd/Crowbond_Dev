@@ -11,7 +11,6 @@ namespace Crowbond.Modules.OMS.Application.PurchaseOrders.UpdatePurchaseOrder;
 internal sealed class UpdatePurchaseOrderCommandHandler(
     IPurchaseOrderRepository purchaseOrderHeaderRepository,
     ISupplierProductApi supplierProductApi,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdatePurchaseOrderCommand>
 {
@@ -29,9 +28,7 @@ internal sealed class UpdatePurchaseOrderCommandHandler(
         // Update the Purchase Order Header Draft
         Result updateResult = purchaseOrderHeader.UpdateDraft(
             requiredDate: request.PurchaseOrder.RequiredDate,
-            purchaseOrderNotes: request.PurchaseOrder.PurchaseOrderNotes,
-            lastModifiedBy: request.UserId,
-            lastModifiedDate: dateTimeProvider.UtcNow);
+            purchaseOrderNotes: request.PurchaseOrder.PurchaseOrderNotes);
 
         if (updateResult.IsFailure)
         {
@@ -74,7 +71,7 @@ internal sealed class UpdatePurchaseOrderCommandHandler(
             }
         }
 
-        purchaseOrderHeaderRepository.AddLines(purchaseOrderHeader.PurchaseOrderLines);
+        purchaseOrderHeaderRepository.AddLines(purchaseOrderHeader.Lines);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

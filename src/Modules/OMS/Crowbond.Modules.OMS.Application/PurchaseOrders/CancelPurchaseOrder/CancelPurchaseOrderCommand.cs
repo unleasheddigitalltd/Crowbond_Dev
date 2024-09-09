@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.CancelPurchaseOrder;
 
-public sealed record CancelPurchaseOrderCommand(Guid UserId, Guid PurchaseOrderHeaderId) : ICommand;
+public sealed record CancelPurchaseOrderCommand(Guid PurchaseOrderHeaderId) : ICommand;

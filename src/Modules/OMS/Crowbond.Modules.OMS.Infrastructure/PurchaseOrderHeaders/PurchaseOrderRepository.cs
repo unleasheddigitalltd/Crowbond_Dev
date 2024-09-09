@@ -14,7 +14,7 @@ internal sealed class PurchaseOrderRepository(OmsDbContext context) : IPurchaseO
 
     public async Task<PurchaseOrderHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.PurchaseOrderHeaders.Include(p => p.PurchaseOrderLines).Include(p => p.StatusHistory).SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+        return await context.PurchaseOrderHeaders.Include(p => p.Lines).Include(p => p.StatusHistory).SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
     public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)

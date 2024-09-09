@@ -11,7 +11,6 @@ namespace Crowbond.Modules.OMS.Application.PurchaseOrders.CreatePurchaseOrder;
 
 internal sealed class CreatePurchaseOrderCommandHandler(
     IPurchaseOrderRepository purchaseOrderRepository,
-    IDateTimeProvider dateTimeProvider,
     ISupplierApi supplierApi,
     ISupplierProductApi supplierProductApi,
     IUnitOfWork unitOfWork)
@@ -33,9 +32,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             supplier.PhoneNumber,
             supplier.Email,
             request.PurchaseOrder.RequiredDate,
-            request.PurchaseOrder.PurchaseOrderNotes,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+            request.PurchaseOrder.PurchaseOrderNotes);
 
         if (purchaseOrderHeader.IsFailure)
         {

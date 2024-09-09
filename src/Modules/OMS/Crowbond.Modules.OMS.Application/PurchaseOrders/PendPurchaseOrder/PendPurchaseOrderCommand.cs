@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.PendPurchaseOrder;
 
-public sealed record PendPurchaseOrderCommand(Guid UserId, Guid PurchaseOrderHeaderId) : ICommand;
+public sealed record PendPurchaseOrderCommand(Guid PurchaseOrderHeaderId) : ICommand;

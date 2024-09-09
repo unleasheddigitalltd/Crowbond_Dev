@@ -1,9 +1,13 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.RouteTripLogs;
 
 namespace Crowbond.Modules.OMS.Domain.RouteTrips;
 
 public sealed class RouteTrip : Entity
 {
+    private readonly List<RouteTripStatusHistory> _statusHistories = new();
+    private readonly List<RouteTripLog> _logs = new();
+
     private RouteTrip()
     {        
     }
@@ -17,6 +21,10 @@ public sealed class RouteTrip : Entity
     public string? Comments { get; private set; }
 
     public RouteTripStatus Status { get; private set; }
+
+    public IReadOnlyCollection<RouteTripStatusHistory> StatusHistories => _statusHistories;
+
+    public IReadOnlyCollection<RouteTripLog> Logs => _logs;
 
     public static RouteTrip Create(DateOnly date, Guid routeId, string comments)
     {

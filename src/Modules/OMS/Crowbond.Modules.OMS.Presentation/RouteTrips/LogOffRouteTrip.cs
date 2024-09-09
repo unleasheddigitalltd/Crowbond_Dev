@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
+using Crowbond.Modules.OMS.Application.Abstractions.Authentication;
 using Crowbond.Modules.OMS.Application.RouteTrips.LogOffRouteTrip;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -15,10 +14,10 @@ internal sealed class LogOffRouteTrip : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("routes/trips/log-off", async (Request request, ClaimsPrincipal claims, ISender sender) =>
+        app.MapPut("routes/trips/log-off", async (Request request, IDriverContext driverContext, ISender sender) =>
         {
             Result result = await sender.Send(new LogOffRouteTripCommand(
-                request.RouteTripId, claims.GetUserId()));
+                request.RouteTripId, driverContext.DriverId));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
