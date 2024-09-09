@@ -10,7 +10,6 @@ namespace Crowbond.Modules.CRM.Application.SupplierProducts.UpdateSupplierProduc
 internal sealed class UpdateSupplierProductsCommandHandler(
     ISupplierRepository supplierRepository,
     ISupplierProductRepository supplierProductRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateSupplierProductsCommand>
 {
@@ -40,7 +39,7 @@ internal sealed class UpdateSupplierProductsCommandHandler(
             if (productDictionary.TryGetValue(productDto.ProductId, out SupplierProduct productsNotToDelete))
             {
                 // Update existing product
-                productsNotToDelete.Update(productDto.IsDefault, productDto.Comments, request.UserId, dateTimeProvider.UtcNow);
+                productsNotToDelete.Update(productDto.IsDefault, productDto.Comments);
             }
             else
             {
@@ -50,9 +49,7 @@ internal sealed class UpdateSupplierProductsCommandHandler(
                     productDto.ProductId,
                     productDto.UnitPrice,
                     productDto.IsDefault,
-                    productDto.Comments, 
-                    request.UserId, 
-                    dateTimeProvider.UtcNow);
+                    productDto.Comments);
                 supplierProductRepository.Insert(newProduct);
             }
         }

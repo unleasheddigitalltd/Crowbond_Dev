@@ -66,6 +66,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
             Permission.ModifySupplierProducts,
 
+            Permission.GetPriceTiers,
+            Permission.ModifyPriceTiers,
+
             Permission.CreatePurchaseOrders,
             Permission.GetPurchaseOrders,
             Permission.ModifyPurchaseOrders,
@@ -170,6 +173,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifySupplierContacts),
 
                     CreateRolePermission(Role.Administrator, Permission.ModifySupplierProducts),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetPriceTiers),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyPriceTiers),
 
                     CreateRolePermission(Role.Administrator, Permission.CreatePurchaseOrders),
                     CreateRolePermission(Role.Administrator, Permission.ModifyPurchaseOrders),

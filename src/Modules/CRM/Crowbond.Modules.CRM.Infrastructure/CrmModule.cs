@@ -49,6 +49,8 @@ using MassTransit;
 using Crowbond.Modules.WMS.IntegrationEvents;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Common.Infrastructure.AuditEntity;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -86,6 +88,8 @@ public static class CrmModule
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<ICustomerRepository,CustomerRepository>();

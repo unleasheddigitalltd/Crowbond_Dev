@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.SupplierProducts.UpdateSupplierProducts;
 
-public sealed record UpdateSupplierProductsCommand(Guid UserId, Guid SupplierId, IReadOnlyCollection<SupplierProductRequest> SupplierProducts) : ICommand;
+public sealed record UpdateSupplierProductsCommand(Guid SupplierId, IReadOnlyCollection<SupplierProductRequest> SupplierProducts) : ICommand;

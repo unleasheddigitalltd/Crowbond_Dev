@@ -1,9 +1,11 @@
 ﻿using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
+using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.CRM.IntegrationEvents;
 using Crowbond.Modules.OMS.IntegrationEvents;
@@ -92,6 +94,8 @@ public static class UsersModule
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUserRepository, UserRepository>();

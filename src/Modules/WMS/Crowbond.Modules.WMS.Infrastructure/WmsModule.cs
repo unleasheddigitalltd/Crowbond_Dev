@@ -34,6 +34,8 @@ using Crowbond.Modules.WMS.Infrastructure.Tasks;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Modules.WMS.Application.Abstractions.Authentication;
 using Crowbond.Modules.WMS.Infrastructure.Authentication;
+using Crowbond.Common.Infrastructure.AuditEntity;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -72,6 +74,8 @@ public static class WmsModule
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WmsDbContext>());

@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.ProductPrices;
 
-public sealed class ProductPrice : Entity
+public sealed class ProductPrice : Entity, ISoftDeletable, IAuditable
 {
     private ProductPrice()
     {        
@@ -19,6 +19,20 @@ public sealed class ProductPrice : Entity
     public decimal SalePrice { get; private set; }
 
     public DateOnly EffectiveDate { get; private set; }
+
+    public Guid CreatedBy { get; set; }
+
+    public DateTime CreatedOnUtc { get; set; }
+
+    public Guid? LastModifiedBy { get; set; }
+
+    public DateTime? LastModifiedOnUtc { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public Guid? DeletedBy { get; set; }
+
+    public DateTime? DeletedOnUtc { get; set; }
 
     public static ProductPrice Create(
         Guid productId,
@@ -40,13 +54,8 @@ public sealed class ProductPrice : Entity
         return productPrice;
     }
 
-    public void Update(
-        decimal basePurchasePrice,
-        decimal salePrice,
-        DateOnly effectiveDate)
+    public void Update(DateOnly effectiveDate)
     {
-        BasePurchasePrice = basePurchasePrice;
-        SalePrice = salePrice;
         EffectiveDate = effectiveDate;
     }
 }
