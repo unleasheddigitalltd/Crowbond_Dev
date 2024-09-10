@@ -23,6 +23,7 @@ internal sealed class GetSupplierProductsQueryHandler(IDbConnectionFactory dbCon
                  p.sku AS {nameof(SupplierProductResponse.ProductSku)},
                  p.unit_of_measure_name AS {nameof(SupplierProductResponse.UnitOfMeasureName)},
                  p.category_id AS {nameof(SupplierProductResponse.CategoryId)},
+                 p.category_name AS {nameof(SupplierProductResponse.CategoryName)},
                  sp.unit_price AS {nameof(SupplierProductResponse.UnitPrice)},
                  p.tax_rate_type AS {nameof(SupplierProductResponse.TaxRateType)},
                  sp.is_default AS {nameof(SupplierProductResponse.IsDefault)},

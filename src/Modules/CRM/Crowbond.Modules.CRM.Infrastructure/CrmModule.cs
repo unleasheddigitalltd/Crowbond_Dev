@@ -30,8 +30,6 @@ using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
-using Crowbond.Modules.CRM.Domain.CustomerProductPrices;
-using Crowbond.Modules.CRM.Infrastructure.CustomerProductPrices;
 using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Infrastructure.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Domain.Routes;
@@ -104,7 +102,6 @@ public static class CrmModule
         services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
-        services.AddScoped<ICustomerProductPriceRepository, CustomerProductPriceRepository>();
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
 
