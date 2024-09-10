@@ -11,8 +11,18 @@ internal sealed class CustomerProductRepository(CrmDbContext context) : ICustome
         return await context.CustomerProducts.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
+    public async Task<IEnumerable<CustomerProduct>> GetForCustomerAsync(Guid customerId, CancellationToken cancellationToken = default)
+    {
+        return await context.CustomerProducts.Where(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
+    }
+
     public void Insert(CustomerProduct customerProduct)
     {
         context.CustomerProducts.Add(customerProduct);
+    }
+
+    public void Remove(CustomerProduct customerProduct)
+    {
+        context.CustomerProducts.Remove(customerProduct);
     }
 }

@@ -15,8 +15,6 @@ internal sealed class CustomerProductConfiguration : IEntityTypeConfiguration<Cu
         builder.Property(c => c.FixedDiscount).HasPrecision(5, 2);
         builder.Property(c => c.Comments).HasMaxLength(255);
 
-        builder.HasQueryFilter(c => c.IsActive);
-
         builder.HasOne<Customer>().WithMany().HasForeignKey(c => c.CustomerId);
         builder.HasOne<Product>().WithMany().HasForeignKey(e => e.ProductId);
     }

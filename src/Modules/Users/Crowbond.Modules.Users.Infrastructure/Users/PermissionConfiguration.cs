@@ -57,6 +57,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateCustomerOutlets,
             Permission.ModifyCustomerOutlets,
 
+            Permission.ModifyCustomerProducts,
+
             Permission.GetSuppliers,
             Permission.ModifySuppliers,
             Permission.CreateSuppliers,
@@ -164,6 +166,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                     CreateRolePermission(Role.Administrator, Permission.CreateCustomerOutlets),
                     CreateRolePermission(Role.Administrator, Permission.ModifyCustomerOutlets),
+
+                    CreateRolePermission(Role.Administrator, Permission.ModifyCustomerProducts),
 
                     CreateRolePermission(Role.Administrator, Permission.GetSuppliers),
                     CreateRolePermission(Role.Administrator, Permission.ModifySuppliers),

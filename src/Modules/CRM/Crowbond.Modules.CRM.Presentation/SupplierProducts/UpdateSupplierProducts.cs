@@ -13,12 +13,12 @@ internal sealed class UpdateSupplierProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("suppliers/{supplierId}/products", async (
-            Guid supplierId,
+        app.MapPut("suppliers/{id}/products", async (
+            Guid id,
             IReadOnlyCollection<SupplierProductRequest> request,
             ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateSupplierProductsCommand(supplierId, request));
+            Result result = await sender.Send(new UpdateSupplierProductsCommand(id, request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

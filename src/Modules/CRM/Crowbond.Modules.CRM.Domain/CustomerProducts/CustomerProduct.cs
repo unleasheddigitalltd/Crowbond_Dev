@@ -40,15 +40,31 @@ public sealed class CustomerProduct : Entity, ISoftDeletable, IAuditable
 
     public DateTime? DeletedOnUtc { get; set; }
 
-    public static CustomerProduct Create(
+    public static Result<CustomerProduct> Create(
         Guid customerId,
         Guid productId,
         decimal? fixedPrice,
         decimal? fixedDiscount,
         string? comments,
         DateOnly effectiveDate,
-        DateOnly? expiryDate)
+        DateOnly? expiryDate,
+        DateTime utcNow)
     {
+        if (effectiveDate < DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure<CustomerProduct>(CustomerProductErrors.EffectiveDateInThePast);
+        }
+
+        if (expiryDate <= DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure<CustomerProduct>(CustomerProductErrors.ExpiryDateInThePastOrToday);            
+        }
+
+        if (expiryDate <= effectiveDate)
+        {
+            return Result.Failure<CustomerProduct>(CustomerProductErrors.ExpiryDateBeforeEffectiveDate);
+        }
+
         var customer = new CustomerProduct
         {
             Id = Guid.NewGuid(),
@@ -59,9 +75,38 @@ public sealed class CustomerProduct : Entity, ISoftDeletable, IAuditable
             Comments = comments,
             EffectiveDate = effectiveDate,
             ExpiryDate = expiryDate,
-            IsActive = true
+            IsActive = effectiveDate == DateOnly.FromDateTime(utcNow)
         };
 
         return customer;
+    }
+
+    public Result Update(
+        string? comments,
+        DateOnly effectiveDate,
+        DateOnly? expiryDate,
+        DateTime utcNow)
+    {
+        if (effectiveDate < DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure(CustomerProductErrors.EffectiveDateInThePast);
+        }
+
+        if (expiryDate <= DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure(CustomerProductErrors.ExpiryDateInThePastOrToday);
+        }
+
+        if (expiryDate <= effectiveDate)
+        {
+            return Result.Failure(CustomerProductErrors.ExpiryDateBeforeEffectiveDate);
+        }
+
+        Comments = comments;
+        EffectiveDate = effectiveDate;
+        ExpiryDate = expiryDate;
+        IsActive = effectiveDate == DateOnly.FromDateTime(utcNow);
+
+        return Result.Success();
     }
 }
