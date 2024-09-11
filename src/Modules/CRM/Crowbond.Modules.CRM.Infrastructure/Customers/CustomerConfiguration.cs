@@ -38,10 +38,6 @@ internal sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         builder.Property(c => c.CustomerNotes).HasMaxLength(500);
 
-        builder.Property(c => c.LastModifiedBy).IsRequired(false);
-
-        builder.Property(c => c.LastModifiedDate).IsRequired(false);
-
         builder.HasOne<Rep>().WithMany().HasForeignKey(c => c.RepId).OnDelete(DeleteBehavior.NoAction);
     }
 }

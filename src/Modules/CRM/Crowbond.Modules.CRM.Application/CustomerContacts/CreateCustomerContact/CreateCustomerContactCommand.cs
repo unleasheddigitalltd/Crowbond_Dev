@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContact;
 
-public sealed record CreateCustomerContactCommand(Guid CustomerId, Guid UserId, CustomerContactRequest CustomerContact) : ICommand<Guid>;
+public sealed record CreateCustomerContactCommand(Guid CustomerId, CustomerContactRequest CustomerContact) : ICommand<Guid>;

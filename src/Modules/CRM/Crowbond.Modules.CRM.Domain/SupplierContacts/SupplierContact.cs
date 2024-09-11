@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.SupplierContacts;
 
-public sealed class SupplierContact : Entity, ISoftDeletable
+public sealed class SupplierContact : Entity, ISoftDeletable, IAuditable
 {
     private SupplierContact()
     {        
@@ -28,13 +28,13 @@ public sealed class SupplierContact : Entity, ISoftDeletable
 
     public bool IsActive { get; private set; }
 
-    public Guid CreateBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreateDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public bool IsDeleted { get; set; }
 
@@ -49,9 +49,7 @@ public sealed class SupplierContact : Entity, ISoftDeletable
         string phoneNumber,
         string? mobile,
         string email,
-        string username,
-        Guid createBy,
-        DateTime createDate)
+        string username)
     {
         var supplierContact = new SupplierContact
         {
@@ -64,9 +62,7 @@ public sealed class SupplierContact : Entity, ISoftDeletable
             Email = email,
             Username = username,
             IsPrimary = false,
-            IsActive = true,
-            CreateBy = createBy,
-            CreateDate = createDate
+            IsActive = true
         };
 
 
@@ -79,21 +75,17 @@ public sealed class SupplierContact : Entity, ISoftDeletable
         string firstName,
         string lastName,
         string phoneNumber,
-        string? mobile,
-        Guid lastModifiedBy,
-        DateTime lastModifiedDate)
+        string? mobile)
     {
         FirstName = firstName;
         LastName = lastName;
         PhoneNumber = phoneNumber;
         Mobile = mobile;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new SupplierContactUpdatedDomainEvent(Id, FirstName, LastName));
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate()
     {
         if (IsActive)
         {
@@ -101,15 +93,13 @@ public sealed class SupplierContact : Entity, ISoftDeletable
         }
 
         IsActive = true;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new SupplierContactActivatedDomainEvent(Id));
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Deactivate()
     {
         if (!IsActive)
         {
@@ -122,15 +112,13 @@ public sealed class SupplierContact : Entity, ISoftDeletable
         }
 
         IsActive = false;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new SupplierContactDeactivatedDomainEvent(Id));
 
         return Result.Success();
     }
 
-    public Result ChangePrimary(bool isPrimary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result ChangePrimary(bool isPrimary)
     {
         if (!IsActive && isPrimary)
         {
@@ -138,8 +126,6 @@ public sealed class SupplierContact : Entity, ISoftDeletable
         }
 
         IsPrimary = isPrimary;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

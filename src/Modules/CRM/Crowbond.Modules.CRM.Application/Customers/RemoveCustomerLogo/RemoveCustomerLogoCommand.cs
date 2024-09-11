@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.Customers.RemoveCustomerLogo;
 
-public sealed record RemoveCustomerLogoCommand(Guid UserId, Guid CustomerId) : ICommand;
+public sealed record RemoveCustomerLogoCommand(Guid CustomerId) : ICommand;

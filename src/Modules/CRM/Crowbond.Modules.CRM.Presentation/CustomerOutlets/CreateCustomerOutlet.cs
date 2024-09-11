@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.CreateCustomerOutlet;
@@ -15,9 +13,9 @@ internal sealed class CreateCustomerOutlet : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("customers/{id}/outlets", async (Guid id, ClaimsPrincipal claims, CustomerOutletRequest request, ISender sender) =>
+        app.MapPost("customers/{id}/outlets", async (Guid id, CustomerOutletRequest request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new CreateCustomerOutletCommand(id, claims.GetUserId(), request));
+            Result<Guid> result = await sender.Send(new CreateCustomerOutletCommand(id, request));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

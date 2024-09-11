@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.UpdateCustomerContactActivation;
 
-public sealed record UpdateCustomerContactActivationCommand(Guid UserId, Guid CustomerContactId, bool IsActive) : ICommand;
+public sealed record UpdateCustomerContactActivationCommand(Guid CustomerContactId, bool IsActive) : ICommand;

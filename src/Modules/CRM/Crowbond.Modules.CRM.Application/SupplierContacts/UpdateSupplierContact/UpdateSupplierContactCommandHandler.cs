@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
@@ -8,7 +7,6 @@ namespace Crowbond.Modules.CRM.Application.SupplierContacts.UpdateSupplierContac
 
 internal sealed class UpdateSupplierContactCommandHandler(
     ISupplierContactRepository supplierContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateSupplierContactCommand>
 {
@@ -25,9 +23,7 @@ internal sealed class UpdateSupplierContactCommandHandler(
             firstName: request.SupplierContact.FirstName,
             lastName: request.SupplierContact.LastName,
             phoneNumber: request.SupplierContact.PhoneNumber,
-            mobile: request.SupplierContact.Mobile,
-            lastModifiedBy: request.UserId,
-            lastModifiedDate: dateTimeProvider.UtcNow);
+            mobile: request.SupplierContact.Mobile);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

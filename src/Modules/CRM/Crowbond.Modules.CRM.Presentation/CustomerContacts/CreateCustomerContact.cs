@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContact;
@@ -15,9 +13,9 @@ internal sealed class CreateCustomerContact : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("customers/{id}/contacts", async (Guid id, CustomerContactRequest request, ClaimsPrincipal claimes, ISender sender) =>
+        app.MapPost("customers/{id}/contacts", async (Guid id, CustomerContactRequest request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new CreateCustomerContactCommand(id, claimes.GetUserId(), request));
+            Result<Guid> result = await sender.Send(new CreateCustomerContactCommand(id, request));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

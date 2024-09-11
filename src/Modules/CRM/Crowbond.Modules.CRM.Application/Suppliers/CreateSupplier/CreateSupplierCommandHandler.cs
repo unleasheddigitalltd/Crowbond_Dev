@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Sequences;
@@ -10,7 +8,6 @@ namespace Crowbond.Modules.CRM.Application.Suppliers.CreateSupplier;
 
 internal sealed class CreateSupplierCommandHandler(
         ISupplierRepository supplierRepository,
-        IDateTimeProvider dateTimeProvider,
         IUnitOfWork unitOfWork)
     : ICommandHandler<CreateSupplierCommand, Guid>
 {
@@ -34,9 +31,7 @@ internal sealed class CreateSupplierCommandHandler(
              country: request.Supplier.Country,
              postalCode: request.Supplier.PostalCode,
              paymentTerms: request.Supplier.PaymentTerms,
-             supplierNotes: request.Supplier.SupplierNotes,
-             createBy: request.UserId,
-             createDate: dateTimeProvider.UtcNow);
+             supplierNotes: request.Supplier.SupplierNotes);
 
         if (result.IsFailure)
         {

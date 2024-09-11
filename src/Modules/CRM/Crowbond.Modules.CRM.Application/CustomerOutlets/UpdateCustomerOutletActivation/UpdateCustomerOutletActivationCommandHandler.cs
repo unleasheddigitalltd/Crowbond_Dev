@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
@@ -8,7 +7,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutletA
 
 internal sealed class UpdateCustomerOutletActivationCommandHandler(
     ICustomerOutletRepository customerOutletRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerOutletActivationCommand>
 {
@@ -21,9 +19,7 @@ internal sealed class UpdateCustomerOutletActivationCommandHandler(
             return Result.Failure(CustomerOutletErrors.NotFound(request.CustomerOutletId));
         }
 
-        Result result = request.IsActive ?
-            outlet.Activate(request.UserId, dateTimeProvider.UtcNow) :
-            outlet.Deactivate(request.UserId, dateTimeProvider.UtcNow);
+        Result result = request.IsActive ? outlet.Activate() : outlet.Deactivate();
 
         if (result.IsFailure)
         {

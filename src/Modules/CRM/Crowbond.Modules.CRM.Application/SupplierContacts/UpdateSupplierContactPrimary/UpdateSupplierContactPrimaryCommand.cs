@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.SupplierContacts.UpdateSupplierContactPrimary;
 
-public sealed record UpdateSupplierContactPrimaryCommand(Guid UserId, Guid SupplierContactId) : ICommand;
+public sealed record UpdateSupplierContactPrimaryCommand(Guid SupplierContactId) : ICommand;

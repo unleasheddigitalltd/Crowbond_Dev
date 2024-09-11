@@ -3,11 +3,10 @@ using Crowbond.Modules.CRM.Domain.CustomerSettings;
 
 namespace Crowbond.Modules.CRM.Domain.Customers;
 
-public sealed class Customer : Entity
+public sealed class Customer : Entity , IAuditable
 {
     private Customer()
     {
-
     }
 
     public Guid Id { get; private set; }
@@ -60,13 +59,13 @@ public sealed class Customer : Entity
 
     public CustomerSetting CustomerSetting { get; private set; }
 
-    public Guid CreateBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreateDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
 
     public static Result<Customer> Create(
@@ -94,9 +93,7 @@ public sealed class Customer : Entity
          bool isHq,
          bool showPricesInDeliveryDocket,
          bool showPriceInApp,
-         ShowLogoInDeliveryDocket showLogoInDeliveryDocket,
-         Guid createBy,
-         DateTime createDate)
+         ShowLogoInDeliveryDocket showLogoInDeliveryDocket)
     {
         var customerId = Guid.NewGuid();
 
@@ -126,8 +123,6 @@ public sealed class Customer : Entity
             CustomerNotes = customerNotes,
             IsHq = isHq,
             IsActive = true,
-            CreateBy = createBy,
-            CreateDate = createDate,
             CustomerSetting = CustomerSetting.Create(
                 customerId: customerId,
                 showPricesInDeliveryDocket: showPricesInDeliveryDocket,
@@ -159,8 +154,6 @@ public sealed class Customer : Entity
          bool noDiscountFixedPrice,
          bool detailedInvoice,
          string? customerNotes,
-         Guid lastModifiedBy,
-         DateTime lastModifiedDate,
          bool showPricesInDeliveryDocket,
          bool showPriceInApp,
          ShowLogoInDeliveryDocket showLogoInDeliveryDocket)
@@ -185,15 +178,13 @@ public sealed class Customer : Entity
         NoDiscountFixedPrice = noDiscountFixedPrice;
         DetailedInvoice = detailedInvoice;
         CustomerNotes = customerNotes;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
         CustomerSetting.Update(
             showPricesInDeliveryDocket,
             showPriceInApp,
             showLogoInDeliveryDocket);
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate()
     {
         if (IsActive)
         {
@@ -201,13 +192,11 @@ public sealed class Customer : Entity
         }
 
         IsActive = true;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Deactivate()
     {
         if (!IsActive)
         {
@@ -215,24 +204,18 @@ public sealed class Customer : Entity
         }
 
         IsActive = false;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public void SetLogo(string customerLogo, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public void SetLogo(string customerLogo)
     {
         CustomerSetting.SetLogo(customerLogo);
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
     }
 
-    public void RemoveLogo(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public void RemoveLogo()
     {
         CustomerSetting.RemoveLogo();
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
     }
 }
 
