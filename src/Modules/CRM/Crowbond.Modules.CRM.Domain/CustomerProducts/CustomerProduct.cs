@@ -2,10 +2,10 @@
 
 namespace Crowbond.Modules.CRM.Domain.CustomerProducts;
 
-public sealed class CustomerProduct : Entity, ISoftDeletable, IAuditable
+public sealed class CustomerProduct : Entity, ISoftDeletable, IAuditable, IJobExecutionTracking
 {
     private CustomerProduct()
-    {        
+    {
     }
 
     public Guid Id { get; private set; }
@@ -39,6 +39,10 @@ public sealed class CustomerProduct : Entity, ISoftDeletable, IAuditable
     public Guid? DeletedBy { get; set; }
 
     public DateTime? DeletedOnUtc { get; set; }
+
+    public DateTime? ProcessedOnUtc { get; set; }
+
+    public string? ErrorMessage { get; set; }
 
     public static Result<CustomerProduct> Create(
         Guid customerId,

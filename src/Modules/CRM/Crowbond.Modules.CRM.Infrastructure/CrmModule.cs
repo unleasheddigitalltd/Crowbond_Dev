@@ -49,6 +49,7 @@ using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
+using Crowbond.Modules.CRM.Infrastructure.CustomerPriceUpdating;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -113,13 +114,16 @@ public static class CrmModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<CrmDbContext>());
 
         services.Configure<OutboxOptions>(configuration.GetSection("CRM:Outbox"));
-        services.Configure<FileStorageOptions>(configuration.GetSection("CRM:FileSettings"));
-
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-        services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
+        services.Configure<FileStorageOptions>(configuration.GetSection("CRM:FileSettings"));
 
+
+        services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
         services.ConfigureOptions<ConfigureProcessInboxJob>();
+
+        services.Configure<CustomerPriceUpdatingOptions>(configuration.GetSection("CRM:CustomerPriceUpdating"));
+        services.ConfigureOptions<ConfigureProcessCustomerPriceUpdatingJob>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)
