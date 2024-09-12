@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Domain;
-using MediatR;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
 

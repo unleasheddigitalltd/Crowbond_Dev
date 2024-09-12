@@ -24,22 +24,26 @@ internal sealed class UpdateCustomerProductCommandHandler(
 
         IEnumerable<CustomerProduct> existingProducts = await customerProductRepository.GetForCustomerAsync(request.CustomerId, cancellationToken);
 
-        var productsToDelete = existingProducts
+        // Identify products that need to be deactivated
+        var productsToDeactivate = existingProducts
             .Where(p => !request.CustomerProducts
-            .Any(dto => dto.ProductId == p.ProductId && dto.FixedDiscount == p.FixedDiscount && dto.FixedPrice == p.FixedPrice))
+            .Any(dto => dto.ProductId == p.ProductId))
             .ToList();
 
-        var productDictionary = existingProducts
-            .Where(p => !productsToDelete.Contains(p)) // Keep products not marked for deletion
+        // Group existing products by their ProductId for quick lookup
+        var existingProductMap = existingProducts
+            .Where(p => !productsToDeactivate.Contains(p)) // Keep products not marked for deletion
             .ToDictionary(p => p.ProductId);
 
-        // Identify products to add or update
+        // Process new or updated customer products
         foreach (CustomerProductRequest productDto in request.CustomerProducts)
         {
-            if (productDictionary.TryGetValue(productDto.ProductId, out CustomerProduct productsNotToDelete))
+            if (existingProductMap.TryGetValue(productDto.ProductId, out CustomerProduct existingProduct))
             {
-                // Update existing product
-                Result result = productsNotToDelete.Update(
+                // Update or add price to an existing product
+                Result result = existingProduct.Update(
+                    productDto.FixedPrice,
+                    productDto.FixedDiscount,
                     productDto.Comments,
                     productDto.EffectiveDate,
                     productDto.ExpiryDate,
@@ -47,12 +51,12 @@ internal sealed class UpdateCustomerProductCommandHandler(
 
                 if (result.IsFailure)
                 {
-                    return Result.Failure(result.Error);
+                    return result;
                 }
             }
             else
             {
-                // Add new product
+                // Add a new product
                 Result<CustomerProduct> result = CustomerProduct.Create(
                     request.CustomerId,
                     productDto.ProductId,
@@ -65,19 +69,20 @@ internal sealed class UpdateCustomerProductCommandHandler(
 
                 if (result.IsFailure)
                 {
-                    return Result.Failure(result.Error);
+                    return result;
                 }
 
                 customerProductRepository.Insert(result.Value);
             }
         }
 
-        // Delete products not in the updated list
-        foreach (CustomerProduct product in productsToDelete)
+        // Deactivate products that are no longer in the request
+        foreach (CustomerProduct product in productsToDeactivate)
         {
-            customerProductRepository.Remove(product);
+            product.Deactivate();
         }
 
+        // Commit all changes to the database
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

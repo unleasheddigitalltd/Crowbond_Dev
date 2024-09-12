@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.WMS.Domain.Receipts;
 
-public sealed class ReceiptHeader : Entity , IAuditable
+public sealed class ReceiptHeader : Entity
 {
     private readonly List<ReceiptLine> _lines = new();
 

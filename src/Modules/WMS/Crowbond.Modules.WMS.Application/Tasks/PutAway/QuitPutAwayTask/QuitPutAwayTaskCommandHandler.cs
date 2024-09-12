@@ -21,7 +21,7 @@ internal sealed class QuitPutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.NotFound(request.TaskHeaderId));
         }
 
-        if (taskHeader.IsAssignedTo(request.UserId))
+        if (!taskHeader.IsAssignedTo(request.UserId))
         {
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }

@@ -17,8 +17,8 @@ public sealed record PurchaseOrderResponse
     public DateOnly RequiredDate { get; }
     public decimal PurchaseOrderAmount { get; }
     public string? PurchaseOrderNotes { get; }
-    public Guid CreateBy { get; }
-    public DateTime CreateDate { get; }
+    public Guid CreatedBy { get; }
+    public DateTime CreatedOnUtc { get; }
     public List<PurchaseOrderLineResponse> Lines { get; set; }
 }
 public sealed record PurchaseOrderLineResponse(

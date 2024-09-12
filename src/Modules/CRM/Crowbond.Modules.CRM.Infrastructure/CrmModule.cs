@@ -49,7 +49,7 @@ using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
-using Crowbond.Modules.CRM.Infrastructure.CustomerPriceUpdating;
+using Crowbond.Modules.CRM.Infrastructure.CustomerProductPriceUpdating;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -83,10 +83,9 @@ public static class CrmModule
                     configuration.GetConnectionString("Database"),
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.CRM))
-                .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
@@ -122,8 +121,8 @@ public static class CrmModule
         services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
         services.ConfigureOptions<ConfigureProcessInboxJob>();
 
-        services.Configure<CustomerPriceUpdatingOptions>(configuration.GetSection("CRM:CustomerPriceUpdating"));
-        services.ConfigureOptions<ConfigureProcessCustomerPriceUpdatingJob>();
+        services.Configure<CustomerProductPriceUpdatingOptions>(configuration.GetSection("CRM:CustomerPriceUpdating"));
+        services.ConfigureOptions<ConfigureProcessCustomerProductPriceUpdatingJob>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)

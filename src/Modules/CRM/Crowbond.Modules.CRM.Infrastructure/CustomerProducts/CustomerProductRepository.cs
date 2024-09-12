@@ -6,14 +6,9 @@ namespace Crowbond.Modules.CRM.Infrastructure.CustomerProducts;
 
 internal sealed class CustomerProductRepository(CrmDbContext context) : ICustomerProductRepository
 {
-    public async Task<CustomerProduct?> GetAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context.CustomerProducts.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
-    }
-
     public async Task<IEnumerable<CustomerProduct>> GetForCustomerAsync(Guid customerId, CancellationToken cancellationToken = default)
     {
-        return await context.CustomerProducts.Where(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
+        return await context.CustomerProducts.Include(c => c.Price).Where(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
     }
 
     public void Insert(CustomerProduct customerProduct)

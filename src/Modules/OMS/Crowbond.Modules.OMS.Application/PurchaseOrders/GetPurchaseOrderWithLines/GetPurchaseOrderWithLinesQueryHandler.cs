@@ -27,8 +27,8 @@ internal sealed class GetPurchaseOrderWithLinesQueryHandler(IDbConnectionFactory
                  required_date AS {nameof(PurchaseOrderResponse.RequiredDate)},
                  purchase_order_amount AS {nameof(PurchaseOrderResponse.PurchaseOrderAmount)},
                  purchase_order_notes AS {nameof(PurchaseOrderResponse.PurchaseOrderNotes)},
-                 create_by AS {nameof(PurchaseOrderResponse.CreateBy)},
-                 create_date AS {nameof(PurchaseOrderResponse.CreateDate)}
+                 created_by AS {nameof(PurchaseOrderResponse.CreatedBy)},
+                 created_on_utc AS {nameof(PurchaseOrderResponse.CreatedOnUtc)}
              FROM oms.purchase_order_headers
              WHERE id = @PurchaseOrderHeaderId;
 

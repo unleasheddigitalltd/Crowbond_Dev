@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
 
-namespace Crowbond.Modules.CRM.Infrastructure.CustomerPriceUpdating;
+namespace Crowbond.Modules.CRM.Infrastructure.CustomerProductPriceUpdating;
 
-internal sealed class ConfigureProcessCustomerPriceUpdatingJob(IOptions<CustomerPriceUpdatingOptions> options)
+internal sealed class ConfigureProcessCustomerProductPriceUpdatingJob(IOptions<CustomerProductPriceUpdatingOptions> options)
     : IConfigureOptions<QuartzOptions>
 {
-    private readonly CustomerPriceUpdatingOptions _options = options.Value;
+    private readonly CustomerProductPriceUpdatingOptions _options = options.Value;
 
     public void Configure(QuartzOptions options)
     {
-        string jobName = typeof(ProcessCustomerPriceUpdatingJob).FullName!;
+        string jobName = typeof(ProcessCustomerProductPriceUpdatingJob).FullName!;
 
 
         options
-            .AddJob<ProcessCustomerPriceUpdatingJob>(configure => configure.WithIdentity(jobName))
+            .AddJob<ProcessCustomerProductPriceUpdatingJob>(configure => configure.WithIdentity(jobName))
             .AddTrigger(configure =>
                 configure
                     .ForJob(jobName)

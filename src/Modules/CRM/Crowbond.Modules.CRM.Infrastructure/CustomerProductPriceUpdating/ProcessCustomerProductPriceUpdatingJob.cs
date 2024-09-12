@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
 
-namespace Crowbond.Modules.CRM.Infrastructure.CustomerPriceUpdating;
+namespace Crowbond.Modules.CRM.Infrastructure.CustomerProductPriceUpdating;
 
 [DisallowConcurrentExecution]
-internal sealed class ProcessCustomerPriceUpdatingJob(
+internal sealed class ProcessCustomerProductPriceUpdatingJob(
     IDbConnectionFactory dbConnectionFactory,
     IDateTimeProvider dateTimeProvider,
-    IOptions<CustomerPriceUpdatingOptions> pricingOptions,
-    ILogger<ProcessCustomerPriceUpdatingJob> logger) : IJob
+    IOptions<CustomerProductPriceUpdatingOptions> pricingOptions,
+    ILogger<ProcessCustomerProductPriceUpdatingJob> logger) : IJob
 {
     private const string ModuleName = "crm";
     public async Task Execute(IJobExecutionContext context)
@@ -26,9 +26,9 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
         await using DbTransaction transaction = await connection.BeginTransactionAsync();
 
-        IReadOnlyList<CustomerProductResponse> customerProducts = await GetCustomerProductAsync(today, connection, transaction);
+        IReadOnlyList<CustomerProductPriceResponse> customerProductPrices = await GetCustomerProductAsync(today, connection, transaction);
 
-        foreach (CustomerProductResponse customerProduct in customerProducts)
+        foreach (CustomerProductPriceResponse customerProductPrice in customerProductPrices)
         {
             Exception? exception = null;
 
@@ -37,22 +37,22 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
 
             try
             {
-                isActive = customerProduct.EffectiveDate <= today;
-                isDeleted = customerProduct.ExpiryDate <= today;
+                isActive = customerProductPrice.EffectiveDate <= today;
+                isDeleted = customerProductPrice.ExpiryDate <= today;
 
-                customerProduct.UpdateStatus(isActive, isDeleted);
+                customerProductPrice.UpdateStatus(isActive, isDeleted);
             }
             catch (Exception caughtException)
             {
                 logger.LogError(
                     caughtException,
                     "Exception while processing pricing message {MessageId}",
-                    customerProduct.Id);
+                    customerProductPrice.Id);
 
                 exception = caughtException;
             }
 
-            await UpdateCustomerProductAsync(connection, transaction, customerProduct, exception);
+            await UpdateCustomerProductAsync(connection, transaction, customerProductPrice, exception);
         }
 
         await transaction.CommitAsync();
@@ -60,7 +60,7 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
         logger.LogInformation("{Module} - Completed processing customer price updating messages", ModuleName);
     }
 
-    private async Task<IReadOnlyList<CustomerProductResponse>> GetCustomerProductAsync(
+    private async Task<IReadOnlyList<CustomerProductPriceResponse>> GetCustomerProductAsync(
         DateOnly today,
         IDbConnection connection,
         IDbTransaction transaction)
@@ -68,12 +68,12 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
         string sql =
             $"""
              SELECT
-                id AS {nameof(CustomerProductResponse.Id)},
-                effective_date AS {nameof(CustomerProductResponse.EffectiveDate)},
-                expiry_date AS {nameof(CustomerProductResponse.ExpiryDate)},
-                is_active AS {nameof(CustomerProductResponse.IsActive)},
-                is_deleted AS {nameof(CustomerProductResponse.IsDeleted)}
-             FROM crm.customer_products
+                id AS {nameof(CustomerProductPriceResponse.Id)},
+                effective_date AS {nameof(CustomerProductPriceResponse.EffectiveDate)},
+                expiry_date AS {nameof(CustomerProductPriceResponse.ExpiryDate)},
+                is_active AS {nameof(CustomerProductPriceResponse.IsActive)},
+                is_deleted AS {nameof(CustomerProductPriceResponse.IsDeleted)}
+             FROM crm.customer_product_prices
              WHERE (processed_on_utc IS NULL 
              OR processed_on_utc < @Today)
              AND is_deleted = false
@@ -82,7 +82,7 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
              FOR UPDATE
              """;
 
-        IEnumerable<CustomerProductResponse> inboxMessages = await connection.QueryAsync<CustomerProductResponse>(
+        IEnumerable<CustomerProductPriceResponse> inboxMessages = await connection.QueryAsync<CustomerProductPriceResponse>(
             sql,
             new { Today = today.ToDateTime(TimeOnly.MinValue) },
             transaction: transaction);
@@ -93,12 +93,12 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
     private async Task UpdateCustomerProductAsync(
         IDbConnection connection,
         IDbTransaction transaction,
-        CustomerProductResponse customerProduct,
+        CustomerProductPriceResponse customerProduct,
         Exception? exception)
     {
         string sql =
             $"""
-            UPDATE crm.customer_products
+            UPDATE crm.customer_product_prices
             SET 
             is_active = @IsActive,
             is_deleted = @IsDeleted,
@@ -120,7 +120,7 @@ internal sealed class ProcessCustomerPriceUpdatingJob(
             transaction: transaction);
     }
 
-    internal sealed class CustomerProductResponse
+    internal sealed class CustomerProductPriceResponse
     {
         public Guid Id { get; init; }
         public DateOnly EffectiveDate { get; init; }
