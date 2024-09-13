@@ -13,11 +13,6 @@
       "FtpUsername": "crowbond_dev",
       "FtpPassword": "Unleashed51*",
       "CustomerLogoStoragePath": "/customers/logo"
-    },
-    "CustomerPriceUpdating": {
-      "StartAt": "11:35:00",
-      "IntervalInSeconds": 15,
-      "BatchSize": 20
     }
   }
 }

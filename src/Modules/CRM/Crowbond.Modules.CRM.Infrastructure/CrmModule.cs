@@ -49,7 +49,6 @@ using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
-using Crowbond.Modules.CRM.Infrastructure.CustomerProductPriceUpdating;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -120,9 +119,6 @@ public static class CrmModule
 
         services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
         services.ConfigureOptions<ConfigureProcessInboxJob>();
-
-        services.Configure<CustomerProductPriceUpdatingOptions>(configuration.GetSection("CRM:CustomerPriceUpdating"));
-        services.ConfigureOptions<ConfigureProcessCustomerProductPriceUpdatingJob>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)
