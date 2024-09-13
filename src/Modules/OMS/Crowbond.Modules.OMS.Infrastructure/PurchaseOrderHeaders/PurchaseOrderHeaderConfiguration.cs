@@ -38,8 +38,6 @@ public sealed class PurchaseOrderHeaderConfiguratin : IEntityTypeConfiguration<P
         builder.Property(p => p.PurchaseOrderNotes).HasMaxLength(500);
         builder.Property(p => p.SalesOrderRef).HasMaxLength(100);
         builder.Property(p => p.Tags).HasConversion(tagsConverter).HasMaxLength(255);
-        builder.Property(p => p.LastModifiedBy).IsRequired(false);
-        builder.Property(p => p.LastModifiedDate).IsRequired(false);
         
     }
 }

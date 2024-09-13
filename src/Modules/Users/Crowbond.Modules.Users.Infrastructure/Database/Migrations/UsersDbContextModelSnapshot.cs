@@ -280,6 +280,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "customers:products:update"
+                        },
+                        new
+                        {
                             Code = "suppliers:read"
                         },
                         new
@@ -301,6 +305,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "suppliers:products:update"
+                        },
+                        new
+                        {
+                            Code = "price-tiers:read"
+                        },
+                        new
+                        {
+                            Code = "price-tiers:update"
                         },
                         new
                         {
@@ -714,6 +726,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "customers:products:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "suppliers:read",
                             RoleName = "Administrator"
                         },
@@ -740,6 +757,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "suppliers:products:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "price-tiers:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "price-tiers:update",
                             RoleName = "Administrator"
                         },
                         new

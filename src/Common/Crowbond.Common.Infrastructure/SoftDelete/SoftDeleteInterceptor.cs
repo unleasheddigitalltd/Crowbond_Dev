@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Crowbond.Common.Application.Authentication;
 
 namespace Crowbond.Common.Infrastructure.SoftDelete;
 
-public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
+public sealed class SoftDeleteInterceptor(ICurrentUserContext currentUserContext) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
@@ -29,6 +30,7 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
         {
             softDeletable.State = EntityState.Modified;
             softDeletable.Entity.IsDeleted = true;
+            softDeletable.Entity.DeletedBy = currentUserContext.UserId;
             softDeletable.Entity.DeletedOnUtc = DateTime.UtcNow;
         }
 

@@ -35,10 +35,20 @@ internal sealed class UpdateStockQuantityCommandHandler(
 
         // Apply stock adjustment
         Result<StockTransaction> result = posAdjustment
-            ? stock.StockIn(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
-                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow)
-            : stock.StockOut(null, ActionType.Adjustment.Name, dateTimeProvider.UtcNow, request.TransactionNote,
-                                transactionReason.Id, quantity, request.UserId, dateTimeProvider.UtcNow);
+            ? stock.StockIn(
+                null, 
+                ActionType.Adjustment.Name, 
+                dateTimeProvider.UtcNow, 
+                request.TransactionNote,
+                transactionReason.Id, 
+                quantity)
+            : stock.StockOut(
+                null, 
+                ActionType.Adjustment.Name, 
+                dateTimeProvider.UtcNow, 
+                request.TransactionNote,
+                transactionReason.Id, 
+                quantity);
 
         if (result.IsFailure)
         {

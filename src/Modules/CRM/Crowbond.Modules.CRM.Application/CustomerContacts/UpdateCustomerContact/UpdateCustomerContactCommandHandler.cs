@@ -9,7 +9,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerContacts.UpdateCustomerContac
 
 internal sealed class UpdateCustomerContactCommandHandler(
     ICustomerContactRepository customerContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerContactCommand>
 {
@@ -29,9 +28,7 @@ internal sealed class UpdateCustomerContactCommandHandler(
         mobile: request.CustomerContact.Mobile,
         receiveInvoice: request.CustomerContact.ReceiveInvoice,
         receiveOrder: request.CustomerContact.ReceiveOrder,
-        receivePriceList: request.CustomerContact.ReceivePriceList,
-        lastModifiedBy: request.UserId,
-        lastModifiedDate: dateTimeProvider.UtcNow);
+        receivePriceList: request.CustomerContact.ReceivePriceList);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -10,7 +10,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerContacts.CreateCustomerContac
 internal sealed class CreateCustomerContactCommandHandler(
     ICustomerRepository customerRepository,
     ICustomerContactRepository customerContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCustomerContactCommand, Guid>
 {
@@ -33,9 +32,7 @@ internal sealed class CreateCustomerContactCommandHandler(
             username: request.CustomerContact.Username,
             receiveInvoice: request.CustomerContact.ReceiveInvoice,
             receiveOrder: request.CustomerContact.ReceiveOrder,
-            receivePriceList: request.CustomerContact.ReceivePriceList,
-            createBy: request.UserId,
-            createDate: dateTimeProvider.UtcNow);
+            receivePriceList: request.CustomerContact.ReceivePriceList);
 
         if (result.IsFailure)
         {

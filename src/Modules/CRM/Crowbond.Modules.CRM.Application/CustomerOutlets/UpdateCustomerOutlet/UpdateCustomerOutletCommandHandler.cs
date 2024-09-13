@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
@@ -9,7 +8,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
 
 internal sealed class UpdateCustomerOutletCommandHandler(
     ICustomerOutletRepository customerOutletRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerOutletCommand>
 {
@@ -50,9 +48,7 @@ internal sealed class UpdateCustomerOutletCommandHandler(
             request.CustomerOutlet.DeliveryNote,
             deliveryTimeFrom,
             deliveryTimeTo,
-            request.CustomerOutlet.Is24HrsDelivery,
-            request.UserId,
-            dateTimeProvider.UtcNow);
+            request.CustomerOutlet.Is24HrsDelivery);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

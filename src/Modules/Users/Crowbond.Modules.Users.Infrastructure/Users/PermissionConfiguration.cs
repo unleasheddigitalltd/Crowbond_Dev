@@ -57,6 +57,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CreateCustomerOutlets,
             Permission.ModifyCustomerOutlets,
 
+            Permission.ModifyCustomerProducts,
+
             Permission.GetSuppliers,
             Permission.ModifySuppliers,
             Permission.CreateSuppliers,
@@ -65,6 +67,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifySupplierContacts,
 
             Permission.ModifySupplierProducts,
+
+            Permission.GetPriceTiers,
+            Permission.ModifyPriceTiers,
 
             Permission.CreatePurchaseOrders,
             Permission.GetPurchaseOrders,
@@ -162,6 +167,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateCustomerOutlets),
                     CreateRolePermission(Role.Administrator, Permission.ModifyCustomerOutlets),
 
+                    CreateRolePermission(Role.Administrator, Permission.ModifyCustomerProducts),
+
                     CreateRolePermission(Role.Administrator, Permission.GetSuppliers),
                     CreateRolePermission(Role.Administrator, Permission.ModifySuppliers),
                     CreateRolePermission(Role.Administrator, Permission.CreateSuppliers),
@@ -170,6 +177,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifySupplierContacts),
 
                     CreateRolePermission(Role.Administrator, Permission.ModifySupplierProducts),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetPriceTiers),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyPriceTiers),
 
                     CreateRolePermission(Role.Administrator, Permission.CreatePurchaseOrders),
                     CreateRolePermission(Role.Administrator, Permission.ModifyPurchaseOrders),

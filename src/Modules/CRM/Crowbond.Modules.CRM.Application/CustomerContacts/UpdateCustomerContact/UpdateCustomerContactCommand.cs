@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.CustomerContacts.UpdateCustomerContact;
 
-public sealed record UpdateCustomerContactCommand(Guid UserId, Guid CustomerContactId, CustomerContactRequest CustomerContact) : ICommand;
+public sealed record UpdateCustomerContactCommand(Guid CustomerContactId, CustomerContactRequest CustomerContact) : ICommand;

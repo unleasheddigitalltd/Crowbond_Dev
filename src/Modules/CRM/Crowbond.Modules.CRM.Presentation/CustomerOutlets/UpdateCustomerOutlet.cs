@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
@@ -15,9 +13,9 @@ internal sealed class UpdateCustomerOutlet : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("customers/outlets/{id}", async (Guid id, ClaimsPrincipal claims, CustomerOutletRequest request, ISender sender) =>
+        app.MapPut("customers/outlets/{id}", async (Guid id, CustomerOutletRequest request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateCustomerOutletCommand(claims.GetUserId(), id, request));
+            Result result = await sender.Send(new UpdateCustomerOutletCommand(id, request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

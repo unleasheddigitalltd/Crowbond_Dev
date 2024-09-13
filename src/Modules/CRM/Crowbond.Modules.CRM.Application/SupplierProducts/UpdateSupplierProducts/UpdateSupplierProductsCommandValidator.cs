@@ -15,5 +15,8 @@ internal sealed class UpdateSupplierProductsCommandValidator : AbstractValidator
             products.RuleFor(p => p.IsDefault).NotNull();
             products.RuleFor(p => p.Comments).MaximumLength(255);
         });
+
+        RuleFor(p => p.SupplierProducts).Must(coll => coll.GroupBy(p => p.ProductId).Count() == coll.Count)
+            .WithMessage(coll => $"One or more items have duplicate products");
     }
 }

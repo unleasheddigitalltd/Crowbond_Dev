@@ -24,13 +24,13 @@ public sealed class ReceiptHeader : Entity
 
     public ReceiptStatus Status { get; private set; }
 
-    public Guid CreatedBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreatedDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public IReadOnlyCollection<ReceiptLine> Lines => _lines;
 
@@ -41,7 +41,7 @@ public sealed class ReceiptHeader : Entity
         string? purchaseOrderNumber,
         string deliveryNoteNumber,
         Guid createdBy,
-        DateTime createdDate)
+        DateTime createdOnUtc)
     {
         var receiptHeader = new ReceiptHeader
         {
@@ -51,15 +51,15 @@ public sealed class ReceiptHeader : Entity
             PurchaseOrderId = purchaseOrderId,
             PurchaseOrderNo = purchaseOrderNumber,
             DeliveryNoteNumber = deliveryNoteNumber,
-            Status = ReceiptStatus.Shipping,
             CreatedBy = createdBy,
-            CreatedDate = createdDate
+            CreatedOnUtc = createdOnUtc,
+            Status = ReceiptStatus.Shipping
         };
 
         return receiptHeader;
     }
 
-    public Result Receive(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Receive()
     {
         if (Status != ReceiptStatus.Shipping)
         {
@@ -67,13 +67,11 @@ public sealed class ReceiptHeader : Entity
         }
 
         Status = ReceiptStatus.Received;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result Cancel(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Cancel(Guid userId, DateTime utcNow)
     {
         if (Status != ReceiptStatus.Shipping)
         {
@@ -81,15 +79,12 @@ public sealed class ReceiptHeader : Entity
         }
 
         Status = ReceiptStatus.Cancelled;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
-
+        LastModifiedBy = userId;
+        LastModifiedOnUtc = utcNow;
         return Result.Success();
     }
 
     public Result<ReceiptLine> AddLine(
-        Guid modifiedBy, 
-        DateTime modiriedDate, 
         Guid productId,
         decimal quantityReceived,
         decimal unitPrice)
@@ -97,8 +92,6 @@ public sealed class ReceiptHeader : Entity
         var receiptLine = ReceiptLine.Create(productId, quantityReceived, unitPrice);
 
         _lines.Add(receiptLine);
-        LastModifiedBy = modifiedBy;
-        LastModifiedDate = modiriedDate;
 
         return Result.Success(receiptLine);
     }

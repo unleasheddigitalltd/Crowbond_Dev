@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Customers;
@@ -14,7 +13,6 @@ internal sealed class CreateCustomerCommandHandler(
     ICustomerRepository customerRepository,
     IRepRepository repRepository,
     IPriceTierRepository priceTierRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateCustomerCommand, Guid>
 {
@@ -71,9 +69,7 @@ internal sealed class CreateCustomerCommandHandler(
              isHq: request.Customer.IsHq,
              showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
              showPriceInApp: request.Customer.ShowPriceInApp,
-             showLogoInDeliveryDocket: (ShowLogoInDeliveryDocket)request.Customer.ShowLogoInDeliveryDocket,
-             createBy: request.UserId,
-             createDate: dateTimeProvider.UtcNow);
+             showLogoInDeliveryDocket: (ShowLogoInDeliveryDocket)request.Customer.ShowLogoInDeliveryDocket);
 
         customerRepository.Insert(result.Value);
 

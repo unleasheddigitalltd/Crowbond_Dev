@@ -46,6 +46,4 @@ public sealed class ReceiptLine : Entity
         string batchNumber = "";
         return batchNumber;
     }
-
-
 }

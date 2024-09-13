@@ -8,7 +8,6 @@ namespace Crowbond.Modules.CRM.Application.CustomerContacts.UpdateCustomerContac
 
 internal sealed class UpdateCustomerContactActivationCommandHandler(
     ICustomerContactRepository customerContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerContactActivationCommand>
 {
@@ -22,8 +21,8 @@ internal sealed class UpdateCustomerContactActivationCommandHandler(
         }
 
         Result result = request.IsActive ? 
-            contact.Activate(request.UserId, dateTimeProvider.UtcNow) : 
-            contact.Deactivate(request.UserId, dateTimeProvider.UtcNow);
+            contact.Activate() : 
+            contact.Deactivate();
 
         if (result.IsFailure)
         {

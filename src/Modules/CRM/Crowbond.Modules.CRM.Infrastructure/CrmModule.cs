@@ -30,8 +30,6 @@ using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
-using Crowbond.Modules.CRM.Domain.CustomerProductPrices;
-using Crowbond.Modules.CRM.Infrastructure.CustomerProductPrices;
 using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Infrastructure.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Domain.Routes;
@@ -49,6 +47,8 @@ using MassTransit;
 using Crowbond.Modules.WMS.IntegrationEvents;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Common.Infrastructure.AuditEntity;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -82,10 +82,11 @@ public static class CrmModule
                     configuration.GetConnectionString("Database"),
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.CRM))
-                .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<ICustomerRepository,CustomerRepository>();
@@ -100,7 +101,6 @@ public static class CrmModule
         services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
-        services.AddScoped<ICustomerProductPriceRepository, CustomerProductPriceRepository>();
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
 
@@ -112,12 +112,12 @@ public static class CrmModule
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<CrmDbContext>());
 
         services.Configure<OutboxOptions>(configuration.GetSection("CRM:Outbox"));
-        services.Configure<FileStorageOptions>(configuration.GetSection("CRM:FileSettings"));
-
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-        services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
+        services.Configure<FileStorageOptions>(configuration.GetSection("CRM:FileSettings"));
 
+
+        services.Configure<InboxOptions>(configuration.GetSection("CRM:Inbox"));
         services.ConfigureOptions<ConfigureProcessInboxJob>();
     }
 

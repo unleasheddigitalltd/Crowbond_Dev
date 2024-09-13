@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
@@ -10,7 +9,6 @@ namespace Crowbond.Modules.CRM.Application.SupplierContacts.CreateSupplierContac
 internal sealed class CreateSupplierContactCommandHandler(
     ISupplierRepository supplierRepository,
     ISupplierContactRepository supplierContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateSupplierContactCommand, Guid>
 {
@@ -30,9 +28,7 @@ internal sealed class CreateSupplierContactCommandHandler(
             phoneNumber: request.SupplierContact.PhoneNumber,
             mobile: request.SupplierContact.Mobile,
             email: request.SupplierContact.Email,
-            username: request.SupplierContact.Username,
-            createBy: request.UserId,
-            createDate: dateTimeProvider.UtcNow);
+            username: request.SupplierContact.Username);
 
         if (result.IsFailure)
         {

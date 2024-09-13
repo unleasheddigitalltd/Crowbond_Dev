@@ -30,8 +30,8 @@ internal sealed class PurchaseOrderApprovedIntegrationDomainEventHandler(ISender
                 domainEvent.OccurredOnUtc,
                 result.Value.Id,
                 result.Value.PurchaseOrderNo,
-                result.Value.CreateBy,
-                result.Value.CreateDate,
+                result.Value.CreatedBy,
+                result.Value.CreatedOnUtc,
                 result.Value.Lines.Select(l => new PurchaseOrderApprovedIntegrationEvent.ReceiptLine(l.ProductId, l.Qty, l.UnitPrice)).ToList()),
             cancellationToken);
     }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.SupplierProducts.UpdateSupplierProducts;
@@ -15,13 +13,12 @@ internal sealed class UpdateSupplierProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("suppliers/{supplierId}/products", async (
-            ClaimsPrincipal claims,
-            Guid supplierId,
+        app.MapPut("suppliers/{id}/products", async (
+            Guid id,
             IReadOnlyCollection<SupplierProductRequest> request,
             ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateSupplierProductsCommand(claims.GetUserId(), supplierId, request));
+            Result result = await sender.Send(new UpdateSupplierProductsCommand(id, request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

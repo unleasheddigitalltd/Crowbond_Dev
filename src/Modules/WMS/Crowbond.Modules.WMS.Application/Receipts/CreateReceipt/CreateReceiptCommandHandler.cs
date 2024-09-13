@@ -8,8 +8,8 @@ using Crowbond.Modules.WMS.Domain.Sequences;
 namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceipt;
 
 internal sealed class CreateReceiptCommandHandler(
-    IDateTimeProvider dateTimeProvider,
     IReceiptRepository receiptRepository,
+    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateReceiptCommand, Guid>
 {
@@ -37,8 +37,6 @@ internal sealed class CreateReceiptCommandHandler(
         foreach (ReceiptRequest.ReceiptLineRequest line in request.Receipt.ReceiptLines)
         {
             result.Value.AddLine(
-                request.Receipt.CreateBy,
-                dateTimeProvider.UtcNow,
                 line.ProductId, 
                 line.QuantityReceived,
                 line.UnitPrice);

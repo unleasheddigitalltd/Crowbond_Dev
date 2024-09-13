@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.OMS.Application.PurchaseOrders.CancelPurchaseOrder;
@@ -15,9 +13,9 @@ internal sealed class CancelPurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchase-order/{id}/cancel", async (Guid id, ClaimsPrincipal claims, ISender sender) =>
+        app.MapPut("purchase-order/{id}/cancel", async (Guid id, ISender sender) =>
         {
-            Result result = await sender.Send(new CancelPurchaseOrderCommand(claims.GetUserId(), id));
+            Result result = await sender.Send(new CancelPurchaseOrderCommand(id));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

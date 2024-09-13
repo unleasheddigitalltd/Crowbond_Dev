@@ -1,7 +1,9 @@
-﻿using Crowbond.Common.Application.Caching;
+﻿using Crowbond.Common.Application.Authentication;
+using Crowbond.Common.Application.Caching;
 using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.EventBus;
+using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Infrastructure.Authorization;
 using Crowbond.Common.Infrastructure.Caching;
@@ -10,6 +12,7 @@ using Crowbond.Common.Infrastructure.Clock;
 using Crowbond.Common.Infrastructure.Data;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Dapper;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +37,8 @@ public static class InfrastructureConfiguration
 
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
+        services.TryAddSingleton<ICurrentUserContext, CurrentUserContext>();
+
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
@@ -41,6 +46,10 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton<SoftDeleteInterceptor>();
 
         services.TryAddSingleton<ChangeDetectionInterceptor>();
+
+        services.TryAddSingleton<AuditEntityInterceptor>();
+
+        services.TryAddSingleton<TrackEntityChangeInterceptor>();
 
         NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
         services.TryAddSingleton(npgsqlDataSource);

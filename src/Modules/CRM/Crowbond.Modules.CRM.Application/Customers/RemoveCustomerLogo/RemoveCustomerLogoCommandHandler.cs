@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.CustomerContacts;
@@ -10,7 +9,6 @@ namespace Crowbond.Modules.CRM.Application.Customers.RemoveCustomerLogo;
 internal sealed class RemoveCustomerLogoCommandHandler(
     ICustomerRepository customerRepository,
     ICustomerFileAccess customerFileAccess,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<RemoveCustomerLogoCommand>
 {
@@ -24,7 +22,7 @@ internal sealed class RemoveCustomerLogoCommandHandler(
         }
 
         await customerFileAccess.DeleteLogoAsync(customer.AccountNumber, cancellationToken);
-        customer.RemoveLogo(request.UserId ,dateTimeProvider.UtcNow);
+        customer.RemoveLogo();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

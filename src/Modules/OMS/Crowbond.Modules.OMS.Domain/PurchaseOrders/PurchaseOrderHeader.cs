@@ -4,12 +4,12 @@ using Crowbond.Modules.OMS.Domain.Payments;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
-public sealed class PurchaseOrderHeader : Entity
+public sealed class PurchaseOrderHeader : Entity , IAuditable
 {
+    private readonly List<PurchaseOrderLine> _lines = new();
+    private readonly List<PurchaseOrderStatusHistory> _statusHistory = new();
     private PurchaseOrderHeader()
     {
-        PurchaseOrderLines = new List<PurchaseOrderLine>();
-        StatusHistory = new List<PurchaseOrderStatusHistory>();
     }
 
     public Guid Id { get; private set; }
@@ -72,20 +72,20 @@ public sealed class PurchaseOrderHeader : Entity
 
     public PurchaseOrderStatus Status { get; private set; }
 
-    public Guid CreateBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreateDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
-    public List<PurchaseOrderLine> PurchaseOrderLines { get; private set; }
+    public IReadOnlyCollection<PurchaseOrderLine> Lines => _lines;
 
-    public List<PurchaseOrderStatusHistory> StatusHistory { get; private set; }
+    public IReadOnlyCollection<PurchaseOrderStatusHistory> StatusHistory => _statusHistory;
 
     public static Result<PurchaseOrderHeader> Create(Guid supplierId, string supplierName, string? contactFullName, string? contactPhone,
-        string? contactEmail, DateOnly requiredDate, string? purchaseOrderNotes, Guid createBy, DateTime createDate)
+        string? contactEmail, DateOnly requiredDate, string? purchaseOrderNotes)
     {
         var orderHeader = new PurchaseOrderHeader
         {
@@ -102,15 +102,13 @@ public sealed class PurchaseOrderHeader : Entity
             PaymentStatus = PaymentStatus.Unpaid,
             PurchaseOrderNotes = purchaseOrderNotes,
             Status = PurchaseOrderStatus.Draft,
-            CreateBy = createBy,
-            CreateDate = createDate,
             Tags = []
         };
 
         return orderHeader;
     }
 
-    public Result UpdateDraft(DateOnly requiredDate, string? purchaseOrderNotes, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result UpdateDraft(DateOnly requiredDate, string? purchaseOrderNotes)
     {
         if (Status != PurchaseOrderStatus.Draft)
         {
@@ -119,8 +117,6 @@ public sealed class PurchaseOrderHeader : Entity
 
         RequiredDate = requiredDate;
         PurchaseOrderNotes = purchaseOrderNotes;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
@@ -132,13 +128,13 @@ public sealed class PurchaseOrderHeader : Entity
             return Result.Failure(PurchaseOrderErrors.NotDraft);
         }
 
-        PurchaseOrderLine? line = PurchaseOrderLines.SingleOrDefault(l => l.Id == lineId);
+        PurchaseOrderLine? line = _lines.SingleOrDefault(l => l.Id == lineId);
         if (line == null)
         {
             return Result.Failure(PurchaseOrderErrors.NotFound(lineId));
         }
 
-        PurchaseOrderLines.Remove(line);
+        _lines.Remove(line);
         UpdateTotalAmount();
 
         return Result.Success();
@@ -151,7 +147,7 @@ public sealed class PurchaseOrderHeader : Entity
             return Result.Failure(PurchaseOrderErrors.NotDraft);
         }
 
-        PurchaseOrderLines.Clear();
+        _lines.Clear();
         UpdateTotalAmount();
 
         return Result.Success();
@@ -182,7 +178,7 @@ public sealed class PurchaseOrderHeader : Entity
             return Result.Failure<PurchaseOrderLine>(purchaseOrderLine.Error);
         }
 
-        PurchaseOrderLines.Add(purchaseOrderLine.Value);
+        _lines.Add(purchaseOrderLine.Value);
         UpdateTotalAmount();
         return purchaseOrderLine.Value;
     }
@@ -194,7 +190,7 @@ public sealed class PurchaseOrderHeader : Entity
             return Result.Failure(PurchaseOrderErrors.NotDraft);
         }
 
-        PurchaseOrderLine? line = PurchaseOrderLines.SingleOrDefault(pl => pl.Id == purchaseOrderLineId);
+        PurchaseOrderLine? line = _lines.SingleOrDefault(pl => pl.Id == purchaseOrderLineId);
 
         if (line is null)
         {
@@ -225,9 +221,7 @@ public sealed class PurchaseOrderHeader : Entity
     decimal deliveryCharge,
     PaymentMethod paymentMethod,
     string? purchaseOrderNotes,
-    string? salesOrderRef,
-    Guid lastModifiedBy,
-    DateTime lastModifiedDate)
+    string? salesOrderRef)
     {
         ContactFullName = contactFullName;
         ContactPhone = contactPhone;
@@ -247,12 +241,10 @@ public sealed class PurchaseOrderHeader : Entity
         PaymentMethod = paymentMethod;
         PurchaseOrderNotes = purchaseOrderNotes;
         SalesOrderRef = salesOrderRef;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
         UpdateTotalAmount();
     }
 
-    public Result<PurchaseOrderStatusHistory> Draft(Guid userId, DateTime utcNow)
+    public Result<PurchaseOrderStatusHistory> Draft(DateTime utcNow)
     {
         if (Status != PurchaseOrderStatus.Pending)
         {
@@ -260,16 +252,14 @@ public sealed class PurchaseOrderHeader : Entity
         }
 
         Status = PurchaseOrderStatus.Draft;
-        LastModifiedBy = userId;
-        LastModifiedDate = utcNow;
 
-        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
-        StatusHistory.Add(newHistory);
+        var newHistory = new PurchaseOrderStatusHistory(Status, utcNow);
+        _statusHistory.Add(newHistory);
 
         return newHistory;
     }
 
-    public Result<PurchaseOrderStatusHistory> Pend(Guid userId, DateTime utcNow)
+    public Result<PurchaseOrderStatusHistory> Pend(DateTime utcNow)
     {
         if (Status != PurchaseOrderStatus.Draft)
         {
@@ -277,16 +267,14 @@ public sealed class PurchaseOrderHeader : Entity
         }
 
         Status = PurchaseOrderStatus.Pending;
-        LastModifiedBy = userId;
-        LastModifiedDate = utcNow;
 
-        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
-        StatusHistory.Add(newHistory);
+        var newHistory = new PurchaseOrderStatusHistory(Status, utcNow);
+        _statusHistory.Add(newHistory);
 
         return newHistory;
     }
 
-    public Result<PurchaseOrderStatusHistory> Approve(string purchaseOrderNo, Guid userId, DateTime utcNow)
+    public Result<PurchaseOrderStatusHistory> Approve(string purchaseOrderNo, DateTime utcNow)
     {
         if (Status != PurchaseOrderStatus.Pending)
         {
@@ -296,18 +284,16 @@ public sealed class PurchaseOrderHeader : Entity
         Status = PurchaseOrderStatus.Approved;
         PurchaseOrderNo = purchaseOrderNo;
         PurchaseDate = DateOnly.FromDateTime(utcNow);
-        LastModifiedBy = userId;
-        LastModifiedDate = utcNow;
 
-        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
-        StatusHistory.Add(newHistory);
+        var newHistory = new PurchaseOrderStatusHistory(Status, utcNow);
+        _statusHistory.Add(newHistory);
 
         Raise(new PurchaseOrderApprovedDomainEvent(Id));
 
         return newHistory;
     }
 
-    public Result<PurchaseOrderStatusHistory> Cancel(Guid userId, DateTime utcNow)
+    public Result<PurchaseOrderStatusHistory> Cancel(DateTime utcNow)
     {
         if (Status != PurchaseOrderStatus.Approved)
         {
@@ -315,13 +301,11 @@ public sealed class PurchaseOrderHeader : Entity
         }
 
         Status = PurchaseOrderStatus.Cancelled;
-        LastModifiedBy = userId;
-        LastModifiedDate = utcNow;
 
-        var newHistory = PurchaseOrderStatusHistory.Create(Id, Status, utcNow, userId);
-        StatusHistory.Add(newHistory);
+        var newHistory = new PurchaseOrderStatusHistory(Status, utcNow);
+        _statusHistory.Add(newHistory);
 
-        Raise(new PurchaseOrderCancelledDomainEvent(Id, userId, utcNow));
+        Raise(new PurchaseOrderCancelledDomainEvent(Id));
 
         return newHistory;
     }
@@ -347,8 +331,7 @@ public sealed class PurchaseOrderHeader : Entity
 
     public void UpdateTotalAmount()
     {
-        PurchaseOrderTax = PurchaseOrderLines.Sum(line => line.Tax);
-        PurchaseOrderAmount = PurchaseOrderLines.Sum(line => line.LineTotal) + DeliveryCharge;
+        PurchaseOrderTax = _lines.Sum(line => line.Tax);
+        PurchaseOrderAmount = _lines.Sum(line => line.LineTotal) + DeliveryCharge;
     }
-
 }

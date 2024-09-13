@@ -136,17 +136,25 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CreateBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("create_by");
+                        .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -164,6 +172,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<bool>("IsPrimary")
                         .HasColumnType("boolean")
                         .HasColumnName("is_primary");
@@ -172,9 +184,9 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -284,17 +296,21 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("county");
 
-                    b.Property<Guid>("CreateBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("create_by");
+                        .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreateOnUtc")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_on_utc");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
 
                     b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("timestamp with time zone")
@@ -382,22 +398,23 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("customer_outlets", "crm");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProductPrices.CustomerProductPrice", b =>
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Comment")
-                        .HasColumnType("text")
-                        .HasColumnName("comment");
+                    b.Property<string>("Comments")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("comments");
 
-                    b.Property<Guid>("CustomerProductId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
-                        .HasColumnName("customer_product_id");
+                        .HasColumnName("customer_id");
 
-                    b.Property<DateOnly>("EffectiveDate")
+                    b.Property<DateOnly?>("EffectiveDate")
                         .HasColumnType("date")
                         .HasColumnName("effective_date");
 
@@ -414,26 +431,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("fixed_price");
-
-                    b.HasKey("Id")
-                        .HasName("pk_customer_product_prices");
-
-                    b.HasIndex("CustomerProductId")
-                        .HasDatabaseName("ix_customer_product_prices_customer_product_id");
-
-                    b.ToTable("customer_product_prices", "crm");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("customer_id");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -454,6 +451,61 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_customer_products_customer_id_product_id");
 
                     b.ToTable("customer_products", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("changed_at");
+
+                    b.Property<Guid>("ChangedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("changed_by");
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("comments");
+
+                    b.Property<Guid>("CustomerProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_product_id");
+
+                    b.Property<DateOnly?>("EffectiveDate")
+                        .HasColumnType("date")
+                        .HasColumnName("effective_date");
+
+                    b.Property<DateOnly?>("ExpiryDate")
+                        .HasColumnType("date")
+                        .HasColumnName("expiry_date");
+
+                    b.Property<decimal?>("FixedDiscount")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)")
+                        .HasColumnName("fixed_discount");
+
+                    b.Property<decimal?>("FixedPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("fixed_price");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_product_price_history");
+
+                    b.HasIndex("CustomerProductId")
+                        .HasDatabaseName("ix_customer_product_price_history_customer_product_id");
+
+                    b.ToTable("customer_product_price_history", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", b =>
@@ -547,13 +599,13 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("business_name");
 
-                    b.Property<Guid>("CreateBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("create_by");
+                        .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<bool>("CustomPaymentTerm")
                         .HasColumnType("boolean")
@@ -603,9 +655,9 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<bool>("NoDiscountFixedPrice")
                         .HasColumnType("boolean")
@@ -667,9 +719,37 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("base_purchase_price");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
                     b.Property<DateOnly>("EffectiveDate")
                         .HasColumnType("date")
                         .HasColumnName("effective_date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<Guid>("PriceTierId")
                         .HasColumnType("uuid")
@@ -864,13 +944,21 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CreateBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("create_by");
+                        .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -888,6 +976,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<bool>("IsPrimary")
                         .HasColumnType("boolean")
                         .HasColumnName("is_primary");
@@ -896,9 +988,9 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -963,6 +1055,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on_utc");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
 
                     b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("timestamp with time zone")
@@ -1117,16 +1213,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_customer_outlets_customers_customer_id");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProductPrices.CustomerProductPrice", b =>
-                {
-                    b.HasOne("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_customer_product_prices_customer_products_customer_product_");
-                });
-
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
                 {
                     b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
@@ -1142,6 +1228,16 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_customer_products_products_product_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", null)
+                        .WithMany("PriceHistory")
+                        .HasForeignKey("CustomerProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_product_price_history_customer_products_customer_p");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerSettings.CustomerSetting", b =>
@@ -1215,6 +1311,11 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_supplier_products_suppliers_supplier_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
+                {
+                    b.Navigation("PriceHistory");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Customers.Customer", b =>

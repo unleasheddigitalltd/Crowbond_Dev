@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.Suppliers.CreateSupplier;
@@ -15,9 +13,9 @@ internal sealed class CreateSupplier : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("suppliers", async (ClaimsPrincipal claims, SupplierRequest request, ISender sender) =>
+        app.MapPost("suppliers", async (SupplierRequest request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new CreateSupplierCommand(claims.GetUserId(), request));
+            Result<Guid> result = await sender.Send(new CreateSupplierCommand(request));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

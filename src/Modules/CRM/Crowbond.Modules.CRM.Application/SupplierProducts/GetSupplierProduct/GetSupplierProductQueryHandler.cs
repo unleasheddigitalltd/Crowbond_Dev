@@ -17,19 +17,20 @@ internal sealed class GetSupplierProductQueryHandler(IDbConnectionFactory dbConn
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(SupplierProductResponse.Id)},
-                 supplier_id AS {nameof(SupplierProductResponse.SupplierId)},
-                 product_id AS {nameof(SupplierProductResponse.ProductId)},
-                 product_name AS {nameof(SupplierProductResponse.ProductName)},
-                 product_sku AS {nameof(SupplierProductResponse.ProductSku)},
-                 unit_of_measure_name AS {nameof(SupplierProductResponse.UnitOfMeasureName)},
-                 category_id AS {nameof(SupplierProductResponse.CategoryId)},
-                 unit_price AS {nameof(SupplierProductResponse.UnitPrice)},
-                 tax_rate_type AS {nameof(SupplierProductResponse.TaxRateType)},
-                 is_default AS {nameof(SupplierProductResponse.IsDefault)},
-                 comments AS {nameof(SupplierProductResponse.Comments)}
-             FROM crm.supplier_products
-             WHERE supplier_id = @SupplierId AND product_id = @ProductId
+                 sp.id AS {nameof(SupplierProductResponse.Id)},
+                 sp.supplier_id AS {nameof(SupplierProductResponse.SupplierId)},
+                 sp.product_id AS {nameof(SupplierProductResponse.ProductId)},
+                 p.name AS {nameof(SupplierProductResponse.ProductName)},
+                 p.sku AS {nameof(SupplierProductResponse.ProductSku)},
+                 p.unit_of_measure_name AS {nameof(SupplierProductResponse.UnitOfMeasureName)},
+                 p.category_id AS {nameof(SupplierProductResponse.CategoryId)},
+                 sp.unit_price AS {nameof(SupplierProductResponse.UnitPrice)},
+                 p.tax_rate_type AS {nameof(SupplierProductResponse.TaxRateType)},
+                 sp.is_default AS {nameof(SupplierProductResponse.IsDefault)},
+                 sp.comments AS {nameof(SupplierProductResponse.Comments)}
+             FROM crm.supplier_products sp
+             INNER JOIN crm.products p ON p.id = sp.product_id
+             WHERE sp.supplier_id = @SupplierId AND p.id = @ProductId AND sp.is_deleted = false
              """;
 
         SupplierProductResponse? supplierProduct = await connection.QuerySingleOrDefaultAsync<SupplierProductResponse>(sql, request);

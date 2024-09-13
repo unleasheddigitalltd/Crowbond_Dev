@@ -9,7 +9,5 @@ internal sealed class RouteTripStatusHistoryConfiguration : IEntityTypeConfigura
     public void Configure(EntityTypeBuilder<RouteTripStatusHistory> builder)
     {
         builder.HasKey(r => r.Id);
-
-        builder.HasOne<RouteTrip>().WithMany().HasForeignKey(r => r.RouteTripId);
     }
 }

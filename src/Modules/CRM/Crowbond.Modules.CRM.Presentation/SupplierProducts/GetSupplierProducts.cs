@@ -13,9 +13,9 @@ internal sealed class GetSupplierProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("suppliers/{supplierId}/products", async (Guid supplierId, ISender sender) =>
+        app.MapGet("suppliers/{id}/products", async (Guid id, ISender sender) =>
         {
-            Result<IReadOnlyCollection<SupplierProductResponse>> result = await sender.Send(new GetSupplierProductsQuery(supplierId));
+            Result<IReadOnlyCollection<SupplierProductResponse>> result = await sender.Send(new GetSupplierProductsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

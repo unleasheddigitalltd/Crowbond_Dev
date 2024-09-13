@@ -32,6 +32,10 @@ using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
+using Crowbond.Modules.OMS.Infrastructure.Authentication;
+using Crowbond.Modules.OMS.Application.Abstractions.Authentication;
+using Crowbond.Common.Infrastructure.TrackEntityChange;
+using Crowbond.Common.Infrastructure.AuditEntity;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -60,10 +64,11 @@ public static class OmsModule
                     configuration.GetConnectionString("Database"),
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.OMS))
-                .UseSnakeCaseNamingConvention()
                 .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
                 .AddInterceptors(sp.GetRequiredService<ChangeDetectionInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<TrackEntityChangeInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
@@ -79,6 +84,8 @@ public static class OmsModule
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<IDeliveryImageRepository, DeliveryImageRepository>();
         services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
+
+        services.AddScoped<IDriverContext, DriverContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
         services.ConfigureOptions<ConfigureProcessOutboxJob>();

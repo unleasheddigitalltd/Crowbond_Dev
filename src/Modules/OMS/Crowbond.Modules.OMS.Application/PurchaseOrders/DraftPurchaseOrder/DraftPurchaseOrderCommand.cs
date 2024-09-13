@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.DraftPurchaseOrder;
 
-public sealed record DraftPurchaseOrderCommand(Guid UserId, Guid PurchaseOrderHeaderId) : ICommand;
+public sealed record DraftPurchaseOrderCommand(Guid PurchaseOrderHeaderId) : ICommand;

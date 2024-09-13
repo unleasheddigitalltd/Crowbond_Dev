@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.Suppliers.UpdateSupplierActivation;
 
-public sealed record UpdateSupplierActivationCommand(Guid UserId, Guid SupplierId, bool IsActive) : ICommand;
+public sealed record UpdateSupplierActivationCommand(Guid SupplierId, bool IsActive) : ICommand;

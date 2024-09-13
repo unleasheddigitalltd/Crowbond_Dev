@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Suppliers;
@@ -8,7 +7,6 @@ namespace Crowbond.Modules.CRM.Application.Suppliers.UpdateSupplierActivation;
 
 internal sealed class UpdateSupplierActivationCommandHandler(
     ISupplierRepository supplierRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateSupplierActivationCommand>
 {
@@ -21,7 +19,7 @@ internal sealed class UpdateSupplierActivationCommandHandler(
             return Result.Failure(SupplierErrors.NotFound(request.SupplierId));
         }
 
-        Result result = request.IsActive ? supplier.Activate(request.UserId, dateTimeProvider.UtcNow) : supplier.Deactivate(request.UserId, dateTimeProvider.UtcNow);
+        Result result = request.IsActive ? supplier.Activate() : supplier.Deactivate();
 
         if (result.IsFailure)
         {

@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
@@ -8,7 +7,6 @@ namespace Crowbond.Modules.CRM.Application.SupplierContacts.UpdateSupplierContac
 
 internal sealed class UpdateSupplierContactPrimaryCommandHandler(
     ISupplierContactRepository supplierContactRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateSupplierContactPrimaryCommand>
 {
@@ -25,7 +23,7 @@ internal sealed class UpdateSupplierContactPrimaryCommandHandler(
 
         foreach (SupplierContact contact in contacts)
         {
-            Result result = contact.ChangePrimary(contact.Id == primaryContact.Id, request.UserId, dateTimeProvider.UtcNow);
+            Result result = contact.ChangePrimary(contact.Id == primaryContact.Id);
 
             if (result.IsFailure)
             {

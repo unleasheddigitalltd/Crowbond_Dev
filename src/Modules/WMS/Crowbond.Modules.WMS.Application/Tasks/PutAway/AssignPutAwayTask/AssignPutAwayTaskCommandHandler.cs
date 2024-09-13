@@ -10,7 +10,6 @@ namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.AssignPutAwayTask;
 internal sealed class AssignPutAwayTaskCommandHandler(
     ITaskRepository taskRepository,
     IReceiptRepository receiptRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<AssignPutAwayTaskCommand, Guid>
 {
@@ -42,10 +41,8 @@ internal sealed class AssignPutAwayTaskCommandHandler(
         )).ToList();
 
         Result<TaskAssignment> result = taskHeader.AddAssignmentWithLines(
-            warehouseOperatorId: request.WarehouseOperatorId,
-            createdBy: request.UserId,
-            createdDate: dateTimeProvider.UtcNow,
-            productLines: productLines);
+            request.WarehouseOperatorId,
+            productLines);
 
         if (result.IsFailure)
         {

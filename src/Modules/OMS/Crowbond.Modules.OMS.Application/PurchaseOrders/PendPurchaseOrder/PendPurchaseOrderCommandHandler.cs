@@ -21,7 +21,7 @@ internal sealed class PendPurchaseOrderCommandHandler(
             return Result.Failure(PurchaseOrderErrors.NotFound(request.PurchaseOrderHeaderId));
         }
 
-        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Pend(request.UserId, dateTimeProvider.UtcNow);
+        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Pend(dateTimeProvider.UtcNow);
         if (result.IsFailure)
         {
             return Result.Failure(result.Error);

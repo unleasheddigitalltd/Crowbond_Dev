@@ -415,9 +415,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<string>("DeliveryNoteNumber")
                         .IsRequired()
@@ -429,9 +429,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<Guid?>("PurchaseOrderId")
                         .HasColumnType("uuid")
@@ -552,6 +552,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
                     b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_on_utc");
@@ -621,9 +625,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<decimal>("CurrentQty")
                         .HasPrecision(10, 2)
@@ -634,9 +638,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uuid")
@@ -796,17 +800,17 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")

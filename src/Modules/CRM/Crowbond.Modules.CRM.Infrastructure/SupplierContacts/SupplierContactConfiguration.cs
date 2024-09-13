@@ -25,10 +25,6 @@ internal sealed class SupplierContactConfiguration : IEntityTypeConfiguration<Su
         builder.Property(c => c.Email).IsRequired().HasMaxLength(255);
         builder.HasIndex(t => t.Email).IsUnique();
 
-        builder.Property(c => c.LastModifiedBy).IsRequired(false);
-
-        builder.Property(c => c.LastModifiedDate).IsRequired(false);
-
         builder.HasOne<Supplier>().WithMany().HasForeignKey(c => c.SupplierId);
     }
 }

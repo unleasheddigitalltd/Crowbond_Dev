@@ -519,7 +519,7 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.ToTable("order_status_histories", "oms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -541,13 +541,13 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("contact_phone");
 
-                    b.Property<Guid>("CreateBy")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("create_by");
+                        .HasColumnName("created_by");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_date");
+                        .HasColumnName("created_on_utc");
 
                     b.Property<decimal>("DeliveryCharge")
                         .HasPrecision(10, 2)
@@ -566,9 +566,9 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
 
-                    b.Property<DateTime?>("LastModifiedDate")
+                    b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_date");
+                        .HasColumnName("last_modified_on_utc");
 
                     b.Property<string>("PaidBy")
                         .HasMaxLength(100)
@@ -686,39 +686,7 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.ToTable("purchase_order_headers", "oms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderStatusHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("changed_at");
-
-                    b.Property<Guid>("ChangedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("changed_by");
-
-                    b.Property<Guid>("PurchaseOrderHeaderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("purchase_order_header_id");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
-
-                    b.HasKey("Id")
-                        .HasName("pk_purchase_order_status_histories");
-
-                    b.HasIndex("PurchaseOrderHeaderId")
-                        .HasDatabaseName("ix_purchase_order_status_histories_purchase_order_header_id");
-
-                    b.ToTable("purchase_order_status_histories", "oms");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderLines.PurchaseOrderLine", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderLine", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -799,6 +767,38 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_purchase_order_lines_purchase_order_header_id");
 
                     b.ToTable("purchase_order_lines", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderStatusHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("changed_at");
+
+                    b.Property<Guid>("ChangedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("changed_by");
+
+                    b.Property<Guid>("PurchaseOrderHeaderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("purchase_order_header_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id")
+                        .HasName("pk_purchase_order_status_histories");
+
+                    b.HasIndex("PurchaseOrderHeaderId")
+                        .HasDatabaseName("ix_purchase_order_status_histories_purchase_order_header_id");
+
+                    b.ToTable("purchase_order_status_histories", "oms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.RouteTripLogDatails.RouteTripLogDatail", b =>
@@ -1054,24 +1054,24 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_order_status_histories_order_headers_order_header_id");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderStatusHistory", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderLine", b =>
                 {
-                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", null)
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_purchase_order_status_histories_purchase_order_headers_purc");
-                });
-
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderLines.PurchaseOrderLine", b =>
-                {
-                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", null)
-                        .WithMany("PurchaseOrderLines")
+                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", null)
+                        .WithMany("Lines")
                         .HasForeignKey("PurchaseOrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_purchase_order_lines_purchase_order_headers_purchase_order_");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderStatusHistory", b =>
+                {
+                    b.HasOne("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", null)
+                        .WithMany("StatusHistory")
+                        .HasForeignKey("PurchaseOrderHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_purchase_order_status_histories_purchase_order_headers_purc");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.RouteTripLogDatails.RouteTripLogDatail", b =>
@@ -1128,9 +1128,11 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_route_trip_status_histories_route_trips_route_trip_id");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrderHeaders.PurchaseOrderHeader", b =>
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", b =>
                 {
-                    b.Navigation("PurchaseOrderLines");
+                    b.Navigation("Lines");
+
+                    b.Navigation("StatusHistory");
                 });
 #pragma warning restore 612, 618
         }

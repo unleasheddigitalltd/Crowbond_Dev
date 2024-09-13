@@ -9,6 +9,7 @@ public sealed record SupplierProductResponse
     public string ProductSku { get; }
     public string UnitOfMeasureName { get; }
     public Guid CategoryId { get; }
+    public string CategoryName { get; }
     public decimal UnitPrice { get; }
     public int TaxRateType { get; }
     public bool IsDefault { get; }

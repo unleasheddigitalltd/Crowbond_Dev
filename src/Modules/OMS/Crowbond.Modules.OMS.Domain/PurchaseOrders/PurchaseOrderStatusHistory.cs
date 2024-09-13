@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
-public sealed class PurchaseOrderStatusHistory : Entity
+public sealed class PurchaseOrderStatusHistory : Entity , ITrackable
 {
     private PurchaseOrderStatusHistory()
     {
@@ -16,23 +16,12 @@ public sealed class PurchaseOrderStatusHistory : Entity
 
     public DateTime ChangedAt { get; private set; }
 
-    public Guid ChangedBy { get; private set; }
+    public Guid ChangedBy { get; set; }
 
-    public static PurchaseOrderStatusHistory Create(
-        Guid purchaseOrderHeaderId,
-        PurchaseOrderStatus status,
-        DateTime changedAt,
-        Guid changedBy)
+    internal PurchaseOrderStatusHistory(PurchaseOrderStatus status, DateTime utcNow)
     {
-        var purchaseOrderStatusHistory = new PurchaseOrderStatusHistory
-        {
-            Id = Guid.NewGuid(),
-            PurchaseOrderHeaderId = purchaseOrderHeaderId,
-            Status = status,
-            ChangedAt = changedAt,
-            ChangedBy = changedBy
-        };
-
-        return purchaseOrderStatusHistory;
+        Id = Guid.NewGuid();
+        Status = status;
+        ChangedAt = utcNow;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.OMS.Application.PurchaseOrders.CreatePurchaseOrder;
@@ -15,9 +13,9 @@ internal sealed class CreatePurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("purchase-orders", async (PurchaseOrderRequest request, ClaimsPrincipal claims, ISender sender) =>
+        app.MapPost("purchase-orders", async (PurchaseOrderRequest request, ISender sender) =>
         {
-            Result<Guid> results = await sender.Send(new CreatePurchaseOrderCommand(claims.GetUserId(), request));
+            Result<Guid> results = await sender.Send(new CreatePurchaseOrderCommand(request));
 
             return results.Match(Results.Ok, ApiResults.Problem);
         })

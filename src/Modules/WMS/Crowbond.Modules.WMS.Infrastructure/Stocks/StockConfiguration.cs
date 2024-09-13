@@ -17,8 +17,6 @@ internal sealed class StockConfiguration : IEntityTypeConfiguration<Stock>
         builder.Property(s => s.SellByDate).IsRequired(false);
         builder.Property(s => s.UseByDate).IsRequired(false);
         builder.Property(s => s.Note).IsRequired(false).HasMaxLength(255);
-        builder.Property(r => r.LastModifiedBy).IsRequired(false);
-        builder.Property(r => r.LastModifiedDate).IsRequired(false);
 
         builder.HasOne<Location>().WithMany().HasForeignKey(s => s.LocationId);
         builder.HasOne<ReceiptLine>().WithMany().HasForeignKey(s => s.ReceiptLineId);

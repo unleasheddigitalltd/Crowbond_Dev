@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.Customers;
@@ -12,7 +11,6 @@ internal sealed class UpdateCustomerCommandHandler(
     ICustomerRepository customerRepository,
     IRepRepository repRepository,
     IPriceTierRepository priceTierRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerCommand>
 {
@@ -65,9 +63,7 @@ internal sealed class UpdateCustomerCommandHandler(
             customerNotes: request.Customer.CustomerNotes,
             showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
             showPriceInApp: request.Customer.ShowPriceInApp,
-            showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket,
-            lastModifiedBy: request.UserName,
-            lastModifiedDate: dateTimeProvider.UtcNow);
+            showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

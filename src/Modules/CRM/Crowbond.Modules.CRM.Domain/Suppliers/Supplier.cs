@@ -52,9 +52,7 @@ public sealed class Supplier : Entity
      string? country,
      string postalCode,
      PaymentTerm paymentTerms,
-     string? supplierNotes,
-     Guid createBy,
-     DateTime createDate)
+     string? supplierNotes)
     {
         var supplier = new Supplier
         {
@@ -69,9 +67,7 @@ public sealed class Supplier : Entity
             PostalCode = postalCode,
             PaymentTerms = paymentTerms,
             IsActive = true,
-            SupplierNotes = supplierNotes,
-            CreateBy = createBy,
-            CreateDate = createDate
+            SupplierNotes = supplierNotes
         };
 
         return supplier;
@@ -86,9 +82,7 @@ public sealed class Supplier : Entity
          string? country,
          string postalcode,
          PaymentTerm paymentterms,
-         string? suppliernotes,
-         Guid lastModifiedBy,
-         DateTime lastModifiedDate)
+         string? suppliernotes)
     {
 
         SupplierName = suppliername;
@@ -100,11 +94,9 @@ public sealed class Supplier : Entity
         PostalCode = postalcode;
         PaymentTerms = paymentterms;
         SupplierNotes = suppliernotes;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate()
     {
         if (IsActive)
         {
@@ -112,13 +104,11 @@ public sealed class Supplier : Entity
         }
 
         IsActive = true;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Deactivate()
     {
         if (!IsActive)
         {
@@ -126,8 +116,6 @@ public sealed class Supplier : Entity
         }
 
         IsActive = false;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }

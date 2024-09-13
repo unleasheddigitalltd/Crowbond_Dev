@@ -21,12 +21,12 @@ internal sealed class QuitPutAwayTaskCommandHandler(
             return Result.Failure(TaskErrors.NotFound(request.TaskHeaderId));
         }
 
-        if (taskHeader.IsAssignedTo(request.UserId))
+        if (!taskHeader.IsAssignedTo(request.UserId))
         {
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }
 
-        Result result = taskHeader.Quit(request.UserId, dateTimeProvider.UtcNow);
+        Result result = taskHeader.Quit(dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Receipts.ReceiveReceipt;
 
-public sealed record ReceiveReceiptCommand(Guid UserId, Guid ReceiptId) : ICommand;
+public sealed record ReceiveReceiptCommand(Guid ReceiptId) : ICommand;

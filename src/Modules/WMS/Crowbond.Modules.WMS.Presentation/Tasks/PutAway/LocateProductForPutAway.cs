@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
-using Crowbond.Common.Infrastructure.Authentication;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
+using Crowbond.Modules.WMS.Application.Abstractions.Authentication;
 using Crowbond.Modules.WMS.Application.Tasks.PutAway.LocateProductForPutAway;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -15,10 +14,10 @@ internal sealed class LocateProductForPutAway : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("task/putaway/{taskId}/locate", async (ClaimsPrincipal claims, Guid taskId, Request request, ISender sender) =>
+        app.MapPost("task/putaway/{taskId}/locate", async (IWarehouseOperatorContext operatorContext, Guid taskId, Request request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new LocateProductForPutAwayCommand(
-                claims.GetUserId(),
+                operatorContext.WarehouseOperatorId,
                 taskId,
                 request.ProductId,
                 request.LocationId,

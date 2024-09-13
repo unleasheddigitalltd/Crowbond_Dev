@@ -21,7 +21,7 @@ internal sealed class DraftPurchaseOrderCommandHandler(
             return Result.Failure(PurchaseOrderErrors.NotFound(request.PurchaseOrderHeaderId));
         }
 
-        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Draft(request.UserId, dateTimeProvider.UtcNow);
+        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Draft(dateTimeProvider.UtcNow);
         if (result.IsFailure)
         {
             return Result.Failure(result.Error);

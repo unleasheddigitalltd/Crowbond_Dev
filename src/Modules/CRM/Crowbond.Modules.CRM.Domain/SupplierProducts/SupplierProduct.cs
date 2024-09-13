@@ -30,6 +30,8 @@ public sealed class SupplierProduct : Entity , ISoftDeletable
 
     public bool IsDeleted { get; set; }
 
+    public Guid? DeletedBy { get; set; }
+
     public DateTime? DeletedOnUtc { get ; set; }
 
     public static SupplierProduct Create(
@@ -37,9 +39,7 @@ public sealed class SupplierProduct : Entity , ISoftDeletable
         Guid productId,
         decimal unitPrice,
         bool isDefault,
-        string? comments,
-        Guid createdBy,
-        DateTime createOnUtc)
+        string? comments)
     {
         var supplierProduct = new SupplierProduct
         {
@@ -49,8 +49,6 @@ public sealed class SupplierProduct : Entity , ISoftDeletable
             UnitPrice = unitPrice,
             IsDefault = isDefault,
             Comments = comments,
-            CreatedBy = createdBy,
-            CreatedOnUtc = createOnUtc
         };
 
         return supplierProduct;
@@ -58,13 +56,9 @@ public sealed class SupplierProduct : Entity , ISoftDeletable
 
     public void Update(
         bool isDefault,
-        string? comments,
-        Guid lastModifiedBy,
-        DateTime lastModifiedOnUtc)
+        string? comments)
     {
         IsDefault = isDefault;
         Comments = comments;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedOnUtc = lastModifiedOnUtc;
     }
 }

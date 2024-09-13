@@ -16,8 +16,13 @@ public sealed class Setting : Entity, ISoftDeletable
     }
 
     public Guid Id { get; private set; }
+
     public bool HasMixBatchLocation { get; private set; }
+
     public bool IsDeleted { get; set; }
+
+    public Guid? DeletedBy { get; set; }
+
     public DateTime? DeletedOnUtc { get; set; }
 
     public static Setting Create(bool hasMixBatchLocation)

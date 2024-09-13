@@ -22,6 +22,7 @@ using Crowbond.Modules.OMS.Domain.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Common.Infrastructure.Configuration;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
@@ -46,6 +47,8 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.OMS);
+
+        modelBuilder.ApplySoftDeleteFilter();
 
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());

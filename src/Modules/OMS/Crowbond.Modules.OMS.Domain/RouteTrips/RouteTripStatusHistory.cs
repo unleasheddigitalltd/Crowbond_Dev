@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.OMS.Domain.RouteTrips;
 
-public sealed class RouteTripStatusHistory : Entity
+public sealed class RouteTripStatusHistory : Entity , ITrackable
 {
     private RouteTripStatusHistory()
     {        
@@ -16,23 +16,12 @@ public sealed class RouteTripStatusHistory : Entity
 
     public DateTime ChangedAt { get; private set; }
 
-    public Guid ChangedBy { get; private set; }
+    public Guid ChangedBy { get; set; }
 
-    public static RouteTripStatusHistory Create(
-        Guid routeTripId, 
-        RouteTripStatus status, 
-        DateTime changedAt, 
-        Guid changedBy)
+    internal RouteTripStatusHistory(RouteTripStatus status, DateTime changedAt)
     {
-        var RouteTripStatusHistory = new RouteTripStatusHistory
-        {
-            Id = Guid.NewGuid(),
-            RouteTripId = routeTripId,
-            Status = status,
-            ChangedAt = changedAt,
-            ChangedBy = changedBy
-        };
-
-        return RouteTripStatusHistory;
+        Id = Guid.NewGuid();
+        Status = status;
+        ChangedAt = changedAt;
     }
 }

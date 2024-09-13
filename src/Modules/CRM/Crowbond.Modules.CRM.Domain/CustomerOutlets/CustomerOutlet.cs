@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
-public sealed class CustomerOutlet : Entity , ISoftDeletable
+public sealed class CustomerOutlet : Entity , ISoftDeletable, IAuditable
 {
     private CustomerOutlet()
     {
@@ -44,15 +44,17 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
 
     public bool IsActive { get; private set; }
 
-    public Guid CreateBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreateOnUtc { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedOnUtc { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public Guid? DeletedBy { get; set; }
 
     public DateTime? DeletedOnUtc { get; set; }
 
@@ -72,9 +74,7 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
         string? deliveryNote,
         TimeOnly deliveryTimeFrom,
         TimeOnly deliveryTimeTo,
-        bool is24HrsDelivery,
-        Guid createBy,
-        DateTime createOnUtc)
+        bool is24HrsDelivery)
     {
         var shippingAddress = new CustomerOutlet
         {
@@ -95,9 +95,7 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
             DeliveryTimeFrom = deliveryTimeFrom,
             DeliveryTimeTo = deliveryTimeTo,
             Is24HrsDelivery = is24HrsDelivery,
-            IsActive = true,
-            CreateBy = createBy,
-            CreateOnUtc = createOnUtc
+            IsActive = true
         };
         return shippingAddress;
     }
@@ -117,9 +115,7 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
         string? deliveryNote,
         TimeOnly deliveryTimeFrom,
         TimeOnly deliveryTimeTo,
-        bool is24HrsDelivery,
-        Guid lastModifiedBy,
-        DateTime lastModifiedOnUtc)
+        bool is24HrsDelivery)
     {
         LocationName = locationName;
         FullName = fullName;
@@ -136,11 +132,9 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
         DeliveryTimeFrom = deliveryTimeFrom;
         DeliveryTimeTo = deliveryTimeTo;
         Is24HrsDelivery = is24HrsDelivery;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedOnUtc = lastModifiedOnUtc;
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedOnUtc)
+    public Result Activate()
     {
         if (IsActive)
         {
@@ -148,13 +142,11 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
         }
 
         IsActive = true;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedOnUtc = lastModifiedOnUtc;
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedOnUtc)
+    public Result Deactivate()
     {
         if (!IsActive)
         {
@@ -162,8 +154,6 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable
         }
 
         IsActive = false;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedOnUtc = lastModifiedOnUtc;
 
         return Result.Success();
     }

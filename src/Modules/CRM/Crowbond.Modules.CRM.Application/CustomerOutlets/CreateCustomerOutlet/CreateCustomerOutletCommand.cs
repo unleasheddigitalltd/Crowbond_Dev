@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.CustomerOutlets.CreateCustomerOutlet;
 
-public sealed record CreateCustomerOutletCommand(Guid CustomerId, Guid UserId, CustomerOutletRequest CustomerOutlet) : ICommand<Guid>;
+public sealed record CreateCustomerOutletCommand(Guid CustomerId, CustomerOutletRequest CustomerOutlet) : ICommand<Guid>;

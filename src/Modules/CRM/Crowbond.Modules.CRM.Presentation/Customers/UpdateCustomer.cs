@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Crowbond.Common.Domain;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;

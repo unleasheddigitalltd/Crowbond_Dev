@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.CRM.Domain.CustomerContacts;
 
-public sealed class CustomerContact : Entity
+public sealed class CustomerContact : Entity , IAuditable, ISoftDeletable
 {
     private CustomerContact()
     {
@@ -34,13 +34,19 @@ public sealed class CustomerContact : Entity
 
     public bool IsActive { get; private set; }
 
-    public Guid CreateBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime CreateDate { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public DateTime? LastModifiedDate { get; private set; }
+    public DateTime? LastModifiedOnUtc { get; set; }
+
+    public bool IsDeleted { get; set; }
+    
+    public Guid? DeletedBy { get; set; }
+
+    public DateTime? DeletedOnUtc { get; set; }
 
     public static CustomerContact Create(
         Guid customerId,
@@ -52,9 +58,7 @@ public sealed class CustomerContact : Entity
         string username,
         bool receiveInvoice,
         bool receiveOrder,
-        bool receivePriceList,
-        Guid createBy,
-        DateTime createDate)
+        bool receivePriceList)
     {
         var customerContact = new CustomerContact
         {
@@ -70,9 +74,7 @@ public sealed class CustomerContact : Entity
             ReceiveOrder = receiveOrder,
             ReceivePriceList = receivePriceList,
             IsPrimary = false,
-            IsActive = true,
-            CreateBy = createBy,
-            CreateDate = createDate
+            IsActive = true
         };
 
 
@@ -88,9 +90,7 @@ public sealed class CustomerContact : Entity
         string mobile,
         bool receiveInvoice,
         bool receiveOrder,
-        bool receivePriceList,
-        Guid lastModifiedBy,
-        DateTime lastModifiedDate)
+        bool receivePriceList)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -99,13 +99,11 @@ public sealed class CustomerContact : Entity
         ReceiveInvoice = receiveInvoice;
         ReceiveOrder = receiveOrder;
         ReceivePriceList = receivePriceList;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new CustomerContactUpdatedDomainEvent(Id, FirstName, LastName));
     }
 
-    public Result Activate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Activate()
     {
         if (IsActive)
         {
@@ -113,15 +111,13 @@ public sealed class CustomerContact : Entity
         }
 
         IsActive = true;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new CustomerContactActivatedDomainEvent(Id));
 
         return Result.Success();
     }
 
-    public Result Deactivate(Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result Deactivate()
     {
         if (!IsActive)
         {
@@ -134,15 +130,13 @@ public sealed class CustomerContact : Entity
         }
 
         IsActive = false;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         Raise(new CustomerContactDeactivatedDomainEvent(Id));
 
         return Result.Success();
     }
 
-    public Result ChangePrimary(bool isPrimary, Guid lastModifiedBy, DateTime lastModifiedDate)
+    public Result ChangePrimary(bool isPrimary)
     {
         if (!IsActive && isPrimary)
         {
@@ -150,8 +144,6 @@ public sealed class CustomerContact : Entity
         }
 
         IsPrimary = isPrimary;
-        LastModifiedBy = lastModifiedBy;
-        LastModifiedDate = lastModifiedDate;
 
         return Result.Success();
     }
