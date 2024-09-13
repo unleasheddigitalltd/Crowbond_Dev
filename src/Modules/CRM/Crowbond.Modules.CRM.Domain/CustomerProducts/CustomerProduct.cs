@@ -1,10 +1,11 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Xml.Linq;
+using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.CRM.Domain.CustomerProducts;
 
 public sealed class CustomerProduct : Entity, IChangeDetectable
 {
-    private readonly List<CustomerProductPrice> _price = new();
+    private readonly List<CustomerProductPriceHistory> _priceHistory = new();
 
     private CustomerProduct()
     {
@@ -16,157 +17,176 @@ public sealed class CustomerProduct : Entity, IChangeDetectable
 
     public Guid ProductId { get; private set; }
 
+    public decimal? FixedPrice { get; private set; }
+
+    public decimal? FixedDiscount { get; private set; }
+
+    public string? Comments { get; private set; }
+
+    public DateOnly? EffectiveDate { get; private set; }
+
+    public DateOnly? ExpiryDate { get; private set; }
+
     public bool IsActive { get; private set; }
-   
-    public IReadOnlyCollection<CustomerProductPrice> Price => _price;
+
+    public IReadOnlyCollection<CustomerProductPriceHistory> PriceHistory => _priceHistory;
 
     public static Result<CustomerProduct> Create(
-        Guid customerId, 
+        Guid customerId,
         Guid productId,
         decimal? fixedPrice,
         decimal? fixedDiscount,
         string? comments,
-        DateOnly effectiveDate,
+        DateOnly? effectiveDate,
         DateOnly? expiryDate,
         DateTime utcNow)
     {
-        var customer = new CustomerProduct
-        {
-            Id = Guid.NewGuid(),
-            CustomerId = customerId,
-            ProductId = productId,
-            IsActive = true,
-        };
 
-        Result result = customer.AddPrice(fixedPrice, fixedDiscount, comments, effectiveDate, expiryDate, utcNow);
-
-        if (result.IsFailure)
-        {
-            return Result.Failure<CustomerProduct>(result.Error);
-        }
-
-        return customer;
-    }
-
-    public Result Update(
-        decimal? fixedPrice,
-        decimal? fixedDiscount,
-        string? comments,
-        DateOnly effectiveDate,
-        DateOnly? expiryDate,
-        DateTime utcNow)
-    {
-        CustomerProductPrice? activePrice = _price.SingleOrDefault();
-
-        if (activePrice is null)
-        {
-            // If there is no active price, add a new price if provided
-            if (fixedPrice != null || fixedDiscount != null)
-            {
-                Result result = AddPrice(
-                    fixedPrice,
-                    fixedDiscount,
-                    comments,
-                    effectiveDate,
-                    expiryDate,
-                    utcNow);
-
-                if (result.IsFailure)
-                {
-                    return Result.Failure<CustomerProduct>(result.Error);
-                }
-            }
-        }
-        else
-        {
-            // If the existing price matches the new price, update other properties
-            if (activePrice.FixedPrice == fixedPrice && activePrice.FixedDiscount == fixedDiscount)
-            {
-                Result result = UpdatePrice(
-                    activePrice,
-                    comments,
-                    effectiveDate,
-                    expiryDate,
-                    utcNow);
-
-                if (result.IsFailure)
-                {
-                    return Result.Failure<CustomerProduct>(result.Error);
-                }
-            }
-            else
-            {
-                // Remove the old price and add the new price
-                RemovePrice(activePrice);
-
-                Result result = AddPrice(
-                    fixedPrice,
-                    fixedDiscount,
-                    comments,
-                    effectiveDate,
-                    expiryDate,
-                    utcNow);
-
-                if (result.IsFailure)
-                {
-                    return Result.Failure<CustomerProduct>(result.Error);
-                }
-            }
-        }
-
-        Activate();
-        return Result.Success();
-    }
-
-    private Result AddPrice(
-        decimal? fixedPrice,
-        decimal? fixedDiscount,
-        string? comments,
-        DateOnly effectiveDate,
-        DateOnly? expiryDate,
-        DateTime utcNow)
-    {
-        Result<CustomerProductPrice> result = CustomerProductPrice.Create(
+        Result result = InputValidate(
             fixedPrice,
             fixedDiscount,
-            comments,
             effectiveDate,
             expiryDate,
             utcNow);
 
         if (result.IsFailure)
         {
-            return Result.Failure(result.Error);
+            return Result.Failure<CustomerProduct>(result.Error);
         }
 
-        _price.Add(result.Value);
-        return Result.Success();
+        var customerProduct = new CustomerProduct
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = customerId,
+            ProductId = productId,
+            FixedPrice = fixedPrice,
+            FixedDiscount = fixedDiscount,
+            Comments = comments,
+            EffectiveDate = effectiveDate,
+            ExpiryDate = expiryDate,
+            IsActive = true,
+        };
+
+
+        var newPriceHistory = new CustomerProductPriceHistory(
+            fixedPrice,
+            fixedDiscount,
+            comments,
+            effectiveDate,
+            expiryDate,
+            utcNow,
+            true);
+
+        customerProduct.AddPriceHistory(newPriceHistory);
+
+        return customerProduct;
     }
 
-    private Result UpdatePrice(
-        CustomerProductPrice price,
+    public Result<CustomerProductPriceHistory> Update(
+        decimal? fixedPrice,
+        decimal? fixedDiscount,
         string? comments,
-        DateOnly effectiveDate,
+        DateOnly? effectiveDate,
         DateOnly? expiryDate,
         DateTime utcNow)
     {
-        return price.Update(comments, effectiveDate, expiryDate, utcNow);
-    }
+        Result result = InputValidate(
+            fixedPrice,
+            fixedDiscount,
+            effectiveDate,
+            expiryDate,
+            utcNow);
 
-    private void RemovePrice(CustomerProductPrice price)
-    {
-        _price.Remove(price);
-    }
+        if (result.IsFailure)
+        {
+            return Result.Failure<CustomerProductPriceHistory>(result.Error);
+        }
 
-
-    public void Activate()
-    {
+        FixedPrice = fixedPrice;
+        FixedDiscount = fixedDiscount;
+        Comments = comments;
+        EffectiveDate = effectiveDate;
+        ExpiryDate = expiryDate;
         IsActive = true;
+
+        var newPriceHistory = new CustomerProductPriceHistory(
+            fixedPrice,
+            fixedDiscount,
+            comments,
+            effectiveDate,
+            expiryDate,
+            utcNow,
+            true);
+
+        AddPriceHistory(newPriceHistory);
+
+        return Result.Success(newPriceHistory);
     }
-    
-    public void Deactivate()
+
+    public CustomerProductPriceHistory Deactivate(DateTime utcNow)
     {
+        FixedPrice = null;
+        FixedDiscount = null;
+        Comments = null;
+        EffectiveDate = null;
+        ExpiryDate = null;
         IsActive = false;
-        _price.Clear();
+        var newPriceHistory = new CustomerProductPriceHistory(
+            null,
+            null,
+            null,
+            null,
+            null,
+            utcNow,
+            false);
+
+        AddPriceHistory(newPriceHistory);
+
+        return newPriceHistory;
+    }
+
+    private static Result InputValidate(
+        decimal? fixedPrice,
+        decimal? fixedDiscount,
+        DateOnly? effectiveDate,
+        DateOnly? expiryDate,
+        DateTime utcNow)
+    {
+        if (effectiveDate is not null && fixedDiscount is null && fixedPrice is null)
+        {
+            return Result.Failure(CustomerProductErrors.EffectiveDateWithoutPricing);
+        }
+
+        if (fixedDiscount is not null && fixedPrice is not null)
+        {
+            return Result.Failure(CustomerProductErrors.FixedDiscountAndFixedPriceConflict);
+        }
+
+        if (effectiveDate is null && (fixedDiscount is not null || fixedPrice is not null))
+        {
+            return Result.Failure(CustomerProductErrors.EffectiveDateIsNull);
+        }
+
+        if (effectiveDate is not null && effectiveDate < DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure(CustomerProductErrors.EffectiveDateInThePast);
+        }
+
+        if (expiryDate is not null && expiryDate <= DateOnly.FromDateTime(utcNow))
+        {
+            return Result.Failure(CustomerProductErrors.ExpiryDateInThePastOrToday);
+        }
+
+        if (effectiveDate is not null && expiryDate <= effectiveDate)
+        {
+            return Result.Failure(CustomerProductErrors.ExpiryDateBeforeEffectiveDate);
+        }
+
+        return Result.Success();
+    }
+
+    public void AddPriceHistory(CustomerProductPriceHistory priceHistory)
+    {
+        _priceHistory.Add(priceHistory);
     }
 }

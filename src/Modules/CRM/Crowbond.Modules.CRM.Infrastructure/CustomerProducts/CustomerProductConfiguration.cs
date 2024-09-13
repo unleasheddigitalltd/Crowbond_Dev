@@ -11,11 +11,13 @@ internal sealed class CustomerProductConfiguration : IEntityTypeConfiguration<Cu
     {
         builder.HasKey(c => c.Id);
 
+        builder.Property(c => c.FixedPrice).HasPrecision(10, 2);
+        builder.Property(c => c.FixedDiscount).HasPrecision(5, 2);
+        builder.Property(c => c.Comments).HasMaxLength(255);
+
         builder.HasIndex(c => new { c.CustomerId, c.ProductId }).IsUnique();
 
         builder.HasOne<Customer>().WithMany().HasForeignKey(c => c.CustomerId);
         builder.HasOne<Product>().WithMany().HasForeignKey(e => e.ProductId);
-
-        builder.HasMany(cp => cp.Price).WithOne().HasForeignKey(cpp => cpp.CustomerProductId).OnDelete(DeleteBehavior.Cascade);
     }
 }

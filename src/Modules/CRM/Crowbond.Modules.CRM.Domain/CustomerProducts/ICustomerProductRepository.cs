@@ -7,4 +7,6 @@ public interface ICustomerProductRepository
     void Insert(CustomerProduct customerProduct);
 
     void Remove(CustomerProduct customerProduct);
+
+    void InsertPriceHistory(CustomerProductPriceHistory priceHistory);
 }

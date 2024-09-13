@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Crowbond.Modules.CRM.Infrastructure.CustomerProducts;
 
-internal sealed class CustomerProductPriceConfiguration : IEntityTypeConfiguration<CustomerProductPrice>
+internal sealed class CustomerProductPriceHistoryConfiguration : IEntityTypeConfiguration<CustomerProductPriceHistory>
 {
-    public void Configure(EntityTypeBuilder<CustomerProductPrice> builder)
+    public void Configure(EntityTypeBuilder<CustomerProductPriceHistory> builder)
     {
         builder.HasKey(p => p.Id);
 

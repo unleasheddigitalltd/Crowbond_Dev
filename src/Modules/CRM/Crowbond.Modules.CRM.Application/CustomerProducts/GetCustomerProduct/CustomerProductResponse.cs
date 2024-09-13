@@ -14,5 +14,4 @@ public sealed record CustomerProductResponse
     public string? Comments { get; }
     public DateOnly EffectiveDate { get; }
     public DateOnly? ExpiryDate { get; }
-    public bool IsActive { get; }
 }

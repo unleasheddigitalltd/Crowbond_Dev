@@ -40,18 +40,28 @@ internal sealed class UpdateCustomerProductCommandHandler(
         {
             if (existingProductMap.TryGetValue(productDto.ProductId, out CustomerProduct existingProduct))
             {
-                // Update or add price to an existing product
-                Result result = existingProduct.Update(
-                    productDto.FixedPrice,
-                    productDto.FixedDiscount,
-                    productDto.Comments,
-                    productDto.EffectiveDate,
-                    productDto.ExpiryDate,
-                    dateTimeProvider.UtcNow);
-
-                if (result.IsFailure)
+                // Update or add price to an existing product that is changed.
+                if (existingProduct.FixedPrice != productDto.FixedPrice ||
+                    existingProduct.FixedDiscount != productDto.FixedDiscount ||
+                    existingProduct.Comments != productDto.Comments ||
+                    existingProduct.EffectiveDate != productDto.EffectiveDate ||
+                    existingProduct.ExpiryDate != productDto.ExpiryDate ||
+                    !existingProduct.IsActive)
                 {
-                    return result;
+                    Result<CustomerProductPriceHistory> result = existingProduct.Update(
+                        productDto.FixedPrice,
+                        productDto.FixedDiscount,
+                        productDto.Comments,
+                        productDto.EffectiveDate,
+                        productDto.ExpiryDate,
+                        dateTimeProvider.UtcNow);
+
+                    if (result.IsFailure)
+                    {
+                        return result;
+                    }
+
+                    customerProductRepository.InsertPriceHistory(result.Value);
                 }
             }
             else
@@ -79,7 +89,8 @@ internal sealed class UpdateCustomerProductCommandHandler(
         // Deactivate products that are no longer in the request
         foreach (CustomerProduct product in productsToDeactivate)
         {
-            product.Deactivate();
+            CustomerProductPriceHistory priceHistory = product.Deactivate(dateTimeProvider.UtcNow);
+            customerProductRepository.InsertPriceHistory(priceHistory);
         }
 
         // Commit all changes to the database

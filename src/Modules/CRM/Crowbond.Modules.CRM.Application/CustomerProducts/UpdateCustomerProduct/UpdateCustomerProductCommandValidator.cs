@@ -14,7 +14,6 @@ internal sealed class UpdateCustomerProductCommandValidator : AbstractValidator<
             products.RuleFor(p => p.FixedPrice).GreaterThan(0);
             products.RuleFor(p => p.FixedDiscount).GreaterThan(0).LessThanOrEqualTo(100);
             products.RuleFor(p => p.Comments).MaximumLength(255);
-            products.RuleFor(p => p.EffectiveDate).NotNull();
         });
 
         RuleFor(p => p.CustomerProducts).Must(coll => coll.GroupBy(p => p.ProductId).Count() == coll.Count)

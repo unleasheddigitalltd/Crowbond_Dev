@@ -5,5 +5,5 @@ public sealed record CustomerProductRequest(
     decimal? FixedPrice,
     decimal? FixedDiscount,
     string? Comments,
-    DateOnly EffectiveDate,
+    DateOnly? EffectiveDate,
     DateOnly? ExpiryDate);

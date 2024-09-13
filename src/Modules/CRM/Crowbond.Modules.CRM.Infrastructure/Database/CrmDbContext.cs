@@ -54,7 +54,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<PriceTier> PriceTiers { get; set; }
     internal DbSet<ProductPrice> ProductPrices { get; set; }
     internal DbSet<CustomerProduct> CustomerProducts { get; set; }
-    internal DbSet<CustomerProductPrice> CustomerProductPrices { get; set; }
+    internal DbSet<CustomerProductPriceHistory> CustomerProductPriceHistory { get; set; }
     internal DbSet<CustomerOutletRoute> CustomerOutletRoutes { get; set; }
     internal DbSet<Route> Routes { get; set; }
     internal DbSet<SupplierProduct> SupplierProducts { get; set; }
@@ -82,7 +82,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new PriceTierConfiguration());
         modelBuilder.ApplyConfiguration(new ProductPriceConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerProductConfiguration());
-        modelBuilder.ApplyConfiguration(new CustomerProductPriceConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerProductPriceHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerOutletConfiguration());
         modelBuilder.ApplyConfiguration(new RouteConfiguration());
         modelBuilder.ApplyConfiguration(new SupplierProductConfiguration());

@@ -28,11 +28,10 @@ internal sealed class GetCustomerProductsQueryHandler(IDbConnectionFactory dbCon
                  cp.fixed_discount AS {nameof(CustomerProductResponse.FixedDiscount)},
                  cp.comments AS {nameof(CustomerProductResponse.Comments)},
                  cp.effective_date AS {nameof(CustomerProductResponse.EffectiveDate)},
-                 cp.expiry_date AS {nameof(CustomerProductResponse.ExpiryDate)},
-                 cp.is_active AS {nameof(CustomerProductResponse.IsActive)}
+                 cp.expiry_date AS {nameof(CustomerProductResponse.ExpiryDate)}
              FROM crm.customer_products cp
              INNER JOIN crm.products p ON cp.product_id = p.id
-             WHERE cp.customer_id = @CustomerId AND cp.is_deleted = false
+             WHERE cp.customer_id = @CustomerId AND cp.is_active = true
              """;
 
         List<CustomerProductResponse> customerProducts = (await connection.QueryAsync<CustomerProductResponse>(sql, request)).AsList();
