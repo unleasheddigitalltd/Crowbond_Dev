@@ -36,6 +36,7 @@ using Crowbond.Modules.OMS.Infrastructure.Authentication;
 using Crowbond.Modules.OMS.Application.Abstractions.Authentication;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Crowbond.Common.Infrastructure.AuditEntity;
+using Crowbond.Modules.OMS.Application.Carts;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -85,7 +86,10 @@ public static class OmsModule
         services.AddScoped<IDeliveryImageRepository, DeliveryImageRepository>();
         services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
 
+        services.AddSingleton<CartService>();
+
         services.AddScoped<IDriverContext, DriverContext>();
+        services.AddScoped<IContactContext, CustomerContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
         services.ConfigureOptions<ConfigureProcessOutboxJob>();

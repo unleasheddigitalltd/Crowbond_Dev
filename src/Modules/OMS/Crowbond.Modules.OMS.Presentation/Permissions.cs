@@ -25,4 +25,8 @@ internal static class Permissions
 
     internal const string ModifyRouteTriplogs = "route-trip-log:update";
     internal const string ModifyOtherRouteTripLogs = "route-trip-log:update:other";
+
+    internal const string GetCart = "carts:read";
+    internal const string AddToCart = "carts:add";
+    internal const string RemoveFromCart = "carts:remove";
 }

@@ -1,24 +1,23 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.Ticketing.Application.Abstractions.Authentication;
-using Crowbond.Modules.Ticketing.Presentation;
-using Crowbond.Modules.Ticketing.Application.Carts.RemoveItemFromCart;
+using Crowbond.Modules.OMS.Application.Abstractions.Authentication;
+using Crowbond.Modules.OMS.Application.Carts.RemoveItemFromCart;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Crowbond.Modules.Ticketing.Presentation.Carts;
+namespace Crowbond.Modules.OMS.Presentation.Carts;
 
 internal sealed class RemoveFromCart : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("carts/remove", async (Request request, ICustomerContext customerContext, ISender sender) =>
+        app.MapPut("carts/remove", static async (Request request, IContactContext contactContext, ISender sender) =>
         {
             Result result = await sender.Send(
-                new RemoveItemFromCartCommand(customerContext.CustomerId, request.TicketTypeId));
+                new RemoveItemFromCartCommand(contactContext.ContactId, request.ProductId));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
@@ -28,6 +27,6 @@ internal sealed class RemoveFromCart : IEndpoint
 
     internal sealed class Request
     {
-        public Guid TicketTypeId { get; init; }
+        public Guid ProductId { get; init; }
     }
 }

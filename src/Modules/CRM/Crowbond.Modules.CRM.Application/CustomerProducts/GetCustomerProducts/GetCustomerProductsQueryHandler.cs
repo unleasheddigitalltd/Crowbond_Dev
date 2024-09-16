@@ -4,7 +4,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProduct;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
 
 internal sealed class GetCustomerProductsQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetCustomerProductsQuery, IReadOnlyCollection<CustomerProductResponse>>
