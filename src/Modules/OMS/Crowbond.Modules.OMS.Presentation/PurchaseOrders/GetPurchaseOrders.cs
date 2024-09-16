@@ -13,7 +13,7 @@ internal sealed class GetPurchaseOrders : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("purchaseorders", async (
+        app.MapGet("purchase-orders", async (
             ISender sender,
             string search = "",
             string sort = "createddate",

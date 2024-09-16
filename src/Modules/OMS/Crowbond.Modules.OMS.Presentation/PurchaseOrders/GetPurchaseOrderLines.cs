@@ -13,7 +13,7 @@ internal sealed class GetPurchaseOrderLines : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("purchase-order/{id}/lines", async (Guid id, ISender sender) =>
+        app.MapGet("purchase-orders/{id}/lines", async (Guid id, ISender sender) =>
         {
             Result<IReadOnlyCollection<PurchaseOrderLineResponse>> result = await sender.Send(new GetPurchaseOrderLinesQuery(id));
 
