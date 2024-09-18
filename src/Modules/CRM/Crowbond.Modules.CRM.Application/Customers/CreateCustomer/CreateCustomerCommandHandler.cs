@@ -42,10 +42,8 @@ internal sealed class CreateCustomerCommandHandler(
             return Result.Failure<Guid>(CustomerErrors.SequenceNotFound());
         }
 
-        sequence.IncreaseSequence();
-
         Result<Customer> result = Customer.Create(
-             accountNumber: $"CUS-{sequence.LastNumber}",
+             accountNumber: sequence.GetNumber(),
              businessName: request.Customer.BusinessName,
              billingAddressLine1: request.Customer.BillingAddressLine1,
              billingAddressLine2: request.Customer.BillingAddressLine2,

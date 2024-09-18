@@ -20,9 +20,8 @@ internal sealed class CreateSupplierCommandHandler(
             return Result.Failure<Guid>(SupplierErrors.SequenceNotFound());
         }
 
-        sequence.IncreaseSequence();
         Result<Supplier> result = Supplier.Create(
-             accountNumber: $"SUP-{sequence.LastNumber}",
+             accountNumber: sequence.GetNumber(),
              supplierName: request.Supplier.SupplierName,
              addressLine1: request.Supplier.AddressLine1,
              addressLine2: request.Supplier.AddressLine2,
