@@ -40,7 +40,15 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                              ELSE 
                                  pp.sale_price
                          END
-                 END AS {nameof(CustomerProductPriceResponse.UnitPrice)}
+                 END AS {nameof(CustomerProductPriceResponse.UnitPrice)},
+                 CASE 
+                     WHEN cp.fixed_price IS NOT NULL             
+                        AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                        AND cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                        THEN TRUE
+                     ELSE FALSE
+                 END AS {nameof(CustomerProductPriceResponse.IsFixedPrice)},
+                 p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)}
              FROM crm.customer_products cp
              INNER JOIN crm.products p ON cp.product_id = p.id
              INNER JOIN crm.customers c ON cp.customer_id = c.id
@@ -48,7 +56,7 @@ internal sealed class GetCustomerProductPriceQueryHandler(
              INNER JOIN crm.product_prices pp ON pp.price_tier_id = pt.id AND pp.product_id = p.id
              WHERE c.id = @CustomerId 
                AND p.id = @ProductId 
-               AND cp.is_active = true
+               AND cp.is_active = true;
              """;
 
         CustomerProductPriceResponse? customerProductPrice = await connection.QuerySingleOrDefaultAsync<CustomerProductPriceResponse>(sql, request);

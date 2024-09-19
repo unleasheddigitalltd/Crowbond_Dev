@@ -2,5 +2,5 @@
 
 namespace Crowbond.Modules.OMS.Application.Carts.AddItemToCart;
 
-public sealed record AddItemToCartCommand(Guid ContactId, Guid ProductId, decimal Quantity)
+public sealed record AddItemToCartCommand(Guid ContactId, Guid ProductId, decimal Qty)
     : ICommand;

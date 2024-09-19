@@ -27,6 +27,7 @@ internal sealed class CustomerProductApi(ISender sender) : ICustomerProductApi
                 result.Value.CategoryId,
                 result.Value.CategoryName,
                 result.Value.UnitPrice,
+                result.Value.IsFixedPrice,
                 result.Value.TaxRateType);
     }
 }

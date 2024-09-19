@@ -10,22 +10,21 @@ public sealed class OrderHeaderConfiguratin : IEntityTypeConfiguration<OrderHead
     public void Configure(EntityTypeBuilder<OrderHeader> builder)
     {
         builder.HasKey(o => o.Id);
-        builder.Property(o => o.OrderNumber).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.OrderNumber).HasMaxLength(100);
         builder.Property(o => o.PurchaseOrderNumber).HasMaxLength(100);
-        builder.Property(o => o.CustomerBusinessName).IsRequired().HasMaxLength(100);
-        builder.Property(o => o.DeliveryLocationName).IsRequired().HasMaxLength(100);
-        builder.Property(o => o.DeliveryFullName).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.CustomerBusinessName).HasMaxLength(100);
+        builder.Property(o => o.DeliveryLocationName).HasMaxLength(100);
+        builder.Property(o => o.DeliveryFullName).HasMaxLength(100);
         builder.Property(o => o.DeliveryEmail).HasMaxLength(255);
-        builder.Property(o => o.DeliveryPhone).IsRequired().HasMaxLength(20);
+        builder.Property(o => o.DeliveryPhone).HasMaxLength(20);
         builder.Property(o => o.DeliveryMobile).HasMaxLength(20);
         builder.Property(o => o.DeliveryNotes).HasMaxLength(500);
-        builder.Property(o => o.DeliveryAddressLine1).IsRequired().HasMaxLength(255);
+        builder.Property(o => o.DeliveryAddressLine1).HasMaxLength(255);
         builder.Property(o => o.DeliveryAddressLine2).HasMaxLength(255);
-        builder.Property(o => o.DeliveryTownCity).IsRequired().HasMaxLength(100);
-        builder.Property(o => o.DeliveryCounty).IsRequired().HasMaxLength(100);
+        builder.Property(o => o.DeliveryTownCity).HasMaxLength(100);
+        builder.Property(o => o.DeliveryCounty).HasMaxLength(100);
         builder.Property(o => o.DeliveryCountry).HasMaxLength(100);
-        builder.Property(o => o.DeliveryPostalCode).IsRequired().HasMaxLength(20);
-        builder.Property(o => o.RouteTripId).IsRequired(false);
+        builder.Property(o => o.DeliveryPostalCode).HasMaxLength(20);
         builder.Property(o => o.DeliveryCharge).HasPrecision(10, 2);
         builder.Property(o => o.OrderAmount).HasPrecision(10, 2);
         builder.Property(o => o.OrderTax).HasPrecision(10, 2);

@@ -8,7 +8,7 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
 {
     public async Task<OrderHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.OrderHeaders.SingleOrDefaultAsync(o => o.Id == id, cancellationToken);
+        return await context.OrderHeaders.Include(o => o.Lines).SingleOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
     public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
@@ -16,9 +16,13 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
         return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Order, cancellationToken);
     }
 
-    public void InsertOrderHeader(OrderHeader orderHeader)
+    public void Insert(OrderHeader orderHeader)
     {
         context.OrderHeaders.Add(orderHeader);
     }
 
+    public void AddLine(OrderLine line)
+    {
+        context.OrderLines.Add(line);
+    }
 }

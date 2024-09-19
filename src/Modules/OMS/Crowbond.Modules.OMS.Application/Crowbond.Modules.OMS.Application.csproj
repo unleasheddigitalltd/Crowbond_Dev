@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Compile Remove="Orders\**" />
-    <EmbeddedResource Remove="Orders\**" />
-    <None Remove="Orders\**" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Application\Crowbond.Common.Application.csproj" />
     <ProjectReference Include="..\..\CRM\Crowbond.Modules.CRM.PublicApi\Crowbond.Modules.CRM.PublicApi.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Orders\GetOrders\" />
   </ItemGroup>
 </Project>

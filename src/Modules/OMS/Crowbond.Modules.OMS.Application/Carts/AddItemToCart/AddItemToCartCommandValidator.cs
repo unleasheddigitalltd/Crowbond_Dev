@@ -8,6 +8,6 @@ internal sealed class AddItemToCartCommandValidator : AbstractValidator<AddItemT
     {
         RuleFor(c => c.ContactId).NotEmpty();
         RuleFor(c => c.ProductId).NotEmpty();
-        RuleFor(c => c.Quantity).GreaterThan(decimal.Zero);
+        RuleFor(c => c.Qty).GreaterThan(decimal.Zero);
     }
 }

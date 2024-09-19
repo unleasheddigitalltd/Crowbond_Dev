@@ -1,10 +1,14 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Payments;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public sealed class OrderHeader : Entity
 {
+    private readonly List<OrderLine> _lines = new();
+
     private OrderHeader()
     {        
     }
@@ -33,7 +37,7 @@ public sealed class OrderHeader : Entity
 
     public string DeliveryAddressLine1 { get; private set; }
 
-    public string DeliveryAddressLine2 { get; private set; }
+    public string? DeliveryAddressLine2 { get; private set; }
 
     public string DeliveryTownCity { get; private set; }
 
@@ -59,7 +63,11 @@ public sealed class OrderHeader : Entity
 
     public PaymentStatus PaymentStatus { get; private set; }
 
+    public PaymentTerm PaymentTerm { get; private set; }
+
     public PaymentMethod PaymentMethod { get; private set; }
+
+    public DateOnly? PaymentDueDate { get; private set; }
 
     public string? CustomerComment { get; private set; }
 
@@ -70,6 +78,8 @@ public sealed class OrderHeader : Entity
     public string? Tags { get; private set; }
 
     public OrderStatus Status { get; private set; }
+
+    public IReadOnlyCollection<OrderLine> Lines => _lines;
 
     public static Result<OrderHeader> Create(
         string orderNumber,
@@ -83,7 +93,7 @@ public sealed class OrderHeader : Entity
         string? deliveryMobile,
         string? deliveryNotes,
         string deliveryAddressLine1,
-        string deliveryAddressLine2,
+        string? deliveryAddressLine2,
         string deliveryTownCity,
         string deliveryCounty,
         string? deliveryCountry,
@@ -91,15 +101,18 @@ public sealed class OrderHeader : Entity
         DateOnly shippingDate,
         DeliveryMethod deliveryMethod,
         decimal deliveryCharge,
-        decimal orderAmount,
-        decimal orderTax,
-        PaymentStatus paymentStatus,
+        PaymentTerm paymentTerm,
         PaymentMethod paymentMethod,
         string? customerComment,
-        string? originalSource,
-        string? externalOrderRef,
-        string? tags)
+        DateTime utcNow)
     {
+        var today = DateOnly.FromDateTime(utcNow);
+
+        if (shippingDate <= today)
+        {
+            return Result.Failure<OrderHeader>(OrderErrors.InvalidShippingDateError);
+        }
+
         var orderHeader = new OrderHeader
         {
             Id = Guid.NewGuid(),
@@ -122,77 +135,76 @@ public sealed class OrderHeader : Entity
             ShippingDate = shippingDate,
             DeliveryMethod = deliveryMethod,
             DeliveryCharge = deliveryCharge,
-            OrderAmount = orderAmount,
-            OrderTax = orderTax,
-            PaymentStatus = paymentStatus,
+            OrderAmount = 0,
+            OrderTax = 0,
+            PaymentStatus = PaymentStatus.Unpaid,
+            PaymentTerm = paymentTerm,
             PaymentMethod = paymentMethod,
             CustomerComment = customerComment,
-            OriginalSource = originalSource,
-            ExternalOrderRef = externalOrderRef,
-            Tags = tags,
             Status = OrderStatus.Pending
         };
 
         return orderHeader;
     }
 
-    public void Update(
-        string? purchaseOrderNumber,
-        Guid customerId,
-        string customerBusinessName,
-        string deliveryLocationName,
-        string deliveryFullName,
-        string? deliveryEmail,
-        string deliveryPhone,
-        string? deliveryMobile,
-        string? deliveryNotes,
-        string deliveryAddressLine1,
-        string deliveryAddressLine2,
-        string deliveryTownCity,
-        string deliveryCounty,
-        string? deliveryCountry,
-        string deliveryPostalCode,
-        DateOnly shippingDate,
-        Guid? routeTripId,
-        string? routeName,
-        DeliveryMethod deliveryMethod,
-        decimal deliveryCharge,
-        decimal orderAmount,
-        decimal orderTax,
-        PaymentStatus paymentStatus,
-        PaymentMethod paymentMethod,
-        string? customerComment,
-        string? originalSource,
-        string? externalOrderRef,
-        string? tags)
+    public OrderLine AddLine(
+        Guid productId,
+        string productSku,
+        string productName,
+        string unitOfMeasureName,
+        decimal unitPrice,
+        decimal qty,
+        TaxRateType taxRateType)
     {
-        PurchaseOrderNumber = purchaseOrderNumber;
-        CustomerId = customerId;
-        CustomerBusinessName = customerBusinessName;
-        DeliveryLocationName = deliveryLocationName;
-        DeliveryFullName = deliveryFullName;
-        DeliveryEmail = deliveryEmail;
-        DeliveryPhone = deliveryPhone;
-        DeliveryMobile = deliveryMobile;
-        DeliveryNotes = deliveryNotes;
-        DeliveryAddressLine1 = deliveryAddressLine1;
-        DeliveryAddressLine2 = deliveryAddressLine2;
-        DeliveryTownCity = deliveryTownCity;
-        DeliveryCounty = deliveryCounty;
-        DeliveryCountry = deliveryCountry;
-        DeliveryPostalCode = deliveryPostalCode;
-        ShippingDate = shippingDate;
-        RouteTripId = routeTripId;
-        RouteName = routeName;
-        DeliveryMethod = deliveryMethod;
-        DeliveryCharge = deliveryCharge;
-        OrderAmount = orderAmount;
-        OrderTax = orderTax;
-        PaymentStatus = paymentStatus;
-        PaymentMethod = paymentMethod;
-        CustomerComment = customerComment;
-        OriginalSource = originalSource;
-        ExternalOrderRef = externalOrderRef;
-        Tags = tags;
+        var line = OrderLine.Create(
+            productId,
+            productSku,
+            productName,
+            unitOfMeasureName,
+            unitPrice,
+            qty,
+            taxRateType);
+
+        _lines.Add(line);
+        UpdateTotalAmount();
+
+        return line;
+    }
+
+    public void UpdateTotalAmount()
+    {
+        OrderTax = _lines.Sum(line => line.Tax);
+        OrderAmount = _lines.Sum(line => line.LineTotal) + DeliveryCharge;
+    }
+
+    public void Deliver(DateTime utcNow)
+    {
+        var deliveryDate = DateOnly.FromDateTime(utcNow);
+        // set payment due date
+        PaymentDueDate = PaymentTerm switch
+        {
+            PaymentTerm.ShortTerm => deliveryDate.AddDays(7),
+            PaymentTerm.StandardTerm => GetStandardPaymentDate(deliveryDate),
+            PaymentTerm.LongTerm => deliveryDate.AddDays(28),
+            _ => throw new NotImplementedException()
+        };
+
+        Status = OrderStatus.Delivered;
+    }
+
+    private static DateOnly GetStandardPaymentDate(DateOnly deliveryDate)
+    {
+        // Get the year and month from the delivery date
+        int year = deliveryDate.Year;
+        int month = deliveryDate.Month;
+
+        // Find the last day of the month
+        int lastDayOfMonth = DateTime.DaysInMonth(year, month);
+        var monthEndDate = new DateOnly(year, month, lastDayOfMonth);
+
+        // Add 14 days to the last day of the month
+        DateOnly result = monthEndDate.AddDays(14);
+
+        return result;
     }
 }

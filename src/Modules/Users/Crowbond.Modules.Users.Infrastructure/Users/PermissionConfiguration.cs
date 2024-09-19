@@ -128,6 +128,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Customer, Permission.GetCart),
                     CreateRolePermission(Role.Customer, Permission.AddToCart),
                     CreateRolePermission(Role.Customer, Permission.RemoveFromCart),
+                    CreateRolePermission(Role.Customer, Permission.GetOrders),
+                    CreateRolePermission(Role.Customer, Permission.CreateOrder),
 
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
@@ -140,8 +142,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyTicketTypes),
                     CreateRolePermission(Role.Administrator, Permission.GetCategories),
                     CreateRolePermission(Role.Administrator, Permission.ModifyCategories),
-                    CreateRolePermission(Role.Administrator, Permission.GetOrders),
-                    CreateRolePermission(Role.Administrator, Permission.CreateOrder),
                     CreateRolePermission(Role.Administrator, Permission.GetTickets),
                     CreateRolePermission(Role.Administrator, Permission.CheckInTicket),
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),

@@ -56,7 +56,7 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
 
     public decimal PurchaseOrderTax { get; private set; }
 
-    public DeliveryMethod? DeliveryMethod { get; private set; }
+    public DeliveryType? DeliveryMethod { get; private set; }
 
     public decimal DeliveryCharge { get; private set; }
 
@@ -217,7 +217,7 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
     DateOnly requiredDate,
     DateOnly? expectedShippingDate,
     string? supplierReference,
-    DeliveryMethod? deliveryMethod,
+    DeliveryType? deliveryMethod,
     decimal deliveryCharge,
     PaymentMethod paymentMethod,
     string? purchaseOrderNotes,

@@ -17,7 +17,5 @@ public sealed class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
         builder.Property(o => o.SubTotal).IsRequired().HasPrecision(10, 2);
         builder.Property(o => o.Tax).IsRequired().HasPrecision(5, 2);
         builder.Property(o => o.LineTotal).IsRequired().HasPrecision(10, 2);
-
-        builder.HasOne<OrderHeader>().WithMany().HasForeignKey(x => x.OrderId);
     }
 }

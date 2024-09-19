@@ -6,18 +6,18 @@ using Crowbond.Modules.OMS.Domain.Customers;
 namespace Crowbond.Modules.OMS.Application.Carts.GetCart;
 
 internal sealed class GetCartQueryHandler(
-    ICustomerContactApi customerContactApi,
+    ICustomerApi customerApi,
     CartService cartService) : IQueryHandler<GetCartQuery, Cart>
 {
     public async Task<Result<Cart>> Handle(GetCartQuery request, CancellationToken cancellationToken)
     {
-        CustomerContactResponse customerContact = await customerContactApi.GetAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
 
-        if (customerContact is null)
+        if (customer is null)
         {
-            return Result.Failure<Cart>(CustomerErrors.ContactNotFound(request.ContactId));
+            return Result.Failure<Cart>(CustomerErrors.NotFound(request.ContactId));
         }
 
-        return await cartService.GetAsync(customerContact.CustomerId, cancellationToken);
+        return await cartService.GetAsync(customer.Id, cancellationToken);
     }
 }

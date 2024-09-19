@@ -20,7 +20,7 @@ internal sealed class AddItemToCart : IEndpoint
                 new AddItemToCartCommand(
                     contactContext.ContactId,
                     request.ProductId,
-                    request.Quantity));
+                    request.Qty));
 
             return results.Match(() => Results.Ok(), ApiResults.Problem);
         })
@@ -28,5 +28,5 @@ internal sealed class AddItemToCart : IEndpoint
             .WithTags(Tags.Carts);
     }
 
-    private sealed record Request(Guid ProductId, decimal Quantity);
+    private sealed record Request(Guid ProductId, decimal Qty);
 }

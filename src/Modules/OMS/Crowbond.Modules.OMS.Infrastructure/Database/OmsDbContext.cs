@@ -23,6 +23,8 @@ using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Common.Infrastructure.Configuration;
+using Crowbond.Modules.OMS.Domain.Settings;
+using Crowbond.Modules.OMS.Infrastructure.Settings;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
@@ -43,6 +45,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<DeliveryImage> DeliveryImages { get; set; }
     internal DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
     internal DbSet<PurchaseOrderStatusHistory> PurchaseOrderStatusHistories { get; set; }
+    internal DbSet<Setting> Settings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,5 +72,6 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new DeliveryImageConfiguration());
         modelBuilder.ApplyConfiguration(new OrderStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new PurchaseOrderStatusHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new SettingConfiguration());
     }
 }

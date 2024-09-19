@@ -269,7 +269,6 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnName("delivery_address_line1");
 
                     b.Property<string>("DeliveryAddressLine2")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("delivery_address_line2");
@@ -365,6 +364,10 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("original_source");
 
+                    b.Property<DateOnly?>("PaymentDueDate")
+                        .HasColumnType("date")
+                        .HasColumnName("payment_due_date");
+
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("integer")
                         .HasColumnName("payment_method");
@@ -372,6 +375,10 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("integer")
                         .HasColumnName("payment_status");
+
+                    b.Property<int>("PaymentTerm")
+                        .HasColumnType("integer")
+                        .HasColumnName("payment_term");
 
                     b.Property<string>("PurchaseOrderNumber")
                         .HasMaxLength(100)
@@ -415,18 +422,14 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<bool>("FOC")
-                        .HasColumnType("boolean")
-                        .HasColumnName("foc");
-
                     b.Property<decimal>("LineTotal")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("line_total");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("OrderHeaderId")
                         .HasColumnType("uuid")
-                        .HasColumnName("order_id");
+                        .HasColumnName("order_header_id");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
@@ -463,9 +466,9 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(5,2)")
                         .HasColumnName("tax");
 
-                    b.Property<bool>("Taxable")
-                        .HasColumnType("boolean")
-                        .HasColumnName("taxable");
+                    b.Property<int>("TaxRateType")
+                        .HasColumnType("integer")
+                        .HasColumnName("tax_rate_type");
 
                     b.Property<string>("UnitOfMeasureName")
                         .IsRequired()
@@ -481,8 +484,8 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_order_lines");
 
-                    b.HasIndex("OrderId")
-                        .HasDatabaseName("ix_order_lines_order_id");
+                    b.HasIndex("OrderHeaderId")
+                        .HasDatabaseName("ix_order_lines_order_header_id");
 
                     b.ToTable("order_lines", "oms");
                 });
@@ -1026,6 +1029,43 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Settings.Setting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
+                    b.Property<decimal>("DeliveryCharge")
+                        .HasColumnType("numeric")
+                        .HasColumnName("delivery_charge");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.HasKey("Id")
+                        .HasName("pk_settings");
+
+                    b.ToTable("settings", "oms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("037b725f-2110-40f8-a1b3-06ca5722cb83"),
+                            DeliveryCharge = 10m,
+                            IsDeleted = false
+                        });
+                });
+
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Deliveries.Delivery", b =>
                 {
                     b.HasOne("Crowbond.Modules.OMS.Domain.RouteTripLogDatails.RouteTripLogDatail", null)
@@ -1058,11 +1098,11 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderLine", b =>
                 {
                     b.HasOne("Crowbond.Modules.OMS.Domain.Orders.OrderHeader", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
+                        .WithMany("Lines")
+                        .HasForeignKey("OrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_lines_order_headers_order_id");
+                        .HasConstraintName("fk_order_lines_order_headers_order_header_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderStatusHistory", b =>
@@ -1147,6 +1187,11 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_route_trip_status_histories_route_trips_route_trip_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderHeader", b =>
+                {
+                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.PurchaseOrders.PurchaseOrderHeader", b =>

@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Domain;
+﻿using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
@@ -10,7 +10,7 @@ public sealed class OrderLine
 
     public Guid Id { get; private set; }
 
-    public Guid OrderId { get; private set; }
+    public Guid OrderHeaderId { get; private set; }
 
     public Guid ProductId { get; private set; }
 
@@ -30,44 +30,55 @@ public sealed class OrderLine
 
     public decimal LineTotal { get; private set; }
 
-    public bool FOC { get; private set; }
-
-    public bool Taxable { get; private set; }
+    public TaxRateType TaxRateType { get; private set; } 
 
     public OrderLineStatus Status { get; private set; }
 
-    public static Result<OrderLine> Create(
-        Guid orderId,
+    internal static OrderLine Create(
         Guid productId,
         string productSku,
         string productName,
         string unitOfMeasureName,
         decimal unitPrice,
-        int qty,
-        decimal subTotal,
-        decimal tax,
-        decimal lineTotal,
-        bool foc,
-        bool taxable)
+        decimal qty,
+        TaxRateType taxRateType)
     {
         var orderLine = new OrderLine
         {
             Id = Guid.NewGuid(),
-            OrderId = orderId,
             ProductId = productId,
             ProductSku = productSku,
             ProductName = productName,
             UnitOfMeasureName = unitOfMeasureName,
             UnitPrice = unitPrice,
+            TaxRateType = taxRateType,
             Qty = qty,
-            SubTotal = subTotal,
-            Tax = tax,
-            LineTotal = lineTotal,
-            FOC = foc,
-            Taxable = taxable,
             Status = OrderLineStatus.Pending
         };
 
+        orderLine.SubTotal = orderLine.UnitPrice * orderLine.Qty;
+        orderLine.Tax = orderLine.SubTotal * orderLine.GetTaxRate(orderLine.TaxRateType);
+        orderLine.LineTotal = orderLine.SubTotal + orderLine.Tax;
+
         return orderLine;
+    }
+
+    internal void Update(decimal qty)
+    {
+        Qty = qty;
+        SubTotal = UnitPrice * Qty;
+        Tax = SubTotal * GetTaxRate(TaxRateType);
+        LineTotal = SubTotal + Tax;
+    }
+
+    private decimal GetTaxRate(TaxRateType taxRateType)
+    {
+        return taxRateType switch
+        {
+            TaxRateType.VatOnIncome => 0.2m,
+            TaxRateType.NoVat => 0,
+            TaxRateType.ZeroRatedIncome => 0,
+            _ => 0
+        };
     }
 }

@@ -7,19 +7,19 @@ namespace Crowbond.Modules.OMS.Application.Carts.ClearCart;
 
 internal sealed class ClearCartCommandHandler(
     CartService cartService,
-    ICustomerContactApi customerContactApi)
+    ICustomerApi customerApi)
     : ICommandHandler<ClearCartCommand>
 {
     public async Task<Result> Handle(ClearCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerContactResponse customerContact = await customerContactApi.GetAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
 
-        if (customerContact is null)
+        if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.ContactNotFound(request.ContactId));
+            return Result.Failure<Guid>(CustomerErrors.NotFound(request.ContactId));
         }
 
-        await cartService.ClearAsync(customerContact.CustomerId, cancellationToken);
+        await cartService.ClearAsync(customer.Id, cancellationToken);
 
         return Result.Success();
     }

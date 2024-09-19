@@ -6,20 +6,20 @@ using Crowbond.Modules.OMS.Domain.Customers;
 namespace Crowbond.Modules.OMS.Application.Carts.RemoveItemFromCart;
 
 internal sealed class RemoveItemFromCartCommandHandler(
-    ICustomerContactApi customerContactApi,
+    ICustomerApi customerApi,
     CartService cartService)
     : ICommandHandler<RemoveItemFromCartCommand>
 {
     public async Task<Result> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerContactResponse customerContact = await customerContactApi.GetAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
 
-        if (customerContact is null)
+        if (customer is null)
         {
-            return Result.Failure<Cart>(CustomerErrors.ContactNotFound(request.ContactId));
+            return Result.Failure<Cart>(CustomerErrors.NotFound(request.ContactId));
         }
 
-        await cartService.RemoveItemAsync(customerContact.CustomerId, request.ProductId, cancellationToken);
+        await cartService.RemoveItemAsync(customer.Id, request.ProductId, cancellationToken);
 
         return Result.Success();
     }

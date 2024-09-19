@@ -7,35 +7,42 @@ using Crowbond.Modules.OMS.Domain.Customers;
 namespace Crowbond.Modules.OMS.Application.Carts.AddItemToCart;
 
 internal sealed class AddItemToCartCommandHandler(
-    ICustomerContactApi customerApi,
+    ICustomerApi customerApi,
     ICustomerProductApi customerProductApi,
     CartService cartService)
     : ICommandHandler<AddItemToCartCommand>
 {
     public async Task<Result> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerContactResponse customerContact = await customerApi.GetAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
 
-        if (customerContact is null)
+        if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.ContactNotFound(request.ContactId));
+            return Result.Failure<Guid>(CustomerErrors.NotFound(request.ContactId));
         }
 
-        CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(customerContact.CustomerId, request.ProductId, cancellationToken);
+        CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(customer.Id, request.ProductId, cancellationToken);
 
         if (customerProduct is null)
         {
-            return Result.Failure<Guid>(CustomerProductErrors.NotFound(customerContact.CustomerId, request.ProductId));
+            return Result.Failure<Guid>(CustomerProductErrors.NotFound(customer.Id, request.ProductId));
         }
+
+        decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?
+            customerProduct.UnitPrice :
+            customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
 
         var cartItem = new CartItem
         {
-            ProductId = request.ProductId,
-            Quantity = request.Quantity,
-            Price = customerProduct.UnitPrice,
+            ProductId = customerProduct.Id,
+            ProductName = customerProduct.ProductName,
+            ProductSku = customerProduct.ProductSku,
+            UnitOfMeasureName = customerProduct.UnitOfMeasureName,
+            Qty = request.Qty,
+            UnitPrice = unitPrice,
         };
 
-        await cartService.AddItemAsync(customerContact.CustomerId, cartItem, cancellationToken);
+        await cartService.AddItemAsync(customer.Id, cartItem, cancellationToken);
 
         return Result.Success();
     }

@@ -107,7 +107,7 @@ public static class CrmModule
         services.AddScoped<ISupplierApi, SupplierApi>();
         services.AddScoped<ISupplierProductApi, SupplierProductsApi>();
 
-        services.AddScoped<ICustomerContactApi, CustomerApi>();
+        services.AddScoped<ICustomerApi, CustomerApi>();
         services.AddScoped<ICustomerProductApi, CustomerProductApi>();
 
         services.AddScoped<ICustomerFileAccess, CustomerFileAccess>();

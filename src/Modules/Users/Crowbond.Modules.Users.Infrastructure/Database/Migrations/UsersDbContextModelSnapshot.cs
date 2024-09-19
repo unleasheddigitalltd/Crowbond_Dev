@@ -571,6 +571,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "orders:read",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:create",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
                             PermissionCode = "users:read",
                             RoleName = "Administrator"
                         },
@@ -612,16 +622,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "categories:update",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:read",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:create",
                             RoleName = "Administrator"
                         },
                         new
