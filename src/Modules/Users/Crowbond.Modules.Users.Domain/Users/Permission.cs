@@ -12,8 +12,6 @@ public sealed class Permission
     public static readonly Permission ModifyTicketTypes = new("ticket-types:update");
     public static readonly Permission GetCategories = new("categories:read");
     public static readonly Permission ModifyCategories = new("categories:update");
-    public static readonly Permission GetOrders = new("orders:read");
-    public static readonly Permission CreateOrder = new("orders:create");
     public static readonly Permission GetTickets = new("tickets:read");
     public static readonly Permission CheckInTicket = new("tickets:check-in");
     public static readonly Permission GetEventStatistics = new("event-statistics:read");
@@ -89,6 +87,11 @@ public sealed class Permission
     public static readonly Permission GetCart = new("carts:read");
     public static readonly Permission AddToCart = new("carts:add");
     public static readonly Permission RemoveFromCart = new("carts:remove");
+    public static readonly Permission GetOrders = new("orders:read");
+    public static readonly Permission GetOwnOrders = new("orders:read:own");
+    public static readonly Permission CreateOrder = new("orders:create");
+
+
     public Permission(string code)
     {
         Code = code;

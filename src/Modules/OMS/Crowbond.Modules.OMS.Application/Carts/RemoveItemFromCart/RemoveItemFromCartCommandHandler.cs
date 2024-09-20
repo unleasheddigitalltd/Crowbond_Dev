@@ -19,7 +19,7 @@ internal sealed class RemoveItemFromCartCommandHandler(
             return Result.Failure<Cart>(CustomerErrors.NotFound(request.ContactId));
         }
 
-        await cartService.RemoveItemAsync(customer.Id, request.ProductId, cancellationToken);
+        await cartService.RemoveItemAsync(customer.Id, request.ProductId, request.Qty, cancellationToken);
 
         return Result.Success();
     }

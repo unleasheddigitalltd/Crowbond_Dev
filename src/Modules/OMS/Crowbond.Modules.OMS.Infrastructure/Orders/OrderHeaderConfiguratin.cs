@@ -10,8 +10,9 @@ public sealed class OrderHeaderConfiguratin : IEntityTypeConfiguration<OrderHead
     public void Configure(EntityTypeBuilder<OrderHeader> builder)
     {
         builder.HasKey(o => o.Id);
-        builder.Property(o => o.OrderNumber).HasMaxLength(100);
-        builder.Property(o => o.PurchaseOrderNumber).HasMaxLength(100);
+        builder.Property(o => o.OrderNo).HasMaxLength(20);
+        builder.Property(o => o.PurchaseOrderNo).HasMaxLength(20);
+        builder.Property(o => o.CustomerAccountNumber).HasMaxLength(20);
         builder.Property(o => o.CustomerBusinessName).HasMaxLength(100);
         builder.Property(o => o.DeliveryLocationName).HasMaxLength(100);
         builder.Property(o => o.DeliveryFullName).HasMaxLength(100);

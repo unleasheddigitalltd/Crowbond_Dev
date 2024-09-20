@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
+﻿namespace Crowbond.Modules.OMS.Domain.Products;
 
 public enum TaxRateType
 {

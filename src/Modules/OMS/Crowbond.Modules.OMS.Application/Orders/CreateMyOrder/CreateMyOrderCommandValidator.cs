@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
+namespace Crowbond.Modules.OMS.Application.Orders.CreateMyOrder;
 
-internal sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+internal sealed class CreateMyOrderCommandValidator : AbstractValidator<CreateMyOrderCommand>
 {
-    public CreateOrderCommandValidator()
+    public CreateMyOrderCommandValidator()
     {
         RuleFor(c => c.CustomerContactId).NotEmpty();
         RuleFor(c => c.CustomerOutletId).NotEmpty();

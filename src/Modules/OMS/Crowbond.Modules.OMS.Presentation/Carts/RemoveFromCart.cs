@@ -17,7 +17,10 @@ internal sealed class RemoveFromCart : IEndpoint
         app.MapPut("carts/remove", static async (Request request, IContactContext contactContext, ISender sender) =>
         {
             Result result = await sender.Send(
-                new RemoveItemFromCartCommand(contactContext.ContactId, request.ProductId));
+                new RemoveItemFromCartCommand(
+                    contactContext.ContactId,
+                    request.ProductId,
+                    request.Qty));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
@@ -25,8 +28,5 @@ internal sealed class RemoveFromCart : IEndpoint
         .WithTags(Tags.Carts);
     }
 
-    internal sealed class Request
-    {
-        public Guid ProductId { get; init; }
-    }
+    private sealed record Request(Guid ProductId, decimal Qty);
 }

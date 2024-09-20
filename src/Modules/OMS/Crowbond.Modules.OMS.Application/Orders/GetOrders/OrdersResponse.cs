@@ -14,10 +14,10 @@ public sealed record Order(
     Guid Id,
     Guid CustomerId,
     string OrderNo,
-    string AccountNo,
-    Guid BusinessName,
+    string CustomerAccountNumber,
+    string CustomerBusinessName,
     DateOnly ShippingDate,
     OrderStatus Status,
     decimal DeliveryCharge,
-    decimal TotalPrice);
+    decimal OrderAmount);
 

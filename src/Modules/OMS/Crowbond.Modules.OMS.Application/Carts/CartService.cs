@@ -45,7 +45,7 @@ public sealed class CartService(ICacheService cacheService)
         await cacheService.SetAsync(cacheKey, cart, DefaultExpiration, cancellationToken);
     }
 
-    public async Task RemoveItemAsync(Guid customerId, Guid productId, CancellationToken cancellationToken = default)
+    public async Task RemoveItemAsync(Guid customerId, Guid productId, decimal qty, CancellationToken cancellationToken = default)
     {
         string cacheKey = CreateCacheKey(customerId);
 
@@ -58,7 +58,19 @@ public sealed class CartService(ICacheService cacheService)
             return;
         }
 
-        cart.Items.Remove(cartItem);
+        if (cartItem.Qty < qty)
+        {
+            return;
+        }
+
+        if (cartItem.Qty == qty)
+        {
+            cart.Items.Remove(cartItem);
+        }
+        else
+        {
+            cartItem.Qty -= qty;
+        }
 
         await cacheService.SetAsync(cacheKey, cart, DefaultExpiration, cancellationToken);
     }

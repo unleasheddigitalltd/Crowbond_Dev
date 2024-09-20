@@ -1,4 +1,4 @@
-﻿using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+﻿using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 

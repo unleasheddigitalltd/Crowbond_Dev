@@ -48,7 +48,7 @@ internal sealed class GetPurchaseOrdersQueryHandler(IDbConnectionFactory dbConne
                     payment_status AS {nameof(PurchaseOrder.PaymentStatus)},
                     purchase_order_notes AS {nameof(PurchaseOrder.PurchaseOrderNotes)},
                     status AS {nameof(PurchaseOrder.Status)},
-                    create_date AS {nameof(PurchaseOrder.CreateDate)},
+                    created_on_utc AS {nameof(PurchaseOrder.CreateDate)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM oms.purchase_order_headers
                 WHERE

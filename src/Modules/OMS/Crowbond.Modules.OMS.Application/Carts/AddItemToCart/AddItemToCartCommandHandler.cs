@@ -34,7 +34,7 @@ internal sealed class AddItemToCartCommandHandler(
 
         var cartItem = new CartItem
         {
-            ProductId = customerProduct.Id,
+            ProductId = customerProduct.ProductId,
             ProductName = customerProduct.ProductName,
             ProductSku = customerProduct.ProductSku,
             UnitOfMeasureName = customerProduct.UnitOfMeasureName,

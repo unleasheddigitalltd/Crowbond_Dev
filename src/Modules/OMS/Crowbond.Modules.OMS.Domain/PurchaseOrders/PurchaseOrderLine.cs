@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 

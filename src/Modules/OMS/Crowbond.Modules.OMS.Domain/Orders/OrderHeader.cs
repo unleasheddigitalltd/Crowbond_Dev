@@ -1,11 +1,11 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Payments;
-using Crowbond.Modules.OMS.Domain.PurchaseOrders;
+using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
-public sealed class OrderHeader : Entity
+public sealed class OrderHeader : Entity, IAuditable
 {
     private readonly List<OrderLine> _lines = new();
 
@@ -15,11 +15,13 @@ public sealed class OrderHeader : Entity
 
     public Guid Id { get; private set; }
 
-    public string OrderNumber { get; private set; }
+    public string OrderNo { get; private set; }
 
-    public string? PurchaseOrderNumber { get; private set; }
+    public string? PurchaseOrderNo { get; private set; }
 
     public Guid CustomerId { get; private set; }
+
+    public string CustomerAccountNumber { get; private set; }
 
     public string CustomerBusinessName { get; private set; }
 
@@ -79,12 +81,21 @@ public sealed class OrderHeader : Entity
 
     public OrderStatus Status { get; private set; }
 
+    public Guid CreatedBy { get; set; }
+
+    public DateTime CreatedOnUtc { get; set; }
+
+    public Guid? LastModifiedBy { get; set; }
+
+    public DateTime? LastModifiedOnUtc { get; set; }
+
     public IReadOnlyCollection<OrderLine> Lines => _lines;
 
     public static Result<OrderHeader> Create(
-        string orderNumber,
-        string? purchaseOrderNumber,
+        string orderNo,
+        string? purchaseOrderNo,
         Guid customerId,
+        string customerAccountNumber,
         string customerBusinessName,
         string deliveryLocationName,
         string deliveryFullName,
@@ -116,9 +127,10 @@ public sealed class OrderHeader : Entity
         var orderHeader = new OrderHeader
         {
             Id = Guid.NewGuid(),
-            OrderNumber = orderNumber,
-            PurchaseOrderNumber = purchaseOrderNumber,
+            OrderNo = orderNo,
+            PurchaseOrderNo = purchaseOrderNo,
             CustomerId = customerId,
+            CustomerAccountNumber = customerAccountNumber,
             CustomerBusinessName = customerBusinessName,
             DeliveryLocationName = deliveryLocationName,
             DeliveryFullName = deliveryFullName,

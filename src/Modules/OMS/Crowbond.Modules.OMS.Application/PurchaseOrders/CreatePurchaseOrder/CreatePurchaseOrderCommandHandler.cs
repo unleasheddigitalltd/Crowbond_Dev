@@ -3,6 +3,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
+using Crowbond.Modules.OMS.Domain.Products;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Modules.OMS.Domain.SupplierProducts;
 using Crowbond.Modules.OMS.Domain.Suppliers;

@@ -10,18 +10,18 @@ using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Domain.Settings;
 
-namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
+namespace Crowbond.Modules.OMS.Application.Orders.CreateMyOrder;
 
-internal sealed class CreateOrderCommandHandler(
+internal sealed class CreateMyOrderCommandHandler(
     ICustomerApi customerApi,
     ISettingRepository settingRepository,
     CartService cartService,
     IOrderRepository orderRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateOrderCommand>
+    : ICommandHandler<CreateMyOrderCommand>
 {
-    public async Task<Result> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateMyOrderCommand request, CancellationToken cancellationToken)
     {
         if (!Enum.IsDefined(typeof(PaymentMethod), request.PaymentMethod))
         {
@@ -77,7 +77,7 @@ internal sealed class CreateOrderCommandHandler(
             DeliveryFeeSetting.Global => setting.DeliveryCharge,
             DeliveryFeeSetting.Custom => customer.DeliveryCharge,
             _ => throw new NotImplementedException()
-        };        
+        };
 
         Cart? cart = await cartService.GetAsync(customer.Id, cancellationToken);
 
@@ -98,6 +98,7 @@ internal sealed class CreateOrderCommandHandler(
             sequence.GetNumber(),
             null,
             customer.Id,
+            customer.AccountNumber,
             customer.BusinessName,
             outlet.LocationName,
             outlet.FullName,

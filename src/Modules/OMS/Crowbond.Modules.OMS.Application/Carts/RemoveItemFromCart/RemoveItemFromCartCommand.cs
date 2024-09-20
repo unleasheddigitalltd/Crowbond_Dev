@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.OMS.Application.Carts.RemoveItemFromCart;
 
-public sealed record RemoveItemFromCartCommand(Guid ContactId, Guid ProductId) : ICommand;
+public sealed record RemoveItemFromCartCommand(Guid ContactId, Guid ProductId, decimal Qty) : ICommand;

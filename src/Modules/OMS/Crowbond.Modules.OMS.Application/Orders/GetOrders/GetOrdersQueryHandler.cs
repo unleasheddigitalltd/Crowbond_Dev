@@ -18,8 +18,8 @@ internal sealed class GetOrdersQueryHandler(IDbConnectionFactory dbConnectionFac
         string orderByClause = request.Sort switch
         {
             "orderNo" => "order_no",
-            "accountNo" => "account_no",
-            "businessName" => "usiness_name",
+            "customerAccountNumber" => "customer_account_number",
+            "customerBusinessName" => "customer_business_name",
             "shippingDate" => "shipping_date",
             "status" => "status",
             _ => "order_no" // Default sorting
@@ -29,41 +29,41 @@ internal sealed class GetOrdersQueryHandler(IDbConnectionFactory dbConnectionFac
             WITH FilteredOrders AS (
                 SELECT
                     id AS {nameof(Order.Id)},
-                    id AS {nameof(Order.CustomerId)},
+                    customer_id AS {nameof(Order.CustomerId)},
                     order_no AS {nameof(Order.OrderNo)},
-                    account_no AS {nameof(Order.AccountNo)},
-                    business_name AS {nameof(Order.BusinessName)},
+                    customer_account_number AS {nameof(Order.CustomerAccountNumber)},
+                    customer_business_name AS {nameof(Order.CustomerBusinessName)},
                     shipping_date AS {nameof(Order.ShippingDate)},
                     status AS {nameof(Order.Status)},
                     delivery_charge AS {nameof(Order.DeliveryCharge)},
-                    total_price AS {nameof(Order.TotalPrice)},
+                    order_amount AS {nameof(Order.OrderAmount)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
-                FROM oms.orders p
+                FROM oms.order_headers
                 WHERE
-                    o.order_no ILIKE '%' || @Search || '%'
-                    OR c.account_no ILIKE '%' || @Search || '%'
-                    OR c.business_name ILIKE '%' || @Search || '%'
+                    order_no ILIKE '%' || @Search || '%'
+                    OR customer_account_number ILIKE '%' || @Search || '%'
+                    OR customer_business_name ILIKE '%' || @Search || '%'
             )
             SELECT 
                 {nameof(Order.Id)},
                 {nameof(Order.CustomerId)},
                 {nameof(Order.OrderNo)},
-                {nameof(Order.AccountNo)},
-                {nameof(Order.BusinessName)},
+                {nameof(Order.CustomerAccountNumber)},
+                {nameof(Order.CustomerBusinessName)},
                 {nameof(Order.ShippingDate)},
                 {nameof(Order.Status)},
                 {nameof(Order.DeliveryCharge)},
-                {nameof(Order.TotalPrice)}
+                {nameof(Order.OrderAmount)}
             FROM FilteredOrders
             WHERE RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size            
             ORDER BY RowNum;
 
             SELECT Count(*) 
-                FROM oms.orders p
-                WHERE
-                    o.order_no ILIKE '%' || @Search || '%'
-                    OR c.account_no ILIKE '%' || @Search || '%'
-                    OR c.business_name ILIKE '%' || @Search || '%'
+            FROM oms.order_headers
+            WHERE
+                order_no ILIKE '%' || @Search || '%'
+                OR customer_account_number ILIKE '%' || @Search || '%'
+                OR customer_business_name ILIKE '%' || @Search || '%'
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

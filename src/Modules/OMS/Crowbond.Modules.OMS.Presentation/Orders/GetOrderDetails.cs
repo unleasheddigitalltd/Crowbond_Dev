@@ -1,8 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.OMS.Application.Orders.GetOrder;
-using Crowbond.Modules.OMS.Application.Orders.GetOrders;
+using Crowbond.Modules.OMS.Application.Orders.GetOrderDetails;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -10,21 +9,13 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.OMS.Presentation.Orders;
 
-internal sealed class GetOrders : IEndpoint
+internal sealed class GetOrderDetails : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("orders", async (
-            ISender sender,
-            string search = "",
-            string sort = "orderNo",
-            string order = "desc",
-            int page = 0,
-            int size = 10
-            ) =>
+        app.MapGet("orders/{id}/details", async (Guid id, ISender sender) =>
         {
-            Result<OrdersResponse> result = await sender.Send(
-                new GetOrdersQuery(search, sort, order, page, size));
+            Result<OrderResponse> result = await sender.Send(new GetOrderDetailsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

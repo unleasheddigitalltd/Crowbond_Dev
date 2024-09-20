@@ -58,6 +58,7 @@ public static class InfrastructureConfiguration
 
         SqlMapper.AddTypeHandler(new GenericArrayHandler<string>());
         SqlMapper.AddTypeHandler(new TimeOnlyHandler());
+        SqlMapper.AddTypeHandler(new DateOnlyHandler());
 
         services.AddQuartz();
 

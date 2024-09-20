@@ -25,8 +25,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifyTicketTypes,
             Permission.GetCategories,
             Permission.ModifyCategories,
-            Permission.GetOrders,
-            Permission.CreateOrder,
             Permission.GetTickets,
             Permission.CheckInTicket,
             Permission.GetEventStatistics,
@@ -101,7 +99,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
             Permission.GetCart,
             Permission.AddToCart,
-            Permission.RemoveFromCart);
+            Permission.RemoveFromCart,
+            Permission.GetOrders,
+            Permission.GetOwnOrders,
+            Permission.CreateOrder);
 
 
         builder
@@ -128,7 +129,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Customer, Permission.GetCart),
                     CreateRolePermission(Role.Customer, Permission.AddToCart),
                     CreateRolePermission(Role.Customer, Permission.RemoveFromCart),
-                    CreateRolePermission(Role.Customer, Permission.GetOrders),
+                    CreateRolePermission(Role.Customer, Permission.GetOwnOrders),
                     CreateRolePermission(Role.Customer, Permission.CreateOrder),
 
                     // Admin permissions
@@ -216,7 +217,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                     CreateRolePermission(Role.Administrator, Permission.GetCart),
                     CreateRolePermission(Role.Administrator, Permission.AddToCart),
-                    CreateRolePermission(Role.Administrator, Permission.RemoveFromCart));
+                    CreateRolePermission(Role.Administrator, Permission.RemoveFromCart),
+                    CreateRolePermission(Role.Administrator, Permission.GetOrders));
             });
     }
 

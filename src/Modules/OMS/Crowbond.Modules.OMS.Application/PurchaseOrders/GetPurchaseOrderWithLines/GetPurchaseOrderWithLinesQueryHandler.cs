@@ -17,46 +17,53 @@ internal sealed class GetPurchaseOrderWithLinesQueryHandler(IDbConnectionFactory
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(PurchaseOrderResponse.Id)},          
-                 purchase_order_no AS {nameof(PurchaseOrderResponse.PurchaseOrderNo)},
-                 purchase_date AS {nameof(PurchaseOrderResponse.PurchaseDate)},
-                 supplier_name AS {nameof(PurchaseOrderResponse.SupplierName)},
-                 contact_full_name AS {nameof(PurchaseOrderResponse.ContactFullName)},
-                 contact_phone AS {nameof(PurchaseOrderResponse.ContactPhone)},
-                 contact_email AS {nameof(PurchaseOrderResponse.ContactEmail)},
-                 required_date AS {nameof(PurchaseOrderResponse.RequiredDate)},
-                 purchase_order_amount AS {nameof(PurchaseOrderResponse.PurchaseOrderAmount)},
-                 purchase_order_notes AS {nameof(PurchaseOrderResponse.PurchaseOrderNotes)},
-                 created_by AS {nameof(PurchaseOrderResponse.CreatedBy)},
-                 created_on_utc AS {nameof(PurchaseOrderResponse.CreatedOnUtc)}
-             FROM oms.purchase_order_headers
-             WHERE id = @PurchaseOrderHeaderId;
-
-             SELECT
-                 l.id AS {nameof(PurchaseOrderLineResponse.Id)},
+                 p.id AS {nameof(PurchaseOrderResponse.Id)},          
+                 p.purchase_order_no AS {nameof(PurchaseOrderResponse.PurchaseOrderNo)},
+                 p.purchase_date AS {nameof(PurchaseOrderResponse.PurchaseDate)},
+                 p.supplier_name AS {nameof(PurchaseOrderResponse.SupplierName)},
+                 p.contact_full_name AS {nameof(PurchaseOrderResponse.ContactFullName)},
+                 p.contact_phone AS {nameof(PurchaseOrderResponse.ContactPhone)},
+                 p.contact_email AS {nameof(PurchaseOrderResponse.ContactEmail)},
+                 p.required_date AS {nameof(PurchaseOrderResponse.RequiredDate)},
+                 p.purchase_order_amount AS {nameof(PurchaseOrderResponse.PurchaseOrderAmount)},
+                 p.purchase_order_notes AS {nameof(PurchaseOrderResponse.PurchaseOrderNotes)},
+                 p.created_by AS {nameof(PurchaseOrderResponse.CreatedBy)},
+                 p.created_on_utc AS {nameof(PurchaseOrderResponse.CreatedOnUtc)}
+                 l.id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderLineId)},
                  l.purchase_order_header_id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderHeaderId)},
                  l.product_id AS {nameof(PurchaseOrderLineResponse.ProductId)},
                  l.qty AS {nameof(PurchaseOrderLineResponse.Qty)},
                  l.unit_price AS {nameof(PurchaseOrderLineResponse.UnitPrice)}
-             FROM oms.purchase_order_lines l
-             INNER JOIN oms.purchase_order_headers p ON p.id = l.purchase_order_header_id
+             FROM oms.purchase_order_headers p
+             INNER JOIN oms.purchase_order_lines l ON p.id = l.purchase_order_header_id
              WHERE p.id = @PurchaseOrderHeaderId
              """;
 
+        Dictionary<Guid, PurchaseOrderResponse> purchaseOrdersDictionary = [];
+        await connection.QueryAsync<PurchaseOrderResponse, PurchaseOrderLineResponse, PurchaseOrderResponse>(
+            sql,
+            (purchaseOrder, purchaseOrderLine) =>
+            {
+                if (purchaseOrdersDictionary.TryGetValue(purchaseOrder.Id, out PurchaseOrderResponse? existingEvent))
+                {
+                    purchaseOrder = existingEvent;
+                }
+                else
+                {
+                    purchaseOrdersDictionary.Add(purchaseOrder.Id, purchaseOrder);
+                }
 
-        SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
+                purchaseOrder.Lines.Add(purchaseOrderLine);
 
-        var purchaseOrders = (await multi.ReadAsync<PurchaseOrderResponse>()).ToList();
-        var purchaseOrderLines = (await multi.ReadAsync<PurchaseOrderLineResponse>()).ToList();
+                return purchaseOrder;
+            },
+            request,
+            splitOn: nameof(PurchaseOrderLineResponse.PurchaseOrderLineId));
 
-        PurchaseOrderResponse? purchaseOrder = purchaseOrders.SingleOrDefault();
-
-        if (purchaseOrder is null)
+        if (!purchaseOrdersDictionary.TryGetValue(request.PurchaseOrderHeaderId, out PurchaseOrderResponse purchaseOrder))
         {
             return Result.Failure<PurchaseOrderResponse>(PurchaseOrderErrors.NotFound(request.PurchaseOrderHeaderId));
         }
-
-        purchaseOrder.Lines = purchaseOrderLines.Where(a => a.PurchaseOrderHeaderId == purchaseOrder.Id).ToList();
 
         return purchaseOrder;
     }
