@@ -1,14 +1,13 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.Ticketing.Application.Orders.GetOrder;
-using Crowbond.Modules.Ticketing.Presentation;
+using Crowbond.Modules.OMS.Application.Orders.GetOrder;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Crowbond.Modules.Ticketing.Presentation.Orders;
+namespace Crowbond.Modules.OMS.Presentation.Orders;
 
 internal sealed class GetOrder : IEndpoint
 {
