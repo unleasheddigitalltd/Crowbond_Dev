@@ -101,7 +101,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.AddToCart,
             Permission.RemoveFromCart,
             Permission.GetOrders,
-            Permission.GetOwnOrders,
+            Permission.GetMyOrders,
             Permission.CreateOrder);
 
 
@@ -129,7 +129,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Customer, Permission.GetCart),
                     CreateRolePermission(Role.Customer, Permission.AddToCart),
                     CreateRolePermission(Role.Customer, Permission.RemoveFromCart),
-                    CreateRolePermission(Role.Customer, Permission.GetOwnOrders),
+                    CreateRolePermission(Role.Customer, Permission.GetMyOrders),
                     CreateRolePermission(Role.Customer, Permission.CreateOrder),
 
                     // Admin permissions

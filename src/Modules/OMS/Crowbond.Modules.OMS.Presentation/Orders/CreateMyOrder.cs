@@ -14,7 +14,7 @@ internal sealed class CreateMyOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("orders", async (IContactContext contactContext, Request request, ISender sender) =>
+        app.MapPost("orders/my", async (IContactContext contactContext, Request request, ISender sender) =>
         {
             Result result = await sender.Send(new CreateMyOrderCommand(
                 contactContext.ContactId,

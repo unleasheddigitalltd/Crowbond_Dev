@@ -28,6 +28,6 @@ internal static class Permissions
     internal const string AddToCart = "carts:add";
     internal const string RemoveFromCart = "carts:remove";
     internal const string GetOrders = "orders:read";
-    internal const string GetOwnOrders = "orders:read:own";
+    internal const string GetMyOrders = "orders:read:own";
     internal const string CreateOrder = "orders:create";
 }
