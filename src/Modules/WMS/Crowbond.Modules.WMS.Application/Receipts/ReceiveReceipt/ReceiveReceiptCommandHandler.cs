@@ -36,9 +36,8 @@ internal sealed class ReceiveReceiptCommandHandler(
             return Result.Failure(TaskErrors.SequenceNotFound());
         }
 
-        string taskNo = $"{sequence.Prefix}-{sequence.GetNewSequence()}";
         Result<TaskHeader> taskResult = TaskHeader.Create(
-            taskNo,
+            sequence.GetNumber(),
             receipt.Id,
             TaskType.putaway);
 

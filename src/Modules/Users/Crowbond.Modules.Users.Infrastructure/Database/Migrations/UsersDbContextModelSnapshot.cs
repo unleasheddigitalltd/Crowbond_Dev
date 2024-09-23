@@ -180,26 +180,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "carts:read"
-                        },
-                        new
-                        {
-                            Code = "carts:add"
-                        },
-                        new
-                        {
-                            Code = "carts:remove"
-                        },
-                        new
-                        {
-                            Code = "orders:read"
-                        },
-                        new
-                        {
-                            Code = "orders:create"
-                        },
-                        new
-                        {
                             Code = "tickets:read"
                         },
                         new
@@ -405,6 +385,34 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "warehouse-operators:create"
+                        },
+                        new
+                        {
+                            Code = "carts:read"
+                        },
+                        new
+                        {
+                            Code = "carts:add"
+                        },
+                        new
+                        {
+                            Code = "carts:remove"
+                        },
+                        new
+                        {
+                            Code = "orders:read"
+                        },
+                        new
+                        {
+                            Code = "orders:read:my"
+                        },
+                        new
+                        {
+                            Code = "orders:create"
+                        },
+                        new
+                        {
+                            Code = "orders:create:my"
                         });
                 });
 
@@ -556,6 +564,31 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "carts:read",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            PermissionCode = "carts:add",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            PermissionCode = "carts:remove",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:read:my",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:create:my",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
                             PermissionCode = "users:read",
                             RoleName = "Administrator"
                         },
@@ -597,31 +630,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "categories:update",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:read",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:add",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "carts:remove",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:read",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
-                            PermissionCode = "orders:create",
                             RoleName = "Administrator"
                         },
                         new
@@ -882,6 +890,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "warehouse-operators:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:create",
                             RoleName = "Administrator"
                         });
                 });

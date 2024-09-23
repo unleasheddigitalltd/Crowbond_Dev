@@ -14,7 +14,7 @@ internal sealed class GetPurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("purchaseorders/{id}", async (Guid id, ISender sender) =>
+        app.MapGet("purchase-orders/{id}", async (Guid id, ISender sender) =>
         {
             Result<PurchaseOrderResponse> result = await sender.Send(new GetPurchaseOrderQuery(id));
 

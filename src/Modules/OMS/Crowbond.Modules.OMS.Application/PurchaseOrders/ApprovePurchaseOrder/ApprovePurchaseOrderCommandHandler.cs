@@ -29,9 +29,7 @@ internal sealed class ApprovePurchaseOrderCommandHandler(
             return Result.Failure(PurchaseOrderErrors.SequenceNotFound());
         }
 
-        string purchaseOrderNo = $"PO-{sequence.GetNewSequence()}";
-
-        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Approve(purchaseOrderNo, dateTimeProvider.UtcNow);
+        Result<PurchaseOrderStatusHistory> result = purchaseOrderHeader.Approve(sequence.GetNumber(), dateTimeProvider.UtcNow);
         if (result.IsFailure)
         {
             return Result.Failure(result.Error);

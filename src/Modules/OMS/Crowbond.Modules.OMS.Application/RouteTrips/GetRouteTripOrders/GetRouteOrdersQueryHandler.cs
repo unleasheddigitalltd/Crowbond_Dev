@@ -16,7 +16,7 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
         const string sql =
              $"""
              SELECT
-                id AS {nameof(OrderResponse.OrderHeaderId)},
+                id AS {nameof(OrderResponse.Id)},
                 order_number AS {nameof(OrderResponse.OrderNumber)},
                 customer_id AS {nameof(OrderResponse.CustomerId)},
                 customer_business_name AS {nameof(OrderResponse.CustomerBusinessName)},
@@ -50,7 +50,6 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
              INNER JOIN oms.order_headers h ON h.id = l.order_id
              WHERE h.route_trip_id = @RouteTripId;
              """;
-
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
 
         var orders = (await multi.ReadAsync<OrderResponse>()).ToList();
@@ -58,9 +57,11 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
 
         foreach (OrderResponse? order in orders)
         {
-            order.OrderLines = orderLines.Where(a => a.OrderHeaderId == order.OrderHeaderId).ToList();
+            order.OrderLines = orderLines.Where(a => a.OrderHeaderId == order.Id).ToList();
         }
 
         return orders;
     }
 }
+
+

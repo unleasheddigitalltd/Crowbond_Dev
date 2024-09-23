@@ -22,10 +22,8 @@ internal sealed class CreateReceiptCommandHandler(
             return Result.Failure<Guid>(ReceiptErrors.SequenceNotFound());
         }
 
-        string receiptNo = $"{sequence.Prefix}-{sequence.GetNewSequence()}";
-
         Result<ReceiptHeader> result = ReceiptHeader.Create(
-            receiptNo,
+            sequence.GetNumber(),
             request.Receipt.ReceivedDate,
             request.Receipt.PurchaseOrderId,
             request.Receipt.PurchaseOrderNo,

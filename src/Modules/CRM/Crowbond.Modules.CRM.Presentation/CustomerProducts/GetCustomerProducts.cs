@@ -1,8 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.CRM.Application.CustomerProducts;
-using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProduct;
+using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

@@ -2,11 +2,9 @@
 public enum OrderStatus
 {
     Pending = 0,
-    PendingPayment = 1,
-    Accepted = 2,
-    Processing = 3,
-    Shipped = 4,
-    Delivered = 5,
-    Cancelled = 6,
-    PaymentReceived = 7,
+    Accepted = 1,
+    Processing = 2,
+    Shipped = 3,
+    Delivered = 4,
+    Cancelled = 5,
 }

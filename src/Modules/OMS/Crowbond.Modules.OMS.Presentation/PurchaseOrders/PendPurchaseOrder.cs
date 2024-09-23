@@ -13,7 +13,7 @@ internal sealed class PendPurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchase-order/{id}/pend", async (Guid id, ISender sender) =>
+        app.MapPut("purchase-orders/{id}/pend", async (Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new PendPurchaseOrderCommand(id));
 

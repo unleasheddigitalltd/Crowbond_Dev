@@ -21,9 +21,9 @@ public sealed class Sequence : Entity
     public int LastNumber { get; private set; }
     public string Prefix { get; private set; }
 
-    public int GetNewSequence()
+    public string GetNumber()
     {
         LastNumber++;
-        return LastNumber;
+        return $"{Prefix}-{LastNumber}";
     }
 }

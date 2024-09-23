@@ -25,11 +25,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifyTicketTypes,
             Permission.GetCategories,
             Permission.ModifyCategories,
-            Permission.GetCart,
-            Permission.AddToCart,
-            Permission.RemoveFromCart,
-            Permission.GetOrders,
-            Permission.CreateOrder,
             Permission.GetTickets,
             Permission.CheckInTicket,
             Permission.GetEventStatistics,
@@ -100,9 +95,16 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
             Permission.GetWarehouseOperators,
             Permission.ModifyWarehouseOperators,
-            Permission.CreateWarehouseOperators);
+            Permission.CreateWarehouseOperators,
 
-            
+            Permission.GetCart,
+            Permission.AddToCart,
+            Permission.RemoveFromCart,
+            Permission.GetOrders,
+            Permission.GetMyOrders,
+            Permission.CreateOrders,
+            Permission.CreateMyOrders);
+
 
         builder
             .HasMany<Role>()
@@ -116,13 +118,20 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
                     CreateRolePermission(Role.Driver, Permission.ModifyRouteTriplogs),
 
-                    // WarehouseOperator permissions
+                    // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
 
-                    // WarehouseOperator permisions
+                    // Warehouse Manager permissions
                     CreateRolePermission(Role.WarehouseManager, Permission.GetPutAwayTasks),
                     CreateRolePermission(Role.WarehouseManager, Permission.ManagePutAwayTasks),
+
+                    // Customer permissions
+                    CreateRolePermission(Role.Customer, Permission.GetCart),
+                    CreateRolePermission(Role.Customer, Permission.AddToCart),
+                    CreateRolePermission(Role.Customer, Permission.RemoveFromCart),
+                    CreateRolePermission(Role.Customer, Permission.GetMyOrders),
+                    CreateRolePermission(Role.Customer, Permission.CreateMyOrders),
 
                     // Admin permissions
                     CreateRolePermission(Role.Administrator, Permission.GetUser),
@@ -135,11 +144,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyTicketTypes),
                     CreateRolePermission(Role.Administrator, Permission.GetCategories),
                     CreateRolePermission(Role.Administrator, Permission.ModifyCategories),
-                    CreateRolePermission(Role.Administrator, Permission.GetCart),
-                    CreateRolePermission(Role.Administrator, Permission.AddToCart),
-                    CreateRolePermission(Role.Administrator, Permission.RemoveFromCart),
-                    CreateRolePermission(Role.Administrator, Permission.GetOrders),
-                    CreateRolePermission(Role.Administrator, Permission.CreateOrder),
                     CreateRolePermission(Role.Administrator, Permission.GetTickets),
                     CreateRolePermission(Role.Administrator, Permission.CheckInTicket),
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
@@ -210,7 +214,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     
                     CreateRolePermission(Role.Administrator, Permission.GetWarehouseOperators),
                     CreateRolePermission(Role.Administrator, Permission.ModifyWarehouseOperators),
-                    CreateRolePermission(Role.Administrator, Permission.CreateWarehouseOperators));
+                    CreateRolePermission(Role.Administrator, Permission.CreateWarehouseOperators),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetOrders),
+                    CreateRolePermission(Role.Administrator, Permission.CreateOrders));
             });
     }
 

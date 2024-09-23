@@ -13,6 +13,7 @@ internal sealed class RouteTripConfiguration : IEntityTypeConfiguration<RouteTri
 
         builder.Property(r => r.Comments).HasMaxLength(255);
 
+        builder.HasMany(r => r.Logs).WithOne().HasForeignKey(r => r.RouteTripId).OnDelete(DeleteBehavior.NoAction);
         builder.HasOne<Route>().WithMany().HasForeignKey(r => r.RouteId).OnDelete(DeleteBehavior.NoAction);
     }
 }

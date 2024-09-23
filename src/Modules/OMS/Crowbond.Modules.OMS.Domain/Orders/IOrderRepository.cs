@@ -8,5 +8,7 @@ public interface IOrderRepository
 
     Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default);
 
-    void InsertOrderHeader(OrderHeader orderHeader);
+    void Insert(OrderHeader orderHeader);
+
+    void AddLine(OrderLine line);
 }

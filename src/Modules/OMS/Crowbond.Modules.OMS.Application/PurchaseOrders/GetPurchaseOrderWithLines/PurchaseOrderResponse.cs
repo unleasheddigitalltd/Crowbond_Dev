@@ -1,29 +1,19 @@
 ﻿namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderWithLines;
 
-public sealed record PurchaseOrderResponse
-{
-    public PurchaseOrderResponse()
-    {
-        Lines = new List<PurchaseOrderLineResponse>();
-    }
-
-    public Guid Id { get; }
-    public string? PurchaseOrderNo { get; }
-    public DateOnly? PurchaseDate { get; }
-    public string SupplierName { get; }
-    public string? ContactFullName { get; }
-    public string? ContactPhone { get; }
-    public string? ContactEmail { get; }
-    public DateOnly RequiredDate { get; }
-    public decimal PurchaseOrderAmount { get; }
-    public string? PurchaseOrderNotes { get; }
-    public Guid CreatedBy { get; }
-    public DateTime CreatedOnUtc { get; }
-    public List<PurchaseOrderLineResponse> Lines { get; set; }
-}
-public sealed record PurchaseOrderLineResponse(
+public sealed record PurchaseOrderResponse(
     Guid Id,
-    Guid PurchaseOrderHeaderId,
-    Guid ProductId,
-    decimal Qty,
-    decimal UnitPrice);
+    string? PurchaseOrderNo,
+    DateOnly? PurchaseDate,
+    string SupplierName,
+    string? ContactFullName,
+    string? ContactPhone,
+    string? ContactEmail,
+    DateOnly RequiredDate,
+    decimal PurchaseOrderAmount,
+    string? PurchaseOrderNotes,
+    Guid CreatedBy,
+    DateTime CreatedOnUtc)
+{
+    public List<PurchaseOrderLineResponse> Lines { get; } = [];
+}
+

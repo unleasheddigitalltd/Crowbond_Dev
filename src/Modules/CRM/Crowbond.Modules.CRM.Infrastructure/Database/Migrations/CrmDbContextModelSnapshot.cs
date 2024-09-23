@@ -918,11 +918,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Sequences.Sequence", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
                     b.Property<int>("Context")
                         .HasColumnType("integer")
                         .HasColumnName("context");
@@ -931,10 +926,30 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("last_number");
 
-                    b.HasKey("Id")
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)")
+                        .HasColumnName("prefix");
+
+                    b.HasKey("Context")
                         .HasName("pk_sequences");
 
                     b.ToTable("sequences", "crm");
+
+                    b.HasData(
+                        new
+                        {
+                            Context = 0,
+                            LastNumber = 10001,
+                            Prefix = "CUS"
+                        },
+                        new
+                        {
+                            Context = 1,
+                            LastNumber = 10001,
+                            Prefix = "SUP"
+                        });
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierContacts.SupplierContact", b =>

@@ -13,7 +13,7 @@ internal sealed class CancelPurchaseOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("purchase-order/{id}/cancel", async (Guid id, ISender sender) =>
+        app.MapPut("purchase-orders/{id}/cancel", async (Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new CancelPurchaseOrderCommand(id));
 

@@ -17,7 +17,7 @@ public sealed record PurchaseOrderDetailsRequest(
     DateOnly RequiredDate,
     DateOnly? ExpectedShippingDate,
     string? SupplierReference,
-    DeliveryMethod? DeliveryMethod,
+    DeliveryType? DeliveryMethod,
     decimal DeliveryCharge,
     PaymentMethod PaymentMethod,
     string? PurchaseOrderNotes,
