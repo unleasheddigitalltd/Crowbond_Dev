@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
 
-public sealed record GetCustomerForOrderQuery(Guid ContactId) : IQuery<CustomerForOrderResponse>;
+public sealed record GetCustomerForOrderQuery(Guid CustomerId) : IQuery<CustomerForOrderResponse>;

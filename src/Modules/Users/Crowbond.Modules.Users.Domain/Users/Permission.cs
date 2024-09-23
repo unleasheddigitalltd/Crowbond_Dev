@@ -88,8 +88,9 @@ public sealed class Permission
     public static readonly Permission AddToCart = new("carts:add");
     public static readonly Permission RemoveFromCart = new("carts:remove");
     public static readonly Permission GetOrders = new("orders:read");
-    public static readonly Permission GetMyOrders = new("orders:read:own");
-    public static readonly Permission CreateOrder = new("orders:create");
+    public static readonly Permission GetMyOrders = new("orders:read:my");
+    public static readonly Permission CreateOrders = new("orders:create");
+    public static readonly Permission CreateMyOrders = new("orders:create:my");
 
 
     public Permission(string code)

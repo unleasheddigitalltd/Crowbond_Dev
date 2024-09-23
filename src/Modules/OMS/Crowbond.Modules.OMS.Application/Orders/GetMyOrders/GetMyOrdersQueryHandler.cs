@@ -18,11 +18,11 @@ internal sealed class GetMyOrdersQueryHandler(
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
-        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.CustomerContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetByContactIdAsync(request.CustomerContactId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<OrdersResponse>(CustomerErrors.NotFound(request.CustomerContactId));
+            return Result.Failure<OrdersResponse>(CustomerErrors.ContactNotFound(request.CustomerContactId));
         }
 
         string sortOrder = request.Order.Equals("ASC", StringComparison.OrdinalIgnoreCase) ? "ASC" : "DESC";

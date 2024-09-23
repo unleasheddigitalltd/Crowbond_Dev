@@ -12,11 +12,11 @@ internal sealed class ClearCartCommandHandler(
 {
     public async Task<Result> Handle(ClearCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerForOrderResponse customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse customer = await customerApi.GetByContactIdAsync(request.ContactId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.NotFound(request.ContactId));
+            return Result.Failure<Guid>(CustomerErrors.ContactNotFound(request.ContactId));
         }
 
         await cartService.ClearAsync(customer.Id, cancellationToken);

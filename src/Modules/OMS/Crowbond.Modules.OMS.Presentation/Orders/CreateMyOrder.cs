@@ -26,7 +26,7 @@ internal sealed class CreateMyOrder : IEndpoint
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.CreateOrder)
+        .RequireAuthorization(Permissions.CreateMyOrders)
         .WithTags(Tags.Orders);
     }
 

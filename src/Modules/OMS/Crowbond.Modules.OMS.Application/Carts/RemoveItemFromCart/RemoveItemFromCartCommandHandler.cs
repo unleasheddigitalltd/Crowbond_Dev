@@ -12,11 +12,11 @@ internal sealed class RemoveItemFromCartCommandHandler(
 {
     public async Task<Result> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetByContactIdAsync(request.ContactId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Cart>(CustomerErrors.NotFound(request.ContactId));
+            return Result.Failure<Cart>(CustomerErrors.ContactNotFound(request.ContactId));
         }
 
         await cartService.RemoveItemAsync(customer.Id, request.ProductId, request.Qty, cancellationToken);

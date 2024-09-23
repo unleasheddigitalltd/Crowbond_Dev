@@ -2,7 +2,9 @@
 
 public interface ICustomerApi
 {
-    Task<CustomerForOrderResponse?> GetForOrderAsync(Guid contactId, CancellationToken cancellationToken = default);
+    Task<CustomerForOrderResponse?> GetByContactIdAsync(Guid contactId, CancellationToken cancellationToken = default);
+
+    Task<CustomerForOrderResponse?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<CustomerOutletForOrderResponse?> GetOutletForOrderAsync(Guid outletId, CancellationToken cancellationToken = default);
 }

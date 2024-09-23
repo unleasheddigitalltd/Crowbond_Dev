@@ -3,6 +3,7 @@ using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.OMS.Domain.CustomerProducts;
 using Crowbond.Modules.OMS.Domain.Customers;
+using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Application.Carts.AddItemToCart;
 
@@ -14,11 +15,11 @@ internal sealed class AddItemToCartCommandHandler(
 {
     public async Task<Result> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
-        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.ContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetByContactIdAsync(request.ContactId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.NotFound(request.ContactId));
+            return Result.Failure<Guid>(CustomerErrors.ContactNotFound(request.ContactId));
         }
 
         CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(customer.Id, request.ProductId, cancellationToken);
@@ -26,6 +27,11 @@ internal sealed class AddItemToCartCommandHandler(
         if (customerProduct is null)
         {
             return Result.Failure<Guid>(CustomerProductErrors.NotFound(customer.Id, request.ProductId));
+        }
+
+        if (!Enum.IsDefined(typeof(TaxRateType), customerProduct.TaxRateType))
+        {
+            return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
         decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?

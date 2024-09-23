@@ -33,11 +33,11 @@ internal sealed class CreateMyOrderCommandHandler(
             return Result.Failure(OrderErrors.InvalidDeliveryMethod);
         }
 
-        CustomerForOrderResponse? customer = await customerApi.GetForOrderAsync(request.CustomerContactId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetByContactIdAsync(request.CustomerContactId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure(CustomerErrors.NotFound(request.CustomerContactId));
+            return Result.Failure(CustomerErrors.ContactNotFound(request.CustomerContactId));
         }
 
         if (!Enum.IsDefined(typeof(PaymentTerm), customer.PaymentTerms))

@@ -1,6 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrder;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
+using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrderByContactId;
 using Crowbond.Modules.CRM.PublicApi;
 using MediatR;
 using CustomerForOrderResponse = Crowbond.Modules.CRM.PublicApi.CustomerForOrderResponse;
@@ -10,10 +11,36 @@ namespace Crowbond.Modules.CRM.Infrastructure.PublicApi;
 
 internal sealed class CustomerApi(ISender sender) : ICustomerApi
 {
-    public async Task<CustomerForOrderResponse?> GetForOrderAsync(Guid contactId, CancellationToken cancellationToken = default)
+    public async Task<CustomerForOrderResponse?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         Result<Application.Customers.GetCustomerForOrder.CustomerForOrderResponse> result =
-            await sender.Send(new GetCustomerForOrderQuery(contactId), cancellationToken);
+            await sender.Send(new GetCustomerForOrderQuery(id), cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return null;
+        }
+
+        return new CustomerForOrderResponse(
+            result.Value.Id,
+            result.Value.AccountNumber,
+            result.Value.BusinessName,
+            result.Value.PriceTierId,
+            result.Value.Discount,
+            result.Value.NoDiscountSpecialItem,
+            result.Value.NoDiscountFixedPrice,
+            result.Value.DetailedInvoice,
+            result.Value.PaymentTerms,
+            result.Value.CustomerNotes,
+            result.Value.DeliveryFeeSetting,
+            result.Value.DeliveryMinOrderValue,
+            result.Value.DeliveryCharge);
+    }
+
+    public async Task<CustomerForOrderResponse?> GetByContactIdAsync(Guid contactId, CancellationToken cancellationToken = default)
+    {
+        Result<Application.Customers.GetCustomerForOrderByContactId.CustomerForOrderResponse> result =
+            await sender.Send(new GetCustomerForOrderByContactIdQuery(contactId), cancellationToken);
 
         if (result.IsFailure)
         {

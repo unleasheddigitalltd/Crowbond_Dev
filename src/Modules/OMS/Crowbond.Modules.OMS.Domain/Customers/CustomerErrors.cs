@@ -4,8 +4,12 @@ namespace Crowbond.Modules.OMS.Domain.Customers;
 
 public static class CustomerErrors
 {
-    public static Error NotFound(Guid contactId) =>
+    public static Error NotFound(Guid customerId) =>
     Error.NotFound("Customers.NotFound",
+        $"The customer with the identifier {customerId} was not found");
+
+    public static Error ContactNotFound(Guid contactId) =>
+    Error.NotFound("Customers.ContactNotFound",
         $"The customer with the contact identifier {contactId} was not found");
 
     public static Error OutletNotFound(Guid outletId) =>

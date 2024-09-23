@@ -3,7 +3,6 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Domain.Customers;
-using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Dapper;
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
@@ -32,7 +31,7 @@ internal sealed class GetCustomerForOrderQueryHandler(IDbConnectionFactory dbCon
                 detailed_invoice AS {nameof(CustomerForOrderResponse.DetailedInvoice)},
                 customer_notes AS {nameof(CustomerForOrderResponse.CustomerNotes)}
              FROM crm.customers
-             WHERE is_active = true;
+             WHERE id = @CustomerId AND is_active = true;
              """;
 
 
@@ -40,7 +39,7 @@ internal sealed class GetCustomerForOrderQueryHandler(IDbConnectionFactory dbCon
 
         if (customer is null)
         {
-            return Result.Failure<CustomerForOrderResponse>(CustomerErrors.NotFound(request.ContactId));
+            return Result.Failure<CustomerForOrderResponse>(CustomerErrors.NotFound(request.CustomerId));
         }
 
         return customer;
