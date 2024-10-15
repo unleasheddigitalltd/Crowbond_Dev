@@ -14,7 +14,9 @@ public sealed class TaskHeader : Entity, IChangeDetectable
 
     public string TaskNo { get; private set; }
 
-    public Guid EntityId { get; private set; }
+    public Guid? ReceiptId { get; private set; }
+
+    public Guid? DispatchId { get; private set; }
 
     public TaskType TaskType { get; private set; }
 
@@ -24,14 +26,16 @@ public sealed class TaskHeader : Entity, IChangeDetectable
 
     public static Result<TaskHeader> Create(
         string taskNo,
-        Guid entityId,
+        Guid? receiptId,
+        Guid? dispatchId,
         TaskType taskType)
     {
         var taskHeader = new TaskHeader
         {
             Id = Guid.NewGuid(),
             TaskNo = taskNo,
-            EntityId = entityId,
+            ReceiptId = receiptId,
+            DispatchId = dispatchId,
             TaskType = taskType,
             Status = TaskHeaderStatus.NotAssigned,
         };

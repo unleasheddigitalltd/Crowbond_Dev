@@ -137,14 +137,25 @@ internal sealed class CreateOrderCommandHandler(
                 customerProduct.UnitPrice :
                 customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
 
-            result.Value.AddLine(
+            Result<OrderLine> lineResult = result.Value.AddLine(
                 customerProduct.ProductId,
                 customerProduct.ProductSku,
                 customerProduct.ProductName,
                 customerProduct.UnitOfMeasureName,
+                customerProduct.CategoryId,
+                customerProduct.CategoryName,
+                customerProduct.BrandId,
+                customerProduct.BrandName,
+                customerProduct.ProductGroupId,
+                customerProduct.ProductGroupName,
                 unitPrice,
                 line.Qty,
                 (TaxRateType)customerProduct.TaxRateType);
+
+            if (lineResult.IsFailure)
+            {
+                return Result.Failure<Guid>(lineResult.Error);
+            }
         }
 
         orderRepository.Insert(result.Value);

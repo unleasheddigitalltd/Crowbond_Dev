@@ -19,6 +19,9 @@ public sealed class Permission
     public static readonly Permission GetProducts = new("products:read");
     public static readonly Permission CreateProducts = new("products:create");
     public static readonly Permission ModifyProducts = new("products:update");
+    public static readonly Permission CreateProductGroups = new("product-groups:create");
+    public static readonly Permission CreateBrands = new("brands:create");
+    public static readonly Permission CreateCategories = new("categories:create");
 
     public static readonly Permission GetStocks = new("stocks:read");
     public static readonly Permission GetStockTransactions = new("stock-transactions:read");
@@ -72,7 +75,6 @@ public sealed class Permission
     public static readonly Permission ModifyRouteTrips = new("route-trip:update");
     public static readonly Permission CreateRouteTrips = new("route-trip:create");
 
-    public static readonly Permission ModifyRouteTriplogs = new("route-trip-log:update");
     public static readonly Permission ModifyOtherRouteTripLogs = new("route-trip-log:update:other");
 
     public static readonly Permission GetPutAwayTasks = new("tasks:putaway:read");
@@ -91,7 +93,10 @@ public sealed class Permission
     public static readonly Permission GetMyOrders = new("orders:read:my");
     public static readonly Permission CreateOrders = new("orders:create");
     public static readonly Permission CreateMyOrders = new("orders:create:my");
+    public static readonly Permission AcceptOrders = new("orders:accept");
+    public static readonly Permission DeliverOrders = new("orders:deliver");
 
+    public static readonly Permission ReviewOrderLine = new ("order-lines:review");
 
     public Permission(string code)
     {

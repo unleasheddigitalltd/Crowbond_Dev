@@ -21,14 +21,18 @@ internal sealed class GetPriceTierPricesQueryHandler(IDbConnectionFactory dbConn
                  p.name AS {nameof(ProductPriceResponse.ProductName)},
                  p.sku AS {nameof(ProductPriceResponse.ProductSku)},
                  p.unit_of_measure_name AS {nameof(ProductPriceResponse.UnitOfMeasureName)},
-                 p.category_id AS {nameof(ProductPriceResponse.CategoryId)},
-                 p.category_name AS {nameof(ProductPriceResponse.CategoryName)},
+                 c.name AS {nameof(ProductPriceResponse.CategoryName)},
+                 b.name AS {nameof(ProductPriceResponse.BrandName)},
+                 pg.name AS {nameof(ProductPriceResponse.ProductGroupName)},
                  pr.price_tier_id AS {nameof(ProductPriceResponse.PriceTierId)},
                  pr.base_purchase_price AS {nameof(ProductPriceResponse.BasePurchasePrice)},
                  pr.sale_price AS {nameof(ProductPriceResponse.SalePrice)},
                  pr.effective_date AS {nameof(ProductPriceResponse.EffectiveDate)}              
              FROM crm.product_prices pr
              INNER JOIN crm.products p ON p.id = pr.product_id
+             INNER JOIN crm.categories c ON p.category_id = c.id
+             INNER JOIN crm.brands b ON p.brand_id = b.id
+             INNER JOIN crm.product_groups pg ON p.product_group_id = pg.id
              WHERE pr.price_tier_id = @PriceTierId AND pr.is_deleted = false
              """;
 

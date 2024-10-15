@@ -12,6 +12,6 @@ internal sealed class SequenceConfiguration : IEntityTypeConfiguration<Sequence>
 
         builder.Property(s => s.Prefix).IsRequired().HasMaxLength(3);
         
-        builder.HasData(Sequence.Receipt, Sequence.Task);
+        builder.HasData(Sequence.Receipt, Sequence.Task, Sequence.Dispatch);
     }
 }

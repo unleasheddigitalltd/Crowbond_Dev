@@ -11,11 +11,9 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Sku).IsRequired().HasMaxLength(20);
-        builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
+        builder.Property(c => c.Name).IsRequired().HasMaxLength(150);
         builder.Property(c => c.FilterTypeName).IsRequired().HasMaxLength(20);
         builder.Property(c => c.UnitOfMeasureName).IsRequired().HasMaxLength(20);
         builder.Property(c => c.InventoryTypeName).IsRequired().HasMaxLength(20);
-        builder.Property(c => c.CategoryId).IsRequired();
-        builder.Property(c => c.CategoryName).IsRequired().HasMaxLength(100);
     }
 }

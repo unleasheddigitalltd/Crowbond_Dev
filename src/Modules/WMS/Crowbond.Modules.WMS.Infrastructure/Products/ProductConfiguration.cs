@@ -1,5 +1,4 @@
-﻿using Crowbond.Modules.WMS.Domain.Categories;
-using Crowbond.Modules.WMS.Domain.Products;
+﻿using Crowbond.Modules.WMS.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -27,38 +26,40 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasForeignKey(e => e.CategoryId)
             .OnDelete(DeleteBehavior.NoAction);
 
+        builder.HasOne<Brand>().WithMany()
+            .HasForeignKey(e => e.BrandId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne<ProductGroup>().WithMany()
+            .HasForeignKey(e => e.ProductGroupId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasOne<Product>().WithMany()
             .HasForeignKey(e => e.ParentId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        builder.Property(c => c.Sku).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.Sku).HasMaxLength(20);
 
-        builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
+        builder.Property(c => c.Name).HasMaxLength(150);
 
-        builder.Property(c => c.ParentId).IsRequired(false);
+        builder.Property(c => c.FilterTypeName).HasMaxLength(20);
 
-        builder.Property(c => c.FilterTypeName).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.UnitOfMeasureName).HasMaxLength(20);
 
-        builder.Property(c => c.UnitOfMeasureName).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.InventoryTypeName).HasMaxLength(20);
 
-        builder.Property(c => c.CategoryId).IsRequired();
+        builder.Property(c => c.HandlingNotes).HasMaxLength(500);
 
-        builder.Property(c => c.InventoryTypeName).IsRequired().HasMaxLength(20);
+        builder.Property(c => c.Notes).HasMaxLength(500);
 
-        builder.Property(c => c.HandlingNotes).IsRequired(false).HasMaxLength(500);
+        builder.Property(c => c.Height).HasPrecision(19, 0);
 
-        builder.Property(c => c.Notes).IsRequired(false).HasMaxLength(500);
+        builder.Property(c => c.Width).HasPrecision(19, 0);
 
-        builder.Property(c => c.Height).IsRequired(false).HasPrecision(19, 0);
+        builder.Property(c => c.Length).HasPrecision(19, 0);
 
-        builder.Property(c => c.Width).IsRequired(false).HasPrecision(19, 0);
+        builder.Property(c => c.ReorderLevel).HasPrecision(10, 2);
 
-        builder.Property(c => c.Length).IsRequired(false).HasPrecision(19, 0);
-
-        builder.Property(c => c.Barcode).IsRequired(false);
-
-        builder.Property(c => c.ReorderLevel).IsRequired(false).HasPrecision(10, 2);
-
-        builder.Property(c => c.PackSize).IsRequired(false).HasPrecision(10, 2);
+        builder.Property(c => c.PackSize).HasPrecision(10, 2);
     }
 }

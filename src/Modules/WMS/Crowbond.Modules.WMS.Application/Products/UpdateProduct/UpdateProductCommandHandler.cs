@@ -10,6 +10,27 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
 {
     public async Task<Result> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
+        Category? category = await productRepository.GetCategoryAsync(request.Product.CategoryId, cancellationToken);
+
+        if (category is null)
+        {
+            return Result.Failure<Guid>(ProductErrors.CategoryNotFound(request.Product.CategoryId));
+        }
+
+        Brand? brand = await productRepository.GetBrandAsync(request.Product.BrandId, cancellationToken);
+
+        if (brand is null)
+        {
+            return Result.Failure<Guid>(ProductErrors.BrandNotFound(request.Product.BrandId));
+        }
+
+        ProductGroup? productGroup = await productRepository.GetProductGroupAsync(request.Product.ProductGroupId, cancellationToken);
+
+        if (productGroup is null)
+        {
+            return Result.Failure<Guid>(ProductErrors.ProductGroupNotFound(request.Product.ProductGroupId));
+        }
+
         Product? product = await productRepository.GetAsync(request.Id, cancellationToken);
 
         if (product is null)
@@ -18,25 +39,27 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
         }
 
         product.Update(
-            sku: request.Product.Sku,
-            name: request.Product.Name,
-            parentId: request.Product.Parent,
-            filterTypeName: request.Product.FilterTypeName,
-            unitOfMeasureName: request.Product.UnitOfMeasureName,
-            categoryId: request.Product.CategoryId,
-            inventoryTypeName: request.Product.InventoryTypeName,
-            taxRateType: request.Product.TaxRateType,
-            barcode: request.Product.Barcode,
-            packSize: request.Product.PackSize,
-            handlingNotes: request.Product.HandlingNotes,
-            qiCheck: request.Product.QiCheck,
-            notes: request.Product.Notes,
-            reorderLevel: request.Product.ReorderLevel,
-            height: request.Product.Height,
-            width: request.Product.Width,
-            length: request.Product.Length,
-            weightInput: request.Product.WeightInput,
-            isActive: request.Product.IsActive
+            request.Product.Sku,
+            request.Product.Name,
+            request.Product.Parent,
+            request.Product.FilterTypeName,
+            request.Product.UnitOfMeasureName,
+            request.Product.InventoryTypeName,
+            request.Product.CategoryId,
+            request.Product.BrandId,
+            request.Product.ProductGroupId,
+            request.Product.TaxRateType,
+            request.Product.Barcode,
+            request.Product.PackSize,
+            request.Product.HandlingNotes,
+            request.Product.QiCheck,
+            request.Product.Notes,
+            request.Product.ReorderLevel,
+            request.Product.Height,
+            request.Product.Width,
+            request.Product.Length,
+            request.Product.WeightInput,
+            request.Product.IsActive
         );
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

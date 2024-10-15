@@ -17,7 +17,7 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
              $"""
              SELECT
                 id AS {nameof(OrderResponse.Id)},
-                order_number AS {nameof(OrderResponse.OrderNumber)},
+                order_no AS {nameof(OrderResponse.OrderNo)},
                 customer_id AS {nameof(OrderResponse.CustomerId)},
                 customer_business_name AS {nameof(OrderResponse.CustomerBusinessName)},
                 delivery_location_name AS {nameof(OrderResponse.DeliveryLocationName)},
@@ -36,18 +36,19 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
                 order_amount AS {nameof(OrderResponse.OrderAmount)},
                 payment_method AS {nameof(OrderResponse.PaymentMethod)},
                 customer_comment AS {nameof(OrderResponse.CustomerComment)}         
-             FROM oms.order_headers
+             FROM oms.order_headers o
+             INNER JOIN oms.route_trips rt ON rt.id = o.route_trip
              WHERE route_trip_id = @RouteTripId;
 
              SELECT
                 l.id AS {nameof(OrderLineResponse.OrderLineId)},
-                l.order_id {nameof(OrderLineResponse.OrderHeaderId)},
+                l.order_header_id {nameof(OrderLineResponse.OrderHeaderId)},
                 l.product_id AS {nameof(OrderLineResponse.ProductId)},
                 l.product_sku AS {nameof(OrderLineResponse.ProductSku)},
                 l.product_name AS {nameof(OrderLineResponse.ProductName)},
                 l.qty AS {nameof(OrderLineResponse.Qty)}
              FROM oms.order_lines l
-             INNER JOIN oms.order_headers h ON h.id = l.order_id
+             INNER JOIN oms.order_headers h ON h.id = l.order_header_id
              WHERE h.route_trip_id = @RouteTripId;
              """;
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

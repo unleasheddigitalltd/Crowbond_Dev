@@ -14,11 +14,11 @@ internal sealed class LocateProductForPutAway : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("task/putaway/{taskId}/locate", async (IWarehouseOperatorContext operatorContext, Guid taskId, Request request, ISender sender) =>
+        app.MapPost("tasks/putaway/{id}/locate", async (IWarehouseOperatorContext operatorContext, Guid id, Request request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new LocateProductForPutAwayCommand(
                 operatorContext.WarehouseOperatorId,
-                taskId,
+                id,
                 request.ProductId,
                 request.LocationId,
                 request.Qty));

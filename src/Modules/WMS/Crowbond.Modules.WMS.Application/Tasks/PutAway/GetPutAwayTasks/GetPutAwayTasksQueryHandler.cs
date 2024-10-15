@@ -36,7 +36,7 @@ internal sealed class GetPutAwayTasksQueryHandler(IDbConnectionFactory dbConnect
                     t.status AS {nameof(PutAwayTask.Status)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.task_headers t
-                INNER JOIN wms.receipt_headers r ON r.id = t.entity_id
+                INNER JOIN wms.receipt_headers r ON r.id = t.receipt_id
                 WHERE
                     t.task_type = 0 AND
                     (t.task_no ILIKE '%' || @Search || '%'
@@ -57,7 +57,7 @@ internal sealed class GetPutAwayTasksQueryHandler(IDbConnectionFactory dbConnect
 
             SELECT Count(*) 
                 FROM wms.task_headers t
-                INNER JOIN wms.receipt_headers r ON r.id = t.entity_id
+                INNER JOIN wms.receipt_headers r ON r.id = t.receipt_id
                 WHERE
                     t.task_type = 0 AND
                     (t.task_no ILIKE '%' || @Search || '%'

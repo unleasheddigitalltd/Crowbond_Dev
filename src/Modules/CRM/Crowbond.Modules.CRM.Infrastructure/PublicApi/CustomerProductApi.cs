@@ -26,6 +26,10 @@ internal sealed class CustomerProductApi(ISender sender) : ICustomerProductApi
                 result.Value.UnitOfMeasureName,
                 result.Value.CategoryId,
                 result.Value.CategoryName,
+                result.Value.BrandId,
+                result.Value.BrandName,
+                result.Value.ProductGroupId,
+                result.Value.ProductGroupName,
                 result.Value.UnitPrice,
                 result.Value.IsFixedPrice,
                 result.Value.TaxRateType);

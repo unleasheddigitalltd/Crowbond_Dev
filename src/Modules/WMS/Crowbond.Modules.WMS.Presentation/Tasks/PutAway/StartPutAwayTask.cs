@@ -14,7 +14,7 @@ internal sealed class StartPutAwayTask : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("task/putaway/{id}/start", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
+        app.MapPut("tasks/putaway/{id}/start", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new StartPutAwayTaskCommand(operatorContext.WarehouseOperatorId, id));
 

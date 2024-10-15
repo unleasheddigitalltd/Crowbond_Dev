@@ -35,7 +35,7 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
              p.active AS {nameof(StockResponse.Active)}
              FROM wms.stocks s
              INNER JOIN wms.products p ON p.id = s.product_id
-             INNER JOIN wms.categories c ON c.id = p.category_id
+             INNER JOIN crm.categories c ON p.category_id = c.id
              INNER JOIN wms.locations l ON l.id = s.location_id
              WHERE s.id = @StockId;
              """;

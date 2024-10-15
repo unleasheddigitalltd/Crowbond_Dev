@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Application\Crowbond.Common.Application.csproj" />
     <ProjectReference Include="..\..\CRM\Crowbond.Modules.CRM.PublicApi\Crowbond.Modules.CRM.PublicApi.csproj" />
+    <ProjectReference Include="..\..\WMS\Crowbond.Modules.WMS.PublicApi\Crowbond.Modules.WMS.PublicApi.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj" />
   </ItemGroup>

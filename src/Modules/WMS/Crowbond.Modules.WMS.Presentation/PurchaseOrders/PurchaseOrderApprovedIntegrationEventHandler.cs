@@ -14,11 +14,8 @@ internal sealed class PurchaseOrderApprovedIntegrationEventHandler(ISender sende
         CancellationToken cancellationToken = default)
     {
         var request = new ReceiptRequest(
-            ReceivedDate: integrationEvent.UtcNow,
             PurchaseOrderId: integrationEvent.PurchaseOrderId,
             PurchaseOrderNo: integrationEvent.PurchaseOrderNo,
-            DeliveryNoteNumber: string.Empty,
-            CreateBy: integrationEvent.UserId,
             ReceiptLines: integrationEvent.ReceiptLines.Select(l => new ReceiptRequest.ReceiptLineRequest(
                 l.ProductId, l.Qty, l.UnitPrice)).ToList());
 

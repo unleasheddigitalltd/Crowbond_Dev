@@ -14,13 +14,7 @@ using Crowbond.Modules.OMS.Domain.RouteTrips;
 using Crowbond.Modules.OMS.Infrastructure.RouteTrips;
 using Crowbond.Modules.OMS.Domain.RouteTripLogs;
 using Crowbond.Modules.OMS.Infrastructure.RouteTripLogs;
-using Crowbond.Modules.OMS.Domain.RouteTripLogDatails;
-using Crowbond.Modules.OMS.Infrastructure.RouteTripLogDatails;
-using Crowbond.Modules.OMS.Domain.Deliveries;
-using Crowbond.Modules.OMS.Infrastructure.Deliveries;
-using Crowbond.Modules.OMS.Domain.DeliveryImages;
-using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
-using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Common.Infrastructure.Configuration;
 using Crowbond.Modules.OMS.Domain.Settings;
@@ -40,9 +34,8 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<RouteTrip> RouteTrips { get; set; }
     internal DbSet<RouteTripStatusHistory> RouteTripStatusHistories { get; set; }
     internal DbSet<RouteTripLog> RouteTripLogs { get; set; }
-    internal DbSet<RouteTripLogDatail> RouteTripLogDatails { get; set; }
-    internal DbSet<Delivery> Deliveries { get; set; }
-    internal DbSet<DeliveryImage> DeliveryImages { get; set; }
+    internal DbSet<OrderDelivery> OrderDeliveries { get; set; }
+    internal DbSet<OrderDeliveryImage> OrderDeliveryImages { get; set; }
     internal DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
     internal DbSet<PurchaseOrderStatusHistory> PurchaseOrderStatusHistories { get; set; }
     internal DbSet<Setting> Settings { get; set; }
@@ -67,9 +60,8 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new RouteTripConfiguration());
         modelBuilder.ApplyConfiguration(new RouteTripStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new RouteTripLogConfiguration());
-        modelBuilder.ApplyConfiguration(new RouteTripLogDatailConfiguration());
-        modelBuilder.ApplyConfiguration(new DeliveryConfiguration());
-        modelBuilder.ApplyConfiguration(new DeliveryImageConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderDeliveryConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderDeliveryImageConfiguration());
         modelBuilder.ApplyConfiguration(new OrderStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new PurchaseOrderStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new SettingConfiguration());

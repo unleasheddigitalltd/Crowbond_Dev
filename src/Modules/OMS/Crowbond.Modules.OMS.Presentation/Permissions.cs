@@ -21,7 +21,6 @@ internal static class Permissions
     internal const string ModifyRouteTrips = "route-trip:update";
     internal const string CreateRouteTrips = "route-trip:create";
 
-    internal const string ModifyRouteTriplogs = "route-trip-log:update";
     internal const string ModifyOtherRouteTripLogs = "route-trip-log:update:other";
 
     internal const string GetCart = "carts:read";
@@ -31,4 +30,8 @@ internal static class Permissions
     internal const string GetMyOrders = "orders:read:my";
     internal const string CreateOrders = "orders:create";
     internal const string CreateMyOrders = "orders:create:my";
+    internal const string AcceptOrders = "orders:accept";
+    internal const string DeliverOrders = "orders:deliver";
+
+    internal const string ReviewOrderLine = "order-lines:review";
 }

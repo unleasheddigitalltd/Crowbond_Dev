@@ -14,19 +14,15 @@ public sealed class ReceiptHeader : Entity
 
     public string ReceiptNo { get; private set; }
 
-    public DateTime ReceivedDate { get; private set; }
+    public DateOnly? ReceivedDate { get; private set; }
 
     public Guid? PurchaseOrderId { get; private set; }
 
     public string? PurchaseOrderNo { get; private set; }
 
-    public string DeliveryNoteNumber { get; private set; }
+    public string? DeliveryNoteNumber { get; private set; }
 
     public ReceiptStatus Status { get; private set; }
-
-    public Guid CreatedBy { get; set; }
-
-    public DateTime CreatedOnUtc { get; set; }
 
     public Guid? LastModifiedBy { get; set; }
 
@@ -36,36 +32,29 @@ public sealed class ReceiptHeader : Entity
 
     public static ReceiptHeader Create(
         string receiptNo,
-        DateTime receivedDate,
         Guid purchaseOrderId,
-        string? purchaseOrderNumber,
-        string deliveryNoteNumber,
-        Guid createdBy,
-        DateTime createdOnUtc)
+        string? purchaseOrderNumber)
     {
         var receiptHeader = new ReceiptHeader
         {
             Id = Guid.NewGuid(),
             ReceiptNo = receiptNo,
-            ReceivedDate = receivedDate,
             PurchaseOrderId = purchaseOrderId,
             PurchaseOrderNo = purchaseOrderNumber,
-            DeliveryNoteNumber = deliveryNoteNumber,
-            CreatedBy = createdBy,
-            CreatedOnUtc = createdOnUtc,
             Status = ReceiptStatus.Shipping
         };
 
         return receiptHeader;
     }
 
-    public Result Receive()
+    public Result Receive(DateTime utcNow)
     {
         if (Status != ReceiptStatus.Shipping)
         {
             return Result.Failure(ReceiptErrors.NotShipping);
         }
 
+        ReceivedDate = DateOnly.FromDateTime(utcNow);
         Status = ReceiptStatus.Received;
 
         return Result.Success();

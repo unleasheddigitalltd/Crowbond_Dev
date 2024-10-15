@@ -16,4 +16,7 @@ public sealed record OrderLineResponse(
     decimal Tax,
     decimal LineTotal,
     TaxRateType TaxRateType,
-    OrderLineStatus LineStatus);
+    OrderLineStatus LineStatus)
+{
+    public decimal AvailableQty { get; set; }
+}

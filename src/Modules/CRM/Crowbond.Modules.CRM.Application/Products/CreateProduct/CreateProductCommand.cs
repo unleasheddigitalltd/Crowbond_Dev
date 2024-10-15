@@ -11,7 +11,8 @@ public sealed record CreateProductCommand(
     string UnitOfMeasureName,
     string InventoryTypeName,
     Guid CategoryId,
-    string CategoryName,
+    Guid BrandId,
+    Guid ProductGroupId,
     TaxRateType TaxRateType,
     bool IsActive)
     : ICommand;

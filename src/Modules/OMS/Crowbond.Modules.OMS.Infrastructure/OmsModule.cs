@@ -22,13 +22,6 @@ using Crowbond.Modules.OMS.Domain.RouteTrips;
 using Crowbond.Modules.OMS.Infrastructure.RouteTrips;
 using Crowbond.Modules.OMS.Domain.RouteTripLogs;
 using Crowbond.Modules.OMS.Infrastructure.RouteTripLogs;
-using Crowbond.Modules.OMS.Domain.RouteTripLogDatails;
-using Crowbond.Modules.OMS.Infrastructure.RouteTripLogDatails;
-using Crowbond.Modules.OMS.Domain.Deliveries;
-using Crowbond.Modules.OMS.Infrastructure.Deliveries;
-using Crowbond.Modules.OMS.Domain.DeliveryImages;
-using Crowbond.Modules.OMS.Infrastructure.DeliveryImages;
-using Crowbond.Modules.OMS.Infrastructure.PurchaseOrderHeaders;
 using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.SoftDelete;
@@ -39,6 +32,9 @@ using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Modules.OMS.Application.Carts;
 using Crowbond.Modules.OMS.Domain.Settings;
 using Crowbond.Modules.OMS.Infrastructure.Settings;
+using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
+using Crowbond.Modules.OMS.Application.Orders;
+using Crowbond.Modules.OMS.Infrastructure.FileStorage;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -74,7 +70,6 @@ public static class OmsModule
                 .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
@@ -83,16 +78,20 @@ public static class OmsModule
         services.AddScoped<IRouteTripRepository, RouteTripRepository>();
         services.AddScoped<IRouteTripStatusHistoryRepository, RouteTripStatusHistoryRepository>();
         services.AddScoped<IRouteTripLogRepository, RouteTripLogRepository>();
-        services.AddScoped<IRouteTripLogDatailRepository, RouteTripLogDatailRepository>();
-        services.AddScoped<IDeliveryRepository, DeliveryRepository>();
-        services.AddScoped<IDeliveryImageRepository, DeliveryImageRepository>();
         services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
 
         services.AddSingleton<CartService>();
+        services.AddScoped<InventoryService>();
 
         services.AddScoped<IDriverContext, DriverContext>();
         services.AddScoped<IContactContext, CustomerContext>();
+
+        services.AddScoped<IOrderFileAccess, OrderFileAccess>();
+
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
+
+        services.Configure<FileStorageOptions>(configuration.GetSection("OMS:FileSettings"));
 
         services.Configure<OutboxOptions>(configuration.GetSection("OMS:Outbox"));
         services.ConfigureOptions<ConfigureProcessOutboxJob>();

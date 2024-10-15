@@ -776,6 +776,44 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("product_prices", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Brand", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_brands");
+
+                    b.ToTable("brands", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_categories");
+
+                    b.ToTable("categories", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -783,15 +821,13 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("brand_id");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid")
                         .HasColumnName("category_id");
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("category_name");
 
                     b.Property<string>("FilterTypeName")
                         .IsRequired()
@@ -811,9 +847,13 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("name");
+
+                    b.Property<Guid>("ProductGroupId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_group_id");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -835,6 +875,25 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasName("pk_products");
 
                     b.ToTable("products", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Products.ProductGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_groups");
+
+                    b.ToTable("product_groups", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Recipients.Recipient", b =>

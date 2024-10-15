@@ -26,8 +26,12 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                  p.name AS {nameof(CustomerProductPriceResponse.ProductName)},
                  p.sku AS {nameof(CustomerProductPriceResponse.ProductSku)},
                  p.unit_of_measure_name AS {nameof(CustomerProductPriceResponse.UnitOfMeasureName)},
-                 p.category_id AS {nameof(CustomerProductPriceResponse.CategoryId)},
-                 p.category_name AS {nameof(CustomerProductPriceResponse.CategoryName)},
+                 c.id AS {nameof(CustomerProductPriceResponse.CategoryId)},
+                 ct.name AS {nameof(CustomerProductPriceResponse.CategoryName)},
+                 b.id AS {nameof(CustomerProductPriceResponse.BrandId)},
+                 b.name AS {nameof(CustomerProductPriceResponse.BrandName)},
+                 pg.id AS {nameof(CustomerProductPriceResponse.ProductGroupId)},
+                 pg.name AS {nameof(CustomerProductPriceResponse.ProductGroupName)},
                  CASE 
                      WHEN cp.fixed_price IS NOT NULL             
                         AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
@@ -51,6 +55,9 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                  p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)}
              FROM crm.customer_products cp
              INNER JOIN crm.products p ON cp.product_id = p.id
+             INNER JOIN crm.categories ct ON ct.id = p.category_id
+             INNER JOIN crm.brands b ON b.id = p.brand_id
+             INNER JOIN crm.product_groups pg ON pg.id = p.product_group_id
              INNER JOIN crm.customers c ON cp.customer_id = c.id
              INNER JOIN crm.price_tiers pt ON c.price_tier_id = pt.id
              INNER JOIN crm.product_prices pp ON pp.price_tier_id = pt.id AND pp.product_id = p.id

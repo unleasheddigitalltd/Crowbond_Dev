@@ -7,6 +7,11 @@ namespace Crowbond.Modules.OMS.Infrastructure.RouteTripLogs;
 
 internal sealed class RouteTripLogRepository(OmsDbContext context) : IRouteTripLogRepository
 {
+    public async Task<RouteTripLog?> GetActiveByDriverIdAsync(Guid DriverId, CancellationToken cancellationToken = default)
+    {
+        return await context.RouteTripLogs.SingleOrDefaultAsync(r => r.DriverId == DriverId && r.LoggedOffTime == null, cancellationToken);
+    }
+
     public async Task<RouteTripLog> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context.RouteTripLogs.SingleOrDefaultAsync(l => l.Id == id, cancellationToken);

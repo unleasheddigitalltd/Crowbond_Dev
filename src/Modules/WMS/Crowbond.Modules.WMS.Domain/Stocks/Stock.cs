@@ -21,7 +21,7 @@ public sealed class Stock : Entity , IAuditable
 
     public string BatchNumber { get; private set; }
 
-    public DateTime ReceivedDate { get; private set; }
+    public DateOnly ReceivedDate { get; private set; }
 
     public DateOnly? SellByDate { get; private set; }
 
@@ -47,7 +47,7 @@ public sealed class Stock : Entity , IAuditable
         Guid productId,
         Guid locationId,
         string batchNumber,
-        DateTime receivedDate,
+        DateOnly receivedDate,
         DateOnly? sellByDate,
         DateOnly? useByDate,
         Guid receiptLineId,

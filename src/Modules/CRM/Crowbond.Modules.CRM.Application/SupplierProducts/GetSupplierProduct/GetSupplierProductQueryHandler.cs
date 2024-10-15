@@ -23,13 +23,21 @@ internal sealed class GetSupplierProductQueryHandler(IDbConnectionFactory dbConn
                  p.name AS {nameof(SupplierProductResponse.ProductName)},
                  p.sku AS {nameof(SupplierProductResponse.ProductSku)},
                  p.unit_of_measure_name AS {nameof(SupplierProductResponse.UnitOfMeasureName)},
-                 p.category_id AS {nameof(SupplierProductResponse.CategoryId)},
+                 c.id AS {nameof(SupplierProductResponse.CategoryId)},
+                 c.name AS {nameof(SupplierProductResponse.CategoryName)},
+                 b.id AS {nameof(SupplierProductResponse.BrandId)},
+                 b.name AS {nameof(SupplierProductResponse.BrandName)},
+                 pg.id AS {nameof(SupplierProductResponse.ProductGroupId)},
+                 pg.name AS {nameof(SupplierProductResponse.ProductGroupName)},
                  sp.unit_price AS {nameof(SupplierProductResponse.UnitPrice)},
                  p.tax_rate_type AS {nameof(SupplierProductResponse.TaxRateType)},
                  sp.is_default AS {nameof(SupplierProductResponse.IsDefault)},
                  sp.comments AS {nameof(SupplierProductResponse.Comments)}
              FROM crm.supplier_products sp
-             INNER JOIN crm.products p ON p.id = sp.product_id
+             INNER JOIN crm.products p ON p.id = sp.product_id             
+             INNER JOIN crm.categories c ON c.id = p.category_id
+             INNER JOIN crm.brands b ON b.id = p.brand_id
+             INNER JOIN crm.product_groups pg ON pg.id = p.product_group_id
              WHERE sp.supplier_id = @SupplierId AND p.id = @ProductId AND sp.is_deleted = false
              """;
 

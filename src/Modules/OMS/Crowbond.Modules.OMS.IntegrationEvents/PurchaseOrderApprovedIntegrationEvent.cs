@@ -9,25 +9,17 @@ public sealed class PurchaseOrderApprovedIntegrationEvent : IntegrationEvent
         DateTime occurredOnUtc,
         Guid purchaseOrderId,
         string? purchaseOrderNo,
-        Guid userId,
-        DateTime utcNow,
         List<ReceiptLine> receiptLines)
         : base(id, occurredOnUtc)
     {
         PurchaseOrderId = purchaseOrderId;
         PurchaseOrderNo = purchaseOrderNo;
-        UserId = userId;
-        UtcNow = utcNow;
         ReceiptLines = receiptLines;
     }
 
     public Guid PurchaseOrderId { get; init; }
 
     public string? PurchaseOrderNo { get; init; }
-
-    public Guid UserId { get; init; }
-
-    public DateTime UtcNow { get; init; }
 
     public List<ReceiptLine> ReceiptLines { get; init; }
 

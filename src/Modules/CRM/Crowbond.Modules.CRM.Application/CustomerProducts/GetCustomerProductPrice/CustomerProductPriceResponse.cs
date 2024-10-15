@@ -8,6 +8,10 @@ public sealed record CustomerProductPriceResponse(
     string UnitOfMeasureName,
     Guid CategoryId,
     string CategoryName,
+    Guid BrandId,
+    string BrandName,
+    Guid ProductGroupId,
+    string ProductGroupName,
     decimal UnitPrice,
     bool IsFixedPrice,
     int TaxRateType);

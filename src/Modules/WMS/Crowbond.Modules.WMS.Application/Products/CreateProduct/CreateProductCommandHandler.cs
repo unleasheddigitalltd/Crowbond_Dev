@@ -1,25 +1,36 @@
-﻿using System.Xml.Linq;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
-using Crowbond.Modules.WMS.Domain.Categories;
 using Crowbond.Modules.WMS.Domain.Products;
 
 namespace Crowbond.Modules.WMS.Application.Products.CreateProduct;
 
 internal sealed class CreateProductCommandHandler(
-    ICategoryRepository categoryRepository,
     IProductRepository productRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateProductCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        Category? category = await categoryRepository.GetAsync(request.Product.CategoryId, cancellationToken);
+        Category? category = await productRepository.GetCategoryAsync(request.Product.CategoryId, cancellationToken);
 
         if (category is null)
         {
-            return Result.Failure<Guid>(CategoryErrors.NotFound(request.Product.CategoryId));
+            return Result.Failure<Guid>(ProductErrors.CategoryNotFound(request.Product.CategoryId));
+        }
+
+        Brand? brand = await productRepository.GetBrandAsync(request.Product.BrandId, cancellationToken);
+
+        if (brand is null)
+        {
+            return Result.Failure<Guid>(ProductErrors.BrandNotFound(request.Product.BrandId));
+        }
+        
+        ProductGroup? productGroup = await productRepository.GetProductGroupAsync(request.Product.ProductGroupId, cancellationToken);
+
+        if (productGroup is null)
+        {
+            return Result.Failure<Guid>(ProductErrors.ProductGroupNotFound(request.Product.ProductGroupId));
         }
 
         FilterType? filterType = await productRepository.GetFilterTypeAsync(request.Product.FilterTypeName, cancellationToken);
@@ -47,10 +58,12 @@ internal sealed class CreateProductCommandHandler(
              request.Product.Sku,
              request.Product.Name,
              request.Product.Parent,
-             filterType,
-             unitOfMeasure,
-             category,
-             inventoryType,
+             request.Product.FilterTypeName,
+             request.Product.UnitOfMeasureName,
+             request.Product.InventoryTypeName,
+             request.Product.CategoryId,
+             request.Product.BrandId,
+             request.Product.ProductGroupId,
              request.Product.TaxRateType,
              request.Product.Barcode,
              request.Product.PackSize,

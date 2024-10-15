@@ -20,7 +20,8 @@ public sealed class Route : Entity
 
     public string DaysOfWeek { get; private set; }
 
-    public Route Create(
+    public static Route Create(
+        Guid id,
         string name,
         int position,
         TimeOnly cutOffTime,
@@ -28,7 +29,7 @@ public sealed class Route : Entity
     {
         var route = new Route
         {
-            Id = Guid.NewGuid(),
+            Id = id,
             Name = name,
             Position = position,
             CutOffTime = cutOffTime,

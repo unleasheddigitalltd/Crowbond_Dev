@@ -24,7 +24,7 @@ internal sealed class GetProductStocksQueryHandler(IDbConnectionFactory dbConnec
                 0.00 AS  {nameof(StockResponse.Allocated)},
                 0.00 AS  {nameof(StockResponse.OnHold)},
              	l.name AS {nameof(StockResponse.Location)},
-             	CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(StockResponse.DaysInStock)}
+             	CURRENT_DATE - s.received_date AS {nameof(StockResponse.DaysInStock)}
              FROM wms.stocks s
              INNER JOIN wms.locations l ON l.id = s.location_id
              WHERE s.product_id = @ProductId;

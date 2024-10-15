@@ -13,7 +13,7 @@ internal sealed class CreateCustomer : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("Customers", async (CustomerRequest request, ISender sender) =>
+        app.MapPost("customers", async (CustomerRequest request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CreateCustomerCommand(Guid.NewGuid(), request));
 

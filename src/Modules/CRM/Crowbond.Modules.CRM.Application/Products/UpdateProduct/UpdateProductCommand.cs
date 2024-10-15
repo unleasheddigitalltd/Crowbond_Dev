@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.EventBus;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Modules.CRM.Domain.Products;
 
 namespace Crowbond.Modules.CRM.Application.Products.UpdateProduct;
@@ -12,7 +11,8 @@ public sealed record UpdateProductCommand(
     string UnitOfMeasureName,
     string InventoryTypeName,
     Guid CategoryId,
-    string CategoryName,
+    Guid BrandId,
+    Guid ProductGroupId,
     TaxRateType TaxRateType,
     bool IsActive)
     : ICommand;

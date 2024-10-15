@@ -204,6 +204,18 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "product-groups:create"
+                        },
+                        new
+                        {
+                            Code = "categories:create"
+                        },
+                        new
+                        {
+                            Code = "brands:create"
+                        },
+                        new
+                        {
                             Code = "stocks:read"
                         },
                         new
@@ -352,10 +364,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Code = "route-trip-log:update"
-                        },
-                        new
-                        {
                             Code = "route-trip-log:update:other"
                         },
                         new
@@ -413,6 +421,18 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "orders:create:my"
+                        },
+                        new
+                        {
+                            Code = "orders:accept"
+                        },
+                        new
+                        {
+                            Code = "orders:deliver"
+                        },
+                        new
+                        {
+                            Code = "order-lines:review"
                         });
                 });
 
@@ -539,7 +559,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "route-trip-log:update",
+                            PermissionCode = "orders:deliver",
                             RoleName = "Driver"
                         },
                         new
@@ -660,6 +680,21 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "products:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "product-groups:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "categories:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "brands:create",
                             RoleName = "Administrator"
                         },
                         new
@@ -849,11 +884,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            PermissionCode = "route-trip-log:update",
-                            RoleName = "Administrator"
-                        },
-                        new
-                        {
                             PermissionCode = "route-trip-log:update:other",
                             RoleName = "Administrator"
                         },
@@ -900,6 +930,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "orders:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:accept",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "order-lines:review",
                             RoleName = "Administrator"
                         });
                 });

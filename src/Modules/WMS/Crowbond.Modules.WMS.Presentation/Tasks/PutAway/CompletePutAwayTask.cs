@@ -14,7 +14,7 @@ internal sealed class CompletePutAwayTask : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("task/putaway/{id}/complete", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
+        app.MapPut("tasks/putaway/{id}/complete", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new CompletePutAwayTaskCommand(operatorContext.WarehouseOperatorId, id));
 

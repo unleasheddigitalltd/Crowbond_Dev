@@ -1,9 +1,11 @@
-﻿using Crowbond.Modules.OMS.Domain.Products;
+﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
-public sealed class OrderLine
+public sealed class OrderLine: Entity
 {
+
     private OrderLine()
     {
     }
@@ -20,6 +22,18 @@ public sealed class OrderLine
 
     public string UnitOfMeasureName { get; private set; }
 
+    public Guid CategoryId { get; private set; }
+
+    public string CategoryName { get; private set; }
+
+    public Guid BrandId { get; private set; }
+
+    public string BrandName { get; private set; }
+
+    public Guid ProductGroupId { get; private set; }
+
+    public string ProductGroupName { get; private set; }
+
     public decimal UnitPrice { get; private set; }
 
     public decimal Qty { get; private set; }
@@ -34,11 +48,19 @@ public sealed class OrderLine
 
     public OrderLineStatus Status { get; private set; }
 
+    public OrderHeader Header { get; }
+
     internal static OrderLine Create(
         Guid productId,
         string productSku,
         string productName,
         string unitOfMeasureName,
+        Guid categoryId,
+        string categoryName,
+        Guid brandId,
+        string brandName,
+        Guid productGroupId,
+        string productGroupName,
         decimal unitPrice,
         decimal qty,
         TaxRateType taxRateType)
@@ -50,6 +72,12 @@ public sealed class OrderLine
             ProductSku = productSku,
             ProductName = productName,
             UnitOfMeasureName = unitOfMeasureName,
+            CategoryId = categoryId,
+            CategoryName = categoryName,
+            BrandId = brandId,
+            BrandName = brandName,
+            ProductGroupId = productGroupId,
+            ProductGroupName = productGroupName,
             UnitPrice = unitPrice,
             TaxRateType = taxRateType,
             Qty = qty,
@@ -75,9 +103,8 @@ public sealed class OrderLine
     {
         return taxRateType switch
         {
-            TaxRateType.VatOnIncome => 0.2m,
             TaxRateType.NoVat => 0,
-            TaxRateType.ZeroRatedIncome => 0,
+            TaxRateType.Vat => 0.2m,
             _ => 0
         };
     }

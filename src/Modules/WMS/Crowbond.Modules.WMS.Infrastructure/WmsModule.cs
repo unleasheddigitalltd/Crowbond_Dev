@@ -14,9 +14,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Crowbond.Modules.WMS.Application;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Products;
-using Crowbond.Modules.WMS.Domain.Categories;
 using Crowbond.Modules.WMS.Infrastructure.Products;
-using Crowbond.Modules.WMS.Infrastructure.Categories;
 using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Modules.WMS.Infrastructure.Stocks;
 using Crowbond.Modules.WMS.Domain.Locations;
@@ -36,6 +34,10 @@ using Crowbond.Modules.WMS.Application.Abstractions.Authentication;
 using Crowbond.Modules.WMS.Infrastructure.Authentication;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
+using Crowbond.Modules.WMS.Domain.Dispatches;
+using Crowbond.Modules.WMS.Infrastructure.Dispatches;
+using Crowbond.Modules.WMS.PublicApi;
+using Crowbond.Modules.WMS.Infrastructure.PublicApi;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -60,6 +62,7 @@ public static class WmsModule
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderApprovedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderCancelledIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderAcceptedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -81,8 +84,6 @@ public static class WmsModule
 
         services.AddScoped<IProductRepository, ProductRepository>();
 
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-
         services.AddScoped<IStockRepository, StockRepository>();
 
         services.AddScoped<ILocationRepository, LocationRepository>();
@@ -95,7 +96,11 @@ public static class WmsModule
 
         services.AddScoped<ITaskRepository, TaskRepository>();
 
+        services.AddScoped<IDispatchRepository, DispatchRepository>();
+
         services.AddScoped<IWarehouseOperatorContext, WarehouseOperatorContext>();
+
+        services.AddScoped<IStockApi, StockApi>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 

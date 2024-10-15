@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Drivers;
 
 namespace Crowbond.Modules.OMS.Domain.Routes;
 
@@ -20,7 +21,7 @@ public sealed class Route : Entity
 
     public string DaysOfWeek { get; private set; }
 
-    public Route Create(
+    public static Route Create(
         string name,
         int position,
         TimeOnly cutOffTime,
@@ -35,6 +36,7 @@ public sealed class Route : Entity
             DaysOfWeek = DaysOfWeek
         };
 
+        route.Raise(new RouteCreatedDomainEvent(route.Id, route.Name, route.Position, route.CutOffTime, route.DaysOfWeek));
         return route;
     }
 
@@ -48,5 +50,7 @@ public sealed class Route : Entity
         Position = position;
         CutOffTime = cutOffTime;
         DaysOfWeek = daysOfWeek;
+
+        Raise(new RouteUpdatedDomainEvent(Id, Name, Position, CutOffTime, DaysOfWeek));
     }
 }

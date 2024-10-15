@@ -36,7 +36,8 @@ internal sealed class ProductCreatedDomainEventHandler(ISender sender, IEventBus
                 result.Value.UnitOfMeasureName,
                 result.Value.InventoryTypeName,
                 result.Value.CategoryId,
-                result.Value.CategoryName,
+                result.Value.BrandId,
+                result.Value.ProductGroupId,
                 result.Value.TaxRateType,
                 result.Value.IsActive),
             cancellationToken);

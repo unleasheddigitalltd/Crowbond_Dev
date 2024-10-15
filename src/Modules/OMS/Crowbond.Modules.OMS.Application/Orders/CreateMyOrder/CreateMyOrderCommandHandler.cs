@@ -127,14 +127,25 @@ internal sealed class CreateMyOrderCommandHandler(
 
         foreach (CartItem item in cart.Items)
         {
-            result.Value.AddLine(
+            Result<OrderLine> lineResult = result.Value.AddLine(
                 item.ProductId,
                 item.ProductSku,
                 item.ProductName,
                 item.UnitOfMeasureName,
+                item.CategoryId,
+                item.CategoryName,
+                item.BrandId,
+                item.BrandName,
+                item.ProductGroupId,
+                item.ProductGroupName,
                 item.UnitPrice,
                 item.Qty,
                 item.TaxRateType);
+
+            if (lineResult.IsFailure)
+            {
+                return Result.Failure(lineResult.Error);
+            }
         }
 
         orderRepository.Insert(result.Value);

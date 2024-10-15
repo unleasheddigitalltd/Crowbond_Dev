@@ -31,7 +31,7 @@ internal sealed class GetCustomerForOrderQueryHandler(IDbConnectionFactory dbCon
                 c.detailed_invoice AS {nameof(CustomerForOrderResponse.DetailedInvoice)},
                 c.customer_notes AS {nameof(CustomerForOrderResponse.CustomerNotes)}
              FROM crm.customers c
-             INNER JOIN crm.customer_contact cc ON c.id = cc.customer_id
+             INNER JOIN crm.customer_contacts cc ON c.id = cc.customer_id
              WHERE cc.is_active = true AND c.is_active = true AND cc.id = @ContactId;
              """;
 

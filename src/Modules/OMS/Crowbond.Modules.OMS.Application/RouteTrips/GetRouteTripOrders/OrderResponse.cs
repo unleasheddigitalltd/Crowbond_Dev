@@ -3,16 +3,16 @@
 namespace Crowbond.Modules.OMS.Application.RouteTrips.GetRouteTripOrders;
 public sealed record OrderResponse(
     Guid Id,
-    string OrderNumber,
+    string OrderNo,
     Guid CustomerId,
     string CustomerBusinessName,
     string DeliveryLocationName,
     string DeliveryFullName,
     string DeliveryPhone,
     string DeliveryMobile,
-    string DeliveryNotes,
+    string? DeliveryNotes,
     string DeliveryAddressLine1,
-    string DeliveryAddressLine2,
+    string? DeliveryAddressLine2,
     string DeliveryTownCity,
     string DeliveryCounty,
     string DeliveryPostalCode,
@@ -21,7 +21,7 @@ public sealed record OrderResponse(
     string RouteName,
     decimal OrderAmount,
     PaymentMethod PaymentMethod,
-    string CustomerComment)
+    string? CustomerComment)
 
 {
     public List<OrderLineResponse> OrderLines { get; set; } = [];

@@ -13,13 +13,13 @@ internal sealed class UpdateProductPrices : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("price-tiers/products/{id}", async (Guid id, IReadOnlyCollection<ProductPriceRequest> request, ISender sender) =>
+        app.MapPut("product-prices/products/{id}", async (Guid id, IReadOnlyCollection<ProductPriceRequest> request, ISender sender) =>
         {
             Result result = await sender.Send(new UpdateProductPricesCommand(id, request));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyPriceTiers)
-            .WithTags(Tags.PriceTiers);
+            .WithTags(Tags.ProductPrices);
     }
 }

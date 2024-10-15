@@ -24,9 +24,10 @@ internal sealed class UpdateProductCommandHandler(
             request.Sku, 
             request.FilterTypeName, 
             request.UnitOfMeasureName, 
-            request.InventoryTypeName, 
-            request.CategoryId, 
-            request.CategoryName,
+            request.InventoryTypeName,
+            request.CategoryId,
+            request.BrandId,
+            request.ProductGroupId,
             request.TaxRateType,
             request.IsActive);
 
