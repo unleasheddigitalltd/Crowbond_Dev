@@ -6,7 +6,7 @@ public sealed record SupplierContactDetailsResponse(
     string FirstName,
     string LastName,
     string PhoneNumber,
-    string? Mobile,
+    string Mobile,
     string Username,
     string Email,
     bool IsPrimary,

@@ -22,6 +22,7 @@ internal sealed class SupplierContactCreatedIntegrationEventHandler(ISender send
                 integrationEvent.Username,
                 integrationEvent.FirstName,
                 integrationEvent.LastName,
+                integrationEvent.Mobile,
                 Role.Supplier),
             cancellationToken);
 

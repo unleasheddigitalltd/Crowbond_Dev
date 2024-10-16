@@ -22,6 +22,7 @@ internal sealed class WarehouseOperatorCreatedIntegrationEventHandler(ISender se
                 integrationEvent.Username,
                 integrationEvent.FirstName,
                 integrationEvent.LastName,
+                integrationEvent.Mobile,
                 Role.WarehouseOperator),
             cancellationToken);
 

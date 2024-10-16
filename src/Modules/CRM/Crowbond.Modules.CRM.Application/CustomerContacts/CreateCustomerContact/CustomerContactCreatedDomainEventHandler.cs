@@ -33,7 +33,8 @@ internal sealed class CustomerContactCreatedDomainEventHandler(ISender sender, I
                 result.Value.Username,
                 result.Value.Email,
                 result.Value.FirstName,
-                result.Value.LastName),
+                result.Value.LastName,
+                result.Value.Mobile),
             cancellationToken);
     }
 }

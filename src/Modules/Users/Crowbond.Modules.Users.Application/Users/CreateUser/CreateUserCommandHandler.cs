@@ -25,7 +25,14 @@ internal sealed class CreateUserCommandHandler(
             return Result.Failure(result.Error);
         }
 
-        var user = User.Create(request.UserId, request.Username, request.Email, request.FirstName, request.LastName, result.Value);
+        var user = User.Create(
+            request.UserId,
+            request.Username,
+            request.Email,
+            request.FirstName,
+            request.LastName,
+            request.Mobile,
+            result.Value);
 
         user.AddRole(request.Role);
 

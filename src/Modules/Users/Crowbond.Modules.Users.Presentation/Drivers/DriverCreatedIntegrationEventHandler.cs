@@ -22,6 +22,7 @@ internal sealed class DriverCreatedIntegrationEventHandler(ISender sender)
                 integrationEvent.Username,
                 integrationEvent.FirstName,
                 integrationEvent.LastName,
+                integrationEvent.Mobile,
                 Role.Driver),
             cancellationToken);
 

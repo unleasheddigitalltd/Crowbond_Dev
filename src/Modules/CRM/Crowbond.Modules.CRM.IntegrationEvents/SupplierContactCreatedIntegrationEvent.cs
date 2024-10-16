@@ -11,7 +11,9 @@ public sealed class SupplierContactCreatedIntegrationEvent : IntegrationEvent
         string username,
         string email,
         string firstName,
-        string lastName)
+        string lastName,
+        string mobile
+        )
         : base(id, occurredOnUtc)
     {
         UserId = userId;
@@ -19,6 +21,7 @@ public sealed class SupplierContactCreatedIntegrationEvent : IntegrationEvent
         Email = email;
         FirstName = firstName;
         LastName = lastName;
+        Mobile = mobile;
     }
 
     public Guid UserId { get; init; }
@@ -30,4 +33,6 @@ public sealed class SupplierContactCreatedIntegrationEvent : IntegrationEvent
     public string FirstName { get; init; }
 
     public string LastName { get; init; }
+
+    public string Mobile { get; init; }
 }

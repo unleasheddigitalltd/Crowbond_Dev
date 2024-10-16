@@ -22,6 +22,7 @@ internal sealed class CustomerContactCreatedIntegrationEventHandler(ISender send
                 integrationEvent.Username,
                 integrationEvent.FirstName,
                 integrationEvent.LastName,
+                integrationEvent.Mobile,
                 Role.Customer),
             cancellationToken);
 
