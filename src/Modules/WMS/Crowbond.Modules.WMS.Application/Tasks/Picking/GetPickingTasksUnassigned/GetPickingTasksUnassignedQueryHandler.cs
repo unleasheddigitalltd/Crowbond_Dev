@@ -32,8 +32,8 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                     d.order_no AS {nameof(PickingTask.OrderNo)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.task_headers t
-                LEFT JOIN task_assignments ta ON ta.task_header_id = t.id
-                INNER JOIN wms.dispatch_headers d ON d.id = t.receipt_id
+                LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
+                INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
                 WHERE
                     t.task_type = 1 
                     AND ta.id IS NULL
@@ -54,8 +54,8 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
 
             SELECT Count(*) 
             FROM wms.task_headers t
-            LEFT JOIN task_assignments ta ON ta.task_header_id = t.id
-            INNER JOIN wms.dispatch_headers d ON d.id = t.receipt_id
+            LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
+            INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
             WHERE
                 t.task_type = 1 
                 AND ta.id IS NULL
