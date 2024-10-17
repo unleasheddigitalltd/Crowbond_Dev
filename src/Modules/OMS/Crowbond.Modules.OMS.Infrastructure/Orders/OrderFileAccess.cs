@@ -10,6 +10,7 @@ namespace Crowbond.Modules.OMS.Infrastructure.Orders;
 internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IOrderFileAccess
 {
     private readonly FileStorageOptions _options = options.Value;
+    private readonly List<string> _allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
     public async Task DeleteDeliveryImageAsync(string imageName, CancellationToken cancellationToken = default)
     {
         using var ftpClient = new AsyncFtpClient(_options.FtpHost, new NetworkCredential(_options.FtpUsername, _options.FtpPassword));
@@ -43,6 +44,12 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
         if (image.Length > _options.MaxFileSizeKb * 1024)
         {
             throw new ArgumentException($"File size exceeds the {_options.MaxFileSizeKb} KB limit.");
+        }
+
+        string fileExtension = Path.GetExtension(image.FileName).ToLowerInvariant();
+        if (!_allowedExtensions.Contains(fileExtension))
+        {
+            throw new ArgumentException($"Invalid file type. Only the following file types are allowed: {string.Join(", ", _allowedExtensions)}.");
         }
 
         string imageFileName;
