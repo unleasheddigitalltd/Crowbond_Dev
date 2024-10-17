@@ -19,6 +19,7 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
             user.Email,
             user.FirstName,
             user.LastName,
+            new UserAttribute(user.Mobile),
             true,
             true,
             [new CredentialRepresentation(PasswordCredentialType, user.Password, false)]);

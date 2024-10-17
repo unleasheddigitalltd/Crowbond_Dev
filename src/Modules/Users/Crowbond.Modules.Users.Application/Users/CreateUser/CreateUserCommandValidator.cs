@@ -1,16 +1,15 @@
 ﻿using FluentValidation;
 
-namespace Crowbond.Modules.Users.Application.Users.RegisterUser;
+namespace Crowbond.Modules.Users.Application.Users.CreateUser;
 
-internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+internal sealed class CreateUserCommandValidator: AbstractValidator<CreateUserCommand>
 {
-    public RegisterUserCommandValidator()
+    public CreateUserCommandValidator()
     {
         RuleFor(c => c.Username).NotEmpty().MaximumLength(100);
         RuleFor(c => c.FirstName).NotEmpty().MaximumLength(100);
         RuleFor(c => c.LastName).NotEmpty().MaximumLength(100);
         RuleFor(c => c.Mobile).NotEmpty().MaximumLength(20).Matches(@"^(\+44|0)7\d{9}$");
         RuleFor(c => c.Email).EmailAddress();
-        RuleFor(c => c.Password).MinimumLength(6);
     }
 }

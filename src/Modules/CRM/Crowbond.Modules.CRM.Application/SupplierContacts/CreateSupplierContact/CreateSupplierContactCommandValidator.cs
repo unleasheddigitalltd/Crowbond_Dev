@@ -10,7 +10,7 @@ internal sealed class CreateSupplierContactCommandValidator : AbstractValidator<
         RuleFor(t => t.SupplierContact.LastName).NotEmpty().MaximumLength(100);
         RuleFor(t => t.SupplierContact.Username).NotEmpty().MaximumLength(128);
         RuleFor(t => t.SupplierContact.PhoneNumber).NotEmpty().MaximumLength(20);
-        RuleFor(t => t.SupplierContact.Mobile).MaximumLength(20);
+        RuleFor(t => t.SupplierContact.Mobile).NotEmpty().MaximumLength(20).Matches(@"^(\+44|0)7\d{9}$");
         RuleFor(t => t.SupplierContact.Email).NotEmpty().MaximumLength(255);
     }
 }
