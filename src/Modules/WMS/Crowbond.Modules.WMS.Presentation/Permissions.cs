@@ -25,6 +25,8 @@ internal static class Permissions
     internal const string ManagePutAwayTasks = "tasks:putaway:manage";
     internal const string ExecutePutAwayTasks = "tasks:putaway:execute";
 
+    internal const string ExecutePickingTasks = "tasks:picking:execute";
+
     internal const string GetWarehouseOperators = "warehouse-operators:read";
     internal const string ModifyWarehouseOperators = "warehouse-operators:update";
     internal const string CreateWarehouseOperators = "warehouse-operators:create";

@@ -82,6 +82,8 @@ public sealed class Permission
     public static readonly Permission ManagePutAwayTasks = new("tasks:putaway:manage");
     public static readonly Permission ExecutePutAwayTasks = new("tasks:putaway:execute");
 
+    public static readonly Permission ExecutePickingTasks = new("tasks:picking:execute");
+
     public static readonly Permission GetWarehouseOperators = new("warehouse-operators:read");
     public static readonly Permission ModifyWarehouseOperators = new("warehouse-operators:update");
     public static readonly Permission CreateWarehouseOperators = new("warehouse-operators:create");
