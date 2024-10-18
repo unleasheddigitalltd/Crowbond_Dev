@@ -1,7 +1,8 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.WMS.Application.Tasks.Picking.GetPickingTasksUnassigned;
+using Crowbond.Modules.WMS.Application.Abstractions.Authentication;
+using Crowbond.Modules.WMS.Application.Tasks.Picking.GetMyPickingTaskAssignments;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,20 +10,14 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.WMS.Presentation.Tasks.Picking;
 
-internal sealed class GetPickingTasksUnassigned : IEndpoint
+internal sealed class GetMyPickingTaskAssignments : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("tasks/picking/unassigned", async (
-            ISender sender,
-            string search = "",
-            string sort = "taskNo",
-            string order = "asc",
-            int page = 0,
-            int size = 10) =>
+        app.MapGet("tasks/picking/my/assignments", async (IWarehouseOperatorContext operatorContext, ISender sender) =>
         {
-            Result<PickingTasksResponse> result = await sender.Send(
-                new GetPickingTasksUnassignedQuery(search, sort, order, page, size));
+            Result<IReadOnlyCollection<TaskAssignmentResponse>> result = await sender.Send(
+                new GetMyPickingTaskAssignmentsQuery(operatorContext.WarehouseOperatorId));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

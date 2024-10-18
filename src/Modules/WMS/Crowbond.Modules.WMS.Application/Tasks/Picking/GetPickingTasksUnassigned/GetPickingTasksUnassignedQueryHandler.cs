@@ -36,12 +36,14 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                 INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
                 WHERE
                     t.task_type = 1 
-                    AND ta.id IS NULL
+                    AND (ta.id IS NULL OR ta.status NOT IN (0, 1, 2))
                     AND (
                         t.task_no ILIKE '%' || @Search || '%'
                         OR d.dispatch_no ILIKE '%' || @Search || '%'   
                         OR d.order_no ILIKE '%' || @Search || '%'
                     )
+                GROUP BY
+                    t.id, t.task_no, d.dispatch_no, d.order_no
             )
             SELECT 
                 t.{nameof(PickingTask.Id)},
@@ -52,18 +54,18 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
             WHERE t.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY t.RowNum;
 
-            SELECT Count(*) 
+            SELECT Count(t.id) 
             FROM wms.task_headers t
             LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
             INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
             WHERE
                 t.task_type = 1 
-                AND ta.id IS NULL
+                AND (ta.id IS NULL OR ta.status NOT IN (0, 1, 2))
                 AND (
                     t.task_no ILIKE '%' || @Search || '%'
                     OR d.dispatch_no ILIKE '%' || @Search || '%'   
                     OR d.order_no ILIKE '%' || @Search || '%'
-                )                    
+                )
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

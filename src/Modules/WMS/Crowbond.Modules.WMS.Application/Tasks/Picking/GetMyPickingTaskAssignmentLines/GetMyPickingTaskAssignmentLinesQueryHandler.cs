@@ -2,15 +2,14 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTaskAssignments;
 using Dapper;
 
-namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.GetPutAwayTaskAssignmentLines;
+namespace Crowbond.Modules.WMS.Application.Tasks.Picking.GetMyPickingTaskAssignmentLines;
 
-internal sealed class GetPutAwayTaskAssignmentLinesQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetPutAwayTaskAssignmentLinesQuery, IReadOnlyCollection<TaskAssignmentLineResponse>>
+internal sealed class GetMyPickingTaskAssignmentLinesQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    : IQueryHandler<GetMyPickingTaskAssignmentLinesQuery, IReadOnlyCollection<TaskAssignmentLineResponse>>
 {
-    public async Task<Result<IReadOnlyCollection<TaskAssignmentLineResponse>>> Handle(GetPutAwayTaskAssignmentLinesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyCollection<TaskAssignmentLineResponse>>> Handle(GetMyPickingTaskAssignmentLinesQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -24,7 +23,6 @@ internal sealed class GetPutAwayTaskAssignmentLinesQueryHandler(IDbConnectionFac
                 p.unit_of_measure_name AS {nameof(TaskAssignmentLineResponse.UnitOfMeasure)},
                 tl.requested_qty AS {nameof(TaskAssignmentLineResponse.RequestedQty)},
                 tl.completed_qty AS {nameof(TaskAssignmentLineResponse.CompletedQty)},
-                tl.missed_qty AS {nameof(TaskAssignmentLineResponse.MissedQty)},
                 tl.status AS {nameof(TaskAssignmentLineResponse.Status)}
              FROM wms.task_assignment_lines tl
              INNER JOIN wms.products p ON tl.product_id = p.id
@@ -32,7 +30,7 @@ internal sealed class GetPutAwayTaskAssignmentLinesQueryHandler(IDbConnectionFac
              INNER JOIN wms.task_headers t ON ta.task_header_id = t.id
              WHERE 
                 t.id = @TaskHeaderId AND
-                t.task_type = 0 AND
+                t.task_type = 1 AND
                 ta.assigned_operator_id = @WarehouseOperatorId AND
                 ta.status IN (0, 1, 2)
              """;
