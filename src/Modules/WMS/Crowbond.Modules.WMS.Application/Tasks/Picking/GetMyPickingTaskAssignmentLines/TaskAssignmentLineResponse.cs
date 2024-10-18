@@ -3,7 +3,8 @@
 namespace Crowbond.Modules.WMS.Application.Tasks.Picking.GetMyPickingTaskAssignmentLines;
 
 public sealed record TaskAssignmentLineResponse(
-    Guid TaskAssignmentLineId,
+    Guid Id,
+    string TaskNo,
     Guid ProductId,
     string ProductSku,
     string ProductName,

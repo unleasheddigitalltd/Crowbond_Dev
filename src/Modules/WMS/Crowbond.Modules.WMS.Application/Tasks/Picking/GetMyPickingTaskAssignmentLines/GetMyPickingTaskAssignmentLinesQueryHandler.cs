@@ -16,7 +16,8 @@ internal sealed class GetMyPickingTaskAssignmentLinesQueryHandler(IDbConnectionF
         const string sql =
             $"""
              SELECT
-                tl.id AS {nameof(TaskAssignmentLineResponse.TaskAssignmentLineId)},
+                tl.id AS {nameof(TaskAssignmentLineResponse.Id)},
+                t.task_no AS {nameof(TaskAssignmentLineResponse.TaskNo)},
                 tl.product_id AS {nameof(TaskAssignmentLineResponse.ProductId)},
                 p.sku AS {nameof(TaskAssignmentLineResponse.ProductSku)},
                 p.name AS {nameof(TaskAssignmentLineResponse.ProductName)},
