@@ -290,4 +290,5 @@ public sealed class TaskHeader : Entity, IChangeDetectable
 
         return activeAssignment?.AssignedOperatorId == operatorId;
     }
+
 }

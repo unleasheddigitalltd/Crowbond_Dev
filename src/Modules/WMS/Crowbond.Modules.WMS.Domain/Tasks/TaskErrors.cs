@@ -5,6 +5,9 @@ public static class TaskErrors
 {
     public static Error NotFound(Guid taskHeaderId) =>
     Error.NotFound("Tasks.NotFound", $"The task with the identifier {taskHeaderId} was not found");
+    
+    public static Error AssignmentLineNotFound(Guid taskAssignmentLineId) =>
+    Error.NotFound("Tasks.AssignmentLineNotFound", $"The task assignment line with the identifier {taskAssignmentLineId} was not found");
 
     public static Error HasNoPendingAssignment(Guid taskHeaderId) =>
         Error.NotFound("Tasks.HasNoPendingAssignment", $"The task with the identifier {taskHeaderId} has no pending assignment");

@@ -30,6 +30,8 @@ public sealed class TaskAssignment : Entity , IAuditable
 
     public IReadOnlyCollection<TaskAssignmentLine> Lines => _lines;
 
+    public TaskHeader Header { get; }
+
     internal static Result<TaskAssignment> Create(
         Guid assignedOperatorId)
     {

@@ -6,6 +6,8 @@ public interface ITaskRepository
 {
     Task<TaskHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
+    Task<TaskAssignmentLine?> GetAssignmentLineAsync(Guid id, CancellationToken cancellationToken= default);
+
     Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default);
 
     void Insert(TaskHeader taskHeader);
