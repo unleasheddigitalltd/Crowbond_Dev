@@ -27,7 +27,7 @@ internal sealed class GetProductStocksQueryHandler(IDbConnectionFactory dbConnec
              	CURRENT_DATE - s.received_date AS {nameof(StockResponse.DaysInStock)}
              FROM wms.stocks s
              INNER JOIN wms.locations l ON l.id = s.location_id
-             WHERE s.product_id = @ProductId;
+             WHERE s.current_qty > 0 AND s.product_id = @ProductId;
              """;
 
         List<StockResponse> stocks = (await connection.QueryAsync<StockResponse>(sql, request)).AsList();

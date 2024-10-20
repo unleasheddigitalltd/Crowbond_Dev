@@ -36,7 +36,7 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                 INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
                 WHERE
                     t.task_type = 1 
-                    AND (ta.id IS NULL OR ta.status NOT IN (0, 1, 2))
+                    AND ta.id IS NULL
                     AND (
                         t.task_no ILIKE '%' || @Search || '%'
                         OR d.dispatch_no ILIKE '%' || @Search || '%'   
@@ -60,7 +60,7 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
             INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
             WHERE
                 t.task_type = 1 
-                AND (ta.id IS NULL OR ta.status NOT IN (0, 1, 2))
+                AND ta.id IS NULL
                 AND (
                     t.task_no ILIKE '%' || @Search || '%'
                     OR d.dispatch_no ILIKE '%' || @Search || '%'   
@@ -77,7 +77,7 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
         int currentPage = request.Page;
         int pageSize = request.Size;
         int startIndex = currentPage * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
+        int endIndex = totalCount == 0 ? 0 : Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new PickingTasksResponse(pickingTasks, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }

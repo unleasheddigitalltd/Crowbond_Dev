@@ -6,9 +6,6 @@ public static class CustomerErrors
     public static Error NotFound(Guid customerId) =>
     Error.NotFound("Customers.NotFound", $"The customer with the identifier {customerId} was not found");
 
-    public static Error FilterTypeNotFound(string filterTypeName) =>
-    Error.NotFound("Customers.NotFound", $"The filter type with the name {filterTypeName} was not found");
-
     public static readonly Error AlreadyDeactivated = Error.Problem(
         "Customer.AlreadyDeactivate",
         "The customer was already deactivated");
@@ -18,5 +15,5 @@ public static class CustomerErrors
         "The customer was already activated");
 
     public static Error SequenceNotFound() =>
-    Error.NotFound("Sequence.NotFound", $"The sequence for the customer type was not found");
+    Error.NotFound("Customer.SequenceNotFound", $"The sequence for the customer type was not found");
 }
