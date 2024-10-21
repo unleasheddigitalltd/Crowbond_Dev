@@ -40,6 +40,16 @@ internal sealed class ConfirmProductPickedCommandHandler(
             return Result.Failure<Guid>(StockErrors.NotFound(request.StockId));
         }
 
+        if (request.Qty > stock.CurrentQty)
+        {
+            return Result.Failure<Guid>(TaskErrors.ExceedsAvailableStock);
+        }
+
+        if (request.Qty > assignmentLine.RequestedQty - assignmentLine.CompletedQty)
+        {
+            return Result.Failure<Guid>(TaskErrors.ExceedsRequestedQuantity);
+        }
+
         Location? location = await locationRepository.GetAsync(request.ToLocationId, cancellationToken);
 
         if (location == null)
@@ -80,15 +90,13 @@ internal sealed class ConfirmProductPickedCommandHandler(
             stockRepository.InsertStock(destStock);
         }
 
-        decimal qty = Math.Min(stock.CurrentQty, assignmentLine.RequestedQty - assignmentLine.CompletedQty);
-
         Result<StockTransaction> orgTransResult = stock.StockOut(
             request.TaskAssignmentLineId,
             ActionType.Picking.Name,
             dateTimeProvider.UtcNow,
             null,
             null,
-            qty);
+            request.Qty);
 
         if (orgTransResult.IsFailure)
         {
@@ -101,7 +109,7 @@ internal sealed class ConfirmProductPickedCommandHandler(
             dateTimeProvider.UtcNow,
             null,
             null,
-            qty);
+            request.Qty);
 
         if (destTransResult.IsFailure)
         {
@@ -111,7 +119,7 @@ internal sealed class ConfirmProductPickedCommandHandler(
         stockRepository.AddStockTransaction(orgTransResult.Value);
         stockRepository.AddStockTransaction(destTransResult.Value);
 
-        taskHeader.IncrementCompletedQty(dateTimeProvider.UtcNow, assignmentLine.ProductId, qty);
+        taskHeader.IncrementCompletedQty(dateTimeProvider.UtcNow, assignmentLine.ProductId, request.Qty);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

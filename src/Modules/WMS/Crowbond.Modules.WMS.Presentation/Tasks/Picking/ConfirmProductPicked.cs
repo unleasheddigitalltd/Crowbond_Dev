@@ -20,7 +20,8 @@ internal sealed class ConfirmProductPicked : IEndpoint
                 operatorContext.WarehouseOperatorId,
                 id,
                 request.StockId,
-                request.ToLocationId));
+                request.ToLocationId,
+                request.Qty));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
@@ -28,5 +29,5 @@ internal sealed class ConfirmProductPicked : IEndpoint
             .WithTags(Tags.Picking);
     }
 
-    private sealed record Request(Guid StockId, Guid ToLocationId);
+    private sealed record Request(Guid StockId, Guid ToLocationId, decimal Qty);
 }

@@ -6,4 +6,5 @@ public sealed record ConfirmProductPickedCommand(
     Guid UserId,
     Guid TaskAssignmentLineId,
     Guid StockId,
-    Guid ToLocationId) : ICommand<Guid>;
+    Guid ToLocationId,
+    decimal Qty) : ICommand<Guid>;
