@@ -13,6 +13,9 @@ internal sealed class UpdateCustomerCommandValidator : AbstractValidator<UpdateC
         RuleFor(c => c.Customer.BillingCounty).NotEmpty().MaximumLength(100);
         RuleFor(c => c.Customer.BillingCountry).MaximumLength(100);
         RuleFor(c => c.Customer.BillingPostalCode).NotEmpty().MaximumLength(16);
+        RuleFor(c => c.Customer.Discount).GreaterThanOrEqualTo(0).PrecisionScale(5, 2, true);
+        RuleFor(c => c.Customer.DeliveryMinOrderValue).GreaterThanOrEqualTo(0).PrecisionScale(10, 2, true);
+        RuleFor(c => c.Customer.DeliveryCharge).GreaterThanOrEqualTo(0).PrecisionScale(10, 2, true);
         RuleFor(c => c.Customer.CustomerNotes).MaximumLength(500);
     }
 }
