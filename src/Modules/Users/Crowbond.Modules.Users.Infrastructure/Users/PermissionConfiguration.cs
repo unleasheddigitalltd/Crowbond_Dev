@@ -32,6 +32,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetProducts,
             Permission.CreateProducts,
             Permission.ModifyProducts,
+            Permission.CreateProductGroups,
+            Permission.CreateCategories,
+            Permission.CreateBrands,
 
             Permission.GetStocks,
             Permission.GetStockTransactions,
@@ -85,13 +88,14 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifyRouteTrips,
             Permission.CreateRouteTrips,
 
-            Permission.ModifyRouteTriplogs,
             Permission.ModifyOtherRouteTripLogs,
 
             Permission.GetPutAwayTasks,
             Permission.ModifyPutAwayTasks,
             Permission.ManagePutAwayTasks,
             Permission.ExecutePutAwayTasks,
+
+            Permission.ExecutePickingTasks,
 
             Permission.GetWarehouseOperators,
             Permission.ModifyWarehouseOperators,
@@ -103,7 +107,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetOrders,
             Permission.GetMyOrders,
             Permission.CreateOrders,
-            Permission.CreateMyOrders);
+            Permission.CreateMyOrders,
+            Permission.AcceptOrders,
+            Permission.DeliverOrders,
+
+            Permission.ReviewOrderLine);
 
 
         builder
@@ -116,11 +124,12 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                 joinBuilder.HasData(
                     // Driver permissions
                     CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
-                    CreateRolePermission(Role.Driver, Permission.ModifyRouteTriplogs),
+                    CreateRolePermission(Role.Driver, Permission.DeliverOrders),
 
                     // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePickingTasks),
 
                     // Warehouse Manager permissions
                     CreateRolePermission(Role.WarehouseManager, Permission.GetPutAwayTasks),
@@ -151,6 +160,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetProducts),
                     CreateRolePermission(Role.Administrator, Permission.CreateProducts),
                     CreateRolePermission(Role.Administrator, Permission.ModifyProducts),
+                    CreateRolePermission(Role.Administrator, Permission.CreateProductGroups),
+                    CreateRolePermission(Role.Administrator, Permission.CreateCategories),
+                    CreateRolePermission(Role.Administrator, Permission.CreateBrands),
 
                     CreateRolePermission(Role.Administrator, Permission.GetStocks),
                     CreateRolePermission(Role.Administrator, Permission.GetStockTransactions),
@@ -204,7 +216,6 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.CreateRouteTrips),
 
-                    CreateRolePermission(Role.Administrator, Permission.ModifyRouteTriplogs),
                     CreateRolePermission(Role.Administrator, Permission.ModifyOtherRouteTripLogs),
 
                     CreateRolePermission(Role.Administrator, Permission.GetPutAwayTasks),
@@ -217,7 +228,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.CreateWarehouseOperators),
 
                     CreateRolePermission(Role.Administrator, Permission.GetOrders),
-                    CreateRolePermission(Role.Administrator, Permission.CreateOrders));
+                    CreateRolePermission(Role.Administrator, Permission.CreateOrders),
+                    CreateRolePermission(Role.Administrator, Permission.AcceptOrders),
+
+                    CreateRolePermission(Role.Administrator, Permission.ReviewOrderLine));
             });
     }
 

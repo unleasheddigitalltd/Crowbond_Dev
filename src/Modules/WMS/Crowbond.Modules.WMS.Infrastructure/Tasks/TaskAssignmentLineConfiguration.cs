@@ -23,5 +23,10 @@ internal sealed class TaskAssignmentLineConfiguration : IEntityTypeConfiguration
         builder.HasOne<Location>().WithMany().HasForeignKey(t => t.FromLocationId);
         builder.HasOne<Location>().WithMany().HasForeignKey(t => t.ToLocationId);
         builder.HasOne<Product>().WithMany().HasForeignKey(t => t.ProductId);
+
+        builder.HasOne(al => al.Assignment)
+               .WithMany(a => a.Lines)
+               .HasForeignKey(al => al.TaskAssignmentId)
+               .IsRequired();
     }
 }

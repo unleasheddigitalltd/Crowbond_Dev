@@ -13,7 +13,7 @@ internal sealed class CreateProduct : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("Products", async (ProductRequest request, ISender sender) =>
+        app.MapPost("products", async (ProductRequest request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CreateProductCommand(request));
 

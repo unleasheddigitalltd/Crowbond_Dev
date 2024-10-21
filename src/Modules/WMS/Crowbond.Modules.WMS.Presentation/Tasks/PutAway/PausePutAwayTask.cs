@@ -14,7 +14,7 @@ internal sealed class PausePutAwayTask : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("task/putaway/{id}/pause", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
+        app.MapPut("tasks/putaway/{id}/pause", async (IWarehouseOperatorContext operatorContext, Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new PausePutAwayTaskCommand(operatorContext.WarehouseOperatorId, id));
 

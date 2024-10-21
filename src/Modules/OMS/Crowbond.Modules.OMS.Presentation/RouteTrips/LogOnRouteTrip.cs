@@ -21,7 +21,7 @@ internal sealed class LogOnRouteTrip : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.ModifyRouteTriplogs)
+        .RequireAuthorization(Permissions.DeliverOrders)
         .WithTags(Tags.Routes);
     }
 

@@ -4,8 +4,8 @@ namespace Crowbond.Modules.OMS.Domain.RouteTrips;
 
 public static class RouteTripErrors
 {
-    public static Error NotFound(Guid driverId) =>
-    Error.NotFound("Driver.NotFound", $"The driver with the identifier {driverId} was not found");
+    public static Error NotFound(Guid routeTrip) =>
+    Error.NotFound("RouteTrips.NotFound", $"The route trip with the identifier {routeTrip} was not found");
 
     public static Error DateInPast() =>
     Error.Problem("Date.InPast", $"The provided date cannot be in the past.");

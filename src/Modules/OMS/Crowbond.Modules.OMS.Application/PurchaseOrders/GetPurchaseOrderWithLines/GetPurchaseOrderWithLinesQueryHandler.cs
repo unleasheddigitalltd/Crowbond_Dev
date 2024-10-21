@@ -28,7 +28,7 @@ internal sealed class GetPurchaseOrderWithLinesQueryHandler(IDbConnectionFactory
                  p.purchase_order_amount AS {nameof(PurchaseOrderResponse.PurchaseOrderAmount)},
                  p.purchase_order_notes AS {nameof(PurchaseOrderResponse.PurchaseOrderNotes)},
                  p.created_by AS {nameof(PurchaseOrderResponse.CreatedBy)},
-                 p.created_on_utc AS {nameof(PurchaseOrderResponse.CreatedOnUtc)}
+                 p.created_on_utc AS {nameof(PurchaseOrderResponse.CreatedOnUtc)},
                  l.id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderLineId)},
                  l.purchase_order_header_id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderHeaderId)},
                  l.product_id AS {nameof(PurchaseOrderLineResponse.ProductId)},

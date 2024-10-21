@@ -20,13 +20,15 @@ public sealed class User : Entity
 
     public string LastName { get; private set; }
 
+    public string Mobile { get; private set; }
+
     public string IdentityId { get; private set; }
 
     public bool IsActive { get; private set; }
 
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
-    public static User Create(Guid id, string username, string email, string firstName, string lastName, string identityId)
+    public static User Create(Guid id, string username, string email, string firstName, string lastName, string mobile, string identityId)
     {
         var user = new User
         {
@@ -35,6 +37,7 @@ public sealed class User : Entity
             Email = email,
             FirstName = firstName,
             LastName = lastName,
+            Mobile = mobile,
             IdentityId = identityId,
             IsActive = true,
         };

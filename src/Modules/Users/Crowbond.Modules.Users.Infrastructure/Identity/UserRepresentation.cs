@@ -5,6 +5,7 @@ internal sealed record UserRepresentation(
     string Email,
     string FirstName,
     string LastName,
+    UserAttribute Attributes,
     bool EmailVerified,
     bool Enabled,
     CredentialRepresentation[] Credentials);

@@ -14,7 +14,8 @@ public sealed class ProductUpdatedIntegrationEvent : IntegrationEvent
         string unitOfMeasureName,
         string inventoryTypeName,
         Guid categoryId,
-        string categoryName,
+        Guid brandId,
+        Guid productGroupId,
         int taxRateType,
         bool isActive)
         : base(id, occurredOnUtc)
@@ -26,28 +27,21 @@ public sealed class ProductUpdatedIntegrationEvent : IntegrationEvent
         UnitOfMeasureName = unitOfMeasureName;
         InventoryTypeName = inventoryTypeName;
         CategoryId = categoryId;
-        CategoryName = categoryName;
+        BrandId = brandId;
+        ProductGroupId = productGroupId;
         TaxRateType = taxRateType;
         IsActive = isActive;
     }
 
     public Guid ProductId { get; private set; }
-
     public string Name { get; private set; }
-
     public string Sku { get; private set; }
-
     public string FilterTypeName { get; private set; }
-
     public string UnitOfMeasureName { get; private set; }
-
     public string InventoryTypeName { get; private set; }
-
-    public Guid CategoryId { get; private set; }
-
-    public string CategoryName { get; private set; }
-
+    public Guid CategoryId { get; private set; }    
+    public Guid BrandId { get; private set; }    
+    public Guid ProductGroupId { get; private set; }
     public int TaxRateType { get; private set; }
-
     public bool IsActive { get; private set; }
 }

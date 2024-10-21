@@ -17,14 +17,14 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
         const string sql =
             $"""
              SELECT 
-                 p.id                            AS {nameof(ProductResponse.Id)},
-                 p.sku                           AS {nameof(ProductResponse.Sku)},
-                 p.name                          AS {nameof(ProductResponse.Name)},
-                 p.unit_of_measure_name          AS {nameof(ProductResponse.UnitOfMeasureName)},
-                 c.name                          AS {nameof(ProductResponse.CategoryName)},                                 
+                 p.id AS {nameof(ProductResponse.Id)},
+                 p.sku AS {nameof(ProductResponse.Sku)},
+                 p.name AS {nameof(ProductResponse.Name)},
+                 p.unit_of_measure_name AS {nameof(ProductResponse.UnitOfMeasureName)},
+                 c.name AS {nameof(ProductResponse.CategoryName)},                                 
                  COALESCE(SUM(s.current_qty), 0) AS {nameof(ProductResponse.Stock)},
-                 p.reorder_level                 AS {nameof(ProductResponse.ReorderLevel)},
-                 p.is_active                        AS {nameof(ProductResponse.IsActive)}
+                 p.reorder_level AS {nameof(ProductResponse.ReorderLevel)},
+                 p.is_active AS {nameof(ProductResponse.IsActive)}
              FROM wms.products p
              INNER JOIN wms.categories c ON c.id = p.category_id
              LEFT OUTER JOIN wms.stocks s ON p.id = s.product_id             

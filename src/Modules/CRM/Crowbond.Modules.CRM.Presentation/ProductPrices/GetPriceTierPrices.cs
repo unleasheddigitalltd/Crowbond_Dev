@@ -13,13 +13,13 @@ internal sealed class GetPriceTierPrices : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("price-tiers/{id}", async (Guid id, ISender sender) =>
+        app.MapGet("product-prices/price-tiers/{id}", async (Guid id, ISender sender) =>
         {
             Result<IReadOnlyCollection<ProductPriceResponse>> result = await sender.Send(new GetPriceTierPricesQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.GetPriceTiers)
-            .WithTags(Tags.PriceTiers);
+            .WithTags(Tags.ProductPrices);
     }
 }

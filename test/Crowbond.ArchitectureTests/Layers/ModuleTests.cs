@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
 using Crowbond.ArchitectureTests.Abstractions;
-using Crowbond.Common.Application.EventBus;
-using Crowbond.Modules.Attendance.Domain.Attendees;
-using Crowbond.Modules.Attendance.Infrastructure;
-using Crowbond.Modules.Events.Domain.TicketTypes;
-using Crowbond.Modules.Events.Infrastructure;
-using Crowbond.Modules.Ticketing.Domain.Orders;
-using Crowbond.Modules.Ticketing.Infrastructure;
+using Crowbond.Modules.CRM.Application.Customers.GetCustomers;
+using Crowbond.Modules.CRM.Infrastructure;
+using Crowbond.Modules.OMS.Domain.Orders;
+using Crowbond.Modules.OMS.Infrastructure;
 using Crowbond.Modules.Users.Domain.Users;
 using Crowbond.Modules.Users.Infrastructure;
+using Crowbond.Modules.WMS.Application.Products.GetProducts;
+using Crowbond.Modules.WMS.Infrastructure;
 using NetArchTest.Rules;
 
 namespace Crowbond.ArchitectureTests.Layers;
@@ -18,11 +17,11 @@ public class ModuleTests : BaseTest
     [Fact]
     public void UsersModule_ShouldNotHaveDependencyOn_AnyOtherModule()
     {
-        string[] otherModules = [EventsNamespace, TicketingNamespace, AttendanceNamespace];
+        string[] otherModules = [WmsNamespace, OmsNamespace, CrmNamespace];
         string[] integrationEventsModules = [
-            EventsIntegrationEventsNamespace,
-            TicketingIntegrationEventsNamespace,
-            AttendanceIntegrationEventsNamespace];
+            WmsIntegrationEventsNamespace,
+            OmsIntegrationEventsNamespace,
+            CrmIntegrationEventsNamespace];
 
         List<Assembly> usersAssemblies =
         [
@@ -42,23 +41,23 @@ public class ModuleTests : BaseTest
     }
 
     [Fact]
-    public void EventsModule_ShouldNotHaveDependencyOn_AnyOtherModule()
+    public void WmsModule_ShouldNotHaveDependencyOn_AnyOtherModule()
     {
-        string[] otherModules = [UsersNamespace, TicketingNamespace, AttendanceNamespace];
+        string[] otherModules = [UsersNamespace, OmsNamespace, CrmNamespace];
         string[] integrationEventsModules = [
             UsersIntegrationEventsNamespace,
-            TicketingIntegrationEventsNamespace,
-            AttendanceIntegrationEventsNamespace];
+            OmsIntegrationEventsNamespace,
+            CrmIntegrationEventsNamespace];
 
-        List<Assembly> eventsAssemblies =
+        List<Assembly> wmsAssemblies =
         [
-            typeof(TicketType).Assembly,
-            Modules.Events.Application.AssemblyReference.Assembly,
-            Modules.Events.Presentation.AssemblyReference.Assembly,
-            typeof(EventsModule).Assembly
+            typeof(Product).Assembly,
+            Modules.WMS.Application.AssemblyReference.Assembly,
+            Modules.WMS.Presentation.AssemblyReference.Assembly,
+            typeof(WmsModule).Assembly
         ];
 
-        Types.InAssemblies(eventsAssemblies)
+        Types.InAssemblies(wmsAssemblies)
             .That()
             .DoNotHaveDependencyOnAny(integrationEventsModules)
             .Should()
@@ -68,23 +67,23 @@ public class ModuleTests : BaseTest
     }
 
     [Fact]
-    public void TicketingModule_ShouldNotHaveDependencyOn_AnyOtherModule()
+    public void OmsModule_ShouldNotHaveDependencyOn_AnyOtherModule()
     {
-        string[] otherModules = [UsersNamespace, EventsNamespace, AttendanceNamespace];
+        string[] otherModules = [UsersNamespace, WmsNamespace, CrmNamespace];
         string[] integrationEventsModules = [
             UsersIntegrationEventsNamespace,
-            EventsIntegrationEventsNamespace,
-            AttendanceIntegrationEventsNamespace];
+            WmsIntegrationEventsNamespace,
+            CrmIntegrationEventsNamespace];
 
-        List<Assembly> ticketingAssemblies =
+        List<Assembly> omsAssemblies =
         [
-            typeof(Order).Assembly,
-            Modules.Ticketing.Application.AssemblyReference.Assembly,
-            Modules.Ticketing.Presentation.AssemblyReference.Assembly,
-            typeof(TicketingModule).Assembly
+            typeof(OrderHeader).Assembly,
+            Modules.OMS.Application.AssemblyReference.Assembly,
+            Modules.OMS.Presentation.AssemblyReference.Assembly,
+            typeof(OmsModule).Assembly
         ];
 
-        Types.InAssemblies(ticketingAssemblies)
+        Types.InAssemblies(omsAssemblies)
             .That()
             .DoNotHaveDependencyOnAny(integrationEventsModules)
             .Should()
@@ -94,23 +93,23 @@ public class ModuleTests : BaseTest
     }
 
     [Fact]
-    public void AttendanceModule_ShouldNotHaveDependencyOn_AnyOtherModule()
+    public void CrmModule_ShouldNotHaveDependencyOn_AnyOtherModule()
     {
-        string[] otherModules = [UsersNamespace, EventsNamespace, TicketingNamespace];
+        string[] otherModules = [UsersNamespace, WmsNamespace, OmsNamespace];
         string[] integrationEventsModules = [
             UsersIntegrationEventsNamespace,
-            EventsIntegrationEventsNamespace,
-            TicketingIntegrationEventsNamespace];
+            WmsIntegrationEventsNamespace,
+            OmsIntegrationEventsNamespace];
 
-        List<Assembly> attendanceAssemblies =
+        List<Assembly> crmAssemblies =
         [
-            typeof(Attendee).Assembly,
-            Modules.Attendance.Application.AssemblyReference.Assembly,
-            Modules.Attendance.Presentation.AssemblyReference.Assembly,
-            typeof(AttendanceModule).Assembly
+            typeof(Customer).Assembly,
+            Modules.CRM.Application.AssemblyReference.Assembly,
+            Modules.CRM.Presentation.AssemblyReference.Assembly,
+            typeof(CrmModule).Assembly
         ];
 
-        Types.InAssemblies(attendanceAssemblies)
+        Types.InAssemblies(crmAssemblies)
             .That()
             .DoNotHaveDependencyOnAny(integrationEventsModules)
             .Should()

@@ -20,7 +20,8 @@ internal sealed class RegisterUser : IEndpoint
                 request.Email,
                 request.Password,
                 request.FirstName,
-                request.LastName));
+                request.LastName,
+                request.Mobile));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
@@ -39,5 +40,7 @@ internal sealed class RegisterUser : IEndpoint
         public string FirstName { get; init; }
 
         public string LastName { get; init; }
+
+        public string Mobile { get; init; }
     }
 }

@@ -55,16 +55,20 @@ internal sealed class UpdatePurchaseOrderCommandHandler(
             }
 
             Result addLineResult = purchaseOrderHeader.AddLine(
-               productId: supplierProduct.Id,
-               productSku: supplierProduct.ProductSku,
-               productName: supplierProduct.ProductName,
-               unitOfMeasureName: supplierProduct.UnitOfMeasureName,
-               unitPrice: supplierProduct.UnitPrice,
-               qty: lineItem.Qty,
-               taxRateType: (TaxRateType)supplierProduct.TaxRateType,
-               foc: true,
-               taxable: true,
-               comments: lineItem.Comments);
+               supplierProduct.Id,
+               supplierProduct.ProductSku,
+               supplierProduct.ProductName,
+               supplierProduct.UnitOfMeasureName,
+               supplierProduct.CategoryId,
+               supplierProduct.CategoryName,
+               supplierProduct.BrandId,
+               supplierProduct.BrandName,
+               supplierProduct.ProductGroupId,
+               supplierProduct.ProductGroupName,
+               supplierProduct.UnitPrice,
+               lineItem.Qty,
+               (TaxRateType)supplierProduct.TaxRateType,
+               lineItem.Comments);
 
             if (addLineResult.IsFailure)
             {

@@ -18,7 +18,7 @@ public sealed class SupplierContact : Entity, ISoftDeletable, IAuditable
 
     public string PhoneNumber { get; private set; }
 
-    public string? Mobile { get; private set; }
+    public string Mobile { get; private set; }
 
     public string Username { get; private set; }
 
@@ -47,7 +47,7 @@ public sealed class SupplierContact : Entity, ISoftDeletable, IAuditable
         string firstName,
         string lastName,
         string phoneNumber,
-        string? mobile,
+        string mobile,
         string email,
         string username)
     {
@@ -75,7 +75,7 @@ public sealed class SupplierContact : Entity, ISoftDeletable, IAuditable
         string firstName,
         string lastName,
         string phoneNumber,
-        string? mobile)
+        string mobile)
     {
         FirstName = firstName;
         LastName = lastName;

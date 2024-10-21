@@ -13,7 +13,7 @@ internal sealed class GetSupplier : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("supplier/{id}", async (Guid id, ISender sender) =>
+        app.MapGet("suppliers/{id}", async (Guid id, ISender sender) =>
         {
             Result<SupplierResponse> result = await sender.Send(new GetSupplierQuery(id));
 

@@ -23,7 +23,7 @@ internal sealed class ActivateUserCommandHandler(
 
         string password = Guid.NewGuid().ToString("N");
         Result<string> result = await identityProviderService.RegisterUserAsync(
-            new UserModel(user.Username, user.Email, password, user.FirstName, user.LastName),
+            new UserModel(user.Username, user.Email, password, user.FirstName, user.LastName, user.Mobile),
             cancellationToken);
 
         if (result.IsFailure)

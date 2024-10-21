@@ -16,38 +16,39 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
         const string sql =
              $"""
              SELECT
-                id AS {nameof(OrderResponse.Id)},
-                order_number AS {nameof(OrderResponse.OrderNumber)},
-                customer_id AS {nameof(OrderResponse.CustomerId)},
-                customer_business_name AS {nameof(OrderResponse.CustomerBusinessName)},
-                delivery_location_name AS {nameof(OrderResponse.DeliveryLocationName)},
-                delivery_full_name AS {nameof(OrderResponse.DeliveryFullName)},
-                delivery_phone AS {nameof(OrderResponse.DeliveryPhone)},
-                delivery_mobile AS {nameof(OrderResponse.DeliveryMobile)},
-                delivery_notes AS {nameof(OrderResponse.DeliveryNotes)},
-                delivery_address_line1 AS {nameof(OrderResponse.DeliveryAddressLine1)},
-                delivery_address_line2 AS {nameof(OrderResponse.DeliveryAddressLine2)},
-                delivery_town_city AS {nameof(OrderResponse.DeliveryTownCity)},
-                delivery_county AS {nameof(OrderResponse.DeliveryCounty)},
-                delivery_postal_code AS {nameof(OrderResponse.DeliveryPostalCode)},
-                shipping_date AS {nameof(OrderResponse.ShippingDate)},
-                route_trip_id AS {nameof(OrderResponse.RouteTripId)},
-                route_name AS {nameof(OrderResponse.RouteName)},
-                order_amount AS {nameof(OrderResponse.OrderAmount)},
-                payment_method AS {nameof(OrderResponse.PaymentMethod)},
-                customer_comment AS {nameof(OrderResponse.CustomerComment)}         
-             FROM oms.order_headers
+                o.id AS {nameof(OrderResponse.Id)},
+                o.order_no AS {nameof(OrderResponse.OrderNo)},
+                o.customer_id AS {nameof(OrderResponse.CustomerId)},
+                o.customer_business_name AS {nameof(OrderResponse.CustomerBusinessName)},
+                o.delivery_location_name AS {nameof(OrderResponse.DeliveryLocationName)},
+                o.delivery_full_name AS {nameof(OrderResponse.DeliveryFullName)},
+                o.delivery_phone AS {nameof(OrderResponse.DeliveryPhone)},
+                o.delivery_mobile AS {nameof(OrderResponse.DeliveryMobile)},
+                o.delivery_notes AS {nameof(OrderResponse.DeliveryNotes)},
+                o.delivery_address_line1 AS {nameof(OrderResponse.DeliveryAddressLine1)},
+                o.delivery_address_line2 AS {nameof(OrderResponse.DeliveryAddressLine2)},
+                o.delivery_town_city AS {nameof(OrderResponse.DeliveryTownCity)},
+                o.delivery_county AS {nameof(OrderResponse.DeliveryCounty)},
+                o.delivery_postal_code AS {nameof(OrderResponse.DeliveryPostalCode)},
+                o.shipping_date AS {nameof(OrderResponse.ShippingDate)},
+                o.route_trip_id AS {nameof(OrderResponse.RouteTripId)},
+                o.route_name AS {nameof(OrderResponse.RouteName)},
+                o.order_amount AS {nameof(OrderResponse.OrderAmount)},
+                o.payment_method AS {nameof(OrderResponse.PaymentMethod)},
+                o.customer_comment AS {nameof(OrderResponse.CustomerComment)}         
+             FROM oms.order_headers o
+             INNER JOIN oms.route_trips rt ON rt.id = o.route_trip_id
              WHERE route_trip_id = @RouteTripId;
 
              SELECT
                 l.id AS {nameof(OrderLineResponse.OrderLineId)},
-                l.order_id {nameof(OrderLineResponse.OrderHeaderId)},
+                l.order_header_id {nameof(OrderLineResponse.OrderHeaderId)},
                 l.product_id AS {nameof(OrderLineResponse.ProductId)},
                 l.product_sku AS {nameof(OrderLineResponse.ProductSku)},
                 l.product_name AS {nameof(OrderLineResponse.ProductName)},
                 l.qty AS {nameof(OrderLineResponse.Qty)}
              FROM oms.order_lines l
-             INNER JOIN oms.order_headers h ON h.id = l.order_id
+             INNER JOIN oms.order_headers h ON h.id = l.order_header_id
              WHERE h.route_trip_id = @RouteTripId;
              """;
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

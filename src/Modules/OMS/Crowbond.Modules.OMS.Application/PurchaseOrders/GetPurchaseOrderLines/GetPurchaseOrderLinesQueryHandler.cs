@@ -2,6 +2,7 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.PurchaseOrders.GetPurchaseOrderLines;
@@ -16,26 +17,30 @@ internal sealed class GetPurchaseOrderLinesQueryHandler(IDbConnectionFactory dbC
         const string sql =
             $"""
              SELECT
-                pl.id AS {nameof(PurchaseOrderLineResponse.Id)},
-                pl.purchase_order_header_id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderHeaderId)}, 
-                pl.product_id AS {nameof(PurchaseOrderLineResponse.ProductId)}, 
-                pl.product_sku AS {nameof(PurchaseOrderLineResponse.ProductSku)},
-                pl.product_name AS {nameof(PurchaseOrderLineResponse.ProductName)},
-                pl.unit_of_measure_name AS {nameof(PurchaseOrderLineResponse.UnitOfMeasureName)},
-                pl.unit_price AS {nameof(PurchaseOrderLineResponse.UnitPrice)},
-                pl.qty AS {nameof(PurchaseOrderLineResponse.Qty)},
-                pl.sub_total AS {nameof(PurchaseOrderLineResponse.SubTotal)},
-                pl.tax AS {nameof(PurchaseOrderLineResponse.Tax)},
-                pl.line_total AS {nameof(PurchaseOrderLineResponse.LineTotal)},
-                pl.foc AS {nameof(PurchaseOrderLineResponse.FOC)},
-                pl.taxable AS {nameof(PurchaseOrderLineResponse.Taxable)},
-                pl.comments AS {nameof(PurchaseOrderLineResponse.Comments)}
+                id AS {nameof(PurchaseOrderLineResponse.Id)},
+                purchase_order_header_id AS {nameof(PurchaseOrderLineResponse.PurchaseOrderHeaderId)},
+                product_id AS {nameof(PurchaseOrderLineResponse.ProductId)},
+                product_sku AS {nameof(PurchaseOrderLineResponse.ProductSku)},
+                product_name AS {nameof(PurchaseOrderLineResponse.ProductName)},
+                unit_of_measure_name AS {nameof(PurchaseOrderLineResponse.UnitOfMeasureName)},
+                category_id AS {nameof(PurchaseOrderLineResponse.CategoryId)},
+                category_name AS {nameof(PurchaseOrderLineResponse.CategoryName)},
+                brand_id AS {nameof(PurchaseOrderLineResponse.BrandId)},
+                brand_name AS {nameof(PurchaseOrderLineResponse.BrandName)},
+                product_group_id AS {nameof(PurchaseOrderLineResponse.ProductGroupId)},
+                product_group_name AS {nameof(PurchaseOrderLineResponse.ProductGroupName)},
+                unit_price AS {nameof(PurchaseOrderLineResponse.UnitPrice)},
+                qty AS {nameof(PurchaseOrderLineResponse.Qty)},
+                sub_total AS {nameof(PurchaseOrderLineResponse.SubTotal)},
+                tax_rate_type AS {nameof(PurchaseOrderLineResponse.TaxRateType)},
+                tax AS {nameof(PurchaseOrderLineResponse.Tax)},
+                line_total AS {nameof(PurchaseOrderLineResponse.LineTotal)},
+                comments AS {nameof(PurchaseOrderLineResponse.Comments)}
              FROM 
-                oms.purchase_order_lines pl
-                INNER JOIN oms.purchase_order_headers p ON p.id = pl.purchase_order_header_id
+                oms.purchase_order_lines
              WHERE
-                p.id = @PurchaseOrderHeaderId
-             """;
+                purchase_order_header_id = @PurchaseOrderHeaderId
+             """;    
 
         List<PurchaseOrderLineResponse> purchaseOrderLines = (await connection.QueryAsync<PurchaseOrderLineResponse>(sql, request)).AsList();
 

@@ -88,7 +88,7 @@ internal sealed class GetMyOrdersQueryHandler(
         int currentPage = request.Page;
         int pageSize = request.Size;
         int startIndex = (currentPage - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
+        int endIndex = totalCount == 0 ? 0 : Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new OrdersResponse(orders, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }

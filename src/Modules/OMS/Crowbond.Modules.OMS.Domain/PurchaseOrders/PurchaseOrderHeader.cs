@@ -1,11 +1,10 @@
-﻿using System;
-using Crowbond.Common.Domain;
+﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.PurchaseOrders;
 
-public sealed class PurchaseOrderHeader : Entity , IAuditable
+public sealed class PurchaseOrderHeader : Entity, IAuditable
 {
     private readonly List<PurchaseOrderLine> _lines = new();
     private readonly List<PurchaseOrderStatusHistory> _statusHistory = new();
@@ -24,6 +23,8 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
     public DateTime? PaidDate { get; private set; }
 
     public Guid SupplierId { get; private set; }
+
+    public string SupplierAccountNumber { get; private set; }
 
     public string SupplierName { get; private set; }
 
@@ -85,13 +86,21 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
 
     public IReadOnlyCollection<PurchaseOrderStatusHistory> StatusHistory => _statusHistory;
 
-    public static Result<PurchaseOrderHeader> Create(Guid supplierId, string supplierName, string? contactFullName, string? contactPhone,
-        string? contactEmail, DateOnly requiredDate, string? purchaseOrderNotes)
+    public static Result<PurchaseOrderHeader> Create(
+        Guid supplierId,
+        string supplierAccountNumber,
+        string supplierName,
+        string? contactFullName,
+        string? contactPhone,
+        string? contactEmail,
+        DateOnly requiredDate,
+        string? purchaseOrderNotes)
     {
         var orderHeader = new PurchaseOrderHeader
         {
             Id = Guid.NewGuid(),
             SupplierId = supplierId,
+            SupplierAccountNumber = supplierAccountNumber,
             SupplierName = supplierName,
             ContactFullName = contactFullName,
             ContactPhone = contactPhone,
@@ -154,54 +163,63 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
         return Result.Success();
     }
 
-    public Result<PurchaseOrderLine> AddLine(Guid productId, string productSku, string productName, string unitOfMeasureName, decimal unitPrice, decimal qty,
-        TaxRateType taxRateType, bool foc, bool taxable, string? comments)
+    public Result<PurchaseOrderLine> AddLine(
+        Guid productId,
+        string productSku,
+        string productName,
+        string unitOfMeasureName,
+        Guid categoryId,
+        string categoryName,
+        Guid brandId,
+        string brandName,
+        Guid productGroupId,
+        string productGroupName,
+        decimal unitPrice,
+        decimal qty,
+        TaxRateType taxRateType,
+        string? comments)
     {
         if (Status != PurchaseOrderStatus.Draft)
         {
             return Result.Failure<PurchaseOrderLine>(PurchaseOrderErrors.NotDraft);
         }
 
-        Result<PurchaseOrderLine> purchaseOrderLine = PurchaseOrderLine.Create(
-            productId,
-            productSku,
-            productName,
-            unitOfMeasureName,
-            unitPrice,
-            qty,
-            taxRateType,
-            foc,
-            taxable,
-            comments);
+        PurchaseOrderLine line;
 
-        if (purchaseOrderLine.IsFailure)
+        if (_lines.Any(l => l.ProductId == productId))
         {
-            return Result.Failure<PurchaseOrderLine>(purchaseOrderLine.Error);
+            line = _lines.Single(l => l.ProductId == productId);
+            line.IncreasQty(qty);
+        }
+        else
+        {
+            Result<PurchaseOrderLine> purchaseOrderLine = PurchaseOrderLine.Create(
+                productId,
+                productSku,
+                productName,
+                unitOfMeasureName,
+                categoryId,
+                categoryName,
+                brandId,
+                brandName,
+                productGroupId,
+                productGroupName,
+                unitPrice,
+                qty,
+                taxRateType,
+                comments);
+
+            if (purchaseOrderLine.IsFailure)
+            {
+                return Result.Failure<PurchaseOrderLine>(purchaseOrderLine.Error);
+            }
+
+            line = purchaseOrderLine.Value;
+            _lines.Add(line);
         }
 
-        _lines.Add(purchaseOrderLine.Value);
         UpdateTotalAmount();
-        return purchaseOrderLine.Value;
-    }
-
-    public Result UpdateLine(Guid purchaseOrderLineId, decimal qty, string? comments)
-    {
-        if (Status != PurchaseOrderStatus.Draft)
-        {
-            return Result.Failure(PurchaseOrderErrors.NotDraft);
-        }
-
-        PurchaseOrderLine? line = _lines.SingleOrDefault(pl => pl.Id == purchaseOrderLineId);
-
-        if (line is null)
-        {
-            return Result.Failure(PurchaseOrderErrors.NotFound(purchaseOrderLineId));
-        }
-
-        line.Update(qty, comments);
-        UpdateTotalAmount();
-
-        return Result.Success();
+        return line;
     }
 
     public void UpdateDetails(
@@ -243,6 +261,14 @@ public sealed class PurchaseOrderHeader : Entity , IAuditable
         PurchaseOrderNotes = purchaseOrderNotes;
         SalesOrderRef = salesOrderRef;
         UpdateTotalAmount();
+    }
+
+    public void UpdateRequiredDate(DateOnly date)
+    {
+        if (date < RequiredDate)
+        {
+            RequiredDate = date;
+        }
     }
 
     public Result<PurchaseOrderStatusHistory> Draft(DateTime utcNow)

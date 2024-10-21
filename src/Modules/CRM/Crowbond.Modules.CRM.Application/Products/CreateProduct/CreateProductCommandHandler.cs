@@ -19,7 +19,8 @@ internal sealed class CreateProductCommandHandler(
              request.UnitOfMeasureName,
              request.InventoryTypeName,
              request.CategoryId,
-             request.CategoryName,
+             request.BrandId,
+             request.ProductGroupId,
              request.TaxRateType,
              request.IsActive);
 

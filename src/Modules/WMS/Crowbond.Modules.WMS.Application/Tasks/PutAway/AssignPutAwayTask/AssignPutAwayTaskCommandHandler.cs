@@ -22,16 +22,16 @@ internal sealed class AssignPutAwayTaskCommandHandler(
             return Result.Failure<Guid>(TaskErrors.NotFound(request.TaskHeaderId));
         }
 
-        ReceiptHeader? receipt = await receiptRepository.GetAsync(taskHeader.EntityId, cancellationToken);
+        ReceiptHeader? receipt = await receiptRepository.GetAsync(taskHeader.ReceiptId ?? Guid.Empty, cancellationToken);
 
         if (receipt is null)
         {
-            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.EntityId));            
+            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.ReceiptId ?? Guid.Empty));            
         }
 
         if (!receipt.Lines.Any())
         {
-            return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.EntityId));
+            return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.ReceiptId ?? Guid.Empty));
         }
 
         // Prepare a list of product lines from receiptLines

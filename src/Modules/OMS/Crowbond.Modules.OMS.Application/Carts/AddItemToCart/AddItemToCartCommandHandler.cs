@@ -44,8 +44,15 @@ internal sealed class AddItemToCartCommandHandler(
             ProductName = customerProduct.ProductName,
             ProductSku = customerProduct.ProductSku,
             UnitOfMeasureName = customerProduct.UnitOfMeasureName,
+            CategoryId = customerProduct.CategoryId,
+            CategoryName = customerProduct.CategoryName,
+            BrandId = customerProduct.BrandId,
+            BrandName = customerProduct.BrandName,
+            ProductGroupId = customerProduct.ProductGroupId,
+            ProductGroupName = customerProduct.ProductGroupName,
             Qty = request.Qty,
             UnitPrice = unitPrice,
+            TaxRateType = (TaxRateType)customerProduct.TaxRateType
         };
 
         await cartService.AddItemAsync(customer.Id, cartItem, cancellationToken);

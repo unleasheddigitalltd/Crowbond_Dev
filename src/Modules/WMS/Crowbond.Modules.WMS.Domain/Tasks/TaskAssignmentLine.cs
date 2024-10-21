@@ -30,6 +30,8 @@ public sealed class TaskAssignmentLine : Entity
 
     public TaskAssignmentLineStatus Status { get; private set; }
 
+    public TaskAssignment Assignment { get; }
+
     internal static TaskAssignmentLine Create(
         Guid productId,
         decimal requestedQty)

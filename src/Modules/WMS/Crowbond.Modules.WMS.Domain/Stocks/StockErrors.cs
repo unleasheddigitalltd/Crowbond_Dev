@@ -7,22 +7,25 @@ public static class StockErrors
     Error.NotFound("Stocks.NotFound", $"The stock with the identifier {stockId} was not found");
 
     public static Error ReasonNotFound(Guid reasonId) =>
-    Error.NotFound("StockTransactionReasons.NotFound", $"The reason with the identifier {reasonId} was not found");
+    Error.NotFound("Stocks.ReasonNotFound", $"The reason with the identifier {reasonId} was not found");
 
     public static Error LocationNotFound(Guid locationId) =>
-    Error.NotFound("Location.NotFound", $"The location with the identifier {locationId} was not found");
+    Error.NotFound("Stocks.LocationNotFound", $"The location with the identifier {locationId} was not found");
 
     public static Error ProductNotFound(Guid productId) =>
-    Error.NotFound("Product.NotFound", $"The product with the identifier {productId} was not found");
+    Error.NotFound("Stocks.ProductNotFound", $"The product with the identifier {productId} was not found");
+
+    public static Error ProductOutOfStock(Guid productId) =>
+    Error.NotFound("Stocks.ProductOutOfStock", $"The product with the identifier {productId} is currently out of stock.");
 
     public static Error ReceiptNotFound(Guid receiptId) =>
-    Error.NotFound("Receipt.NotFound", $"The receipt with the identifier {receiptId} was not found");
+    Error.NotFound("Stocks.ReceiptNotFound", $"The receipt with the identifier {receiptId} was not found");
 
     public static Error StatusNotFound(string stockStatus) =>
     Error.NotFound("Stocks.StatusNotFound", $"The status {stockStatus} was not found");
 
     public static Error LocationNotEmpty(Guid locationId) =>
-    Error.Conflict("Location.NotEmpty", $"The location with the identifier {locationId} was not empty");
+    Error.Conflict("Stocks.LocationNotEmpty", $"The location with the identifier {locationId} was not empty");
 
     public static readonly Error SettingNotFound = Error.Conflict("Setting.NotFound", $"Any active setting was not found");
 

@@ -14,7 +14,7 @@ internal sealed class CreateCategory : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("categories", async (Request request, ISender sender) =>
+        app.MapPost("categories1", async (Request request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CreateCategoryCommand(request.Name));
 

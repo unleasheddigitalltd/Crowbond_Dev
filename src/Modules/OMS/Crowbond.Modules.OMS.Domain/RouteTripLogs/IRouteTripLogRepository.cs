@@ -8,5 +8,7 @@ public interface IRouteTripLogRepository
 
     Task<IEnumerable<RouteTripLog>> GetForRouteTripAsync(RouteTrip routeTrip, CancellationToken cancellationToken = default);
 
+    Task<RouteTripLog?> GetActiveByDriverIdAsync(Guid DriverId, CancellationToken cancellationToken = default);
+
     void Insert(RouteTripLog routeTripLog);
 }

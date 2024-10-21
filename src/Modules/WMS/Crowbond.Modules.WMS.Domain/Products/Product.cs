@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Domain.Categories;
 
 namespace Crowbond.Modules.WMS.Domain.Products;
 
@@ -21,9 +20,13 @@ public sealed class Product : Entity
 
     public string UnitOfMeasureName { get; private set; }
 
+    public string InventoryTypeName { get; private set; }
+
     public Guid CategoryId { get; private set; }
 
-    public string InventoryTypeName { get; private set; }
+    public Guid BrandId { get; private set; }
+
+    public Guid ProductGroupId { get; private set; }
 
     public TaxRateType TaxRateType { get; private set; }
 
@@ -31,11 +34,11 @@ public sealed class Product : Entity
 
     public decimal? PackSize { get; private set; }
 
-    public string HandlingNotes { get; private set; }
+    public string? HandlingNotes { get; private set; }
 
     public bool QiCheck { get; private set; }
 
-    public string Notes { get; private set; }
+    public string? Notes { get; private set; }
 
     public decimal? ReorderLevel { get; private set; }
 
@@ -53,16 +56,18 @@ public sealed class Product : Entity
         string sku,
         string name,
         Guid? parentId,
-        FilterType filterType,
-        UnitOfMeasure unitOfMeasure,
-        Category category,
-        InventoryType inventoryType,
+        string filterTypeName,
+        string unitOfMeasureName,
+        string inventoryTypeName,
+        Guid categoryId,
+        Guid brandId,
+        Guid productGroupId,
         TaxRateType taxRateType,
         int? barcode,
         decimal? packSize,
-        string handlingNote,
+        string? handlingNote,
         bool qiCheck,
-        string notes,
+        string? notes,
         decimal? reorderLevel,
         decimal? height,
         decimal? width,
@@ -75,10 +80,12 @@ public sealed class Product : Entity
             Sku = sku,
             Name = name,
             ParentId = parentId,
-            FilterTypeName = filterType.Name,
-            UnitOfMeasureName = unitOfMeasure.Name,
-            CategoryId = category.Id,
-            InventoryTypeName = inventoryType.Name,
+            FilterTypeName = filterTypeName,
+            UnitOfMeasureName = unitOfMeasureName,
+            InventoryTypeName = inventoryTypeName,
+            CategoryId = categoryId,
+            BrandId = brandId,
+            ProductGroupId = productGroupId,
             TaxRateType = taxRateType,
             Barcode = barcode,
             PackSize = packSize,
@@ -104,14 +111,16 @@ public sealed class Product : Entity
         Guid? parentId,
         string filterTypeName,
         string unitOfMeasureName,
-        Guid categoryId,
         string inventoryTypeName,
+        Guid categoryId,
+        Guid brandId,
+        Guid productGroupId,
         TaxRateType taxRateType,
         int? barcode,
         decimal? packSize,
-        string handlingNotes,
+        string? handlingNotes,
         bool qiCheck,
-        string notes,
+        string? notes,
         decimal? reorderLevel,
         decimal? height,
         decimal? width,
@@ -124,8 +133,10 @@ public sealed class Product : Entity
         ParentId = parentId;
         FilterTypeName = filterTypeName;
         UnitOfMeasureName = unitOfMeasureName;
-        CategoryId = categoryId;
         InventoryTypeName = inventoryTypeName;
+        CategoryId = categoryId;
+        BrandId = brandId;
+        ProductGroupId = productGroupId;
         TaxRateType = taxRateType;
         Barcode = barcode;
         PackSize = packSize;

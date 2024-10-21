@@ -4,5 +4,5 @@ internal static class Tags
 {
     internal const string Customers = "Customers";
     internal const string Suppliers = "Suppliers";
-    internal const string PriceTiers = "Price Tiers";
+    internal const string ProductPrices = "Product-Prices";
 }

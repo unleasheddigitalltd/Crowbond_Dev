@@ -51,6 +51,9 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<Rep> Reps { get; set; }
     internal DbSet<Recipient> Recipients { get; set; }
     internal DbSet<Product> Products { get; set; }
+    internal DbSet<Brand> Brands { get; set; }
+    internal DbSet<Category> Categories { get; set; }
+    internal DbSet<ProductGroup> ProductGroups { get; set; }
     internal DbSet<PriceTier> PriceTiers { get; set; }
     internal DbSet<ProductPrice> ProductPrices { get; set; }
     internal DbSet<CustomerProduct> CustomerProducts { get; set; }
@@ -79,6 +82,9 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new RepConfiguration());
         modelBuilder.ApplyConfiguration(new RecipientConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new BrandConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductGroupConfiguration());
         modelBuilder.ApplyConfiguration(new PriceTierConfiguration());
         modelBuilder.ApplyConfiguration(new ProductPriceConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerProductConfiguration());

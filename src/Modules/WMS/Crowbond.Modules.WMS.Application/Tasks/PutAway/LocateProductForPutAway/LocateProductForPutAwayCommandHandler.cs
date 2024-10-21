@@ -58,11 +58,11 @@ internal sealed class LocateProductForPutAwayCommandHandler(
         }
 
         // Retrieve receipt
-        ReceiptHeader? receiptHeader = await receiptRepository.GetAsync(taskHeader.EntityId, cancellationToken);
+        ReceiptHeader? receiptHeader = await receiptRepository.GetAsync(taskHeader.ReceiptId ?? Guid.Empty, cancellationToken);
 
         if (receiptHeader is null)
         {
-            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.EntityId));
+            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.ReceiptId ?? Guid.Empty));
         }
 
         // find and check the receipt line.
@@ -93,7 +93,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
                 receiptLine.ProductId,
                 location.Id,
                 receiptLine.BatchNumber,
-                receiptHeader.ReceivedDate,
+                receiptHeader.ReceivedDate??DateOnly.MinValue,
                 receiptLine.SellByDate,
                 receiptLine.UseByDate,
                 receiptLine.Id,

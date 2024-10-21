@@ -4,13 +4,11 @@ using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Modules.WMS.Infrastructure.Locations;
 using Crowbond.Modules.WMS.Infrastructure.Receipts;
 using Crowbond.Modules.WMS.Infrastructure.Stocks;
-using Crowbond.Modules.WMS.Infrastructure.Categories;
 using Crowbond.Modules.WMS.Infrastructure.Products;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Locations;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Stocks;
-using Crowbond.Modules.WMS.Domain.Categories;
 using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Settings;
 using Crowbond.Modules.WMS.Infrastructure.Settings;
@@ -21,6 +19,8 @@ using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 using Crowbond.Modules.WMS.Infrastructure.WarehouseOperators;
 using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Common.Infrastructure.Configuration;
+using Crowbond.Modules.WMS.Domain.Dispatches;
+using Crowbond.Modules.WMS.Infrastructure.Dispatches;
 
 namespace Crowbond.Modules.WMS.Infrastructure.Database;
 
@@ -32,6 +32,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<FilterType> FilterTypes { get; set; }
     internal DbSet<InventoryType> InventoryTypes { get; set; }
     internal DbSet<Category> Categories { get; set; }
+    internal DbSet<Brand> Brands { get; set; }
+    internal DbSet<ProductGroup> ProductGroups { get; set; }
     internal DbSet<Location> Locations { get; set; }
     internal DbSet<ReceiptHeader> ReceiptHeaders { get; set; }
     internal DbSet<ReceiptLine> ReceiptLines { get; set; }
@@ -46,6 +48,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<TaskAssignment> TaskAssignments { get; set; }
     internal DbSet<TaskAssignmentLine> TaskAssignmentLines { get; set; }
     internal DbSet<TaskAssignmentStatusHistory> TaskAssignmentStatusHistories { get; set; }
+    internal DbSet<DispatchHeader> DispatchHeaders { get; set; }
+    internal DbSet<DispatchLine> DispatchLines { get; set; }
 
 
 
@@ -75,6 +79,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new FilterTypeConfiguration());
         modelBuilder.ApplyConfiguration(new InventoryTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new BrandConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductGroupConfiguration());
 
         modelBuilder.ApplyConfiguration(new SettingConfiguration());
         modelBuilder.ApplyConfiguration(new SequenceConfiguration());
@@ -85,5 +91,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new TaskAssignmentStatusHistoryConfiguration());
 
         modelBuilder.ApplyConfiguration(new WarehouseOperatorConfiguration());
+
+        modelBuilder.ApplyConfiguration(new DispatchHeaderConfiguration());
+        modelBuilder.ApplyConfiguration(new DispatchLineConfiguration());
     }
 }

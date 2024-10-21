@@ -21,6 +21,18 @@ public sealed class PurchaseOrderLine
 
     public string UnitOfMeasureName { get; private set; }
 
+    public Guid CategoryId { get; private set; }
+
+    public string CategoryName { get; private set; }
+
+    public Guid BrandId { get; private set; }
+
+    public string BrandName { get; private set; }
+
+    public Guid ProductGroupId { get; private set; }
+
+    public string ProductGroupName { get; private set; }
+
     public decimal UnitPrice { get; private set; }
 
     public decimal Qty { get; private set; }
@@ -33,10 +45,6 @@ public sealed class PurchaseOrderLine
 
     public decimal LineTotal { get; private set; }
 
-    public bool FOC { get; private set; }
-
-    public bool Taxable { get; private set; }
-
     public string? Comments { get; private set; }
 
     internal static Result<PurchaseOrderLine> Create(
@@ -44,11 +52,15 @@ public sealed class PurchaseOrderLine
         string productSku,
         string productName,
         string unitOfMeasureName,
+        Guid categoryId,
+        string categoryName,
+        Guid brandId,
+        string brandName,
+        Guid productGroupId,
+        string productGroupName,
         decimal unitPrice,
         decimal qty,
         TaxRateType taxRateType,
-        bool foc,
-        bool taxable,
         string? comments)
     {
         var purchaseOrderLine = new PurchaseOrderLine
@@ -58,30 +70,31 @@ public sealed class PurchaseOrderLine
             ProductSku = productSku,
             ProductName = productName,
             UnitOfMeasureName = unitOfMeasureName,
+            CategoryId = categoryId,
+            CategoryName = categoryName,
+            BrandId = brandId,
+            BrandName = brandName,
+            ProductGroupId = productGroupId,
+            ProductGroupName = productGroupName,
             UnitPrice = unitPrice,
             Qty = qty,
             TaxRateType = taxRateType,
-            FOC = foc,
-            Taxable = taxable,
             Comments = comments
         };
 
         purchaseOrderLine.SubTotal = purchaseOrderLine.UnitPrice * purchaseOrderLine.Qty;
-        purchaseOrderLine.Tax = purchaseOrderLine.Taxable ? purchaseOrderLine.SubTotal * purchaseOrderLine.GetTaxRate(purchaseOrderLine.TaxRateType) : 0;
+        purchaseOrderLine.Tax = purchaseOrderLine.SubTotal * purchaseOrderLine.GetTaxRate(purchaseOrderLine.TaxRateType);
         purchaseOrderLine.LineTotal = purchaseOrderLine.SubTotal + purchaseOrderLine.Tax;
 
         return purchaseOrderLine;
     }
 
-    internal void Update(
-        decimal qty,
-        string? comments)
+    internal void IncreasQty(decimal qty)
     {
-        Qty = qty;
-        Comments = comments;
+        Qty += qty;
 
         SubTotal = UnitPrice * Qty;
-        Tax = Taxable ? SubTotal * GetTaxRate(TaxRateType) : 0;
+        Tax = SubTotal * GetTaxRate(TaxRateType);
         LineTotal = SubTotal + Tax;
     }
 
@@ -89,9 +102,8 @@ public sealed class PurchaseOrderLine
     {
         return taxRateType switch
         {
-            TaxRateType.VatOnIncome => 0.2m,
             TaxRateType.NoVat => 0,
-            TaxRateType.ZeroRatedIncome => 0,
+            TaxRateType.Vat => 0.2m,
             _ => 0
         };
     }

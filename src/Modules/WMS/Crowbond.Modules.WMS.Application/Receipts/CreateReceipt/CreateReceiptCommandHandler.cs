@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Receipts;
@@ -9,7 +8,6 @@ namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceipt;
 
 internal sealed class CreateReceiptCommandHandler(
     IReceiptRepository receiptRepository,
-    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<CreateReceiptCommand, Guid>
 {
@@ -24,12 +22,8 @@ internal sealed class CreateReceiptCommandHandler(
 
         Result<ReceiptHeader> result = ReceiptHeader.Create(
             sequence.GetNumber(),
-            request.Receipt.ReceivedDate,
             request.Receipt.PurchaseOrderId,
-            request.Receipt.PurchaseOrderNo,
-            request.Receipt.DeliveryNoteNumber,
-            request.Receipt.CreateBy,
-            dateTimeProvider.UtcNow);
+            request.Receipt.PurchaseOrderNo);
 
 
         foreach (ReceiptRequest.ReceiptLineRequest line in request.Receipt.ReceiptLines)

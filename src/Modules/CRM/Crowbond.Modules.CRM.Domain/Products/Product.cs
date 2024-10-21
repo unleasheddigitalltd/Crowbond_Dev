@@ -21,8 +21,10 @@ public sealed class Product : Entity
     public string InventoryTypeName { get; private set; }
 
     public Guid CategoryId { get; private set; }
-
-    public string CategoryName { get; private set; }
+    
+    public Guid BrandId { get; private set; }
+    
+    public Guid ProductGroupId { get; private set; }
 
     public TaxRateType TaxRateType { get; private set; }
 
@@ -36,7 +38,8 @@ public sealed class Product : Entity
         string unitOfMeasure,
         string inventoryTypeName,
         Guid categoryId,
-        string categoryName,
+        Guid brandId,
+        Guid productGroupId,
         TaxRateType taxRateType,
         bool isActive)
     {
@@ -49,7 +52,8 @@ public sealed class Product : Entity
             UnitOfMeasureName = unitOfMeasure,
             InventoryTypeName = inventoryTypeName,
             CategoryId = categoryId,
-            CategoryName = categoryName,
+            BrandId = brandId,
+            ProductGroupId = productGroupId,
             TaxRateType = taxRateType,
             IsActive = isActive
         };
@@ -64,7 +68,8 @@ public sealed class Product : Entity
         string unitOfMeasureName,
         string inventoryTypeName,
         Guid categoryId,
-        string categoryName,
+        Guid brandId,
+        Guid productGroupId,
         TaxRateType taxRateType,
         bool isActive)
     {
@@ -74,7 +79,8 @@ public sealed class Product : Entity
         UnitOfMeasureName = unitOfMeasureName;
         InventoryTypeName = inventoryTypeName;
         CategoryId = categoryId;
-        CategoryName = categoryName;
+        BrandId = brandId;
+        ProductGroupId = productGroupId;
         TaxRateType = taxRateType;
         IsActive = isActive;
     }

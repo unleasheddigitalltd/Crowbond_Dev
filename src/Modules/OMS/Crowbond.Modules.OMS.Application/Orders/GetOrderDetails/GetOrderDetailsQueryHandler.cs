@@ -7,7 +7,9 @@ using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.Orders.GetOrderDetails;
 
-internal sealed class GetOrderDetailsQueryHandler(IDbConnectionFactory dbConnectionFactory)
+internal sealed class GetOrderDetailsQueryHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    InventoryService inventoryService)
     : IQueryHandler<GetOrderDetailsQuery, OrderResponse>
 {
     public async Task<Result<OrderResponse>> Handle(GetOrderDetailsQuery request, CancellationToken cancellationToken)
@@ -93,6 +95,12 @@ internal sealed class GetOrderDetailsQueryHandler(IDbConnectionFactory dbConnect
         if (!ordersDictionary.TryGetValue(request.OrderHeaderId, out OrderResponse orderResponse))
         {
             return Result.Failure<OrderResponse>(OrderErrors.NotFound(request.OrderHeaderId));
+        }
+
+        foreach (OrderLineResponse line in orderResponse.OrderLines)
+        {
+            decimal availableQty = await inventoryService.GetAvailableQuantityAsync(line.ProductId, cancellationToken);
+            line.AvailableQty = Math.Min(line.Qty , availableQty);
         }
 
         return orderResponse;

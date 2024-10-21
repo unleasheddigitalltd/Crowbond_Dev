@@ -32,6 +32,7 @@ internal sealed class GetPutAwayTaskAssignmentLinesQueryHandler(IDbConnectionFac
              INNER JOIN wms.task_headers t ON ta.task_header_id = t.id
              WHERE 
                 t.id = @TaskHeaderId AND
+                t.task_type = 0 AND
                 ta.assigned_operator_id = @WarehouseOperatorId AND
                 ta.status IN (0, 1, 2)
              """;

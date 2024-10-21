@@ -25,17 +25,17 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
                 s.id AS {nameof(StockResponse.Id)},
                 p.sku AS {nameof(StockResponse.Sku)},
                 p.name AS {nameof(StockResponse.Name)},	
-                c.name AS {nameof(StockResponse.Category)},
+                c.name AS {nameof(StockResponse.CategoryName)},
                 s.batch_number AS {nameof(StockResponse.Batch)},
-                p.unit_of_measure_name AS {nameof(StockResponse.UnitOfMeasure)},
+                p.unit_of_measure_name AS {nameof(StockResponse.UnitOfMeasureName)},
                 s.current_qty AS {nameof(StockResponse.InStock)},
                 l.name AS {nameof(StockResponse.Location)},
-                CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(StockResponse.DaysInStock)},                
+                CURRENT_DATE - s.received_date AS {nameof(StockResponse.DaysInStock)},                
                 CASE s.status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(StockResponse.Status)},
-             p.active AS {nameof(StockResponse.Active)}
+                p.is_active AS {nameof(StockResponse.Active)}
              FROM wms.stocks s
              INNER JOIN wms.products p ON p.id = s.product_id
-             INNER JOIN wms.categories c ON c.id = p.category_id
+             INNER JOIN crm.categories c ON p.category_id = c.id
              INNER JOIN wms.locations l ON l.id = s.location_id
              WHERE s.id = @StockId;
              """;

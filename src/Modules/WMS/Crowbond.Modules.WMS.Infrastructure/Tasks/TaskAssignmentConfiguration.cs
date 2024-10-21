@@ -12,5 +12,10 @@ internal sealed class TaskAssignmentConfiguration : IEntityTypeConfiguration<Tas
         builder.HasKey(t => t.Id);
 
         builder.HasOne<WarehouseOperator>().WithMany().HasForeignKey(t => t.AssignedOperatorId);
+
+        builder.HasOne(a => a.Header)
+               .WithMany(t => t.Assignments)
+               .HasForeignKey(a => a.TaskHeaderId)
+               .IsRequired();
     }
 }

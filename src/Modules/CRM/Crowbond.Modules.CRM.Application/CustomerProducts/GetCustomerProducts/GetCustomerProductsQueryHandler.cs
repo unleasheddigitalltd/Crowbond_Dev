@@ -22,8 +22,9 @@ internal sealed class GetCustomerProductsQueryHandler(IDbConnectionFactory dbCon
                  p.name AS {nameof(CustomerProductResponse.ProductName)},
                  p.sku AS {nameof(CustomerProductResponse.ProductSku)},
                  p.unit_of_measure_name AS {nameof(CustomerProductResponse.UnitOfMeasureName)},
-                 p.category_id AS {nameof(CustomerProductResponse.CategoryId)},
-                 p.category_name AS {nameof(CustomerProductResponse.CategoryName)},
+                 c.name AS {nameof(CustomerProductResponse.CategoryName)},
+                 b.name AS {nameof(CustomerProductResponse.BrandName)},
+                 pg.name AS {nameof(CustomerProductResponse.ProductGroupName)},
                  cp.fixed_price AS {nameof(CustomerProductResponse.FixedPrice)},
                  cp.fixed_discount AS {nameof(CustomerProductResponse.FixedDiscount)},
                  cp.comments AS {nameof(CustomerProductResponse.Comments)},
@@ -31,6 +32,9 @@ internal sealed class GetCustomerProductsQueryHandler(IDbConnectionFactory dbCon
                  cp.expiry_date AS {nameof(CustomerProductResponse.ExpiryDate)}
              FROM crm.customer_products cp
              INNER JOIN crm.products p ON cp.product_id = p.id
+             INNER JOIN crm.categories c ON p.category_id = c.id
+             INNER JOIN crm.brands b ON p.brand_id = b.id
+             INNER JOIN crm.product_groups pg ON p.product_group_id = pg.id
              WHERE cp.customer_id = @CustomerId AND cp.is_active = true
              """;
 

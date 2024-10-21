@@ -8,8 +8,6 @@ internal sealed class FilterTypeConfiguration : IEntityTypeConfiguration<FilterT
 {
     public void Configure(EntityTypeBuilder<FilterType> builder)
     {
-        builder.ToTable("filter_types");
-
         builder.HasKey(c => c.Name);
 
         builder.Property(c => c.Name).IsRequired().HasMaxLength(20);

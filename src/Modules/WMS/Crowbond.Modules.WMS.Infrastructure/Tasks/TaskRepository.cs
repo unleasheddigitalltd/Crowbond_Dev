@@ -11,6 +11,11 @@ internal sealed class TaskRepository(WmsDbContext context) : ITaskRepository
         return await context.TaskHeaders.Include(t => t.Assignments).ThenInclude(a => a.Lines).SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
+    public async Task<TaskAssignmentLine?> GetAssignmentLineAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.TaskAssignmentLines.Include(t => t.Assignment).ThenInclude(a => a.Header).SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
     public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
     {
         return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Task, cancellationToken);

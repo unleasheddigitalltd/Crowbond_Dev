@@ -28,6 +28,7 @@ internal sealed class CreatePurchaseOrderCommandHandler(
 
         Result<PurchaseOrderHeader> purchaseOrderHeader = PurchaseOrderHeader.Create(
             supplier.Id,
+            supplier.AccountNumber,
             supplier.SupplierName,
             $"{supplier.FirstName} {supplier.LastName}",
             supplier.PhoneNumber,
@@ -50,16 +51,20 @@ internal sealed class CreatePurchaseOrderCommandHandler(
             }
 
             Result result = purchaseOrderHeader.Value.AddLine(
-                productId: supplierProduct.ProductId,
-                productSku: supplierProduct.ProductSku,
-                productName: supplierProduct.ProductName,
-                unitOfMeasureName: supplierProduct.UnitOfMeasureName,
-                unitPrice: supplierProduct.UnitPrice,
-                qty: lineItem.Qty,
-                taxRateType: (TaxRateType)supplierProduct.TaxRateType,
-                foc: true,
-                taxable: true,
-                comments: lineItem.Comments);
+                supplierProduct.ProductId,
+                supplierProduct.ProductSku,
+                supplierProduct.ProductName,
+                supplierProduct.UnitOfMeasureName,
+                supplierProduct.CategoryId,
+                supplierProduct.CategoryName,
+                supplierProduct.BrandId,
+                supplierProduct.BrandName,
+                supplierProduct.ProductGroupId,
+                supplierProduct.ProductGroupName,
+                supplierProduct.UnitPrice,
+                lineItem.Qty,
+                (TaxRateType)supplierProduct.TaxRateType,
+                lineItem.Comments);
 
             if (result.IsFailure)
             {

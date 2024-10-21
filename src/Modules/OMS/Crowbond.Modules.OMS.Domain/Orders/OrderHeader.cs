@@ -8,9 +8,10 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 public sealed class OrderHeader : Entity, IAuditable
 {
     private readonly List<OrderLine> _lines = new();
+    private readonly List<OrderDelivery> _delivery = new();
 
     private OrderHeader()
-    {        
+    {
     }
 
     public Guid Id { get; private set; }
@@ -79,6 +80,8 @@ public sealed class OrderHeader : Entity, IAuditable
 
     public string? Tags { get; private set; }
 
+    public int LastImageSequence { get; private set; }
+
     public OrderStatus Status { get; private set; }
 
     public Guid CreatedBy { get; set; }
@@ -90,6 +93,8 @@ public sealed class OrderHeader : Entity, IAuditable
     public DateTime? LastModifiedOnUtc { get; set; }
 
     public IReadOnlyCollection<OrderLine> Lines => _lines;
+
+    public IReadOnlyCollection<OrderDelivery> Delivery => _delivery;
 
     public static Result<OrderHeader> Create(
         string orderNo,
@@ -159,20 +164,37 @@ public sealed class OrderHeader : Entity, IAuditable
         return orderHeader;
     }
 
-    public OrderLine AddLine(
+    public Result<OrderLine> AddLine(
         Guid productId,
         string productSku,
         string productName,
         string unitOfMeasureName,
+        Guid categoryId,
+        string categoryName,
+        Guid brandId,
+        string brandName,
+        Guid productGroupId,
+        string productGroupName,
         decimal unitPrice,
         decimal qty,
         TaxRateType taxRateType)
     {
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure<OrderLine>(OrderErrors.NotStockReviewing);
+        }
+
         var line = OrderLine.Create(
             productId,
             productSku,
             productName,
             unitOfMeasureName,
+            categoryId,
+            categoryName,
+            brandId,
+            brandName,
+            productGroupId,
+            productGroupName,
             unitPrice,
             qty,
             taxRateType);
@@ -183,14 +205,74 @@ public sealed class OrderHeader : Entity, IAuditable
         return line;
     }
 
+    public Result RemoveLine(Guid orderLineId)
+    {
+        if (Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure(OrderErrors.NotStockReviewing);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(ol => ol.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        _lines.Remove(line);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+
+    public Result AdjustLineQty(Guid orderLineId, decimal qty)
+    {
+        if (Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure(OrderErrors.NotStockReviewing);
+        }
+
+        if (qty < 0)
+        {
+            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+        }
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+        line.Update(qty);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+
     public void UpdateTotalAmount()
     {
         OrderTax = _lines.Sum(line => line.Tax);
         OrderAmount = _lines.Sum(line => line.LineTotal) + DeliveryCharge;
     }
 
-    public void Deliver(DateTime utcNow)
+    public Result Accept()
     {
+        if (Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure(OrderErrors.NotStockReviewing);
+        }
+
+        Status = OrderStatus.Accepted;
+        Raise(new OrderAcceptedDomainEvent(Id));
+        return Result.Success();
+    }
+
+    public Result<OrderDelivery> Deliver(Guid routeTripLogId, DateTime utcNow, string? comments)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderDelivery>(OrderErrors.NotShipped);
+        }
+
         var deliveryDate = DateOnly.FromDateTime(utcNow);
         // set payment due date
         PaymentDueDate = PaymentTerm switch
@@ -201,7 +283,61 @@ public sealed class OrderHeader : Entity, IAuditable
             _ => throw new NotImplementedException()
         };
 
+        var delivery = OrderDelivery.Create(
+            routeTripLogId,
+            DeliveryStatus.delivered,
+            utcNow,
+            comments);
+
+        _delivery.Add(delivery);
+
         Status = OrderStatus.Delivered;
+        return Result.Success(delivery);
+    }
+
+    public Result<OrderDeliveryImage> AddDeliveryImage(string imageName)
+    {
+        if (Status != OrderStatus.Delivered)
+        {
+            return Result.Failure<OrderDeliveryImage>(OrderErrors.NotDelivered);
+        }
+
+        OrderDelivery? delivery = _delivery.SingleOrDefault(s => s.Status == DeliveryStatus.delivered);
+
+        if (delivery is null)
+        {
+            return Result.Failure<OrderDeliveryImage>(OrderErrors.NoDeliveryRecordFound);
+        }
+
+        Result<OrderDeliveryImage> imageResult = delivery.AddImage(imageName);
+
+        if (imageResult.IsFailure)
+        {
+            return Result.Failure<OrderDeliveryImage>(imageResult.Error);
+        }
+
+        LastImageSequence++;
+
+        return Result.Success(imageResult.Value);
+    }
+
+    public Result<OrderDeliveryImage> RemoveDeliveryImage(string imageName)
+    {
+        if (Status != OrderStatus.Delivered)
+        {
+            return Result.Failure<OrderDeliveryImage>(OrderErrors.NotDelivered);
+        }
+
+        OrderDelivery? delivery = _delivery.SingleOrDefault(s => s.Status == DeliveryStatus.delivered);
+
+        if (delivery is null)
+        {
+            return Result.Failure<OrderDeliveryImage>(OrderErrors.NoDeliveryRecordFound);
+        }
+
+        Result<OrderDeliveryImage> result = delivery.RemoveImage(imageName);
+
+        return result;
     }
 
     private static DateOnly GetStandardPaymentDate(DateOnly deliveryDate)

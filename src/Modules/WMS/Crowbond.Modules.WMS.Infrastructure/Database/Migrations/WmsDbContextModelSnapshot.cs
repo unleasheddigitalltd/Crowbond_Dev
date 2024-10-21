@@ -23,6 +23,44 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BrandProductGroup", b =>
+                {
+                    b.Property<Guid>("BrandsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("brand_id");
+
+                    b.Property<Guid>("ProductGroupId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_group_id");
+
+                    b.HasKey("BrandsId", "ProductGroupId")
+                        .HasName("pk_product_group_brands");
+
+                    b.HasIndex("ProductGroupId")
+                        .HasDatabaseName("ix_product_group_brands_product_group_id");
+
+                    b.ToTable("product_group_brands", "wms");
+                });
+
+            modelBuilder.Entity("CategoryProductGroup", b =>
+                {
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<Guid>("ProductGroupsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_group_id");
+
+                    b.HasKey("CategoryId", "ProductGroupsId")
+                        .HasName("pk_category_product_groups");
+
+                    b.HasIndex("ProductGroupsId")
+                        .HasDatabaseName("ix_category_product_groups_product_groups_id");
+
+                    b.ToTable("category_product_groups", "wms");
+                });
+
             modelBuilder.Entity("Crowbond.Common.Infrastructure.Inbox.InboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -129,27 +167,74 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.ToTable("outbox_message_consumers", "wms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Categories.Category", b =>
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Dispatches.DispatchHeader", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_archived");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("DispatchNo")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("dispatch_no");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_on_utc");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<string>("OrderNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("order_no");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.HasKey("Id")
-                        .HasName("pk_categories");
+                        .HasName("pk_dispatch_headers");
 
-                    b.ToTable("categories", "wms");
+                    b.ToTable("dispatch_headers", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Dispatches.DispatchLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("DispatchHeaderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("dispatch_header_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<decimal>("Qty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("qty");
+
+                    b.HasKey("Id")
+                        .HasName("pk_dispatch_lines");
+
+                    b.HasIndex("DispatchHeaderId")
+                        .HasDatabaseName("ix_dispatch_lines_dispatch_header_id");
+
+                    b.ToTable("dispatch_lines", "wms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.Location", b =>
@@ -188,6 +273,44 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_locations_parent_id");
 
                     b.ToTable("locations", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.Brand", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_brands");
+
+                    b.ToTable("brands", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_categories");
+
+                    b.ToTable("categories", "wms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.FilterType", b =>
@@ -259,6 +382,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("barcode");
 
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("brand_id");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid")
                         .HasColumnName("category_id");
@@ -296,8 +423,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("name");
 
                     b.Property<string>("Notes")
@@ -313,6 +440,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
+
+                    b.Property<Guid>("ProductGroupId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_group_id");
 
                     b.Property<bool>("QiCheck")
                         .HasColumnType("boolean")
@@ -351,6 +482,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_products");
 
+                    b.HasIndex("BrandId")
+                        .HasDatabaseName("ix_products_brand_id");
+
                     b.HasIndex("CategoryId")
                         .HasDatabaseName("ix_products_category_id");
 
@@ -363,10 +497,32 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_products_parent_id");
 
+                    b.HasIndex("ProductGroupId")
+                        .HasDatabaseName("ix_products_product_group_id");
+
                     b.HasIndex("UnitOfMeasureName")
                         .HasDatabaseName("ix_products_unit_of_measure_name");
 
                     b.ToTable("products", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.ProductGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_groups");
+
+                    b.ToTable("product_groups", "wms");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.UnitOfMeasure", b =>
@@ -411,16 +567,7 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
                     b.Property<string>("DeliveryNoteNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("delivery_note_number");
@@ -448,8 +595,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("receipt_no");
 
-                    b.Property<DateTime>("ReceivedDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly?>("ReceivedDate")
+                        .HasColumnType("date")
                         .HasColumnName("received_date");
 
                     b.Property<int>("Status")
@@ -542,6 +689,12 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                             Context = 1,
                             LastNumber = 10001,
                             Prefix = "TSK"
+                        },
+                        new
+                        {
+                            Context = 2,
+                            LastNumber = 10001,
+                            Prefix = "DSP"
                         });
                 });
 
@@ -606,6 +759,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         new
                         {
                             Name = "PutAway"
+                        },
+                        new
+                        {
+                            Name = "Picking"
                         });
                 });
 
@@ -664,8 +821,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("receipt_line_id");
 
-                    b.Property<DateTime>("ReceivedDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("ReceivedDate")
+                        .HasColumnType("date")
                         .HasColumnName("received_date");
 
                     b.Property<DateOnly?>("SellByDate")
@@ -939,9 +1096,13 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("EntityId")
+                    b.Property<Guid?>("DispatchId")
                         .HasColumnType("uuid")
-                        .HasColumnName("entity_id");
+                        .HasColumnName("dispatch_id");
+
+                    b.Property<Guid?>("ReceiptId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("receipt_id");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -960,8 +1121,11 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_task_headers");
 
-                    b.HasIndex("EntityId")
-                        .HasDatabaseName("ix_task_headers_entity_id");
+                    b.HasIndex("DispatchId")
+                        .HasDatabaseName("ix_task_headers_dispatch_id");
+
+                    b.HasIndex("ReceiptId")
+                        .HasDatabaseName("ix_task_headers_receipt_id");
 
                     b.ToTable("task_headers", "wms");
                 });
@@ -1017,6 +1181,50 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.ToTable("warehouse_operators", "wms");
                 });
 
+            modelBuilder.Entity("BrandProductGroup", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.Brand", null)
+                        .WithMany()
+                        .HasForeignKey("BrandsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_group_brands_brands_brands_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.ProductGroup", null)
+                        .WithMany()
+                        .HasForeignKey("ProductGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_group_brands_product_groups_product_group_id");
+                });
+
+            modelBuilder.Entity("CategoryProductGroup", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_category_product_groups_categories_category_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.ProductGroup", null)
+                        .WithMany()
+                        .HasForeignKey("ProductGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_category_product_groups_product_groups_product_groups_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Dispatches.DispatchLine", b =>
+                {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Dispatches.DispatchHeader", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("DispatchHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_dispatch_lines_dispatch_headers_dispatch_header_id");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Locations.Location", b =>
                 {
                     b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
@@ -1027,7 +1235,14 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Products.Product", b =>
                 {
-                    b.HasOne("Crowbond.Modules.WMS.Domain.Categories.Category", null)
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.Brand", null)
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_brands_brand_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1053,6 +1268,13 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_products_products_parent_id");
+
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Products.ProductGroup", null)
+                        .WithMany()
+                        .HasForeignKey("ProductGroupId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_product_groups_product_group_id");
 
                     b.HasOne("Crowbond.Modules.WMS.Domain.Products.UnitOfMeasure", null)
                         .WithMany()
@@ -1182,12 +1404,20 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Tasks.TaskHeader", b =>
                 {
+                    b.HasOne("Crowbond.Modules.WMS.Domain.Dispatches.DispatchHeader", null)
+                        .WithMany()
+                        .HasForeignKey("DispatchId")
+                        .HasConstraintName("fk_task_headers_dispatch_headers_dispatch_id");
+
                     b.HasOne("Crowbond.Modules.WMS.Domain.Receipts.ReceiptHeader", null)
                         .WithMany()
-                        .HasForeignKey("EntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_task_headers_receipt_headers_entity_id");
+                        .HasForeignKey("ReceiptId")
+                        .HasConstraintName("fk_task_headers_receipt_headers_receipt_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Dispatches.DispatchHeader", b =>
+                {
+                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Receipts.ReceiptHeader", b =>

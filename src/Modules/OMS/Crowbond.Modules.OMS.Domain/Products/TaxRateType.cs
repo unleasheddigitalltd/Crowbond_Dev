@@ -2,7 +2,6 @@
 
 public enum TaxRateType
 {
-    VatOnIncome = 0,
-    NoVat = 1,
-    ZeroRatedIncome = 2
+    NoVat = 0,
+    Vat = 1,
 }

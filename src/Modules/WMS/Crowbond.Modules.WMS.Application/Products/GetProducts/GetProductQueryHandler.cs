@@ -31,16 +31,16 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
         string sql = $@"
             WITH FilteredProducts AS (
                 SELECT
-                    p.id                            AS {nameof(Product.Id)},
-                    p.sku                           AS {nameof(Product.Sku)},
-                    p.name                          AS {nameof(Product.Name)},
-                    p.unit_of_measure_name          AS {nameof(Product.UnitOfMeasureName)},
-                    c.name                          AS {nameof(Product.CategoryName)},
-                    p.reorder_level                 AS {nameof(Product.ReorderLevel)},
-                    p.is_active                        AS {nameof(Product.IsActive)},
+                    p.id AS {nameof(Product.Id)},
+                    p.sku AS {nameof(Product.Sku)},
+                    p.name AS {nameof(Product.Name)},
+                    p.unit_of_measure_name AS {nameof(Product.UnitOfMeasureName)},
+                    c.name AS {nameof(Product.CategoryName)},
+                    p.reorder_level AS {nameof(Product.ReorderLevel)},
+                    p.is_active AS {nameof(Product.IsActive)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.products p
-                INNER JOIN wms.categories c ON p.category_id = c.id
+                INNER JOIN wms.categories c ON c.id = p.category_id
                 WHERE
                     p.name ILIKE '%' || @Search || '%'
                     OR p.sku ILIKE '%' || @Search || '%'
@@ -72,7 +72,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
 
             SELECT Count(*) 
                 FROM wms.products p
-                INNER JOIN wms.categories c ON p.category_id = c.id
+                INNER JOIN wms.categories c ON c.id = p.category_id
                 WHERE
                     p.name ILIKE '%' || @Search || '%'
                     OR p.sku ILIKE '%' || @Search || '%'
@@ -89,7 +89,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
         int currentPage = request.Page;
         int pageSize = request.Size;
         int startIndex = (currentPage - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
+        int endIndex = totalCount == 0 ? 0 : Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new ProductsResponse(products, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }

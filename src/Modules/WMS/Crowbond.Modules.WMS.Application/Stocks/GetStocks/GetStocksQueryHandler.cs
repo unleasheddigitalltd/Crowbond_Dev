@@ -39,22 +39,22 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
 
         string sql = $@"WITH FilteredStocks AS (
                     SELECT 
-                        s.id            AS {nameof(Stock.Id)},
-                        p.sku           AS {nameof(Stock.Sku)},
-                        p.name          AS {nameof(Stock.Name)},	
-                        c.name          AS {nameof(Stock.CategoryName)},
-                        s.batch_number  AS {nameof(Stock.Batch)},
+                        s.id AS {nameof(Stock.Id)},
+                        p.sku AS {nameof(Stock.Sku)},
+                        p.name AS {nameof(Stock.Name)},	
+                        c.name AS {nameof(Stock.CategoryName)},
+                        s.batch_number AS {nameof(Stock.Batch)},
                         p.unit_of_measure_name AS {nameof(Stock.UnitOfMeasureName)},
-                        l.name          AS {nameof(Stock.Location)},
-                        p.is_active        AS {nameof(Stock.IsActive)},
+                        l.name AS {nameof(Stock.Location)},
+                        p.is_active AS {nameof(Stock.IsActive)},
                         CASE s.status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(Stock.Status)},
-                        s.current_qty   AS {nameof(Stock.InStock)},
+                        s.current_qty AS {nameof(Stock.InStock)},
                         s.received_date,    
                         s.current_qty,
                         ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                     FROM wms.stocks s
                     INNER JOIN wms.products p ON p.id = s.product_id
-                    INNER JOIN wms.categories c ON c.id = p.category_id
+                    INNER JOIN crm.categories c ON p.category_id = c.id
                     INNER JOIN wms.locations l ON s.location_id = l.id
                     WHERE
                         s.current_qty != 0 AND
@@ -74,7 +74,7 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
                     s.{nameof(Stock.UnitOfMeasureName)},
                     s.{nameof(Stock.InStock)},
                     s.{nameof(Stock.Location)},               
-                    CAST(DATE_PART('day', CURRENT_DATE - s.received_date) AS INTEGER) AS {nameof(Stock.DaysInStock)},
+                    CURRENT_DATE - s.received_date AS {nameof(Stock.DaysInStock)},
                     s.{nameof(Stock.Status)},
                     s.{nameof(Stock.IsActive)}
                 FROM FilteredStocks s
@@ -105,7 +105,7 @@ internal sealed class GetStocksQueryHandler(IDbConnectionFactory dbConnectionFac
         int currentPage = request.Page;
         int pageSize = request.Size;
         int startIndex = (currentPage - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize - 1, totalCount - 1);
+        int endIndex = totalCount == 0 ? 0 : Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
         return new StocksResponse(stocks, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }

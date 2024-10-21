@@ -1,5 +1,4 @@
 ﻿using Crowbond.Common.Domain;
-using Crowbond.Modules.OMS.Domain.Drivers;
 
 namespace Crowbond.Modules.OMS.Domain.RouteTripLogs;
 
@@ -13,6 +12,9 @@ public static class RouteTripLogErrors
 
     public static Error Exists(Guid routeTripId) =>
     Error.Conflict("RouteTripLog.Exists", $"An active route trip log for route trip ID {routeTripId} already exists.");
+
+    public static Error ActiveForDriverNotFound(Guid driverId) =>
+    Error.Conflict("RouteTripLog.ActiveForDriverNotFound", $"An active route trip log for driver with identifier {driverId} was not found");
 
     public static readonly Error AlreadyLoggedOff = Error.Problem("RouteTripLog.LoggedOff", "The route trip log was already logged off");
 }

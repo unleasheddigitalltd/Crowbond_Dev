@@ -7,6 +7,13 @@
     "Inbox": {
       "IntervalInSeconds": 5,
       "BatchSize": 50
+    },
+    "FileSettings": {
+      "FtpHost": "ftp://44.220.130.235",
+      "FtpUsername": "crowbond_dev",
+      "FtpPassword": "Unleashed51*",
+      "OrderDeliveryImageStoragePath": "/orders/delivery",
+      "MaxFileSizeKb": 1024
     }
   }
 }

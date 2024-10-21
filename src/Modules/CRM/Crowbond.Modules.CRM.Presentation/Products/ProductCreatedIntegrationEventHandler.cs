@@ -24,7 +24,8 @@ internal sealed class ProductCreatedIntegrationEventHandler(ISender sender)
                 integrationEvent.UnitOfMeasureName,
                 integrationEvent.InventoryTypeName,
                 integrationEvent.CategoryId,
-                integrationEvent.CategoryName,
+                integrationEvent.BrandId,
+                integrationEvent.ProductGroupId,
                 (TaxRateType)integrationEvent.TaxRateType,
                 integrationEvent.IsActive),
             cancellationToken);

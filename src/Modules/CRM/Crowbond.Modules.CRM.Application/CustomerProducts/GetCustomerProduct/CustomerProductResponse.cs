@@ -1,17 +1,16 @@
 ﻿namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProduct;
-public sealed record CustomerProductResponse
-{
-    public Guid Id { get; }
-    public Guid CustomerId { get; }
-    public Guid ProductId { get; }
-    public string ProductName { get; }
-    public string ProductSku { get; }
-    public string UnitOfMeasureName { get; }
-    public Guid CategoryId { get; }
-    public string CategoryName { get; }
-    public decimal? FixedPrice { get; }
-    public decimal? FixedDiscount { get; }
-    public string? Comments { get; }
-    public DateOnly EffectiveDate { get; }
-    public DateOnly? ExpiryDate { get; }
-}
+public sealed record CustomerProductResponse(
+    Guid Id,
+    Guid CustomerId,
+    Guid ProductId,
+    string ProductName,
+    string ProductSku,
+    string UnitOfMeasureName,
+    string CategoryName,
+    string BrandName,
+    string ProductGroupName,
+    decimal? FixedPrice,
+    decimal? FixedDiscount,
+    string? Comments,
+    DateOnly EffectiveDate,
+    DateOnly? ExpiryDate);
