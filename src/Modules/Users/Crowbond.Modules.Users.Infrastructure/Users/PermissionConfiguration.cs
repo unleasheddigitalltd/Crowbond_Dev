@@ -29,6 +29,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.CheckInTicket,
             Permission.GetEventStatistics,
 
+            Permission.GetLocations,
+
             Permission.GetProducts,
             Permission.CreateProducts,
             Permission.ModifyProducts,
@@ -156,6 +158,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetTickets),
                     CreateRolePermission(Role.Administrator, Permission.CheckInTicket),
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetLocations),
 
                     CreateRolePermission(Role.Administrator, Permission.GetProducts),
                     CreateRolePermission(Role.Administrator, Permission.CreateProducts),

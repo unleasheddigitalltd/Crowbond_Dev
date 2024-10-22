@@ -14,6 +14,8 @@ public sealed class Location : Entity
 
     public string Name { get; private set; }
 
+    public string? ScanCode { get; private set; }
+
     public LocationType? LocationType { get; private set; }
 
     public LocationLayer LocationLayer { get; private set; }
@@ -24,6 +26,7 @@ public sealed class Location : Entity
     public static Location Create(
         Guid parentId,
         string name,
+        string? scanCode,
         LocationType? locationType,
         LocationLayer locationLayer)
     {
@@ -32,6 +35,7 @@ public sealed class Location : Entity
             Id = Guid.NewGuid(),
             ParentId = parentId,
             Name = name,
+            ScanCode = scanCode,
             LocationType = locationType,
             LocationLayer = locationLayer,
             Status = LocationStatus.Active
