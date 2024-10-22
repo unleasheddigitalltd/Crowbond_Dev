@@ -35,6 +35,8 @@ using Crowbond.Modules.OMS.Infrastructure.Settings;
 using Crowbond.Modules.OMS.Infrastructure.PurchaseOrders;
 using Crowbond.Modules.OMS.Application.Orders;
 using Crowbond.Modules.OMS.Infrastructure.FileStorage;
+using Crowbond.Modules.OMS.Domain.Vehicles;
+using Crowbond.Modules.OMS.Infrastructure.Vehicles;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -74,6 +76,7 @@ public static class OmsModule
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IRouteTripRepository, RouteTripRepository>();
         services.AddScoped<IRouteTripStatusHistoryRepository, RouteTripStatusHistoryRepository>();

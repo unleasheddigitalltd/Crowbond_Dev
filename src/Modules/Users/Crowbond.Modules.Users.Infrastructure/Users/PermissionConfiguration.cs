@@ -81,6 +81,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetDrivers,
             Permission.ModifyDrivers,
             Permission.CreateDrivers,
+            
+            Permission.GetVehicles,
+            Permission.ModifyVehicles,
+            Permission.CreateVehicles,
 
             Permission.GetRoutes,
             Permission.ModifyRoutes,
@@ -127,6 +131,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     // Driver permissions
                     CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
                     CreateRolePermission(Role.Driver, Permission.DeliverOrders),
+                    CreateRolePermission(Role.Driver, Permission.GetVehicles),
 
                     // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
@@ -211,6 +216,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetDrivers),
                     CreateRolePermission(Role.Administrator, Permission.ModifyDrivers),
                     CreateRolePermission(Role.Administrator, Permission.CreateDrivers),
+                    
+                    CreateRolePermission(Role.Administrator, Permission.GetVehicles),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyVehicles),
+                    CreateRolePermission(Role.Administrator, Permission.CreateVehicles),
 
                     CreateRolePermission(Role.Administrator, Permission.GetRoutes),
                     CreateRolePermission(Role.Administrator, Permission.ModifyRoutes),

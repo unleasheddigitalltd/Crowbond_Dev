@@ -19,6 +19,8 @@ using Crowbond.Modules.OMS.Domain.PurchaseOrders;
 using Crowbond.Common.Infrastructure.Configuration;
 using Crowbond.Modules.OMS.Domain.Settings;
 using Crowbond.Modules.OMS.Infrastructure.Settings;
+using Crowbond.Modules.OMS.Domain.Vehicles;
+using Crowbond.Modules.OMS.Infrastructure.Vehicles;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
@@ -30,6 +32,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
     internal DbSet<PurchaseOrderHeader> PurchaseOrderHeaders { get; set; }
     internal DbSet<Driver> Drivers { get; set; }
+    internal DbSet<Vehicle> Vehicles{ get; set; }
     internal DbSet<Route> Routes { get; set; }
     internal DbSet<RouteTrip> RouteTrips { get; set; }
     internal DbSet<RouteTripStatusHistory> RouteTripStatusHistories { get; set; }
@@ -56,6 +59,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new OrderHeaderConfiguratin());
         modelBuilder.ApplyConfiguration(new OrderLineConfiguration());
         modelBuilder.ApplyConfiguration(new DriverConfiguration());
+        modelBuilder.ApplyConfiguration(new VehicleConfiguration());
         modelBuilder.ApplyConfiguration(new RouteConfiguration());
         modelBuilder.ApplyConfiguration(new RouteTripConfiguration());
         modelBuilder.ApplyConfiguration(new RouteTripStatusHistoryConfiguration());
