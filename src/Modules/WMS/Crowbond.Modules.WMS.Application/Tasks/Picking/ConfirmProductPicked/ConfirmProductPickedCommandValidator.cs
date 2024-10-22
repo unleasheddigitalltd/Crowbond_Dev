@@ -8,5 +8,6 @@ internal sealed class ConfirmProductPickedCommandValidator : AbstractValidator<C
         RuleFor(t => t.TaskAssignmentLineId).NotEmpty();
         RuleFor(t => t.ToLocationId).NotEmpty();
         RuleFor(t => t.StockId).NotEmpty();
+        RuleFor(t => t.Qty).GreaterThanOrEqualTo(0).PrecisionScale(10, 2, true);
     }
 }

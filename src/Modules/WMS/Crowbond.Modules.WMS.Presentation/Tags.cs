@@ -2,6 +2,7 @@
 
 internal static class Tags
 {
+    internal const string Locations = "Locations";
     internal const string Products = "Products";
     internal const string Stocks = "Stocks";
     internal const string Receipts = "Receipts";

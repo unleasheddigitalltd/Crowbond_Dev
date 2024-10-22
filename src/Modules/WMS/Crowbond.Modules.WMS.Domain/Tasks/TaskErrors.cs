@@ -54,6 +54,12 @@ public static class TaskErrors
     public static readonly Error QuantityNotGreaterThanZero =
         Error.Problem("Tasks.QuantityNotGreaterThanZero", "The quantity should be greater than zero");
 
+    public static readonly Error ExceedsAvailableStock =
+        Error.Problem("Tasks.ExceedsAvailableStock", "The quantity exceeds available stock");
+    
+    public static readonly Error ExceedsRequestedQuantity =
+        Error.Problem("Tasks.ExceedsRequestedQuantity", "The quantity exceeds requested quantity");
+
     public static Error UnknownStatus(TaskHeaderStatus status) => 
         Error.Problem("Tasks.UnknownStatus", $"The task is in an unknown status: {status}.");
 

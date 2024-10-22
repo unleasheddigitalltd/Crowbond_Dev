@@ -16,6 +16,8 @@ public sealed class Permission
     public static readonly Permission CheckInTicket = new("tickets:check-in");
     public static readonly Permission GetEventStatistics = new("event-statistics:read");
 
+    public static readonly Permission GetLocations = new("locations:read");
+
     public static readonly Permission GetProducts = new("products:read");
     public static readonly Permission CreateProducts = new("products:create");
     public static readonly Permission ModifyProducts = new("products:update");
