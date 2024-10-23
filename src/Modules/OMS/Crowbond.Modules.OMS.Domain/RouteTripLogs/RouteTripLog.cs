@@ -14,7 +14,7 @@ public sealed class RouteTripLog : Entity
 
     public Guid DriverId { get; private set; }
 
-    public string VehicleRegn { get; private set; }
+    public Guid? VehicleId { get; private set; }
 
     public DateTime LoggedOnTime { get; private set; }
 
@@ -22,14 +22,15 @@ public sealed class RouteTripLog : Entity
 
     public decimal? Temperature { get; private set; }
 
-    public static RouteTripLog Create(Guid routeTripId, Guid driverId, string vehicleRegn, DateTime loggedOnTime)
+    public bool ComplianceCompleted { get; private set; }
+
+    public static RouteTripLog Create(Guid routeTripId, Guid driverId, DateTime loggedOnTime)
     {
         var routeTripLog = new RouteTripLog
         {
             Id = Guid.NewGuid(),
             RouteTripId = routeTripId,
             DriverId = driverId,
-            VehicleRegn = vehicleRegn,
             LoggedOnTime = loggedOnTime
         };
 
@@ -45,6 +46,17 @@ public sealed class RouteTripLog : Entity
 
         LoggedOffTime = loggedOffTime;
 
+        return Result.Success();
+    }
+
+    public Result AssignVehicle(Guid vehicleId)
+    {
+        if (LoggedOffTime != null)
+        {
+            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
+        }
+
+        VehicleId = vehicleId;
         return Result.Success();
     }
 }

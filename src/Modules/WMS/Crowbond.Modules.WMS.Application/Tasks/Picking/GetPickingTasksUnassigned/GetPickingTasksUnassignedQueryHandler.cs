@@ -30,6 +30,7 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                     t.task_no AS {nameof(PickingTask.TaskNo)},
                     d.dispatch_no AS {nameof(PickingTask.DispatchNo)},
                     d.order_no AS {nameof(PickingTask.OrderNo)},
+                    'Jeff’s Grocer’s Ltd' AS {nameof(PickingTask.CustomerName)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.task_headers t
                 LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
@@ -49,7 +50,8 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                 t.{nameof(PickingTask.Id)},
                 t.{nameof(PickingTask.TaskNo)},
                 t.{nameof(PickingTask.DispatchNo)},
-                t.{nameof(PickingTask.OrderNo)}
+                t.{nameof(PickingTask.OrderNo)},
+                t.{nameof(PickingTask.CustomerName)}
             FROM FilteredPutAwayTasks t
             WHERE t.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY t.RowNum;

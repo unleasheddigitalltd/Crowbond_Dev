@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(UsersDbContext))]
-    partial class UsersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022163005_Driver_Add_GetVehicles_Permission")]
+    partial class Driver_Add_GetVehicles_Permission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -610,16 +613,6 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "tasks:picking:execute",
-                            RoleName = "WarhouseOperator"
-                        },
-                        new
-                        {
-                            PermissionCode = "locations:read",
-                            RoleName = "WarhouseOperator"
-                        },
-                        new
-                        {
-                            PermissionCode = "stocks:adjust",
                             RoleName = "WarhouseOperator"
                         },
                         new

@@ -41,7 +41,7 @@ internal sealed class LogOnRouteTripCommandHandler(
             return Result.Failure<Guid>(RouteTripLogErrors.Exists(routeTrip.Id));
         }
 
-        Result<RouteTripLog> result = RouteTripLog.Create(routeTrip.Id, driver.Id, driver.VehicleRegn, dateTimeProvider.UtcNow);
+        Result<RouteTripLog> result = RouteTripLog.Create(routeTrip.Id, driver.Id, dateTimeProvider.UtcNow);
 
         if (result.IsFailure)
         {

@@ -16,4 +16,5 @@ public sealed record PickingTask
     public string TaskNo { get; }
     public string DispatchNo { get; }
     public string OrderNo { get; }
+    public string CustomerName { get; }
 }

@@ -17,6 +17,10 @@ internal static class Permissions
     internal const string ModifyDrivers = "drivers:update";
     internal const string CreateDrivers = "drivers:create";
 
+    internal const string GetVehicles = "vehicles:read";
+    internal const string ModifyVehicles = "vehicles:update";
+    internal const string CreateVehicles = "vehicles:create";
+
     internal const string GetRouteTrips = "route-trip:read";
     internal const string ModifyRouteTrips = "route-trip:update";
     internal const string CreateRouteTrips = "route-trip:create";
