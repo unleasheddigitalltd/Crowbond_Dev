@@ -22,4 +22,9 @@ public sealed class Vehicle: Entity
 
         return vehicle;
     }
+
+    public void Update(string vehicleRegn)
+    {
+        VehicleRegn = vehicleRegn;
+    }
 }
