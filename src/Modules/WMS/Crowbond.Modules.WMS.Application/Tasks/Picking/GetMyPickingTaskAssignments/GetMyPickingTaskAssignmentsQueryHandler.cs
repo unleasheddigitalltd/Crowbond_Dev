@@ -18,17 +18,25 @@ internal sealed class GetMyPickingTaskAssignmentsQueryHandler(IDbConnectionFacto
              SELECT
                  t.id AS {nameof(TaskAssignmentResponse.TaskId)},
                  t.task_no AS {nameof(TaskAssignmentResponse.TaskNo)},
+                 d.dispatch_no AS {nameof(TaskAssignmentResponse.DispatchNo)},
+                 d.order_no AS {nameof(TaskAssignmentResponse.OrderNo)},
+                 'Jeff’s Grocer’s Ltd' AS {nameof(TaskAssignmentResponse.CustomerName)},
                  ta.status AS {nameof(TaskAssignmentResponse.Status)},
                  COUNT(l.id) AS {nameof(TaskAssignmentResponse.TotalLines)},
-                 COUNT(CASE WHEN l.status IN (2, 3) THEN l.id END) AS {nameof(TaskAssignmentResponse.FinishedLines)}
+                 COUNT(CASE WHEN l.status IN (2, 3) THEN l.id END) AS {nameof(TaskAssignmentResponse.FinishedLines)},
+                 COUNT(l.id) AS {nameof(TaskAssignmentResponse.ItemTotalLines)},
+                 COUNT(CASE WHEN l.status IN (2, 3) THEN l.id END) AS {nameof(TaskAssignmentResponse.ItemFinishedLines)},
+                 CAST(0 AS BIGINT) AS {nameof(TaskAssignmentResponse.BulkTotalLines)},
+                 CAST(0 AS BIGINT) AS {nameof(TaskAssignmentResponse.BulkFinishedLines)}
              FROM wms.task_headers t
+             INNER JOIN wms.dispatch_headers d ON t.dispatch_id = d.id
              INNER JOIN wms.task_assignments ta ON ta.task_header_id = t.id
              INNER JOIN wms.task_assignment_lines l ON ta.id = l.task_assignment_id
              WHERE 
                  t.task_type = 1
                  AND ta.assigned_operator_id = @WarehouseOperatorId
                  AND ta.status IN (0, 1, 2)
-             GROUP BY t.id, t.task_no, ta.status
+             GROUP BY t.id, t.task_no, ta.status, d.dispatch_no, d.order_no
              ORDER BY t.task_no;
              """;
 

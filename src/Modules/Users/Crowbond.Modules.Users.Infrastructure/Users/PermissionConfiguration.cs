@@ -137,6 +137,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePickingTasks),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.GetLocations),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.AdjustStocks),
 
                     // Warehouse Manager permissions
                     CreateRolePermission(Role.WarehouseManager, Permission.GetPutAwayTasks),
