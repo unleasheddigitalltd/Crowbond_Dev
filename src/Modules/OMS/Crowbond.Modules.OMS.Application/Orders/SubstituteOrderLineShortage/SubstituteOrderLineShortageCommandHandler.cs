@@ -53,10 +53,6 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
-        decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?
-            customerProduct.UnitPrice :
-            customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
-
         Result<OrderLine> newOrderLineResult = orderLine.Header.AddLine(
             customerProduct.ProductId,
             customerProduct.ProductSku,
@@ -68,7 +64,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             customerProduct.BrandName,
             customerProduct.ProductGroupId,
             customerProduct.ProductGroupName,
-            unitPrice,
+            customerProduct.UnitPrice,
             orderLine.Qty - availableQty,
             (TaxRateType)customerProduct.TaxRateType);
 

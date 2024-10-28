@@ -32,28 +32,33 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                  b.name AS {nameof(CustomerProductPriceResponse.BrandName)},
                  pg.id AS {nameof(CustomerProductPriceResponse.ProductGroupId)},
                  pg.name AS {nameof(CustomerProductPriceResponse.ProductGroupName)},
-                 CASE 
-                     WHEN cp.fixed_price IS NOT NULL             
-                        AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                        AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
-                        THEN cp.fixed_price
-                     ELSE 
-                        CASE 
-                            WHEN cp.fixed_discount IS NOT NULL 
-             		            AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                                AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
-             		            THEN pp.sale_price * (1 - cp.fixed_discount / 100.0)
-                            ELSE 
-                                pp.sale_price
-                        END
-                 END AS {nameof(CustomerProductPriceResponse.UnitPrice)},
-                 CASE 
-                     WHEN cp.fixed_price IS NOT NULL             
-                        AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                        AND cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                        THEN TRUE
-                     ELSE FALSE
-                 END AS {nameof(CustomerProductPriceResponse.IsFixedPrice)},
+                 CAST(CASE
+             	 	WHEN c.no_discount_fixed_price = true AND
+                    CASE 
+                        WHEN (cp.fixed_price IS NOT NULL OR cp.fixed_discount IS NOT NULL)             
+                            AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                            AND cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                            THEN TRUE
+                        ELSE FALSE
+                    END = true
+             	 	THEN 1 
+             	 	ELSE (1 - c.discount / 100)
+             	 END * 
+                    CASE 
+                        WHEN cp.fixed_price IS NOT NULL             
+                           AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                           AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
+                           THEN cp.fixed_price
+                        ELSE 
+                           CASE 
+                               WHEN cp.fixed_discount IS NOT NULL 
+             	    	            AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                                   AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
+             	    	            THEN pp.sale_price * (1 - cp.fixed_discount / 100.0)
+                               ELSE 
+                                   pp.sale_price
+                           END
+                    END AS DECIMAL(10, 2)) AS  {nameof(CustomerProductPriceResponse.UnitPrice)},
                  p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)}
              FROM crm.customer_products cp
              INNER JOIN crm.products p ON cp.product_id = p.id

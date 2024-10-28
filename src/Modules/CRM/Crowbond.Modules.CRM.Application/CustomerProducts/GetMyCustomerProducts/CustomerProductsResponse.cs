@@ -21,4 +21,4 @@ public sealed record CustomerProduct(
     string BrandName,
     string ProductGroupName,
     decimal UnitPrice,
-    decimal? UnitFixedPrice);
+    decimal FinalUnitPrice);

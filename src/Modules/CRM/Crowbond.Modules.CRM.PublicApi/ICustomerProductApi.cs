@@ -19,5 +19,4 @@ public sealed record CustomerProductResponse(
     Guid ProductGroupId,
     string ProductGroupName,
     decimal UnitPrice,
-    bool IsFixedPrice,
     int TaxRateType);

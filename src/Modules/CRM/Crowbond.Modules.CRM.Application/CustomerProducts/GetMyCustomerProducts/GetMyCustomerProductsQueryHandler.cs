@@ -4,6 +4,7 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductPrice;
 using Dapper;
 
 namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetMyCustomerProducts;
@@ -37,6 +38,8 @@ internal sealed class GetMyCustomerProductsQueryHandler(
                     b.name AS {nameof(CustomerProduct.BrandName)},
                     pg.name AS {nameof(CustomerProduct.ProductGroupName)},
                     pp.sale_price AS {nameof(CustomerProduct.UnitPrice)},
+					c.no_discount_fixed_price,
+					c.discount,
                     CASE 
                         WHEN cp.fixed_price IS NOT NULL             
                            AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
@@ -51,7 +54,14 @@ internal sealed class GetMyCustomerProductsQueryHandler(
                                 ELSE 
                                     pp.sale_price
                             END
-                    END AS {nameof(CustomerProduct.UnitFixedPrice)},
+                    END AS UnitFixedPrice,
+                    CASE 
+                        WHEN (cp.fixed_price > 0 OR cp.fixed_discount > 0)             
+                           AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                           AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
+                           THEN TRUE
+                        ELSE FALSE
+                    END AS IsFixedPrice,
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM crm.customer_products cp
                 INNER JOIN crm.customers c ON cp.customer_id = c.id
@@ -77,7 +87,11 @@ internal sealed class GetMyCustomerProductsQueryHandler(
                 c.{nameof(CustomerProduct.BrandName)},
                 c.{nameof(CustomerProduct.ProductGroupName)},
                 c.{nameof(CustomerProduct.UnitPrice)},
-                c.{nameof(CustomerProduct.UnitFixedPrice)}
+                CAST(CASE
+					WHEN c.no_discount_fixed_price = true AND IsFixedPrice = true
+					THEN 1 
+					ELSE (1 - c.discount / 100)
+				END * c.UnitFixedPrice AS DECIMAL(10, 2)) AS {nameof(CustomerProduct.FinalUnitPrice)}
             FROM FilteredCustomerProducts c
             WHERE c.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY c.RowNum;

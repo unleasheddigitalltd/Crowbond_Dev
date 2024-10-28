@@ -134,9 +134,6 @@ internal sealed class CreateOrderCommandHandler(
                 return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
             }
 
-            decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?
-                customerProduct.UnitPrice :
-                customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
 
             Result<OrderLine> lineResult = result.Value.AddLine(
                 customerProduct.ProductId,
@@ -149,7 +146,7 @@ internal sealed class CreateOrderCommandHandler(
                 customerProduct.BrandName,
                 customerProduct.ProductGroupId,
                 customerProduct.ProductGroupName,
-                unitPrice,
+                customerProduct.UnitPrice,
                 line.Qty,
                 (TaxRateType)customerProduct.TaxRateType);
 
