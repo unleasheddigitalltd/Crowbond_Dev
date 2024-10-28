@@ -52,6 +52,8 @@ using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Modules.CRM.Domain.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Settings;
+using Crowbond.Modules.CRM.Infrastructure.Authentication;
+using Crowbond.Modules.CRM.Application.Abstractions.Authentication;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -123,6 +125,8 @@ public static class CrmModule
         services.AddScoped<ICustomerProductApi, CustomerProductApi>();
 
         services.AddScoped<ICustomerFileAccess, CustomerFileAccess>();
+
+        services.AddScoped<IContactContext, CustomerContext>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<CrmDbContext>());
 

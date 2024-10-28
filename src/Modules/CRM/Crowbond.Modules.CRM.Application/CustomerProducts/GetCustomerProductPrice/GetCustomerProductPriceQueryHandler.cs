@@ -35,15 +35,17 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                  CASE 
                      WHEN cp.fixed_price IS NOT NULL             
                         AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                        AND cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                        AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
                         THEN cp.fixed_price
                      ELSE 
-                         CASE 
-                             WHEN cp.fixed_discount IS NOT NULL THEN 
-                                 pp.sale_price * (1 - cp.fixed_discount / 100.0)
-                             ELSE 
-                                 pp.sale_price
-                         END
+                        CASE 
+                            WHEN cp.fixed_discount IS NOT NULL 
+             		            AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
+                                AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date is null)
+             		            THEN pp.sale_price * (1 - cp.fixed_discount / 100.0)
+                            ELSE 
+                                pp.sale_price
+                        END
                  END AS {nameof(CustomerProductPriceResponse.UnitPrice)},
                  CASE 
                      WHEN cp.fixed_price IS NOT NULL             
