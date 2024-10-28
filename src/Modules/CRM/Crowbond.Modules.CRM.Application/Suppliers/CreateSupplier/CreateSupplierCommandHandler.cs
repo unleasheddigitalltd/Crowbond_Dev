@@ -21,16 +21,15 @@ internal sealed class CreateSupplierCommandHandler(
         }
 
         Result<Supplier> result = Supplier.Create(
-             accountNumber: sequence.GetNumber(),
-             supplierName: request.Supplier.SupplierName,
-             addressLine1: request.Supplier.AddressLine1,
-             addressLine2: request.Supplier.AddressLine2,
-             townCity: request.Supplier.TownCity,
-             county: request.Supplier.County,
-             country: request.Supplier.Country,
-             postalCode: request.Supplier.PostalCode,
-             paymentTerms: request.Supplier.PaymentTerms,
-             supplierNotes: request.Supplier.SupplierNotes);
+             sequence.GetNumber(),
+             request.Supplier.SupplierName,
+             request.Supplier.AddressLine1,
+             request.Supplier.AddressLine2,
+             request.Supplier.TownCity,
+             request.Supplier.County,
+             request.Supplier.Country,
+             request.Supplier.PostalCode,
+             request.Supplier.SupplierNotes);
 
         if (result.IsFailure)
         {

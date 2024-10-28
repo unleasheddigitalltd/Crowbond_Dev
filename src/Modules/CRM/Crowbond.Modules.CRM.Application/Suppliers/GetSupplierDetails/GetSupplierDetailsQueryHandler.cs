@@ -26,7 +26,6 @@ internal sealed class GetSupplierDetailsQueryHandler(IDbConnectionFactory dbConn
                  county AS {nameof(SupplierDetailsResponse.County)},
                  country AS {nameof(SupplierDetailsResponse.Country)},
                  postal_code AS {nameof(SupplierDetailsResponse.PostalCode)},
-                 payment_terms AS {nameof(SupplierDetailsResponse.PaymentTerms)},
                  supplier_notes AS {nameof(SupplierDetailsResponse.SupplierNotes)},
                  is_active AS {nameof(SupplierDetailsResponse.IsActive)}
              FROM crm.suppliers

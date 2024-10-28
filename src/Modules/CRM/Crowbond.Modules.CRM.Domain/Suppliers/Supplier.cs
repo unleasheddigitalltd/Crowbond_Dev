@@ -1,5 +1,5 @@
 ﻿using Crowbond.Common.Domain;
-using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Domain.Suppliers;
 
@@ -27,8 +27,6 @@ public sealed class Supplier : Entity
 
     public string PostalCode { get; private set; }
 
-    public PaymentTerm PaymentTerms { get; private set; }
-
     public bool IsActive { get; private set; }
 
     public string? SupplierNotes { get; private set; }
@@ -51,7 +49,6 @@ public sealed class Supplier : Entity
      string county,
      string? country,
      string postalCode,
-     PaymentTerm paymentTerms,
      string? supplierNotes)
     {
         var supplier = new Supplier
@@ -65,7 +62,6 @@ public sealed class Supplier : Entity
             County = county,
             Country = country,
             PostalCode = postalCode,
-            PaymentTerms = paymentTerms,
             IsActive = true,
             SupplierNotes = supplierNotes
         };
@@ -81,7 +77,6 @@ public sealed class Supplier : Entity
          string county,
          string? country,
          string postalcode,
-         PaymentTerm paymentterms,
          string? suppliernotes)
     {
 
@@ -92,7 +87,6 @@ public sealed class Supplier : Entity
         County = county;
         Country = country;
         PostalCode = postalcode;
-        PaymentTerms = paymentterms;
         SupplierNotes = suppliernotes;
     }
 

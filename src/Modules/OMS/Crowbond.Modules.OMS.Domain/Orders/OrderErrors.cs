@@ -18,6 +18,9 @@ public static class OrderErrors
 
     public static Error NotAssignedTo(Guid routeTripId) =>
         Error.NotFound("Orders.NotAssignedTo", $"The order is not assigned to route trip with the identifier {routeTripId}");
+    
+    public static Error LogDateMismatch(Guid routeTripId) =>
+        Error.NotFound("Orders.LogDateMismatch", $"Log entry date for route trip with the identifier {routeTripId} does not match today's date");
 
     public readonly static Error SequenceNotFound =
         Error.NotFound("Sequence.NotFound", $"The sequence for the order type was not found");
@@ -28,8 +31,8 @@ public static class OrderErrors
     public static readonly Error InvalidDeliveryMethod = 
         Error.Problem("Orders.InvalidDeliveryMethod", "The delivery method is invalid");
 
-    public static readonly Error InvalidPaymentTerm = 
-        Error.Problem("Orders.InvalidPaymentTerm", "The payment term is invalid");
+    public static readonly Error InvalidDueDateCalculationBasis = 
+        Error.Problem("Orders.InvalidDueDateCalculationBasis", "The due date calculation basis is invalid");
 
     public static readonly Error InvalidDeliveryFeeSetting = 
         Error.Problem("Orders.InvalidDeliveryFeeSetting", "The delivery fee setting is invalid");

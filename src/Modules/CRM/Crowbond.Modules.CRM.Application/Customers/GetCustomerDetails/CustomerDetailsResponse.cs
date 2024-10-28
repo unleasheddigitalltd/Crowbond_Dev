@@ -1,5 +1,6 @@
 ﻿using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Domain.CustomerSettings;
+using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
 
@@ -35,11 +36,11 @@ public sealed record CustomerDetailsResponse
 
     public Guid? RepId { get; }
 
-    public bool CustomPaymentTerm { get; }
+    public bool CustomPaymentTerms { get; }
 
-    public PaymentTerm? PaymentTerms { get; }
+    public DueDateCalculationBasis? DueDateCalculationBasis { get; }
 
-    public int? InvoiceDueDays { get; }
+    public int? DueDaysForInvoice { get; }
 
     public DeliveryFeeSetting DeliveryFeeSetting { get; }
 

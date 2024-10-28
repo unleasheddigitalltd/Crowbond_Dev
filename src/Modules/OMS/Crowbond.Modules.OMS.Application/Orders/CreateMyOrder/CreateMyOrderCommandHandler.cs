@@ -40,9 +40,9 @@ internal sealed class CreateMyOrderCommandHandler(
             return Result.Failure(CustomerErrors.ContactNotFound(request.CustomerContactId));
         }
 
-        if (!Enum.IsDefined(typeof(PaymentTerm), customer.PaymentTerms))
+        if (!Enum.IsDefined(typeof(DueDateCalculationBasis), customer.DueDateCalculationBasis))
         {
-            return Result.Failure(OrderErrors.InvalidPaymentTerm);
+            return Result.Failure(OrderErrors.InvalidDueDateCalculationBasis);
         }
 
         if (!Enum.IsDefined(typeof(DeliveryFeeSetting), customer.DeliveryFeeSetting))
@@ -81,7 +81,7 @@ internal sealed class CreateMyOrderCommandHandler(
 
         Cart? cart = await cartService.GetAsync(customer.Id, cancellationToken);
 
-        if (cart is null)
+        if (cart is null || cart.Items.Count == 0)
         {
             return Result.Failure(CartErrors.Empty);
         }
@@ -115,7 +115,8 @@ internal sealed class CreateMyOrderCommandHandler(
             request.ShippingDate,
             (DeliveryMethod)request.DeliveryMethod,
             deliveryCharge,
-            (PaymentTerm)customer.PaymentTerms,
+            (DueDateCalculationBasis)customer.DueDateCalculationBasis,
+            customer.DueDaysForInvoice,
             (PaymentMethod)request.PaymentMethod,
             request.CustomerComment,
             dateTimeProvider.UtcNow);

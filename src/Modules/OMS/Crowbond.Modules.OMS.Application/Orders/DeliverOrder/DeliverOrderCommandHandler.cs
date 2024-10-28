@@ -44,6 +44,11 @@ internal sealed class DeliverOrderCommandHandler(
             return Result.Failure<Guid>(OrderErrors.NotAssignedTo(routeTripLog.RouteTripId));            
         }
 
+        if (routeTripLog.LoggedOnTime.Date != dateTimeProvider.UtcNow.Date)
+        {
+            return Result.Failure<Guid>(OrderErrors.LogDateMismatch(routeTripLog.RouteTripId));            
+        }
+
         // create the delivery
         Result<OrderDelivery> deliveryResult = order.Deliver(routeTripLog.Id, dateTimeProvider.UtcNow, request.Comments);
 

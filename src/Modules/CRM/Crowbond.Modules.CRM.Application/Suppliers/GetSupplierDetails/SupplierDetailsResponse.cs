@@ -1,4 +1,4 @@
-﻿using Crowbond.Modules.CRM.Domain.Customers;
+﻿using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Application.Suppliers.GetSupplierDetails;
 
@@ -18,7 +18,6 @@ public sealed record SupplierDetailsResponse
     public string County { get; }
     public string? Country { get; }
     public string PostalCode { get; }
-    public PaymentTerm PaymentTerms { get; }
     public string? SupplierNotes { get; }
     public bool IsActive { get; }
 

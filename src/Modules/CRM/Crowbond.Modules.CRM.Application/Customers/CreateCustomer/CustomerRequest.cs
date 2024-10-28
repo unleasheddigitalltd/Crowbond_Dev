@@ -1,4 +1,7 @@
-﻿namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
+﻿using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.CustomerSettings;
+
+namespace Crowbond.Modules.CRM.Application.Customers.CreateCustomer;
 
 public sealed record CustomerRequest(
     string BusinessName,
@@ -11,10 +14,10 @@ public sealed record CustomerRequest(
     Guid PriceTierId,
     decimal Discount,
     Guid? RepId,
-    bool CustomPaymentTerm,
-    int PaymentTerms,
-    int? InvoiceDueDays,
-    int DeliveryFeeSetting,
+    bool CustomPaymentTerms,
+    DueDateCalculationBasis? DueDateCalculationBasis,
+    int? DueDaysForInvoice,
+    DeliveryFeeSetting DeliveryFeeSetting,
     decimal? DeliveryMinOrderValue,
     decimal? DeliveryCharge,
     bool NoDiscountSpecialItem,
@@ -24,4 +27,4 @@ public sealed record CustomerRequest(
     bool IsHq,
     bool ShowPricesInDeliveryDocket,
     bool ShowPriceInApp,
-    int ShowLogoInDeliveryDocket);
+    ShowLogoInDeliveryDocket ShowLogoInDeliveryDocket);

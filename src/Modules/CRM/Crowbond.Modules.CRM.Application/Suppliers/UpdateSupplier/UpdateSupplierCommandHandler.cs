@@ -20,15 +20,14 @@ internal sealed class UpdateSupplierCommandHandler(
         }
 
         supplier.Update(
-            suppliername: request.Supplier.SupplierName,
-            addressline1: request.Supplier.AddressLine1,
-            addressline2: request.Supplier.AddressLine2,
-            towncity: request.Supplier.TownCity,
-            county: request.Supplier.County,
-            country: request.Supplier.Country,
-            postalcode: request.Supplier.PostalCode,
-            suppliernotes: request.Supplier.SupplierNotes,
-            paymentterms: request.Supplier.PaymentTerms);
+            request.Supplier.SupplierName,
+            request.Supplier.AddressLine1,
+            request.Supplier.AddressLine2,
+            request.Supplier.TownCity,
+            request.Supplier.County,
+            request.Supplier.Country,
+            request.Supplier.PostalCode,
+            request.Supplier.SupplierNotes);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

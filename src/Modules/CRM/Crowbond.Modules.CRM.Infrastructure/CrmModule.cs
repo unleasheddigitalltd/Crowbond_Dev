@@ -50,6 +50,8 @@ using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Crowbond.Modules.OMS.IntegrationEvents;
+using Crowbond.Modules.CRM.Domain.Settings;
+using Crowbond.Modules.CRM.Infrastructure.Settings;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -112,6 +114,7 @@ public static class CrmModule
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
 
         services.AddScoped<ISupplierApi, SupplierApi>();
         services.AddScoped<ISupplierProductApi, SupplierProductsApi>();

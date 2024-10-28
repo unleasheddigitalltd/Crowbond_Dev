@@ -16,6 +16,12 @@ internal sealed class UpdateCustomerCommandHandler(
 {
     public async Task<Result> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
+        if (request.Customer.CustomPaymentTerms &&
+            (request.Customer.DueDateCalculationBasis is null || request.Customer.DueDaysForInvoice is null))
+        {
+            return Result.Failure(CustomerErrors.CustomPaymentTermsParametersHasNoValue);
+        }
+
         Customer? customer = await customerRepository.GetAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
@@ -41,29 +47,29 @@ internal sealed class UpdateCustomerCommandHandler(
         }
 
         customer.Update(
-            businessName: request.Customer.BusinessName,
-            billingAddressLine1: request.Customer.BillingAddressLine1,
-            billingAddressLine2: request.Customer.BillingAddressLine2,
-            billingTownCity: request.Customer.BillingTownCity,
-            billingCounty: request.Customer.BillingCounty,
-            billingCountry: request.Customer.BillingCountry,
-            billingPostalCode: request.Customer.BillingPostalCode,
-            priceTierId: request.Customer.PriceTierId,
-            discount: request.Customer.Discount,
-            repId: request.Customer.RepId,
-            customPaymentTerm: request.Customer.CustomPaymentTerm,
-            paymentTerms: request.Customer.PaymentTerms,
-            invoiceDueDays: request.Customer.InvoiceDueDays,
-            deliveryFeeSetting: request.Customer.DeliveryFeeSetting,
-            deliveryMinOrderValue: request.Customer.DeliveryMinOrderValue,
-            deliveryCharge: request.Customer.DeliveryCharge,
-            noDiscountSpecialItem: request.Customer.NoDiscountSpecialItem,
-            noDiscountFixedPrice: request.Customer.NoDiscountFixedPrice,
-            detailedInvoice: request.Customer.DetailedInvoice,
-            customerNotes: request.Customer.CustomerNotes,
-            showPricesInDeliveryDocket: request.Customer.ShowPricesInDeliveryDocket,
-            showPriceInApp: request.Customer.ShowPriceInApp,
-            showLogoInDeliveryDocket: request.Customer.ShowLogoInDeliveryDocket);
+            request.Customer.BusinessName,
+            request.Customer.BillingAddressLine1,
+            request.Customer.BillingAddressLine2,
+            request.Customer.BillingTownCity,
+            request.Customer.BillingCounty,
+            request.Customer.BillingCountry,
+            request.Customer.BillingPostalCode,
+            request.Customer.PriceTierId,
+            request.Customer.Discount,
+            request.Customer.RepId,
+            request.Customer.CustomPaymentTerms,
+            request.Customer.DueDateCalculationBasis,
+            request.Customer.DueDaysForInvoice,
+            request.Customer.DeliveryFeeSetting,
+            request.Customer.DeliveryMinOrderValue,
+            request.Customer.DeliveryCharge,
+            request.Customer.NoDiscountSpecialItem,
+            request.Customer.NoDiscountFixedPrice,
+            request.Customer.DetailedInvoice,
+            request.Customer.CustomerNotes,
+            request.Customer.ShowPricesInDeliveryDocket,
+            request.Customer.ShowPriceInApp,
+            request.Customer.ShowLogoInDeliveryDocket);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
