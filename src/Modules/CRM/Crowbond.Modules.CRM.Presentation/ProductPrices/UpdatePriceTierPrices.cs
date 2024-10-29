@@ -17,7 +17,7 @@ internal sealed class UpdatePriceTierPrices : IEndpoint
         {
             Result result = await sender.Send(new UpdatePriceTierPricesCommand(id, request));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyPriceTiers)
             .WithTags(Tags.ProductPrices);

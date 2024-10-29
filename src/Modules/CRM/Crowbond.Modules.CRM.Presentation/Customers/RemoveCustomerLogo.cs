@@ -17,7 +17,7 @@ internal sealed class RemoveCustomerLogo : IEndpoint
         {
             Result result = await sender.Send(new RemoveCustomerLogoCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.GetCustomers)
             .WithTags(Tags.Customers);

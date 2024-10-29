@@ -17,7 +17,7 @@ internal sealed class UpdateCustomerOutletActivation : IEndpoint
         {
             Result result = await sender.Send(new UpdateCustomerOutletActivationCommand(id, isActive));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         }
         )
         .RequireAuthorization(Permissions.ModifyCustomerOutlets)

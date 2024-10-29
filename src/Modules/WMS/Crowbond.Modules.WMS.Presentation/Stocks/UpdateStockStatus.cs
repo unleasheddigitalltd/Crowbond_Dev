@@ -17,7 +17,7 @@ internal sealed class UpdateStockStatus : IEndpoint
         {
             Result result = await sender.Send(new UpdateStockStatusCommand(id, statusType));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.AdjustStocks)
             .WithTags(Tags.Stocks);

@@ -17,7 +17,7 @@ internal sealed class UpdatePurchaseOrder : IEndpoint
         {
             Result result = await sender.Send(new UpdatePurchaseOrderCommand(id, request));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyPurchaseOrders)
             .WithTags(Tags.PurchaseOrders);

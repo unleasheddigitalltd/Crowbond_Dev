@@ -22,7 +22,7 @@ internal sealed class RemoveFromCart : IEndpoint
                     request.ProductId,
                     request.Qty));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.RemoveFromCart)
         .WithTags(Tags.Carts);

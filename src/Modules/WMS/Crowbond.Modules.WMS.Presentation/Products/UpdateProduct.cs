@@ -17,7 +17,7 @@ internal sealed class UpdateProduct : IEndpoint
         {
             Result result = await sender.Send(new UpdateProductCommand(id, request));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifyProducts)
         .WithTags(Tags.Products);

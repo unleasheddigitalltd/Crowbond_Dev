@@ -16,7 +16,7 @@ internal class ResetUserPassword : IEndpoint
         {
             Result result = await sender.Send(new ResetUserPasswordCommand(email));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .AllowAnonymous()
         .WithTags(Tags.Users);

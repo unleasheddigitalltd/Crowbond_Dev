@@ -17,7 +17,7 @@ internal sealed class UpdateSupplierActivation : IEndpoint
         {
             Result result = await sender.Send(new UpdateSupplierActivationCommand(id, isActive));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         }
         )
         .RequireAuthorization(Permissions.ModifySuppliers)

@@ -17,7 +17,7 @@ internal sealed class UnassignPutAwayTask : IEndpoint
         {
             Result result = await sender.Send(new UnassignPutAwayTaskCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ManagePutAwayTasks)
             .WithTags(Tags.PutAway);

@@ -16,7 +16,7 @@ internal sealed class UpdateStockQuantity : IEndpoint
         app.MapPut("stocks/{id}/adjust", async (Guid id, Request request, ISender sender) =>
         {
             Result result = await sender.Send(new UpdateStockQuantityCommand(id, request.TransactionNote, request.Reason, request.Quantity));
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.AdjustStocks)
         .WithTags(Tags.Stocks);

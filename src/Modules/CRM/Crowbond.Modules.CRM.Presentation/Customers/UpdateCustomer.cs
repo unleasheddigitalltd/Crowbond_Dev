@@ -18,7 +18,7 @@ internal sealed class UpdateCustomer: IEndpoint
 
             Result result = await sender.Send(new UpdateCustomerCommand(id, Guid.NewGuid(), request));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifyCustomers)
         .WithTags(Tags.Customers);

@@ -17,7 +17,7 @@ internal sealed class UpdateSupplierContactPrimary : IEndpoint
         {
             Result result = await sender.Send(new UpdateSupplierContactPrimaryCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifySupplierContacts)
         .WithTags(Tags.Suppliers);

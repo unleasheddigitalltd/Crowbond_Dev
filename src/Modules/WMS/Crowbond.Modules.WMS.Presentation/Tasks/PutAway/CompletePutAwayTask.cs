@@ -18,7 +18,7 @@ internal sealed class CompletePutAwayTask : IEndpoint
         {
             Result result = await sender.Send(new CompletePutAwayTaskCommand(operatorContext.WarehouseOperatorId, id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ExecutePutAwayTasks)
             .WithTags(Tags.PutAway);

@@ -18,7 +18,7 @@ internal sealed class UpdateSupplier : IEndpoint
 
             Result result = await sender.Send(new UpdateSupplierCommand(id, request));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifySuppliers)
         .WithTags(Tags.Suppliers);
