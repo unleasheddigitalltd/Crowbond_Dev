@@ -41,7 +41,7 @@ public sealed class RouteTripLog : Entity
     {
         if (LoggedOffTime != null)
         {
-            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
+            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff(RouteTripId));
         }
 
         LoggedOffTime = loggedOffTime;
@@ -53,10 +53,11 @@ public sealed class RouteTripLog : Entity
     {
         if (LoggedOffTime != null)
         {
-            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
+            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff(RouteTripId));
         }
 
         VehicleId = vehicleId;
+
         return Result.Success();
     }
 }

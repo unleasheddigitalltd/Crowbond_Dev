@@ -30,12 +30,16 @@ internal sealed class LogOffRouteTripCommandHandler(
             return Result.Failure(RouteTripErrors.NotFound(request.RouteTripId));
         }
 
-        IEnumerable<RouteTripLog> routeTripLogs = await routeTripLogRepository.GetForRouteTripAsync(routeTrip, cancellationToken);
+        RouteTripLog? routeTripLog = await routeTripLogRepository.GetActiveByRouteTripIdAsync(routeTrip.Id, cancellationToken);
 
-        RouteTripLog? routeTripLog = routeTripLogs.SingleOrDefault(t => t.DriverId == request.DriverId && t.LoggedOffTime == null);
         if (routeTripLog == null)
         {
-            return Result.Failure(RouteTripLogErrors.NotFound(routeTrip.Id, driver.Id));
+            return Result.Failure(RouteTripLogErrors.NoActiveLog(routeTrip.Id));
+        }
+
+        if (routeTripLog.DriverId != driver.Id)
+        {
+            return Result.Failure(RouteTripLogErrors.InvalidDriverLog(routeTrip.Id));
         }
 
         Result result = routeTripLog.LogOff(dateTimeProvider.UtcNow);

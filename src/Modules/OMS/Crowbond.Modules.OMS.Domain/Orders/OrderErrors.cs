@@ -16,9 +16,9 @@ public static class OrderErrors
     public static Error LineHasShortage(Guid orderLineId) =>
         Error.NotFound("Orders.LineHasShortage", $"The order line with the identifier {orderLineId} has shortage");
 
-    public static Error NotAssignedTo(Guid routeTripId) =>
-        Error.NotFound("Orders.NotAssignedTo", $"The order is not assigned to route trip with the identifier {routeTripId}");
-    
+    public static Error NotAssignedToRouteTrip(Guid orderId) =>
+        Error.NotFound("Orders.NotAssignedToRouteTrip", $"The order with the identifier {orderId} is not assigned to any route trip");
+
     public static Error LogDateMismatch(Guid routeTripId) =>
         Error.NotFound("Orders.LogDateMismatch", $"Log entry date for route trip with the identifier {routeTripId} does not match today's date");
 

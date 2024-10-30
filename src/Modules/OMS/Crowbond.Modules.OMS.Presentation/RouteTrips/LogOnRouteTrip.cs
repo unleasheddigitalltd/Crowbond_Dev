@@ -16,10 +16,10 @@ internal sealed class LogOnRouteTrip : IEndpoint
     {
         app.MapPost("routes/trips/log-on", async (Request request, IDriverContext driverContext, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new LogOnRouteTripCommand(
+            Result result = await sender.Send(new LogOnRouteTripCommand(
                 request.RouteTripId, driverContext.DriverId));
 
-            return result.Match(Results.Ok, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.DeliverOrders)
         .WithTags(Tags.Routes);

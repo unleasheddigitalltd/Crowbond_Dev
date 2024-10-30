@@ -4,11 +4,9 @@ namespace Crowbond.Modules.OMS.Domain.RouteTripLogs;
 
 public interface IRouteTripLogRepository
 {
-    Task<RouteTripLog> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<RouteTripLog?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<RouteTripLog>> GetForRouteTripAsync(RouteTrip routeTrip, CancellationToken cancellationToken = default);
-
-    Task<RouteTripLog?> GetActiveByDriverIdAsync(Guid DriverId, CancellationToken cancellationToken = default);
+    Task<RouteTripLog?> GetActiveByRouteTripIdAsync(Guid routeTripId, CancellationToken cancellationToken = default);
 
     void Insert(RouteTripLog routeTripLog);
 }
