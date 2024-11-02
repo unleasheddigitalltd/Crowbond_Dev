@@ -6,6 +6,6 @@ internal sealed class SubmitComplianceCommandValidator: AbstractValidator<Submit
 {
     public SubmitComplianceCommandValidator()
     {
-        RuleFor(c => c.Temprature).NotNull().PrecisionScale(2, 2, true);
+        RuleFor(c => c.Temprature).NotNull().PrecisionScale(4, 2, false);
     }
 }

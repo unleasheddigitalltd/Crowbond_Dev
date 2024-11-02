@@ -12,7 +12,7 @@ internal sealed class ComplianceHeaderConfiguration : IEntityTypeConfiguration<C
     {
         builder.HasKey(c =>  c.Id);
         builder.Property(c => c.FormNo).HasMaxLength(20);
-        builder.Property(x => x.Temperature).HasPrecision(2, 2);
+        builder.Property(x => x.Temperature).HasPrecision(4, 2);
 
         builder.HasOne<RouteTripLog>().WithMany().HasForeignKey(c => c.RouteTripLogId);
         builder.HasOne<Vehicle>().WithMany().HasForeignKey(c => c.VehicleId);

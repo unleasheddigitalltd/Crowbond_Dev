@@ -24,7 +24,7 @@ internal sealed class ComplianceRepository(OmsDbContext context) : IComplianceRe
 
     public async Task<ComplianceHeader?> GetUnSubmittedByRouteTripLogAsync(Guid routeTripLogId, CancellationToken cancellationToken = default)
     {
-        return await context.ComplianceHeaders.SingleOrDefaultAsync(c => c.RouteTripLogId == routeTripLogId && c.IsConfirmed == null, cancellationToken);
+        return await context.ComplianceHeaders.Include(c => c.Lines).SingleOrDefaultAsync(c => c.RouteTripLogId == routeTripLogId && c.IsConfirmed == null, cancellationToken);
     }
 
     public async Task<Sequence?> GetSequence(CancellationToken cancellationToken = default)
