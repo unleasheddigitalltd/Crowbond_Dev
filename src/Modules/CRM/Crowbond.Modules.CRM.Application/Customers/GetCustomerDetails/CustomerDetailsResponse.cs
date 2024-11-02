@@ -1,6 +1,5 @@
 ﻿using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Domain.CustomerSettings;
-using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
 

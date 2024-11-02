@@ -42,39 +42,40 @@ internal sealed class LogOnRouteTripCommandHandler(
             return Result.Failure(RouteTripErrors.Expired(request.RouteTripId));
         }
 
-        RouteTripLog? activeLog = await routeTripLogRepository.GetActiveByRouteTripIdAsync(routeTrip.Id, cancellationToken);
+        var currentDate = DateOnly.FromDateTime(dateTimeProvider.UtcNow);
 
-        // check if there is already an active log.
-        if (activeLog != null)
+        // Check if the route trip already has an active log by another driver
+        RouteTripLog? conflictingRouteTripLog = await routeTripLogRepository
+            .GetActiveByDateAndRouteTripExcludingDriver(currentDate, routeTrip.Id, driver.Id, cancellationToken);
+
+        if (conflictingRouteTripLog != null)
         {
-            // log off current log if it has expired.
-            if (activeLog.LoggedOnTime.Date != dateTimeProvider.UtcNow.Date)
+            Driver? existDriver = await driverRepository.GetAsync(conflictingRouteTripLog.DriverId, cancellationToken);
+            if (existDriver == null)
             {
-                Result logOffResult = activeLog.LogOff(dateTimeProvider.UtcNow);
-
-                if (logOffResult.IsFailure)
-                {
-                    return Result.Failure(logOffResult.Error);
-                }
+                return Result.Failure(DriverErrors.NotFound(conflictingRouteTripLog.DriverId));
             }
-            else
-            {
-                if (activeLog.DriverId == request.DriverId)
-                {
-                    return Result.Failure(RouteTripLogErrors.AlreadyExists);
-                }
-                else
-                {
-                    Driver? existDriver = await driverRepository.GetAsync(activeLog.DriverId, cancellationToken);
-                    if (existDriver == null)
-                    {
-                        return Result.Failure(DriverErrors.NotFound(activeLog.DriverId));
-                    }
-
-                    return Result.Failure(RouteTripLogErrors.ActiveLogExists($"{existDriver.FirstName} {existDriver.LastName}"));
-                }
-            }
+            return Result.Failure(RouteTripLogErrors.OtherLogAlreadyExistsForRouteTrip($"{existDriver.FirstName} {existDriver.LastName}"));
         }
+
+        // Check if the driver already has an active log for another route trip
+        RouteTripLog? conflictingDriverLog = await routeTripLogRepository
+            .GetActiveByDateAndDriverExcludingRouteTrip(currentDate, routeTrip.Id, driver.Id, cancellationToken);
+
+        if (conflictingDriverLog != null)
+        {
+            return Result.Failure(RouteTripLogErrors.OtherActiveLogAlreadyExistsForDriver(conflictingDriverLog.RouteTripId));
+        }
+
+        // Check if the driver already has an active log for this route trip
+        RouteTripLog? existingLog = await routeTripLogRepository
+            .GetActiveByDateAndDriverAndRouteTrip(currentDate, driver.Id, routeTrip.Id, cancellationToken);
+
+        if (existingLog != null)
+        {
+            return Result.Failure(RouteTripLogErrors.AlreadyExists);
+        }
+
 
         var routeTripLog = RouteTripLog.Create(routeTrip.Id, driver.Id, dateTimeProvider.UtcNow);
 

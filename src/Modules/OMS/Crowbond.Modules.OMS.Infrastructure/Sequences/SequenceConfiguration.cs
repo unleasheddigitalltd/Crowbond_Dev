@@ -10,8 +10,12 @@ internal sealed class SequenceConfiguration : IEntityTypeConfiguration<Sequence>
     {
         builder.HasKey(s => s.Context);
 
-        builder.Property(s => s.Prefix).IsRequired().HasMaxLength(3);
+        builder.Property(s => s.Prefix).HasMaxLength(3);
 
-        builder.HasData(Sequence.Invoice, Sequence.PurchaseOrder, Sequence.Order);
+        builder.HasData(
+            Sequence.Invoice,
+            Sequence.PurchaseOrder,
+            Sequence.Order,
+            Sequence.Compliance);
     }
 }

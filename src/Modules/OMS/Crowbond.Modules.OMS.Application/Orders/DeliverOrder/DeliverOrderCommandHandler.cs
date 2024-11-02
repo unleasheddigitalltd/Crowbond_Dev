@@ -20,7 +20,8 @@ internal sealed class DeliverOrderCommandHandler(
 {
     public async Task<Result<Guid>> Handle(DeliverOrderCommand request, CancellationToken cancellationToken)
     {
-        Driver? driver = await driverRepository.GetAsync(request.DriverId, cancellationToken);
+        var currevtDate = DateOnly.FromDateTime(dateTimeProvider.UtcNow);
+        Driver ? driver = await driverRepository.GetAsync(request.DriverId, cancellationToken);
 
         if (driver == null)
         {
@@ -46,7 +47,7 @@ internal sealed class DeliverOrderCommandHandler(
             return Result.Failure<Guid>(RouteTripErrors.NotFound((Guid)order.RouteTripId));
         }
 
-        RouteTripLog? routeTripLog = await routeTripLogRepository.GetActiveByRouteTripIdAsync(routeTrip.Id, cancellationToken);
+        RouteTripLog? routeTripLog = await routeTripLogRepository.GetActiveByDateAndDriverAndRouteTrip(currevtDate, routeTrip.Id, driver.Id, cancellationToken);
 
         if (routeTripLog == null)
         {
@@ -63,18 +64,6 @@ internal sealed class DeliverOrderCommandHandler(
         if (routeTrip.Status != RouteTripStatus.Available)
         {
             return Result.Failure<Guid>(RouteTripErrors.NotAvailable(routeTrip.Id));
-        }
-
-        // check the route trip is not expired.
-        if (routeTrip.Date != DateOnly.FromDateTime(dateTimeProvider.UtcNow))
-        {
-            return Result.Failure<Guid>(RouteTripErrors.Expired(routeTrip.Id));
-        }
-
-        // check the active log is not expired.
-        if (routeTripLog.LoggedOnTime.Date != dateTimeProvider.UtcNow.Date)
-        {
-            return Result.Failure<Guid>(OrderErrors.LogDateMismatch(routeTripLog.RouteTripId));
         }
 
         // create the delivery
