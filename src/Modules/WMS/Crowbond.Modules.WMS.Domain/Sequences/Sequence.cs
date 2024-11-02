@@ -1,4 +1,5 @@
-﻿using Crowbond.Common.Domain;
+﻿using System.Globalization;
+using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.WMS.Domain.Sequences;
 
@@ -36,6 +37,7 @@ public sealed class Sequence : Entity
         }
 
         LastNumber++;
-        return $"{Prefix}-{LastNumber}:D{Length}";
+        string formattedNumber = LastNumber.ToString($"D{Length}", CultureInfo.InvariantCulture);
+        return $"{Prefix}-{formattedNumber}";
     }
 }
