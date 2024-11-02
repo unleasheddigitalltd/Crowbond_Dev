@@ -24,4 +24,10 @@ public sealed class ComplianceLine: Entity
 
         return line;
     }
+
+    internal void Update(bool? responce, string? description)
+    {
+        Response = responce;
+        Description = description;
+    }
 }

@@ -58,4 +58,17 @@ public sealed class ComplianceHeader : Entity
 
         return Result.Success(IsConfirmed.Value);
     }
+
+    public Result UpdateLine(Guid complianceLineId, bool? response, string? description)
+    {
+        ComplianceLine? line = Lines.SingleOrDefault(l => l.Id == complianceLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(ComplianceErrors.LineNotFound(complianceLineId));
+        }
+
+        line.Update(response, description);
+        return Result.Success();
+    }
 }

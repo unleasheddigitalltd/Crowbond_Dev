@@ -4,8 +4,11 @@ namespace Crowbond.Modules.OMS.Domain.Compliances;
 
 public static class ComplianceErrors
 {
-    public static Error NotFound(Guid complianceHeader) =>
-        Error.NotFound("Compliances.NotFound", $"The compliance header with identifier {complianceHeader} was not found");
+    public static Error NotFound(Guid complianceHeaderId) =>
+        Error.NotFound("Compliances.NotFound", $"The compliance header with identifier {complianceHeaderId} was not found");
+    
+    public static Error LineNotFound(Guid complianceLineId) =>
+        Error.NotFound("Compliances.NotFound", $"The compliance line with identifier {complianceLineId} was not found");
 
     public static Error ForDriverNotFound(Guid driverId) =>
         Error.NotFound("Compliances.ForDriverNotFound", $"No active compliance entry was found for the driver with identifier {driverId}");
