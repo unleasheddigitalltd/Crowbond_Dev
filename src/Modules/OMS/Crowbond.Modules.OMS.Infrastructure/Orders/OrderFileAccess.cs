@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Infrastructure.FileStorage;
 using FluentFTP;
@@ -10,7 +11,6 @@ namespace Crowbond.Modules.OMS.Infrastructure.Orders;
 internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IOrderFileAccess
 {
     private readonly FileStorageOptions _options = options.Value;
-    private readonly List<string> _allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
     public async Task DeleteDeliveryImageAsync(string imageName, CancellationToken cancellationToken = default)
     {
         using var ftpClient = new AsyncFtpClient(_options.FtpHost, new NetworkCredential(_options.FtpUsername, _options.FtpPassword));
@@ -34,26 +34,13 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
         await ftpClient.Disconnect(cancellationToken);
     }
 
-    public async Task<string> SaveDeliveryImageAsync(string orderNo, int LastSequence, IFormFile image, CancellationToken cancellationToken = default)
+    public async Task<List<string>> SaveDeliveryImagesAsync(
+    string orderNo,
+    int lastSequence,
+    IFormFileCollection images,
+    CancellationToken cancellationToken = default)
     {
-        if (image == null)
-        {
-            throw new ArgumentException("No file uploaded.");
-        }
-
-        if (image.Length > _options.MaxFileSizeKb * 1024)
-        {
-            throw new ArgumentException($"File size exceeds the {_options.MaxFileSizeKb} KB limit.");
-        }
-
-        string fileExtension = Path.GetExtension(image.FileName).ToLowerInvariant();
-        if (!_allowedExtensions.Contains(fileExtension))
-        {
-            throw new ArgumentException($"Invalid file type. Only the following file types are allowed: {string.Join(", ", _allowedExtensions)}.");
-        }
-
-        string imageFileName;
-        int sequence = LastSequence + 1;
+        var savedImages = new List<string>();
         using (var ftpClient = new AsyncFtpClient(_options.FtpHost, new NetworkCredential(_options.FtpUsername, _options.FtpPassword)))
         {
             await ftpClient.Connect(cancellationToken);
@@ -65,27 +52,25 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
                 await ftpClient.CreateDirectory(directoryPath, cancellationToken);
             }
 
-            FtpListItem[] files = await ftpClient.GetListing(directoryPath, FtpListOption.AllFiles, cancellationToken);
-
-            foreach (FtpListItem file in files)
+            int sequence = lastSequence;
+            foreach (IFormFile image in images)
             {
-                if (Path.GetFileNameWithoutExtension(file.Name).Equals(orderNo, StringComparison.OrdinalIgnoreCase))
-                {
-                    string filePath = Path.Combine(_options.OrderDeliveryImageStoragePath, file.Name).Replace("\\", "/");
-                    await ftpClient.DeleteFile(filePath, cancellationToken);
-                }
+                sequence++;
+                string imageFileName = $"{orderNo}-{sequence}{Path.GetExtension(image.FileName)}";
+
+                using Stream stream = image.OpenReadStream();
+                await ftpClient.UploadStream(
+                    stream,
+                    Path.Combine(directoryPath, imageFileName),
+                    FtpRemoteExists.Overwrite, true, null, cancellationToken);
+
+                savedImages.Add(imageFileName);
             }
 
-            imageFileName = $"{orderNo}-{sequence}{Path.GetExtension(image.FileName)}";
-            using Stream stream = image.OpenReadStream();
-            await ftpClient.UploadStream(
-                stream,
-                Path.Combine(_options.OrderDeliveryImageStoragePath, imageFileName),
-                FtpRemoteExists.Overwrite, true, null, cancellationToken);
 
             await ftpClient.Disconnect(cancellationToken);
         }
 
-        return imageFileName;
+        return savedImages;
     }
 }

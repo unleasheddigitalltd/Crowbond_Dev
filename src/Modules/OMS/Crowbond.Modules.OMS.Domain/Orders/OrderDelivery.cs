@@ -42,12 +42,13 @@ public sealed class OrderDelivery : Entity
         return delivery;
     }
 
-    internal Result<OrderDeliveryImage> AddImage(string imageName)
+    internal OrderDeliveryImage AddImage(string imageName)
     {
         var image = OrderDeliveryImage.Create(imageName);
+
         _images.Add(image);
 
-        return Result.Success(image);
+        return image;
     }
 
     internal Result<OrderDeliveryImage> RemoveImage(string imageName)

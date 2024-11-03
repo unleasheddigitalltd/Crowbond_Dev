@@ -60,6 +60,13 @@ public static class OrderErrors
 
     public static readonly Error InvalidOrderLineQuantity = 
         Error.Problem("Orders.InvalidOrderLineQuantity", "Order line quantity must be greater than zero.");
-
-
+    
+    public static readonly Error NoFilesUploaded = 
+        Error.Problem("Orders.NoFilesUploaded", "No files uploaded");
+    
+    public static readonly Error FileSizeExceeds = 
+        Error.Problem("Orders.FileSizeExceeds", "File size exceeds the 1 MB limit");
+    
+    public static Error InvalidFileType(List<string> _allowedExtensions) => 
+        Error.Problem("Orders.InvalidFileType", $"Invalid file type. Only the following file types are allowed: {string.Join(", ", _allowedExtensions)}.");
 }

@@ -294,30 +294,30 @@ public sealed class OrderHeader : Entity, IAuditable
         return Result.Success(delivery);
     }
 
-    public Result<OrderDeliveryImage> AddDeliveryImage(string imageName)
+    public Result<OrderDelivery> CheckIsDeliver()
     {
         if (Status != OrderStatus.Delivered)
         {
-            return Result.Failure<OrderDeliveryImage>(OrderErrors.NotDelivered);
+            return Result.Failure<OrderDelivery>(OrderErrors.NotDelivered);
         }
 
         OrderDelivery? delivery = _delivery.SingleOrDefault(s => s.Status == DeliveryStatus.delivered);
 
         if (delivery is null)
         {
-            return Result.Failure<OrderDeliveryImage>(OrderErrors.NoDeliveryRecordFound);
-        }
+            return Result.Failure<OrderDelivery>(OrderErrors.NoDeliveryRecordFound);
+        }       
 
-        Result<OrderDeliveryImage> imageResult = delivery.AddImage(imageName);
+        return Result.Success(delivery);
+    }
 
-        if (imageResult.IsFailure)
-        {
-            return Result.Failure<OrderDeliveryImage>(imageResult.Error);
-        }
+    public OrderDeliveryImage AddDeliveryImage(OrderDelivery orderDelivery, string imageName)
+    {
+        OrderDeliveryImage orderDeliveryImage = orderDelivery.AddImage(imageName);
 
         LastImageSequence++;
 
-        return Result.Success(imageResult.Value);
+        return orderDeliveryImage; 
     }
 
     public Result<OrderDeliveryImage> RemoveDeliveryImage(string imageName)
