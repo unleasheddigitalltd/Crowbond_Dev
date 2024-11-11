@@ -4,5 +4,18 @@ namespace Crowbond.Common.Infrastructure.Clock;
 
 internal sealed class DateTimeProvider : IDateTimeProvider
 {
-    public DateTime UtcNow => DateTime.UtcNow;
+    private DateTime? _overrideUtcNow;
+
+    public DateTime UtcNow => _overrideUtcNow ?? DateTime.UtcNow;
+
+    public Task SetOverrideUtcNow(DateTime dateTime)
+    {
+        _overrideUtcNow = dateTime;
+        return Task.CompletedTask;
+    }
+    public Task ClearOverrideUtcNow()
+    {
+        _overrideUtcNow = null;
+        return Task.CompletedTask;
+    }
 }
