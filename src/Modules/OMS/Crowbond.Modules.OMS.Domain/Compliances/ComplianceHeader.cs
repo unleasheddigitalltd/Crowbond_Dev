@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.OMS.Domain.Orders;
 
 namespace Crowbond.Modules.OMS.Domain.Compliances;
 
@@ -22,6 +23,8 @@ public sealed class ComplianceHeader : Entity
     public decimal? Temperature { get; private set; }
 
     public bool? IsConfirmed { get; private set; }
+
+    public int LastImageSequence { get; private set; }
 
     public IReadOnlyCollection<ComplianceLine> Lines => _lines;
 
@@ -70,5 +73,28 @@ public sealed class ComplianceHeader : Entity
 
         line.Update(response, description);
         return Result.Success();
+    }
+
+    public ComplianceLineImage AddLineImage(ComplianceLine complianceLine, string imageName)
+    {
+        ComplianceLineImage complianceLineImage = complianceLine.AddImage(imageName);
+
+        LastImageSequence++;
+
+        return complianceLineImage;
+    }
+
+    public Result<ComplianceLineImage> RemoveLineImage(ComplianceLine complianceLine, string imageName)
+    {
+        ComplianceLine? line = _lines.SingleOrDefault(l => l.Id == complianceLine.Id);
+
+        if (line is null)
+        {
+            return Result.Failure<ComplianceLineImage>(ComplianceErrors.LineNotFound(complianceLine.Id));
+        }
+
+        Result<ComplianceLineImage> image = line.RemoveImage(imageName);
+
+        return image;
     }
 }

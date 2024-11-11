@@ -1,20 +1,20 @@
 ﻿using System.Net;
-using Crowbond.Modules.OMS.Domain.Orders;
+using Crowbond.Modules.OMS.Domain.Compliances;
 using Crowbond.Modules.OMS.Infrastructure.FileStorage;
 using FluentFTP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Crowbond.Modules.OMS.Infrastructure.Orders;
+namespace Crowbond.Modules.OMS.Infrastructure.Compliances;
 
-internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IOrderFileAccess
+internal sealed class ComplianceFileAccess(IOptions<FileStorageOptions> options) : IComplianceFileAccess
 {
     private readonly FileStorageOptions _options = options.Value;
-    public async Task DeleteDeliveryImageAsync(string imageName, CancellationToken cancellationToken = default)
+    public async Task DeleteLineImageAsync(string imageName, CancellationToken cancellationToken = default)
     {
         using var ftpClient = new AsyncFtpClient(_options.FtpHost, new NetworkCredential(_options.FtpUsername, _options.FtpPassword));
         await ftpClient.Connect(cancellationToken);
-        string directoryPath = _options.DeliveryStoragePath;
+        string directoryPath = _options.ComplianceStoragePath;
 
         if (await ftpClient.DirectoryExists(directoryPath, cancellationToken))
         {
@@ -24,7 +24,7 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
             {
                 if (Path.GetFileName(file.Name).Equals(imageName, StringComparison.OrdinalIgnoreCase))
                 {
-                    string filePath = Path.Combine(_options.DeliveryStoragePath, file.Name).Replace("\\", "/");
+                    string filePath = Path.Combine(_options.ComplianceStoragePath, file.Name).Replace("\\", "/");
                     await ftpClient.DeleteFile(filePath, cancellationToken);
                 }
             }
@@ -33,18 +33,18 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
         await ftpClient.Disconnect(cancellationToken);
     }
 
-    public async Task<List<string>> SaveDeliveryImagesAsync(
-    string orderNo,
-    int lastSequence,
-    IFormFileCollection images,
-    CancellationToken cancellationToken = default)
+    public async Task<List<string>> SaveLineImagesAsync(
+        string formNo, 
+        int lastSequence, 
+        IFormFileCollection images, 
+        CancellationToken cancellationToken = default)
     {
         var savedImages = new List<string>();
         using (var ftpClient = new AsyncFtpClient(_options.FtpHost, new NetworkCredential(_options.FtpUsername, _options.FtpPassword)))
         {
             await ftpClient.Connect(cancellationToken);
 
-            string directoryPath = _options.DeliveryStoragePath;
+            string directoryPath = _options.ComplianceStoragePath;
 
             if (!await ftpClient.DirectoryExists(directoryPath, cancellationToken))
             {
@@ -55,7 +55,7 @@ internal sealed class OrderFileAccess(IOptions<FileStorageOptions> options) : IO
             foreach (IFormFile image in images)
             {
                 sequence++;
-                string imageFileName = $"{orderNo}-{sequence}{Path.GetExtension(image.FileName)}";
+                string imageFileName = $"{formNo}-{sequence}{Path.GetExtension(image.FileName)}";
 
                 using Stream stream = image.OpenReadStream();
                 await ftpClient.UploadStream(

@@ -12,8 +12,8 @@
       "FtpHost": "ftp://44.220.130.235",
       "FtpUsername": "crowbond_dev",
       "FtpPassword": "Unleashed51*",
-      "OrderDeliveryImageStoragePath": "/orders/delivery",
-      "MaxFileSizeKb": 1024
+      "DeliveryStoragePath": "/deliveries",
+      "ComplianceStoragePath": "/compliances"
     }
   }
 }

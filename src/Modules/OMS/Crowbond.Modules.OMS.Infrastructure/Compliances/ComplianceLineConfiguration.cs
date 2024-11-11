@@ -12,5 +12,10 @@ internal sealed class ComplianceLineConfiguration : IEntityTypeConfiguration<Com
         builder.Property(c => c.Description).HasMaxLength(255);
 
         builder.HasOne<ComplianceQuestion>().WithMany().HasForeignKey(c => c.ComplianceQuestionId);
+
+        builder.HasOne(cl => cl.Header)
+               .WithMany(ch => ch.Lines)
+               .HasForeignKey(cl => cl.ComplianceHeaderId)
+               .IsRequired();
     }
 }

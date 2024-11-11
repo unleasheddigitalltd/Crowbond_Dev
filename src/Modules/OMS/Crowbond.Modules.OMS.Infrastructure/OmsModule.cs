@@ -94,6 +94,7 @@ public static class OmsModule
         services.AddScoped<IContactContext, CustomerContext>();
 
         services.AddScoped<IOrderFileAccess, OrderFileAccess>();
+        services.AddScoped<IComplianceFileAccess, ComplianceFileAccess>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<OmsDbContext>());
 

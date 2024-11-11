@@ -47,6 +47,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<ComplianceHeader> ComplianceHeaders { get; set; }
     internal DbSet<ComplianceLine> ComplianceLines { get; set; }
     internal DbSet<ComplianceQuestion> ComplianceQuestions { get; set; }
+    internal DbSet<ComplianceLineImage> ComplianceLineImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,5 +78,6 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new ComplianceHeaderConfiguration());
         modelBuilder.ApplyConfiguration(new ComplianceLineConfiguration());
         modelBuilder.ApplyConfiguration(new ComplianceQuestionConfiguration());
+        modelBuilder.ApplyConfiguration(new ComplianceLineImageConfiguration());
     }
 }

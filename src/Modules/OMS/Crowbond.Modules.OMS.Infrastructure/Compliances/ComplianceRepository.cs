@@ -12,6 +12,11 @@ internal sealed class ComplianceRepository(OmsDbContext context) : IComplianceRe
         return await context.ComplianceHeaders.Include(c => c.Lines).SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
+    public async Task<ComplianceLine?> GetLineAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.ComplianceLines.Include(cl => cl.Header).SingleOrDefaultAsync(cl => cl.Id == id, cancellationToken);
+    }
+
     public async Task<ComplianceQuestion?> GetQuestionAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context.ComplianceQuestions.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
@@ -45,5 +50,20 @@ internal sealed class ComplianceRepository(OmsDbContext context) : IComplianceRe
     public void InsertQuestion(ComplianceQuestion question)
     {
         context.ComplianceQuestions.Add(question);
+    }
+
+    public void InsertLineImage(ComplianceLineImage image)
+    {
+        context.ComplianceLineImages.Add(image);
+    }
+
+    public async Task<ComplianceLine?> GetLineWithImagesAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.ComplianceLines.Include(cl => cl.Header).Include(cl => cl.Images).SingleOrDefaultAsync(cl => cl.Id == id, cancellationToken);
+    }
+
+    public void RemoveLineImage(ComplianceLineImage image)
+    {
+        context.ComplianceLineImages.Remove(image);
     }
 }

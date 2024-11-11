@@ -4,6 +4,7 @@ namespace Crowbond.Modules.OMS.Domain.Compliances;
 
 public sealed class ComplianceLine: Entity
 {
+    private readonly List<ComplianceLineImage> _images = new();
     private ComplianceLine()
     {       
     }
@@ -13,6 +14,8 @@ public sealed class ComplianceLine: Entity
     public Guid ComplianceQuestionId { get; private set; }
     public string? Description { get; private set; }
     public bool? Response { get; private set; }
+    public IReadOnlyCollection<ComplianceLineImage> Images => _images;
+    public ComplianceHeader Header { get; }
 
     internal static ComplianceLine Create(Guid questionId)
     {
@@ -29,5 +32,27 @@ public sealed class ComplianceLine: Entity
     {
         Response = responce;
         Description = description;
+    }
+
+    internal ComplianceLineImage AddImage(string imageName)
+    {
+        var image = ComplianceLineImage.Create(imageName);
+
+        _images.Add(image);
+
+        return image;
+    }
+    internal Result<ComplianceLineImage> RemoveImage(string imageName)
+    {
+        ComplianceLineImage? image = Images.SingleOrDefault(i => i.ImageName == imageName);
+
+        if (image is null)
+        {
+            return Result.Failure<ComplianceLineImage>(ComplianceErrors.LineImageNotFound(imageName));
+        }
+
+        _images.Remove(image);
+
+        return Result.Success(image);
     }
 }

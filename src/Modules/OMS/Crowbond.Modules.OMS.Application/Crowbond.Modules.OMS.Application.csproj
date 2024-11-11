@@ -6,7 +6,4 @@
     <ProjectReference Include="..\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Compliances\UpdateComplianceLine\" />
-  </ItemGroup>
 </Project>

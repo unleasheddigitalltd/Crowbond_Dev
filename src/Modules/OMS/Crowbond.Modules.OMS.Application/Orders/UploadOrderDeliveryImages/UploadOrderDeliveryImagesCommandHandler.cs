@@ -1,10 +1,8 @@
-﻿using System.Drawing;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Microsoft.AspNetCore.Http;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Crowbond.Modules.OMS.Application.Orders.UploadOrderDeliveryImages;
 

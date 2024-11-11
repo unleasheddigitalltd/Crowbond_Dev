@@ -14,7 +14,7 @@ public sealed class OrderDeliveryImage : Entity
 
     public string ImageName { get; private set; }
 
-    public static OrderDeliveryImage Create(string imageName)
+    internal static OrderDeliveryImage Create(string imageName)
     {
         var deliveryImage = new OrderDeliveryImage
         {

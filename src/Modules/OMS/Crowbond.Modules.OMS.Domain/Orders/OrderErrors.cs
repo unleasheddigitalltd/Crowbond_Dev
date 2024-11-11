@@ -11,7 +11,7 @@ public static class OrderErrors
         Error.NotFound("Orders.LineNotFound", $"The order line with the identifier {orderLineId} was not found");
     
     public static Error DeliveryImageNotFound(string imageName) =>
-        Error.NotFound("Orders.DeliveryImageNotFound", $"The order delivery image with the identifier {imageName} was not found");
+        Error.NotFound("Orders.DeliveryImageNotFound", $"The order delivery image with the name {imageName} was not found");
 
     public static Error LineHasShortage(Guid orderLineId) =>
         Error.NotFound("Orders.LineHasShortage", $"The order line with the identifier {orderLineId} has shortage");
