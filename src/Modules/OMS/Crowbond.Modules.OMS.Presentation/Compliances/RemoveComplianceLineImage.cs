@@ -20,7 +20,7 @@ internal sealed class RemoveComplianceLineImage : IEndpoint
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.DeliverOrders)
-            .WithTags(Tags.Orders)
+            .WithTags(Tags.Routes)
             .DisableAntiforgery();
     }
 }

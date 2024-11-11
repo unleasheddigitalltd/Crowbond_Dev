@@ -20,6 +20,6 @@ internal sealed class GetComplianceLineImages : IEndpoint
             return result.Match(Results.Ok, ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.DeliverOrders)
-            .WithTags(Tags.Orders);
+            .WithTags(Tags.Routes);
     }
 }
