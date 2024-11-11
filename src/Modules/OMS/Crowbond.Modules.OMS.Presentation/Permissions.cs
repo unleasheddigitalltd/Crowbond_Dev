@@ -25,6 +25,7 @@ internal static class Permissions
     internal const string ModifyRouteTrips = "route-trip:update";
     internal const string CreateRouteTrips = "route-trip:create";
 
+    internal const string GetCompliances = "compliances:read";
     internal const string ModifyOtherRouteTripLogs = "route-trip-log:update:other";
 
     internal const string GetCart = "carts:read";

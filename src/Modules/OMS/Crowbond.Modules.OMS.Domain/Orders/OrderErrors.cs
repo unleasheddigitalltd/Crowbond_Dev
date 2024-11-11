@@ -11,13 +11,16 @@ public static class OrderErrors
         Error.NotFound("Orders.LineNotFound", $"The order line with the identifier {orderLineId} was not found");
     
     public static Error DeliveryImageNotFound(string imageName) =>
-        Error.NotFound("Orders.DeliveryImageNotFound", $"The order delivery image with the identifier {imageName} was not found");
+        Error.NotFound("Orders.DeliveryImageNotFound", $"The order delivery image with the name {imageName} was not found");
 
     public static Error LineHasShortage(Guid orderLineId) =>
         Error.NotFound("Orders.LineHasShortage", $"The order line with the identifier {orderLineId} has shortage");
 
-    public static Error NotAssignedTo(Guid routeTripId) =>
-        Error.NotFound("Orders.NotAssignedTo", $"The order is not assigned to route trip with the identifier {routeTripId}");
+    public static Error NotAssignedToRouteTrip(Guid orderId) =>
+        Error.NotFound("Orders.NotAssignedToRouteTrip", $"The order with the identifier {orderId} is not assigned to any route trip");
+
+    public static Error LogDateMismatch(Guid routeTripId) =>
+        Error.NotFound("Orders.LogDateMismatch", $"Log entry date for route trip with the identifier {routeTripId} does not match today's date");
 
     public readonly static Error SequenceNotFound =
         Error.NotFound("Sequence.NotFound", $"The sequence for the order type was not found");
@@ -28,8 +31,8 @@ public static class OrderErrors
     public static readonly Error InvalidDeliveryMethod = 
         Error.Problem("Orders.InvalidDeliveryMethod", "The delivery method is invalid");
 
-    public static readonly Error InvalidPaymentTerm = 
-        Error.Problem("Orders.InvalidPaymentTerm", "The payment term is invalid");
+    public static readonly Error InvalidDueDateCalculationBasis = 
+        Error.Problem("Orders.InvalidDueDateCalculationBasis", "The due date calculation basis is invalid");
 
     public static readonly Error InvalidDeliveryFeeSetting = 
         Error.Problem("Orders.InvalidDeliveryFeeSetting", "The delivery fee setting is invalid");
@@ -57,6 +60,13 @@ public static class OrderErrors
 
     public static readonly Error InvalidOrderLineQuantity = 
         Error.Problem("Orders.InvalidOrderLineQuantity", "Order line quantity must be greater than zero.");
-
-
+    
+    public static readonly Error NoFilesUploaded = 
+        Error.Problem("Orders.NoFilesUploaded", "No files uploaded");
+    
+    public static readonly Error FileSizeExceeds = 
+        Error.Problem("Orders.FileSizeExceeds", "File size exceeds the 1 MB limit");
+    
+    public static Error InvalidFileType(List<string> _allowedExtensions) => 
+        Error.Problem("Orders.InvalidFileType", $"Invalid file type. Only the following file types are allowed: {string.Join(", ", _allowedExtensions)}.");
 }

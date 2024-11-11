@@ -14,6 +14,10 @@ public static class CustomerErrors
         "Customer.AlreadyActivated",
         "The customer was already activated");
 
+    public static readonly Error CustomPaymentTermsParametersHasNoValue = Error.Problem(
+        "Customer.CustomPaymentTermsHasNoValue",
+        "The custom payment terms has no value for due days invoice or due date calculation basis.");
+
     public static Error SequenceNotFound() =>
     Error.NotFound("Customer.SequenceNotFound", $"The sequence for the customer type was not found");
 }

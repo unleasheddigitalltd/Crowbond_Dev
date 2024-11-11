@@ -35,11 +35,11 @@ public sealed record CustomerDetailsResponse
 
     public Guid? RepId { get; }
 
-    public bool CustomPaymentTerm { get; }
+    public bool CustomPaymentTerms { get; }
 
-    public PaymentTerm? PaymentTerms { get; }
+    public DueDateCalculationBasis? DueDateCalculationBasis { get; }
 
-    public int? InvoiceDueDays { get; }
+    public int? DueDaysForInvoice { get; }
 
     public DeliveryFeeSetting DeliveryFeeSetting { get; }
 

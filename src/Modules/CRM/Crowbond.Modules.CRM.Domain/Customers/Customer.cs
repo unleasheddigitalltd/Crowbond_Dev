@@ -23,7 +23,7 @@ public sealed class Customer : Entity , IAuditable
 
     public string BillingCounty { get; private set; }
 
-    public string BillingCountry { get; private set; }
+    public string? BillingCountry { get; private set; }
 
     public string BillingPostalCode { get; private set; }
 
@@ -33,11 +33,11 @@ public sealed class Customer : Entity , IAuditable
 
     public Guid? RepId { get; private set; }
 
-    public bool CustomPaymentTerm { get; private set; }
+    public bool CustomPaymentTerms { get; private set; }
 
-    public PaymentTerm? PaymentTerms { get; private set; }
+    public DueDateCalculationBasis? DueDateCalculationBasis { get; private set; }
 
-    public int? InvoiceDueDays { get; private set; }
+    public int? DueDaysForInvoice { get; private set; }
 
     public DeliveryFeeSetting DeliveryFeeSetting { get; private set; }
 
@@ -75,14 +75,14 @@ public sealed class Customer : Entity , IAuditable
          string? billingAddressLine2,
          string billingTownCity,
          string billingCounty,
-         string billingCountry,
+         string? billingCountry,
          string billingPostalCode,
          Guid priceTierId,
          decimal discount,
          Guid? repId,
-         bool customPaymentTerm,
-         PaymentTerm? paymentTerms,
-         int? invoiceDueDays,
+         bool customPaymentTerms,
+         DueDateCalculationBasis? dueDateCalculationBasis,
+         int? dueDaysForInvoice,
          DeliveryFeeSetting deliveryFeeSetting,
          decimal? deliveryMinOrderValue,
          decimal? deliveryCharge,
@@ -111,9 +111,9 @@ public sealed class Customer : Entity , IAuditable
             PriceTierId = priceTierId,
             Discount = discount,
             RepId = repId,
-            CustomPaymentTerm = customPaymentTerm,
-            PaymentTerms = paymentTerms,
-            InvoiceDueDays = invoiceDueDays,
+            CustomPaymentTerms = customPaymentTerms,
+            DueDateCalculationBasis = dueDateCalculationBasis,
+            DueDaysForInvoice = dueDaysForInvoice,
             DeliveryFeeSetting = deliveryFeeSetting,
             DeliveryMinOrderValue = deliveryMinOrderValue,
             DeliveryCharge = deliveryCharge,
@@ -139,14 +139,14 @@ public sealed class Customer : Entity , IAuditable
          string? billingAddressLine2,
          string billingTownCity,
          string billingCounty,
-         string billingCountry,
+         string? billingCountry,
          string billingPostalCode,
          Guid priceTierId,
          decimal discount,
          Guid? repId,
-         bool customPaymentTerm,
-         PaymentTerm? paymentTerms,
-         int? invoiceDueDays,
+         bool customPaymentTerms,
+         DueDateCalculationBasis? dueDateCalculationBasis,
+         int? dueDaysForInvoice,
          DeliveryFeeSetting deliveryFeeSetting,
          decimal? deliveryMinOrderValue,
          decimal? deliveryCharge,
@@ -168,9 +168,9 @@ public sealed class Customer : Entity , IAuditable
         PriceTierId = priceTierId;
         Discount = discount;
         RepId = repId;
-        CustomPaymentTerm = customPaymentTerm;
-        PaymentTerms = paymentTerms;
-        InvoiceDueDays = invoiceDueDays;
+        CustomPaymentTerms = customPaymentTerms;
+        DueDateCalculationBasis = dueDateCalculationBasis;
+        DueDaysForInvoice = dueDaysForInvoice;
         DeliveryFeeSetting = deliveryFeeSetting;
         DeliveryMinOrderValue = deliveryMinOrderValue;
         DeliveryCharge = deliveryCharge;

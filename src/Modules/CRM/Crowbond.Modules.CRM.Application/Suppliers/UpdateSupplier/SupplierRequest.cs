@@ -1,4 +1,4 @@
-﻿using Crowbond.Modules.CRM.Domain.Customers;
+﻿using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Application.Suppliers.UpdateSupplier;
 public sealed record SupplierRequest(
@@ -9,6 +9,5 @@ public sealed record SupplierRequest(
      string County,
      string? Country,
      string PostalCode,
-     PaymentTerm PaymentTerms,
      string? SupplierNotes);
 

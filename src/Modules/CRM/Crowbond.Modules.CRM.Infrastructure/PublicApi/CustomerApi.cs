@@ -21,6 +21,16 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             return null;
         }
 
+        if (result.Value.DueDateCalculationBasis == null)
+        {
+            throw new InvalidOperationException("DueDateCalculationBasis cannot be null.");
+        }
+
+        if (result.Value.DueDaysForInvoice == null)
+        {
+            throw new InvalidOperationException("DueDaysForInvoice cannot be null.");
+        }
+
         return new CustomerForOrderResponse(
             result.Value.Id,
             result.Value.AccountNumber,
@@ -30,7 +40,8 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             result.Value.NoDiscountSpecialItem,
             result.Value.NoDiscountFixedPrice,
             result.Value.DetailedInvoice,
-            result.Value.PaymentTerms,
+            (int)result.Value.DueDateCalculationBasis,
+            (int)result.Value.DueDaysForInvoice,
             result.Value.CustomerNotes,
             result.Value.DeliveryFeeSetting,
             result.Value.DeliveryMinOrderValue,
@@ -47,6 +58,16 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             return null;
         }
 
+        if (result.Value.DueDateCalculationBasis == null)
+        {
+            throw new InvalidOperationException("DueDateCalculationBasis cannot be null.");
+        }
+
+        if (result.Value.DueDaysForInvoice == null)
+        {
+            throw new InvalidOperationException("DueDaysForInvoice cannot be null.");
+        }
+
         return new CustomerForOrderResponse(
             result.Value.Id,
             result.Value.AccountNumber,
@@ -56,7 +77,8 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             result.Value.NoDiscountSpecialItem,
             result.Value.NoDiscountFixedPrice,
             result.Value.DetailedInvoice,
-            result.Value.PaymentTerms,
+            (int)result.Value.DueDateCalculationBasis,
+            (int)result.Value.DueDaysForInvoice,
             result.Value.CustomerNotes,
             result.Value.DeliveryFeeSetting,
             result.Value.DeliveryMinOrderValue,

@@ -66,7 +66,9 @@ public sealed class OrderHeader : Entity, IAuditable
 
     public PaymentStatus PaymentStatus { get; private set; }
 
-    public PaymentTerm PaymentTerm { get; private set; }
+    public DueDateCalculationBasis DueDateCalculationBasis { get; private set; }
+
+    public int DueDaysForInvoice { get; private set; }
 
     public PaymentMethod PaymentMethod { get; private set; }
 
@@ -117,7 +119,8 @@ public sealed class OrderHeader : Entity, IAuditable
         DateOnly shippingDate,
         DeliveryMethod deliveryMethod,
         decimal deliveryCharge,
-        PaymentTerm paymentTerm,
+        DueDateCalculationBasis dueDateCalculationBasis,
+        int dueDaysForInvoice,
         PaymentMethod paymentMethod,
         string? customerComment,
         DateTime utcNow)
@@ -155,7 +158,8 @@ public sealed class OrderHeader : Entity, IAuditable
             OrderAmount = 0,
             OrderTax = 0,
             PaymentStatus = PaymentStatus.Unpaid,
-            PaymentTerm = paymentTerm,
+            DueDateCalculationBasis = dueDateCalculationBasis,
+            DueDaysForInvoice = dueDaysForInvoice,
             PaymentMethod = paymentMethod,
             CustomerComment = customerComment,
             Status = OrderStatus.Pending
@@ -274,14 +278,9 @@ public sealed class OrderHeader : Entity, IAuditable
         }
 
         var deliveryDate = DateOnly.FromDateTime(utcNow);
+
         // set payment due date
-        PaymentDueDate = PaymentTerm switch
-        {
-            PaymentTerm.ShortTerm => deliveryDate.AddDays(7),
-            PaymentTerm.StandardTerm => GetStandardPaymentDate(deliveryDate),
-            PaymentTerm.LongTerm => deliveryDate.AddDays(28),
-            _ => throw new NotImplementedException()
-        };
+        PaymentDueDate = GetPaymentDueDate(deliveryDate, DueDateCalculationBasis, DueDaysForInvoice);
 
         var delivery = OrderDelivery.Create(
             routeTripLogId,
@@ -295,30 +294,30 @@ public sealed class OrderHeader : Entity, IAuditable
         return Result.Success(delivery);
     }
 
-    public Result<OrderDeliveryImage> AddDeliveryImage(string imageName)
+    public Result<OrderDelivery> CheckIsDeliver()
     {
         if (Status != OrderStatus.Delivered)
         {
-            return Result.Failure<OrderDeliveryImage>(OrderErrors.NotDelivered);
+            return Result.Failure<OrderDelivery>(OrderErrors.NotDelivered);
         }
 
         OrderDelivery? delivery = _delivery.SingleOrDefault(s => s.Status == DeliveryStatus.delivered);
 
         if (delivery is null)
         {
-            return Result.Failure<OrderDeliveryImage>(OrderErrors.NoDeliveryRecordFound);
-        }
+            return Result.Failure<OrderDelivery>(OrderErrors.NoDeliveryRecordFound);
+        }       
 
-        Result<OrderDeliveryImage> imageResult = delivery.AddImage(imageName);
+        return Result.Success(delivery);
+    }
 
-        if (imageResult.IsFailure)
-        {
-            return Result.Failure<OrderDeliveryImage>(imageResult.Error);
-        }
+    public OrderDeliveryImage AddDeliveryImage(OrderDelivery orderDelivery, string imageName)
+    {
+        OrderDeliveryImage orderDeliveryImage = orderDelivery.AddImage(imageName);
 
         LastImageSequence++;
 
-        return Result.Success(imageResult.Value);
+        return orderDeliveryImage; 
     }
 
     public Result<OrderDeliveryImage> RemoveDeliveryImage(string imageName)
@@ -340,19 +339,31 @@ public sealed class OrderHeader : Entity, IAuditable
         return result;
     }
 
-    private static DateOnly GetStandardPaymentDate(DateOnly deliveryDate)
+    private static DateOnly GetPaymentDueDate(DateOnly deliveryDate, DueDateCalculationBasis dueDateCalculationBasis, int dueDaysForInvoice)
     {
-        // Get the year and month from the delivery date
-        int year = deliveryDate.Year;
-        int month = deliveryDate.Month;
+        DateOnly basisDate;
 
-        // Find the last day of the month
-        int lastDayOfMonth = DateTime.DaysInMonth(year, month);
-        var monthEndDate = new DateOnly(year, month, lastDayOfMonth);
+        switch (dueDateCalculationBasis)
+        {
+            case DueDateCalculationBasis.ShipDate:
+                basisDate = deliveryDate;
+                break;
 
-        // Add 14 days to the last day of the month
-        DateOnly result = monthEndDate.AddDays(14);
+            case DueDateCalculationBasis.EndOfInvoiceMonth:
+                // Get the year and month from the delivery date
+                int year = deliveryDate.Year;
+                int month = deliveryDate.Month;
 
-        return result;
+                // Find the last day of the invoice month
+                int lastDayOfMonth = DateTime.DaysInMonth(year, month);
+                basisDate = new DateOnly(year, month, lastDayOfMonth);
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dueDateCalculationBasis), dueDateCalculationBasis, "Invalid calculation basis");
+        }
+
+        // Add the due days to the calculated basis date
+        return basisDate.AddDays(dueDaysForInvoice);
     }
 }

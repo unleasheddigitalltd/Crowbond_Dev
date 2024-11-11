@@ -21,6 +21,8 @@ using Crowbond.Modules.OMS.Domain.Settings;
 using Crowbond.Modules.OMS.Infrastructure.Settings;
 using Crowbond.Modules.OMS.Domain.Vehicles;
 using Crowbond.Modules.OMS.Infrastructure.Vehicles;
+using Crowbond.Modules.OMS.Domain.Compliances;
+using Crowbond.Modules.OMS.Infrastructure.Compliances;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
@@ -42,6 +44,10 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
     internal DbSet<PurchaseOrderStatusHistory> PurchaseOrderStatusHistories { get; set; }
     internal DbSet<Setting> Settings { get; set; }
+    internal DbSet<ComplianceHeader> ComplianceHeaders { get; set; }
+    internal DbSet<ComplianceLine> ComplianceLines { get; set; }
+    internal DbSet<ComplianceQuestion> ComplianceQuestions { get; set; }
+    internal DbSet<ComplianceLineImage> ComplianceLineImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,5 +75,9 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new OrderStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new PurchaseOrderStatusHistoryConfiguration());
         modelBuilder.ApplyConfiguration(new SettingConfiguration());
+        modelBuilder.ApplyConfiguration(new ComplianceHeaderConfiguration());
+        modelBuilder.ApplyConfiguration(new ComplianceLineConfiguration());
+        modelBuilder.ApplyConfiguration(new ComplianceQuestionConfiguration());
+        modelBuilder.ApplyConfiguration(new ComplianceLineImageConfiguration());
     }
 }

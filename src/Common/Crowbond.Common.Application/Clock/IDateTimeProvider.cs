@@ -3,4 +3,6 @@
 public interface IDateTimeProvider
 {
     public DateTime UtcNow { get; }
+    Task SetOverrideUtcNow(DateTime dateTime);
+    Task ClearOverrideUtcNow();
 }

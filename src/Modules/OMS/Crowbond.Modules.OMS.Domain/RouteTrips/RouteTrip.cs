@@ -26,7 +26,7 @@ public sealed class RouteTrip : Entity
 
     public IReadOnlyCollection<RouteTripLog> Logs => _logs;
 
-    public static RouteTrip Create(DateOnly date, Guid routeId, string comments)
+    public static RouteTrip Create(DateOnly date, Guid routeId, string? comments = null)
     {
         var routeTrip = new RouteTrip
         {

@@ -14,13 +14,9 @@ public sealed class RouteTripLog : Entity
 
     public Guid DriverId { get; private set; }
 
-    public Guid? VehicleId { get; private set; }
-
     public DateTime LoggedOnTime { get; private set; }
 
     public DateTime? LoggedOffTime { get; private set; }
-
-    public decimal? Temperature { get; private set; }
 
     public bool ComplianceCompleted { get; private set; }
 
@@ -41,22 +37,11 @@ public sealed class RouteTripLog : Entity
     {
         if (LoggedOffTime != null)
         {
-            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
+            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff(RouteTripId));
         }
 
         LoggedOffTime = loggedOffTime;
 
-        return Result.Success();
-    }
-
-    public Result AssignVehicle(Guid vehicleId)
-    {
-        if (LoggedOffTime != null)
-        {
-            return Result.Failure(RouteTripLogErrors.AlreadyLoggedOff);
-        }
-
-        VehicleId = vehicleId;
         return Result.Success();
     }
 }

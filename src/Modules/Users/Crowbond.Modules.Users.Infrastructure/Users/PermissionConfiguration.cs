@@ -94,6 +94,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifyRouteTrips,
             Permission.CreateRouteTrips,
 
+            Permission.GetCompliances,
             Permission.ModifyOtherRouteTripLogs,
 
             Permission.GetPutAwayTasks,
@@ -132,6 +133,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Driver, Permission.GetRouteTrips),
                     CreateRolePermission(Role.Driver, Permission.DeliverOrders),
                     CreateRolePermission(Role.Driver, Permission.GetVehicles),
+                    CreateRolePermission(Role.Driver, Permission.GetCompliances),
 
                     // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
@@ -231,6 +233,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.CreateRouteTrips),
 
+                    CreateRolePermission(Role.Administrator, Permission.GetCompliances),
                     CreateRolePermission(Role.Administrator, Permission.ModifyOtherRouteTripLogs),
 
                     CreateRolePermission(Role.Administrator, Permission.GetPutAwayTasks),

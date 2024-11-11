@@ -17,7 +17,7 @@ internal sealed class ReceiveReceipt : IEndpoint
         {
             Result result = await sender.Send(new ReceiveReceiptCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyReceipts)
             .WithTags(Tags.Receipts);

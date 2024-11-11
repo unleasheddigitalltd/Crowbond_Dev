@@ -607,9 +607,9 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on_utc");
 
-                    b.Property<bool>("CustomPaymentTerm")
+                    b.Property<bool>("CustomPaymentTerms")
                         .HasColumnType("boolean")
-                        .HasColumnName("custom_payment_term");
+                        .HasColumnName("custom_payment_terms");
 
                     b.Property<string>("CustomerNotes")
                         .HasMaxLength(500)
@@ -639,9 +639,13 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(5,2)")
                         .HasColumnName("discount");
 
-                    b.Property<int?>("InvoiceDueDays")
+                    b.Property<int?>("DueDateCalculationBasis")
                         .HasColumnType("integer")
-                        .HasColumnName("invoice_due_days");
+                        .HasColumnName("due_date_calculation_basis");
+
+                    b.Property<int?>("DueDaysForInvoice")
+                        .HasColumnType("integer")
+                        .HasColumnName("due_days_for_invoice");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -666,10 +670,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.Property<bool>("NoDiscountSpecialItem")
                         .HasColumnType("boolean")
                         .HasColumnName("no_discount_special_item");
-
-                    b.Property<int?>("PaymentTerms")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_terms");
 
                     b.Property<Guid>("PriceTierId")
                         .HasColumnType("uuid")
@@ -985,6 +985,10 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("last_number");
 
+                    b.Property<int>("Length")
+                        .HasColumnType("integer")
+                        .HasColumnName("length");
+
                     b.Property<string>("Prefix")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -1000,14 +1004,53 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         new
                         {
                             Context = 0,
-                            LastNumber = 10001,
+                            LastNumber = 5,
+                            Length = 10001,
                             Prefix = "CUS"
                         },
                         new
                         {
                             Context = 1,
-                            LastNumber = 10001,
+                            LastNumber = 5,
+                            Length = 10001,
                             Prefix = "SUP"
+                        });
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Settings.Setting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<int>("PaymentTerms")
+                        .HasColumnType("integer")
+                        .HasColumnName("payment_terms");
+
+                    b.HasKey("Id")
+                        .HasName("pk_settings");
+
+                    b.ToTable("settings", "crm");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("847f725f-2110-40f8-a1b3-06ca5722cb83"),
+                            IsDeleted = false,
+                            PaymentTerms = 1
                         });
                 });
 
@@ -1234,10 +1277,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_date");
-
-                    b.Property<int>("PaymentTerms")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_terms");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()

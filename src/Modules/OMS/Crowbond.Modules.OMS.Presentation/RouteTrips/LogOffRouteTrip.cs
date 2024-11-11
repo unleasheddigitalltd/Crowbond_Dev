@@ -19,7 +19,7 @@ internal sealed class LogOffRouteTrip : IEndpoint
             Result result = await sender.Send(new LogOffRouteTripCommand(
                 request.RouteTripId, driverContext.DriverId));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.DeliverOrders)
         .WithTags(Tags.Routes);

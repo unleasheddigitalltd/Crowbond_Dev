@@ -129,6 +129,141 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.ToTable("outbox_message_consumers", "oms");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceHeader", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateOnly>("FormDate")
+                        .HasColumnType("date")
+                        .HasColumnName("form_date");
+
+                    b.Property<string>("FormNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("form_no");
+
+                    b.Property<bool?>("IsConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_confirmed");
+
+                    b.Property<int>("LastImageSequence")
+                        .HasColumnType("integer")
+                        .HasColumnName("last_image_sequence");
+
+                    b.Property<Guid>("RouteTripLogId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("route_trip_log_id");
+
+                    b.Property<decimal?>("Temperature")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("numeric(4,2)")
+                        .HasColumnName("temperature");
+
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("vehicle_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_compliance_headers");
+
+                    b.HasIndex("RouteTripLogId")
+                        .HasDatabaseName("ix_compliance_headers_route_trip_log_id");
+
+                    b.HasIndex("VehicleId")
+                        .HasDatabaseName("ix_compliance_headers_vehicle_id");
+
+                    b.ToTable("compliance_headers", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ComplianceHeaderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("compliance_header_id");
+
+                    b.Property<Guid>("ComplianceQuestionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("compliance_question_id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("description");
+
+                    b.Property<bool?>("Response")
+                        .HasColumnType("boolean")
+                        .HasColumnName("response");
+
+                    b.HasKey("Id")
+                        .HasName("pk_compliance_lines");
+
+                    b.HasIndex("ComplianceHeaderId")
+                        .HasDatabaseName("ix_compliance_lines_compliance_header_id");
+
+                    b.HasIndex("ComplianceQuestionId")
+                        .HasDatabaseName("ix_compliance_lines_compliance_question_id");
+
+                    b.ToTable("compliance_lines", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLineImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ComplianceLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("compliance_line_id");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("image_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_compliance_line_images");
+
+                    b.HasIndex("ComplianceLineId")
+                        .HasDatabaseName("ix_compliance_line_images_compliance_line_id");
+
+                    b.ToTable("compliance_line_images", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("text");
+
+                    b.HasKey("Id")
+                        .HasName("pk_compliance_questions");
+
+                    b.ToTable("compliance_questions", "oms");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Drivers.Driver", b =>
                 {
                     b.Property<Guid>("Id")
@@ -364,6 +499,14 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("delivery_town_city");
 
+                    b.Property<int>("DueDateCalculationBasis")
+                        .HasColumnType("integer")
+                        .HasColumnName("due_date_calculation_basis");
+
+                    b.Property<int>("DueDaysForInvoice")
+                        .HasColumnType("integer")
+                        .HasColumnName("due_days_for_invoice");
+
                     b.Property<string>("ExternalOrderRef")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
@@ -413,10 +556,6 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("integer")
                         .HasColumnName("payment_status");
-
-                    b.Property<int>("PaymentTerm")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_term");
 
                     b.Property<string>("PurchaseOrderNo")
                         .HasMaxLength(20)
@@ -927,15 +1066,6 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("route_trip_id");
 
-                    b.Property<decimal?>("Temperature")
-                        .HasPrecision(2, 2)
-                        .HasColumnType("numeric(2,2)")
-                        .HasColumnName("temperature");
-
-                    b.Property<Guid?>("VehicleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("vehicle_id");
-
                     b.HasKey("Id")
                         .HasName("pk_route_trip_logs");
 
@@ -1059,6 +1189,10 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("last_number");
 
+                    b.Property<int>("Length")
+                        .HasColumnType("integer")
+                        .HasColumnName("length");
+
                     b.Property<string>("Prefix")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -1075,19 +1209,29 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         {
                             Context = 0,
                             LastNumber = 10001,
+                            Length = 5,
                             Prefix = "INV"
                         },
                         new
                         {
                             Context = 2,
-                            LastNumber = 10001,
+                            LastNumber = 5,
+                            Length = 10001,
                             Prefix = "POR"
                         },
                         new
                         {
                             Context = 1,
                             LastNumber = 10001,
+                            Length = 5,
                             Prefix = "SOR"
+                        },
+                        new
+                        {
+                            Context = 3,
+                            LastNumber = 10001,
+                            Length = 5,
+                            Prefix = "CMP"
                         });
                 });
 
@@ -1145,6 +1289,52 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasName("pk_vehicles");
 
                     b.ToTable("vehicles", "oms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceHeader", b =>
+                {
+                    b.HasOne("Crowbond.Modules.OMS.Domain.RouteTripLogs.RouteTripLog", null)
+                        .WithMany()
+                        .HasForeignKey("RouteTripLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_compliance_headers_route_trip_logs_route_trip_log_id");
+
+                    b.HasOne("Crowbond.Modules.OMS.Domain.Vehicles.Vehicle", null)
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_compliance_headers_vehicles_vehicle_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLine", b =>
+                {
+                    b.HasOne("Crowbond.Modules.OMS.Domain.Compliances.ComplianceHeader", "Header")
+                        .WithMany("Lines")
+                        .HasForeignKey("ComplianceHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_compliance_lines_compliance_headers_compliance_header_id");
+
+                    b.HasOne("Crowbond.Modules.OMS.Domain.Compliances.ComplianceQuestion", null)
+                        .WithMany()
+                        .HasForeignKey("ComplianceQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_compliance_lines_compliance_questions_compliance_question_id");
+
+                    b.Navigation("Header");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLineImage", b =>
+                {
+                    b.HasOne("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLine", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ComplianceLineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_compliance_line_images_compliance_lines_compliance_line_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderDelivery", b =>
@@ -1260,6 +1450,16 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_route_trip_status_histories_route_trips_route_trip_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceHeader", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Compliances.ComplianceLine", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderDelivery", b =>

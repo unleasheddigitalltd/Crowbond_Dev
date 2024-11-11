@@ -17,7 +17,7 @@ internal sealed class UpdateCustomerContactActivation : IEndpoint
         {
             Result result = await sender.Send(new UpdateCustomerContactActivationCommand(id, isActive));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifyCustomerContacts)
         .WithTags(Tags.Customers);

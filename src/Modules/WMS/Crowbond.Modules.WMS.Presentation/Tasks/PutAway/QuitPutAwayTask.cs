@@ -18,7 +18,7 @@ internal sealed class QuitPutAwayTask : IEndpoint
         {
             Result result = await sender.Send(new QuitPutAwayTaskCommand(operatorContext.WarehouseOperatorId, id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ExecutePutAwayTasks)
             .WithTags(Tags.PutAway);

@@ -1,5 +1,6 @@
 ﻿using Crowbond.Modules.CRM.Domain.Customers;
 using Crowbond.Modules.CRM.Domain.CustomerSettings;
+using Crowbond.Modules.CRM.Domain.Settings;
 
 namespace Crowbond.Modules.CRM.Application.Customers.UpdateCustomer;
 
@@ -14,9 +15,9 @@ public sealed record CustomerRequest(
      Guid PriceTierId,
      decimal Discount,
      Guid? RepId,
-     bool CustomPaymentTerm,
-     PaymentTerm PaymentTerms,
-     int? InvoiceDueDays,
+     bool CustomPaymentTerms,
+     DueDateCalculationBasis? DueDateCalculationBasis,
+     int? DueDaysForInvoice,
      DeliveryFeeSetting DeliveryFeeSetting,
      decimal? DeliveryMinOrderValue,
      decimal? DeliveryCharge,

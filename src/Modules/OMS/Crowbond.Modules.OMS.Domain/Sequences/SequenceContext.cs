@@ -4,5 +4,6 @@ public enum SequenceContext
 {
     Invoice = 0,
     Order = 1,
-    PurchaseOrder = 2
+    PurchaseOrder = 2,
+    Compliance = 3,
 }

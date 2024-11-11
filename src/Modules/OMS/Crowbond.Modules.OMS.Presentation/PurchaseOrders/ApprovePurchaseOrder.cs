@@ -17,7 +17,7 @@ internal sealed class ApprovePurchaseOrder : IEndpoint
         {
             Result result = await sender.Send(new ApprovePurchaseOrderCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         }
         )
             .RequireAuthorization(Permissions.ApprovePurchaseOrders)

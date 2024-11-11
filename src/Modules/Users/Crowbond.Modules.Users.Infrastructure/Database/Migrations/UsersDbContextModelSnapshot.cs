@@ -380,6 +380,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "compliances:read"
+                        },
+                        new
+                        {
                             Code = "route-trip-log:update:other"
                         },
                         new
@@ -595,6 +599,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "vehicles:read",
+                            RoleName = "Driver"
+                        },
+                        new
+                        {
+                            PermissionCode = "compliances:read",
                             RoleName = "Driver"
                         },
                         new
@@ -950,6 +959,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "route-trip:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "compliances:read",
                             RoleName = "Administrator"
                         },
                         new

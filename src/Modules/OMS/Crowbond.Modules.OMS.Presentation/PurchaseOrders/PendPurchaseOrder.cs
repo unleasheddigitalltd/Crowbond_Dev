@@ -17,7 +17,7 @@ internal sealed class PendPurchaseOrder : IEndpoint
         {
             Result result = await sender.Send(new PendPurchaseOrderCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyPurchaseOrders)
             .WithTags(Tags.PurchaseOrders);

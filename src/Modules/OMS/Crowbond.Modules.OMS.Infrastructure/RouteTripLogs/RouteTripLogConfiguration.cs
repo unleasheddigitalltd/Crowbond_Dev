@@ -12,8 +12,6 @@ internal sealed class RouteTripLogConfiguration : IEntityTypeConfiguration<Route
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Temperature).IsRequired(false).HasPrecision(2, 2);
-
         builder.HasOne<Driver>().WithMany().HasForeignKey(x => x.DriverId).OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -17,7 +17,7 @@ internal sealed class UpdateCustomerContactPrimary : IEndpoint
         {
             Result result = await sender.Send(new UpdateCustomerContactPrimaryCommand(id));
 
-            return result.Match(Results.NoContent, ApiResults.Problem);
+            return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.ModifyCustomerContacts)
         .WithTags(Tags.Customers);

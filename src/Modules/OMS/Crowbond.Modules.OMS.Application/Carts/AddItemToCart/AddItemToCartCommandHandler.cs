@@ -34,10 +34,6 @@ internal sealed class AddItemToCartCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
-        decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?
-            customerProduct.UnitPrice :
-            customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
-
         var cartItem = new CartItem
         {
             ProductId = customerProduct.ProductId,
@@ -51,7 +47,7 @@ internal sealed class AddItemToCartCommandHandler(
             ProductGroupId = customerProduct.ProductGroupId,
             ProductGroupName = customerProduct.ProductGroupName,
             Qty = request.Qty,
-            UnitPrice = unitPrice,
+            UnitPrice = customerProduct.UnitPrice,
             TaxRateType = (TaxRateType)customerProduct.TaxRateType
         };
 

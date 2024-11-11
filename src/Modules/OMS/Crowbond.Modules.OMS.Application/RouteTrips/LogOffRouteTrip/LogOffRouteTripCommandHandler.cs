@@ -10,7 +10,6 @@ namespace Crowbond.Modules.OMS.Application.RouteTrips.LogOffRouteTrip;
 
 internal sealed class LogOffRouteTripCommandHandler(
     IDriverRepository driverRepository,
-    IRouteTripRepository routeTripRepository,
     IRouteTripLogRepository routeTripLogRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
@@ -24,18 +23,14 @@ internal sealed class LogOffRouteTripCommandHandler(
             return Result.Failure(DriverErrors.NotFound(request.DriverId));
         }
 
-        RouteTrip? routeTrip = await routeTripRepository.GetAsync(request.RouteTripId, cancellationToken);
-        if (routeTrip == null)
-        {
-            return Result.Failure(RouteTripErrors.NotFound(request.RouteTripId));
-        }
+        RouteTripLog? routeTripLog = await routeTripLogRepository.GetActiveByDateAndDriver(
+            DateOnly.FromDateTime(dateTimeProvider.UtcNow),
+            driver.Id,
+            cancellationToken);
 
-        IEnumerable<RouteTripLog> routeTripLogs = await routeTripLogRepository.GetForRouteTripAsync(routeTrip, cancellationToken);
-
-        RouteTripLog? routeTripLog = routeTripLogs.SingleOrDefault(t => t.DriverId == request.DriverId && t.LoggedOffTime == null);
         if (routeTripLog == null)
         {
-            return Result.Failure(RouteTripLogErrors.NotFound(routeTrip.Id, driver.Id));
+            return Result.Failure(RouteTripLogErrors.ActiveLogForDriverNotFound);
         }
 
         Result result = routeTripLog.LogOff(dateTimeProvider.UtcNow);

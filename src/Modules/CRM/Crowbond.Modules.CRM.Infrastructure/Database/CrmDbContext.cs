@@ -36,6 +36,8 @@ using Crowbond.Modules.CRM.Infrastructure.SupplierProducts;
 using Crowbond.Modules.CRM.Domain.Products;
 using Crowbond.Modules.CRM.Infrastructure.Products;
 using Crowbond.Common.Infrastructure.Configuration;
+using Crowbond.Modules.CRM.Domain.Settings;
+using Crowbond.Modules.CRM.Infrastructure.Settings;
 
 namespace Crowbond.Modules.CRM.Infrastructure.Database;
 public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbContext(options), IUnitOfWork
@@ -61,6 +63,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<CustomerOutletRoute> CustomerOutletRoutes { get; set; }
     internal DbSet<Route> Routes { get; set; }
     internal DbSet<SupplierProduct> SupplierProducts { get; set; }
+    internal DbSet<Setting> Settings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,6 +95,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new CustomerOutletConfiguration());
         modelBuilder.ApplyConfiguration(new RouteConfiguration());
         modelBuilder.ApplyConfiguration(new SupplierProductConfiguration());
+        modelBuilder.ApplyConfiguration(new SettingConfiguration());
     }
 
     public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)

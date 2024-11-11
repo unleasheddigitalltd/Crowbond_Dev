@@ -41,9 +41,9 @@ internal sealed class CreateOrderCommandHandler(
             return Result.Failure<Guid>(CustomerErrors.NotFound(request.Order.CustomerId));
         }
 
-        if (!Enum.IsDefined(typeof(PaymentTerm), customer.PaymentTerms))
+        if (!Enum.IsDefined(typeof(DueDateCalculationBasis), customer.DueDateCalculationBasis))
         {
-            return Result.Failure<Guid>(OrderErrors.InvalidPaymentTerm);
+            return Result.Failure<Guid>(OrderErrors.InvalidDueDateCalculationBasis);
         }
 
         if (!Enum.IsDefined(typeof(DeliveryFeeSetting), customer.DeliveryFeeSetting))
@@ -109,7 +109,8 @@ internal sealed class CreateOrderCommandHandler(
             request.Order.ShippingDate,
             (DeliveryMethod)request.Order.DeliveryMethod,
             deliveryCharge,
-            (PaymentTerm)customer.PaymentTerms,
+            (DueDateCalculationBasis)customer.DueDateCalculationBasis,
+            customer.DueDaysForInvoice,
             (PaymentMethod)request.Order.PaymentMethod,
             request.Order.CustomerComment,
             dateTimeProvider.UtcNow);
@@ -133,9 +134,6 @@ internal sealed class CreateOrderCommandHandler(
                 return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
             }
 
-            decimal unitPrice = (customer.NoDiscountFixedPrice && customerProduct.IsFixedPrice) ?
-                customerProduct.UnitPrice :
-                customerProduct.UnitPrice * ((100 - customer.Discount) / 100);
 
             Result<OrderLine> lineResult = result.Value.AddLine(
                 customerProduct.ProductId,
@@ -148,7 +146,7 @@ internal sealed class CreateOrderCommandHandler(
                 customerProduct.BrandName,
                 customerProduct.ProductGroupId,
                 customerProduct.ProductGroupName,
-                unitPrice,
+                customerProduct.UnitPrice,
                 line.Qty,
                 (TaxRateType)customerProduct.TaxRateType);
 

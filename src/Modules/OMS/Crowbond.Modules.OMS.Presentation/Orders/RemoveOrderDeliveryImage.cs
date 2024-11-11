@@ -13,7 +13,7 @@ internal sealed class RemoveOrderDeliveryImage : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("orders/{id}/deliver/image", async (Guid id, string imageName, ISender sender) =>
+        app.MapDelete("orders/{id}/deliver/images", async (Guid id, string imageName, ISender sender) =>
         {
             Result result = await sender.Send(new RemoveOrderDeliveryImageCommand(id, imageName));
 

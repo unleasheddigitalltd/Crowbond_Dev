@@ -12,7 +12,7 @@ internal sealed class GetOrderDeliveryImages : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("orders/{id}/deliver/image", async (Guid id, ISender sender) =>
+        app.MapGet("orders/{id}/deliver/images", async (Guid id, ISender sender) =>
         {
             Result<IReadOnlyCollection<DeliveryImageResponse>> result = await sender.Send(new GetOrderDeliveryImagesQuery(id));
 
