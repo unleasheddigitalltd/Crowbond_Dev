@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.CRM.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(CrmDbContext))]
-    partial class CrmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241111172115_Add_ProductBlacklist_Tables")]
+    partial class Add_ProductBlacklist_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -502,15 +505,15 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("product_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_customer_product_blacklist");
+                        .HasName("pk_customer_products_blacklist");
 
                     b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_customer_product_blacklist_customer_id");
+                        .HasDatabaseName("ix_customer_products_blacklist_customer_id");
 
                     b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_customer_product_blacklist_product_id");
+                        .HasDatabaseName("ix_customer_products_blacklist_product_id");
 
-                    b.ToTable("customer_product_blacklist", "crm");
+                    b.ToTable("customer_products_blacklist", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
@@ -1332,15 +1335,15 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasColumnName("supplier_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_supplier_product_blacklist");
+                        .HasName("pk_supplier_products_blacklist");
 
                     b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_supplier_product_blacklist_product_id");
+                        .HasDatabaseName("ix_supplier_products_blacklist_product_id");
 
                     b.HasIndex("SupplierId")
-                        .HasDatabaseName("ix_supplier_product_blacklist_supplier_id");
+                        .HasDatabaseName("ix_supplier_products_blacklist_supplier_id");
 
-                    b.ToTable("supplier_product_blacklist", "crm");
+                    b.ToTable("supplier_products_blacklist", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", b =>
@@ -1471,14 +1474,14 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_customer_product_blacklist_customers_customer_id");
+                        .HasConstraintName("fk_customer_products_blacklist_customers_customer_id");
 
                     b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_customer_product_blacklist_products_product_id");
+                        .HasConstraintName("fk_customer_products_blacklist_products_product_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
@@ -1571,14 +1574,14 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("fk_supplier_product_blacklist_products_product_id");
+                        .HasConstraintName("fk_supplier_products_blacklist_products_product_id");
 
                     b.HasOne("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", null)
                         .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_supplier_product_blacklist_suppliers_supplier_id");
+                        .HasConstraintName("fk_supplier_products_blacklist_suppliers_supplier_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>

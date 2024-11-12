@@ -1,5 +1,5 @@
 ﻿namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
-public sealed record CustomerProductResponse(
+public sealed record ProductResponse(
     Guid Id,
     Guid CustomerId,
     Guid ProductId,
