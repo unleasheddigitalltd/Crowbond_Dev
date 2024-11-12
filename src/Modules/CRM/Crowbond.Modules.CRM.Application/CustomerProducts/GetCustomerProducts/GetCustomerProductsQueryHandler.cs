@@ -35,7 +35,7 @@ internal sealed class GetCustomerProductsQueryHandler(IDbConnectionFactory dbCon
              INNER JOIN crm.categories c ON p.category_id = c.id
              INNER JOIN crm.brands b ON p.brand_id = b.id
              INNER JOIN crm.product_groups pg ON p.product_group_id = pg.id
-             WHERE cp.customer_id = @CustomerId AND cp.is_active = true
+             WHERE cp.customer_id = @CustomerId AND c.id = @CategoryId
              """;
 
         List<ProductResponse> products = (await connection.QueryAsync<ProductResponse>(sql, request)).AsList();

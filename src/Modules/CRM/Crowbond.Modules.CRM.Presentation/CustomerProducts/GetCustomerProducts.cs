@@ -13,9 +13,9 @@ internal sealed class GetCustomerProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("customers/{id}/products", async (Guid id, ISender sender) =>
+        app.MapGet("customers/{customerId}/categories/{categoryId}/products", async (Guid customerId, Guid categoryId, ISender sender) =>
         {
-            Result<IReadOnlyCollection<ProductResponse>> result = await sender.Send(new GetCustomerProductsQuery(id));
+            Result<IReadOnlyCollection<ProductResponse>> result = await sender.Send(new GetCustomerProductsQuery(customerId, categoryId));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
