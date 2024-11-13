@@ -1,16 +1,17 @@
 ﻿using FluentValidation;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.UpdateCustomerProduct;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.CreateCustomerProduct;
 
-internal sealed class UpdateCustomerProductCommandValidator : AbstractValidator<UpdateCustomerProductCommand>
+internal sealed class CreateCustomerProductCommandValidator : AbstractValidator<CreateCustomerProductCommand>
 {
-    public UpdateCustomerProductCommandValidator()
+    public CreateCustomerProductCommandValidator()
     {
         RuleFor(cp => cp.CustomerId).NotEmpty();
         RuleFor(cp => cp.ProductId).NotEmpty();
         RuleFor(cp => cp.FixedPrice).GreaterThan(0).PrecisionScale(10, 2, true);
         RuleFor(cp => cp.FixedDiscount).GreaterThan(0).PrecisionScale(5, 2, true);
         RuleFor(cp => cp.Comments).MaximumLength(255);
+        RuleFor(cp => cp.ExpiryDate).GreaterThan(cp => cp.EffectiveDate);
         RuleFor(cp => cp.EffectiveDate)
             .NotEmpty()
             .When(cp => cp.FixedPrice > 0 || cp.FixedDiscount > 0)

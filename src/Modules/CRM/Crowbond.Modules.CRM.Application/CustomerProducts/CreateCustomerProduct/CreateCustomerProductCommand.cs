@@ -1,8 +1,8 @@
 ﻿using Crowbond.Common.Application.Messaging;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.UpdateCustomerProduct;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.CreateCustomerProduct;
 
-public sealed record UpdateCustomerProductCommand(
+public sealed record CreateCustomerProductCommand(
     Guid CustomerId,
     Guid ProductId,
     decimal? FixedPrice,

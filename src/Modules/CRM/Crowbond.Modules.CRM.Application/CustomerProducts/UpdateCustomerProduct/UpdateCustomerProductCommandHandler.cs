@@ -4,10 +4,12 @@ using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
 using Crowbond.Modules.CRM.Domain.CustomerProducts;
 using Crowbond.Modules.CRM.Domain.Customers;
+using Crowbond.Modules.CRM.Domain.Products;
 
 namespace Crowbond.Modules.CRM.Application.CustomerProducts.UpdateCustomerProduct;
 
 internal sealed class UpdateCustomerProductCommandHandler(
+    IProductRepository productRepository,
     ICustomerRepository customerRepository,
     ICustomerProductRepository customerProductRepository,
     IDateTimeProvider dateTimeProvider,
@@ -16,84 +18,46 @@ internal sealed class UpdateCustomerProductCommandHandler(
 {
     public async Task<Result> Handle(UpdateCustomerProductCommand request, CancellationToken cancellationToken)
     {
+        // Check if customer exists
         Customer? customer = await customerRepository.GetAsync(request.CustomerId, cancellationToken);
         if (customer is null)
         {
             return Result.Failure(CustomerErrors.NotFound(request.CustomerId));
         }
 
-        IEnumerable<CustomerProduct> existingProducts = await customerProductRepository.GetForCustomerAsync(request.CustomerId, cancellationToken);
+        // Check if product exists
+        Product? product = await productRepository.GetAsync(request.ProductId, cancellationToken);
 
-        // Identify products that need to be deactivated
-        var productsToDeactivate = existingProducts
-            .Where(p => !request.CustomerProducts
-            .Any(dto => dto.ProductId == p.ProductId))
-            .ToList();
-
-        // Group existing products by their ProductId for quick lookup
-        var existingProductMap = existingProducts
-            .Where(p => !productsToDeactivate.Contains(p)) // Keep products not marked for deletion
-            .ToDictionary(p => p.ProductId);
-
-        // Process new or updated customer products
-        foreach (CustomerProductRequest productDto in request.CustomerProducts)
+        if (product is null)
         {
-            if (existingProductMap.TryGetValue(productDto.ProductId, out CustomerProduct existingProduct))
-            {
-                // Update or add price to an existing product that is changed.
-                if (existingProduct.FixedPrice != productDto.FixedPrice ||
-                    existingProduct.FixedDiscount != productDto.FixedDiscount ||
-                    existingProduct.Comments != productDto.Comments ||
-                    existingProduct.EffectiveDate != productDto.EffectiveDate ||
-                    existingProduct.ExpiryDate != productDto.ExpiryDate ||
-                    !existingProduct.IsActive)
-                {
-                    Result<CustomerProductPriceHistory> result = existingProduct.Update(
-                        productDto.FixedPrice,
-                        productDto.FixedDiscount,
-                        productDto.Comments,
-                        productDto.EffectiveDate,
-                        productDto.ExpiryDate,
-                        dateTimeProvider.UtcNow);
-
-                    if (result.IsFailure)
-                    {
-                        return result;
-                    }
-
-                    customerProductRepository.InsertPriceHistory(result.Value);
-                }
-            }
-            else
-            {
-                // Add a new product
-                Result<CustomerProduct> result = CustomerProduct.Create(
-                    request.CustomerId,
-                    productDto.ProductId,
-                    productDto.FixedPrice,
-                    productDto.FixedDiscount,
-                    productDto.Comments,
-                    productDto.EffectiveDate,
-                    productDto.ExpiryDate,
-                    dateTimeProvider.UtcNow);
-
-                if (result.IsFailure)
-                {
-                    return result;
-                }
-
-                customerProductRepository.Insert(result.Value);
-            }
+            return Result.Failure(ProductErrors.NotFound(request.ProductId));
         }
 
-        // Deactivate products that are no longer in the request
-        foreach (CustomerProduct product in productsToDeactivate)
+        // Check for existing product for this customer
+        CustomerProduct? existingProduct = await customerProductRepository
+        .GetByCustomerAndProductAsync(request.CustomerId, request.ProductId, cancellationToken);
+
+        if (existingProduct is null || !existingProduct.IsActive)
         {
-            CustomerProductPriceHistory priceHistory = product.Deactivate(dateTimeProvider.UtcNow);
-            customerProductRepository.InsertPriceHistory(priceHistory);
+            return Result.Failure(CustomerProductErrors.NotFound(request.ProductId));
         }
 
-        // Commit all changes to the database
+        // Update product
+        Result<CustomerProductPriceHistory> updateResult = existingProduct.Update(
+            request.FixedPrice,
+            request.FixedDiscount,
+            request.Comments,
+            request.EffectiveDate,
+            request.ExpiryDate,
+            dateTimeProvider.UtcNow);
+
+        if (updateResult.IsFailure)
+        {
+            return Result.Failure(updateResult.Error);
+        }
+
+        customerProductRepository.InsertPriceHistory(updateResult.Value);
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

@@ -1,4 +1,5 @@
-﻿namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
+﻿namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProduct;
+
 public sealed record ProductResponse(
     Guid Id,
     Guid CustomerId,
@@ -12,5 +13,5 @@ public sealed record ProductResponse(
     decimal? FixedPrice,
     decimal? FixedDiscount,
     string? Comments,
-    DateOnly EffectiveDate,
+    DateOnly? EffectiveDate,
     DateOnly? ExpiryDate);

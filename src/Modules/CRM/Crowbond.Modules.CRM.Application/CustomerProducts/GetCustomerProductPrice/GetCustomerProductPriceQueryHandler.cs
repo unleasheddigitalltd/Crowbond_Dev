@@ -77,7 +77,7 @@ internal sealed class GetCustomerProductPriceQueryHandler(
 
         if (customerProductPrice is null)
         {
-            return Result.Failure<CustomerProductPriceResponse>(CustomerProductErrors.NotFound(request.CustomerId, request.ProductId));
+            return Result.Failure<CustomerProductPriceResponse>(CustomerProductErrors.NotFound(request.ProductId));
         }
         return customerProductPrice;
     }
