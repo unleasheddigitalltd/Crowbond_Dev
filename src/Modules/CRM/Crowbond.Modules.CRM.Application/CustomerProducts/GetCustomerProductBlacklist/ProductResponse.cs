@@ -7,10 +7,7 @@ public sealed record ProductResponse(
     string ProductName, 
     string ProductSku,
     string UnitOfMeasureName,
-    Guid CategoryId,
     string CategoryName,
-    Guid BrandId,
     string BrandName,
-    Guid ProductGroupId,
     string ProductGroupName,
     string? Comments);

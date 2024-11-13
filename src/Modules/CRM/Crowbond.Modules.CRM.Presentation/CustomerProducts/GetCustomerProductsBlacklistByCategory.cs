@@ -1,7 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsByCategory;
+using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsBlacklistByCategory;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.CRM.Presentation.CustomerProducts;
 
-internal sealed class GetCustomerProductsByCategory : IEndpoint
+internal sealed class GetCustomerProductsBlacklistByCategory : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("customers/{customerId}/categories/{categoryId}/products", async (
+        app.MapGet("customers/{customerId}/categories/{categoryId}/product-blacklist", async (
             Guid customerId,
             Guid categoryId,
             ISender sender,
@@ -25,7 +25,7 @@ internal sealed class GetCustomerProductsByCategory : IEndpoint
             ) =>
         {
             Result<CustomerProductsResponse> result = await sender.Send(
-                new GetCustomerProductsByCategoryQuery(
+                new GetCustomerProductsBlacklistByCategoryQuery(
                     customerId,
                     categoryId,
                     search,
@@ -36,7 +36,7 @@ internal sealed class GetCustomerProductsByCategory : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.GetCustomerProducts)
+            .RequireAuthorization(Permissions.GetCustomerProductBlacklist)
             .WithTags(Tags.Customers);
     }
 }

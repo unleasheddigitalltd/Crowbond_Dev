@@ -59,7 +59,7 @@ public sealed class CrmDbContext(DbContextOptions<CrmDbContext> options) : DbCon
     internal DbSet<PriceTier> PriceTiers { get; set; }
     internal DbSet<ProductPrice> ProductPrices { get; set; }
     internal DbSet<CustomerProduct> CustomerProducts { get; set; }
-    internal DbSet<CustomerProductBlacklist> CustomerProductsBlackList { get; set; }
+    internal DbSet<CustomerProductBlacklist> CustomerProductBlackList { get; set; }
     internal DbSet<CustomerProductPriceHistory> CustomerProductPriceHistory { get; set; }
     internal DbSet<CustomerOutletRoute> CustomerOutletRoutes { get; set; }
     internal DbSet<Route> Routes { get; set; }

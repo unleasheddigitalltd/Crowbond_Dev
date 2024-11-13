@@ -19,7 +19,7 @@ internal sealed class GetCustomerProduct : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.GetCustomers)
+            .RequireAuthorization(Permissions.GetCustomerProducts)
             .WithTags(Tags.Customers);
     }
 }

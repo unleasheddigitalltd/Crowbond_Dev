@@ -27,7 +27,7 @@ internal sealed class CreateCustomerProduct : IEndpoint
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.ModifyCustomerProducts)
+            .RequireAuthorization(Permissions.CreateCustomerProducts)
             .WithTags(Tags.Customers);
 
     }

@@ -13,13 +13,13 @@ internal sealed class GetCustomerProductBlacklist : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/customers/{customerId}/categories/{categoryId}/product-blacklist", async (Guid customerId, Guid categoryId, ISender sender) =>
+        app.MapGet("customers/{customerId}/product-blacklist/{productId}", async (Guid customerId, Guid productId, ISender sender) =>
         {
-            Result<IReadOnlyCollection<ProductResponse>> result = await sender.Send(new GetCustomerProductBlacklistQuery(customerId, categoryId));
+            Result<ProductResponse> result = await sender.Send(new GetCustomerProductBlacklistQuery(customerId, productId));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.GetCustomers)
+            .RequireAuthorization(Permissions.GetCustomerProductBlacklist)
             .WithTags(Tags.Customers);
     }
 }
