@@ -2,11 +2,15 @@
 
 public interface ICustomerProductRepository
 {
-    Task<IEnumerable<CustomerProduct>> GetForCustomerAsync(Guid customerId, CancellationToken cancellationToken = default);
+    Task<CustomerProduct?> GetByCustomerAndProductAsync(Guid customerId, Guid productId, CancellationToken cancellationToken = default);
+    
+    Task<CustomerProductBlacklist?> GetBlacklistByCustomerAndProductAsync(Guid customerId, Guid productId, CancellationToken cancellationToken = default);
 
     void Insert(CustomerProduct customerProduct);
+    
+    void InsertBlacklist(CustomerProductBlacklist customerProductBlacklist);
 
-    void Remove(CustomerProduct customerProduct);
+    void RemoveBlacklist(CustomerProductBlacklist customerProductBlacklist);
 
     void InsertPriceHistory(CustomerProductPriceHistory priceHistory);
 }

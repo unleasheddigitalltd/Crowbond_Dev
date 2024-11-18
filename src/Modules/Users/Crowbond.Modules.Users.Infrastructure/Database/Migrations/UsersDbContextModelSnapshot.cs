@@ -276,7 +276,35 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "customers:products:create"
+                        },
+                        new
+                        {
                             Code = "customers:products:update"
+                        },
+                        new
+                        {
+                            Code = "customers:products:read"
+                        },
+                        new
+                        {
+                            Code = "customers:products:delete"
+                        },
+                        new
+                        {
+                            Code = "customers:product-blacklist:create"
+                        },
+                        new
+                        {
+                            Code = "customers:product-blacklist:update"
+                        },
+                        new
+                        {
+                            Code = "customers:product-blacklist:read"
+                        },
+                        new
+                        {
+                            Code = "customers:product-blacklist:delete"
                         },
                         new
                         {
@@ -833,7 +861,42 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "customers:products:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "customers:products:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:products:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:products:delete",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:product-blacklist:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:product-blacklist:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:product-blacklist:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "customers:product-blacklist:delete",
                             RoleName = "Administrator"
                         },
                         new

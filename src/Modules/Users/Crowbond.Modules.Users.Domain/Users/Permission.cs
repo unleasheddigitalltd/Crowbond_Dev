@@ -44,7 +44,15 @@ public sealed class Permission
     public static readonly Permission ModifyCustomerOutlets = new("customers:outlets:update");
     public static readonly Permission CreateCustomerOutlets = new("customers:outlets:create");
 
+    public static readonly Permission CreateCustomerProducts = new("customers:products:create");
     public static readonly Permission ModifyCustomerProducts = new("customers:products:update");
+    public static readonly Permission GetCustomerProducts = new("customers:products:read");
+    public static readonly Permission DeletCustomerProducts = new("customers:products:delete");
+
+    public static readonly Permission CreateCustomerProductBlacklist = new("customers:product-blacklist:create");
+    public static readonly Permission ModifyCustomerProductBlacklist = new("customers:product-blacklist:update");
+    public static readonly Permission GetCustomerProductBlacklist = new("customers:product-blacklist:read");
+    public static readonly Permission DeletCustomerProductBlacklist = new("customers:product-blacklist:delete");
 
     public static readonly Permission GetSuppliers = new("suppliers:read");
     public static readonly Permission ModifySuppliers = new("suppliers:update");

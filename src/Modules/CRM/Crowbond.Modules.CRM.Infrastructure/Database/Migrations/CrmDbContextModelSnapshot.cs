@@ -453,6 +453,66 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("customer_products", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductBlacklist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("comments");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_on_utc");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_product_blacklist");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_customer_product_blacklist_customer_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_customer_product_blacklist_product_id");
+
+                    b.ToTable("customer_product_blacklist", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1223,6 +1283,66 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("supplier_products", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierProducts.SupplierProductBlacklist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("comments");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_on_utc");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTime?>("LastModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_on_utc");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("supplier_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_supplier_product_blacklist");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_supplier_product_blacklist_product_id");
+
+                    b.HasIndex("SupplierId")
+                        .HasDatabaseName("ix_supplier_product_blacklist_supplier_id");
+
+                    b.ToTable("supplier_product_blacklist", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1344,6 +1464,23 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasConstraintName("fk_customer_products_products_product_id");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductBlacklist", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_product_blacklist_customers_customer_id");
+
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_product_blacklist_products_product_id");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProductPriceHistory", b =>
                 {
                     b.HasOne("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", null)
@@ -1425,6 +1562,23 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_supplier_products_suppliers_supplier_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.SupplierProducts.SupplierProductBlacklist", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_product_blacklist_products_product_id");
+
+                    b.HasOne("Crowbond.Modules.CRM.Domain.Suppliers.Supplier", null)
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_supplier_product_blacklist_suppliers_supplier_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>

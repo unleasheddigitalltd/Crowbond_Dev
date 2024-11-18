@@ -49,8 +49,14 @@ public static class OrderErrors
     public static readonly Error NotShipped = 
         Error.Problem("Orders.NotShipped", "The order is not in shipped status");
 
+    public static readonly Error IsShipped =
+        Error.Problem("Orders.IsShipped", "The order is in shipped status");
+
     public static readonly Error NotDelivered = 
         Error.Problem("Orders.NotDelivered", "The order is not in delivered status");
+
+    public static readonly Error IsDelivered =
+        Error.Problem("Orders.IsDelivered", "The order is in delivered status");
 
     public static readonly Error NoDeliveryRecordFound = 
         Error.Problem("Orders.NoDeliveryRecordFound", "No delivery record was found.");

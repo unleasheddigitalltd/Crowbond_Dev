@@ -6,17 +6,14 @@ internal sealed class UpdateCustomerProductCommandValidator : AbstractValidator<
 {
     public UpdateCustomerProductCommandValidator()
     {
-        RuleFor(s => s.CustomerId).NotEmpty();
-
-        RuleForEach(s => s.CustomerProducts).ChildRules(products =>
-        {
-            products.RuleFor(p => p.ProductId).NotEmpty();
-            products.RuleFor(p => p.FixedPrice).GreaterThan(0);
-            products.RuleFor(p => p.FixedDiscount).GreaterThan(0).LessThanOrEqualTo(100);
-            products.RuleFor(p => p.Comments).MaximumLength(255);
-        });
-
-        RuleFor(p => p.CustomerProducts).Must(coll => coll.GroupBy(p => p.ProductId).Count() == coll.Count)
-            .WithMessage(coll => $"One or more items have duplicate products");
+        RuleFor(cp => cp.CustomerId).NotEmpty();
+        RuleFor(cp => cp.ProductId).NotEmpty();
+        RuleFor(cp => cp.FixedPrice).GreaterThan(0).PrecisionScale(10, 2, true);
+        RuleFor(cp => cp.FixedDiscount).GreaterThan(0).PrecisionScale(5, 2, true);
+        RuleFor(cp => cp.Comments).MaximumLength(255);
+        RuleFor(cp => cp.EffectiveDate)
+            .NotEmpty()
+            .When(cp => cp.FixedPrice > 0 || cp.FixedDiscount > 0)
+            .WithMessage("EffectiveDate is required when FixedPrice or FixedDiscount is specified.");
     }
 }

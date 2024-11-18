@@ -4,8 +4,17 @@ namespace Crowbond.Modules.CRM.Domain.CustomerProducts;
 
 public static class CustomerProductErrors
 {
-    public static Error NotFound(Guid customerId, Guid productId) =>
-    Error.NotFound("CustomerProducts.NotFound", $"The product with the identifier {productId} for customer with the identifier {customerId} was not found");
+    public static Error NotFound(Guid productId) =>
+    Error.NotFound("CustomerProducts.NotFound", $"The product with ID {productId} was not found for the specified customer");
+    
+    public static Error BlacklistNotFound(Guid productId) =>
+    Error.NotFound("CustomerProducts.BlacklistNotFound", $"The product with ID {productId} was not found in blacklist for the specified customer");
+    
+    public static Error Exists(Guid productId) =>
+    Error.NotFound("CustomerProducts.Exists", $"The product with ID {productId} already exists for the specified customer");
+    
+    public static Error BlacklistExists(Guid productId) =>
+    Error.NotFound("CustomerProducts.Exists", $"The product with ID {productId} already exists in blacklist for the specified customer");
 
     public static readonly Error EffectiveDateIsNull = Error.Problem(
         "CustomerProducts.EffectiveDateIsNull",

@@ -13,16 +13,29 @@ internal sealed class UpdateCustomerProduct : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("customers/{id}/products", async (
-            Guid id,
-            IReadOnlyCollection<CustomerProductRequest> request,
-            ISender sender) =>
+        app.MapPut("customers/{customerId}/products/{productId}", async (Guid customerId, Guid productId, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateCustomerProductCommand(id, request));
+            Result result = await sender.Send(
+                new UpdateCustomerProductCommand(
+                    customerId,
+                    productId,
+                    request.FixedPrice,
+                    request.FixedDiscount,
+                    request.Comments,
+                    request.EffectiveDate,
+                    request.ExpiryDate));
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyCustomerProducts)
             .WithTags(Tags.Customers);
+
     }
+
+    private sealed record Request(
+        decimal? FixedPrice,
+        decimal? FixedDiscount,
+        string? Comments,
+        DateOnly? EffectiveDate,
+        DateOnly? ExpiryDate);
 }
