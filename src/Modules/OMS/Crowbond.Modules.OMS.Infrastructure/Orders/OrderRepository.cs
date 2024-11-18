@@ -26,6 +26,11 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
         context.OrderHeaders.Add(orderHeader);
     }
 
+    public void Remove(OrderHeader orderHeader)
+    {
+        context.OrderHeaders.Remove(orderHeader);
+    }
+
     public void AddLine(OrderLine line)
     {
         context.OrderLines.Add(line);

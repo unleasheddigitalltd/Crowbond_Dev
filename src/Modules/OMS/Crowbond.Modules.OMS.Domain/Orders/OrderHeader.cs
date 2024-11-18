@@ -5,7 +5,7 @@ using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
-public sealed class OrderHeader : Entity, IAuditable
+public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
 {
     private readonly List<OrderLine> _lines = new();
     private readonly List<OrderDelivery> _delivery = new();
@@ -93,6 +93,12 @@ public sealed class OrderHeader : Entity, IAuditable
     public Guid? LastModifiedBy { get; set; }
 
     public DateTime? LastModifiedOnUtc { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public Guid? DeletedBy { get; set; }
+
+    public DateTime? DeletedOnUtc { get; set; }
 
     public IReadOnlyCollection<OrderLine> Lines => _lines;
 
@@ -211,7 +217,7 @@ public sealed class OrderHeader : Entity, IAuditable
 
     public Result RemoveLine(Guid orderLineId)
     {
-        if (Status != OrderStatus.StockReviewing)
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
         {
             return Result.Failure(OrderErrors.NotStockReviewing);
         }
@@ -231,7 +237,7 @@ public sealed class OrderHeader : Entity, IAuditable
 
     public Result AdjustLineQty(Guid orderLineId, decimal qty)
     {
-        if (Status != OrderStatus.StockReviewing)
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
         {
             return Result.Failure(OrderErrors.NotStockReviewing);
         }
@@ -260,7 +266,7 @@ public sealed class OrderHeader : Entity, IAuditable
 
     public Result Accept()
     {
-        if (Status != OrderStatus.StockReviewing)
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
         {
             return Result.Failure(OrderErrors.NotStockReviewing);
         }
@@ -365,5 +371,66 @@ public sealed class OrderHeader : Entity, IAuditable
 
         // Add the due days to the calculated basis date
         return basisDate.AddDays(dueDaysForInvoice);
+    }
+
+    public Result ValidateRemoval()
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        return Result.Success();
+    }
+
+    public Result UpdateOutlet(
+        string deliveryLocationName,
+        string deliveryFullName,
+        string? deliveryEmail,
+        string deliveryPhone,
+        string? deliveryMobile,
+        string? deliveryNotes,
+        string deliveryAddressLine1,
+        string? deliveryAddressLine2,
+        string deliveryTownCity,
+        string deliveryCounty,
+        string? deliveryCountry,
+        string deliveryPostalCode)
+    {
+        if (Status == OrderStatus.Shipped)
+        {
+            return Result.Failure(OrderErrors.IsShipped);
+        }
+
+        if (Status == OrderStatus.Delivered)
+        {
+            return Result.Failure(OrderErrors.IsDelivered);
+        }
+
+        DeliveryLocationName = deliveryLocationName;
+        DeliveryFullName = deliveryFullName;
+        DeliveryEmail = deliveryEmail;
+        DeliveryPhone = deliveryPhone;
+        DeliveryMobile = deliveryMobile;
+        DeliveryNotes = deliveryNotes;
+        DeliveryAddressLine1 = deliveryAddressLine1;
+        DeliveryAddressLine2 = deliveryAddressLine2;
+        DeliveryTownCity = deliveryTownCity;
+        DeliveryCounty = deliveryCounty;
+        DeliveryCountry = deliveryCountry;
+        DeliveryPostalCode = deliveryPostalCode;
+
+        return Result.Success();
+    }
+
+    public Result Review()
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        Status = OrderStatus.StockReviewing;
+        return Result.Success();
     }
 }

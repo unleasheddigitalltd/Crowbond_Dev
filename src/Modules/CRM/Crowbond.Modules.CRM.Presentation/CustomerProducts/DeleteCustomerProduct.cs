@@ -19,7 +19,7 @@ internal sealed class DeleteCustomerProduct : IEndpoint
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.DeletCustomerProducts)
+            .RequireAuthorization(Permissions.DeleteCustomerProducts)
             .WithTags(Tags.Customers);
     }
 }
