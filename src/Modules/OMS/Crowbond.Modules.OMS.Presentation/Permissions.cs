@@ -36,6 +36,7 @@ internal static class Permissions
     internal const string GetMyOrders = "orders:read:my";
     internal const string CreateOrders = "orders:create";
     internal const string CreateMyOrders = "orders:create:my";
+    internal const string ModifyOrders = "orders:update";
     internal const string DeleteOrders = "orders:delete";
     internal const string AcceptOrders = "orders:accept";
     internal const string DeliverOrders = "orders:deliver";

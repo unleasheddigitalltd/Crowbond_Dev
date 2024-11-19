@@ -13,7 +13,7 @@ internal sealed class AdjustOrderLine : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("orders/lines/{id}/adjust", async (Guid id, ISender sender) =>
+        app.MapPut("orders/lines/{id}/Adjust", async (Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new AdjustOrderLineCommand(id));
 

@@ -10,6 +10,9 @@ public static class OrderErrors
     public static Error LineNotFound(Guid orderLineId) =>
         Error.NotFound("Orders.LineNotFound", $"The order line with the identifier {orderLineId} was not found");
     
+    public static Error LineForProductExists(Guid productId) =>
+        Error.NotFound("Orders.LineForProductExists", $"An order line for the product with the identifier {productId} already exists");
+    
     public static Error DeliveryImageNotFound(string imageName) =>
         Error.NotFound("Orders.DeliveryImageNotFound", $"The order delivery image with the name {imageName} was not found");
 
@@ -40,6 +43,9 @@ public static class OrderErrors
     public static readonly Error InvalidShippingDateError = 
         Error.Problem("Orders.InvalidShippingDateError", "Shipping date must be later than today's date");
 
+    public static readonly Error NotUnpaid = 
+        Error.Problem("Orders.NoNotUnpaidtPending", "The order payment is not in unpaid status");
+    
     public static readonly Error NotPending = 
         Error.Problem("Orders.NotPending", "The order is not in pending status");
 

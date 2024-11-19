@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
+namespace Crowbond.Modules.OMS.Application.Orders.UpdateOrder;
 
-internal sealed class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+internal sealed class UpdateOrderCommandValidator: AbstractValidator<UpdateOrderCommand>
 {
-    public CreateOrderCommandValidator()
+    public UpdateOrderCommandValidator()
     {
-        RuleFor(r => r.CustomerId).NotEmpty();
+        RuleFor(r => r.OrderId).NotEmpty();
         RuleFor(r => r.CustomerOutletId).NotEmpty();
         RuleFor(r => r.ShippingDate).NotEmpty();
         RuleFor(r => r.DeliveryMethod).NotNull();

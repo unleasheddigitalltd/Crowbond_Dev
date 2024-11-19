@@ -26,11 +26,6 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
         context.OrderHeaders.Add(orderHeader);
     }
 
-    public void Remove(OrderHeader orderHeader)
-    {
-        context.OrderHeaders.Remove(orderHeader);
-    }
-
     public void AddLine(OrderLine line)
     {
         context.OrderLines.Add(line);
@@ -39,6 +34,11 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
     public async Task<OrderLine?> GetLineAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context.OrderLines.Include(ol => ol.Header).SingleOrDefaultAsync(l => l.Id == id, cancellationToken);
+    }
+
+    public void Remove(OrderHeader orderHeader)
+    {
+        context.OrderHeaders.Remove(orderHeader);
     }
 
     public void RemoveLine(OrderLine line)

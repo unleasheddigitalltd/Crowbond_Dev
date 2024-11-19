@@ -5,7 +5,7 @@ using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
-public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
+public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDetectable
 {
     private readonly List<OrderLine> _lines = new();
     private readonly List<OrderDelivery> _delivery = new();
@@ -174,6 +174,70 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         return orderHeader;
     }
 
+    public Result Update(
+        string customerBusinessName,
+        string deliveryLocationName,
+        string deliveryFullName,
+        string? deliveryEmail,
+        string deliveryPhone,
+        string? deliveryMobile,
+        string? deliveryNotes,
+        string deliveryAddressLine1,
+        string? deliveryAddressLine2,
+        string deliveryTownCity,
+        string deliveryCounty,
+        string? deliveryCountry,
+        string deliveryPostalCode,
+        DateOnly shippingDate,
+        DeliveryMethod deliveryMethod,
+        decimal deliveryCharge,
+        DueDateCalculationBasis dueDateCalculationBasis,
+        int dueDaysForInvoice,
+        PaymentMethod paymentMethod,
+        string? customerComment,
+        DateTime utcNow)
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        if (PaymentStatus != PaymentStatus.Unpaid)
+        {
+            return Result.Failure(OrderErrors.NotUnpaid);
+        }
+
+        var today = DateOnly.FromDateTime(utcNow);
+
+        if (shippingDate <= today)
+        {
+            return Result.Failure(OrderErrors.InvalidShippingDateError);
+        }
+
+        CustomerBusinessName = customerBusinessName;
+        DeliveryLocationName = deliveryLocationName;
+        DeliveryFullName = deliveryFullName;
+        DeliveryEmail = deliveryEmail;
+        DeliveryPhone = deliveryPhone;
+        DeliveryMobile = deliveryMobile;
+        DeliveryNotes = deliveryNotes;
+        DeliveryAddressLine1 = deliveryAddressLine1;
+        DeliveryAddressLine2 = deliveryAddressLine2;
+        DeliveryTownCity = deliveryTownCity;
+        DeliveryCounty = deliveryCounty;
+        DeliveryCountry = deliveryCountry;
+        DeliveryPostalCode = deliveryPostalCode;
+        ShippingDate = shippingDate;
+        DeliveryMethod = deliveryMethod;
+        DeliveryCharge = deliveryCharge;
+        DueDateCalculationBasis = dueDateCalculationBasis;
+        DueDaysForInvoice = dueDaysForInvoice;
+        PaymentMethod = paymentMethod;
+        CustomerComment = customerComment;
+
+        return Result.Success();
+    }
+
     public Result<OrderLine> AddLine(
         Guid productId,
         string productSku,
@@ -210,6 +274,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
             taxRateType);
 
         _lines.Add(line);
+        Raise(new OrderLineAddedDomainEvent(CustomerId, line.ProductId));
         UpdateTotalAmount();
 
         return line;
@@ -312,7 +377,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         if (delivery is null)
         {
             return Result.Failure<OrderDelivery>(OrderErrors.NoDeliveryRecordFound);
-        }       
+        }
 
         return Result.Success(delivery);
     }
@@ -323,7 +388,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
 
         LastImageSequence++;
 
-        return orderDeliveryImage; 
+        return orderDeliveryImage;
     }
 
     public Result<OrderDeliveryImage> RemoveDeliveryImage(string imageName)
@@ -433,4 +498,5 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         Status = OrderStatus.StockReviewing;
         return Result.Success();
     }
+
 }

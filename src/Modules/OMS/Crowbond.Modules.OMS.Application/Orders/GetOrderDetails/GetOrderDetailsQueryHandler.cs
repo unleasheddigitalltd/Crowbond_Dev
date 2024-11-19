@@ -69,7 +69,7 @@ internal sealed class GetOrderDetailsQueryHandler(
                  ol.status AS {nameof(OrderLineResponse.LineStatus)}
              FROM oms.order_headers o
              JOIN oms.order_lines ol ON ol.order_header_id = o.id
-             WHERE o.id = @OrderHeaderId
+             WHERE o.id = @OrderHeaderId AND o.is_deleted = false
              """;
 
         Dictionary<Guid, OrderResponse> ordersDictionary = [];

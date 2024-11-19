@@ -14,13 +14,13 @@ public interface IOrderRepository
 
     void Insert(OrderHeader orderHeader);
 
-    void Remove(OrderHeader orderHeader);
-
     void AddLine(OrderLine line);
 
     void AddDelivery(OrderDelivery delivery);
 
     void AddDeliveryImage(OrderDeliveryImage image);
+
+    void Remove(OrderHeader orderHeader);
 
     void RemoveLine(OrderLine line);
 

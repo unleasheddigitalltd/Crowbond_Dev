@@ -6,66 +6,72 @@ using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Payments;
-using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Domain.Settings;
 
-namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
+namespace Crowbond.Modules.OMS.Application.Orders.UpdateOrder;
 
-internal sealed class CreateOrderCommandHandler(
+internal sealed class UpdateOrderCommandHandler(
     ICustomerApi customerApi,
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateOrderCommand, Guid>
+    : ICommandHandler<UpdateOrderCommand>
 {
-    public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
     {
         if (!Enum.IsDefined(typeof(PaymentMethod), request.PaymentMethod))
         {
-            return Result.Failure<Guid>(OrderErrors.InvalidPaymentMethod);
+            return Result.Failure(OrderErrors.InvalidPaymentMethod);
         }
 
         if (!Enum.IsDefined(typeof(DeliveryMethod), request.DeliveryMethod))
         {
-            return Result.Failure<Guid>(OrderErrors.InvalidDeliveryMethod);
+            return Result.Failure(OrderErrors.InvalidDeliveryMethod);
         }
 
-        CustomerForOrderResponse? customer = await customerApi.GetAsync(request.CustomerId, cancellationToken);
+        OrderHeader? orderHeader = await orderRepository.GetAsync(request.OrderId, cancellationToken);
+
+        if (orderHeader == null)
+        {
+            return Result.Failure(OrderErrors.NotFound(request.OrderId));
+        }
+
+        CustomerForOrderResponse? customer = await customerApi.GetAsync(orderHeader.CustomerId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.NotFound(request.CustomerId));
+            return Result.Failure(CustomerErrors.NotFound(orderHeader.CustomerId));
         }
 
         if (!Enum.IsDefined(typeof(DueDateCalculationBasis), customer.DueDateCalculationBasis))
         {
-            return Result.Failure<Guid>(OrderErrors.InvalidDueDateCalculationBasis);
+            return Result.Failure(OrderErrors.InvalidDueDateCalculationBasis);
         }
 
         if (!Enum.IsDefined(typeof(DeliveryFeeSetting), customer.DeliveryFeeSetting))
         {
-            return Result.Failure<Guid>(OrderErrors.InvalidDeliveryFeeSetting);
+            return Result.Failure(OrderErrors.InvalidDeliveryFeeSetting);
         }
 
         CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderAsync(request.CustomerOutletId, cancellationToken);
 
         if (outlet is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.OutletNotFound(request.CustomerOutletId));
+            return Result.Failure(CustomerErrors.OutletNotFound(request.CustomerOutletId));
         }
 
         Setting? setting = await settingRepository.GetAsync(cancellationToken);
 
         if (setting is null)
         {
-            return Result.Failure<Guid>(SettingErrors.NotFound);
+            return Result.Failure(SettingErrors.NotFound);
         }
 
         // check the outlet is belong to the customer
         if (outlet.CustomerId != customer.Id)
         {
-            return Result.Failure<Guid>(CustomerErrors.InvalidOutletForCustomer);
+            return Result.Failure(CustomerErrors.InvalidOutletForCustomer);
         }
 
         // get delivery charge
@@ -77,19 +83,8 @@ internal sealed class CreateOrderCommandHandler(
             _ => throw new NotImplementedException()
         };
 
-        Sequence? sequence = await orderRepository.GetSequenceAsync(cancellationToken);
 
-        if (sequence is null)
-        {
-            return Result.Failure<Guid>(OrderErrors.SequenceNotFound);
-        }
-
-
-        Result<OrderHeader> result = OrderHeader.Create(
-            sequence.GetNumber(),
-            null,
-            customer.Id,
-            customer.AccountNumber,
+        Result result = orderHeader.Update(
             customer.BusinessName,
             outlet.LocationName,
             outlet.FullName,
@@ -114,13 +109,11 @@ internal sealed class CreateOrderCommandHandler(
 
         if (result.IsFailure)
         {
-            return Result.Failure<Guid>(result.Error);
+            return Result.Failure(result.Error);
         }
-        
-        orderRepository.Insert(result.Value);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(result.Value.Id);
+        return Result.Success();
     }
 }
