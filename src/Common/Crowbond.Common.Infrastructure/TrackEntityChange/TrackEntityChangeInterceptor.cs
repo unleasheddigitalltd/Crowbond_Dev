@@ -1,5 +1,6 @@
 ﻿using Crowbond.Common.Application.Authentication;
 using Crowbond.Common.Domain;
+using Crowbond.Common.Infrastructure.Authentication;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -19,13 +20,13 @@ public sealed class TrackEntityChangeInterceptor(ICurrentUserContext currentUser
 
         IEnumerable<EntityEntry<ITrackable>> entries =
             eventData
-                .Context
-                .ChangeTracker
-                .Entries<ITrackable>();
+            .Context
+            .ChangeTracker
+            .Entries<ITrackable>();
 
-        foreach (EntityEntry<ITrackable> auditable in entries)
+        foreach (EntityEntry<ITrackable> entry in entries)
         {
-            auditable.Entity.ChangedBy = currentUserContext.UserId;
+            entry.Entity.ChangedBy = currentUserContext.UserId;
         }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
