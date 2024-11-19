@@ -30,11 +30,15 @@ internal sealed class AddOrderLineCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.NotFound(orderHeader.CustomerId, request.ProductId));
         }
 
+        if (customerProduct.IsBlacklisted)
+        {
+            return Result.Failure<Guid>(OrderErrors.ProductIsBlacklisted(request.ProductId));
+        }
+
         if (!Enum.IsDefined(typeof(TaxRateType), customerProduct.TaxRateType))
         {
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
-
 
         OrderLine? existingLine = orderHeader.Lines.SingleOrDefault(l => l.ProductId == request.ProductId);
 

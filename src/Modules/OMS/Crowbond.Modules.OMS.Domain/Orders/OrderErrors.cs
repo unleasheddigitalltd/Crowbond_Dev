@@ -1,4 +1,5 @@
 ﻿using Crowbond.Common.Domain;
+using MediatR;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
@@ -21,6 +22,9 @@ public static class OrderErrors
 
     public static Error NotAssignedToRouteTrip(Guid orderId) =>
         Error.NotFound("Orders.NotAssignedToRouteTrip", $"The order with the identifier {orderId} is not assigned to any route trip");
+    
+    public static Error ProductIsBlacklisted(Guid productId) =>
+        Error.NotFound("Orders.ProductIsBlacklisted", $"The product with the identifier {productId} is blacklisted");
 
     public static Error LogDateMismatch(Guid routeTripId) =>
         Error.NotFound("Orders.LogDateMismatch", $"Log entry date for route trip with the identifier {routeTripId} does not match today's date");

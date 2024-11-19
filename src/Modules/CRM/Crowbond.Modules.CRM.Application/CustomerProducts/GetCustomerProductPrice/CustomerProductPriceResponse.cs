@@ -13,4 +13,5 @@ public sealed record CustomerProductPriceResponse(
     Guid ProductGroupId,
     string ProductGroupName,
     decimal UnitPrice,
-    int TaxRateType);
+    int TaxRateType,
+    bool IsBlacklisted);

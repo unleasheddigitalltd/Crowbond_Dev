@@ -48,6 +48,11 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.NotFound(customer.Id, request.ProductId));
         }
 
+        if (customerProduct.IsBlacklisted)
+        {
+            return Result.Failure<Guid>(OrderErrors.ProductIsBlacklisted(request.ProductId));
+        }
+
         if (!Enum.IsDefined(typeof(TaxRateType), customerProduct.TaxRateType))
         {
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);

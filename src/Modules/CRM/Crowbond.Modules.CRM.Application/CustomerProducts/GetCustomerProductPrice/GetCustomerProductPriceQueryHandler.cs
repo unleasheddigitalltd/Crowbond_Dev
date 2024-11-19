@@ -47,7 +47,11 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                          ELSE pp.sale_price
                      END AS DECIMAL(10, 2)
                  ) AS {nameof(CustomerProductPriceResponse.UnitPrice)},
-                 p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)}
+                 p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)},
+                 CASE
+                    WHEN cpb.is_deleted = false THEN true
+                        ELSE false
+                END AS {nameof(CustomerProductPriceResponse.IsBlacklisted)} 
              FROM crm.products p
              LEFT JOIN crm.customer_products cp 
                  ON cp.product_id = p.id AND cp.customer_id = @CustomerId AND cp.is_active = true
@@ -57,6 +61,7 @@ internal sealed class GetCustomerProductPriceQueryHandler(
              INNER JOIN crm.customers c ON c.id = @CustomerId
              INNER JOIN crm.price_tiers pt ON c.price_tier_id = pt.id
              INNER JOIN crm.product_prices pp ON pp.price_tier_id = pt.id AND pp.product_id = p.id
+             LEFT JOIN crm.customer_product_blacklist cpb ON c.id = cpb.customer_id AND p.id = cpb.product_id AND cpb.is_deleted = false
              WHERE c.id = @CustomerId 
                AND p.id = @ProductId;
              """;
