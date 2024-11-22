@@ -5,12 +5,12 @@ using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsByCategory;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsBlacklist;
 
-internal sealed class GetCustomerProductsByCategoryQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetCustomerProductsByCategoryQuery, CustomerProductsResponse>
+internal sealed class GetCustomerProductsBlacklistQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    : IQueryHandler<GetCustomerProductsBlacklistQuery, CustomerProductsResponse>
 {
-    public async Task<Result<CustomerProductsResponse>> Handle(GetCustomerProductsByCategoryQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerProductsResponse>> Handle(GetCustomerProductsBlacklistQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -35,18 +35,14 @@ internal sealed class GetCustomerProductsByCategoryQueryHandler(IDbConnectionFac
                     c.name AS {nameof(CustomerProduct.CategoryName)},
                     b.name AS {nameof(CustomerProduct.BrandName)},
                     pg.name AS {nameof(CustomerProduct.ProductGroupName)},
-                    cp.fixed_price AS {nameof(CustomerProduct.FixedPrice)},
-                    cp.fixed_discount AS {nameof(CustomerProduct.FixedDiscount)},
                     cp.comments AS {nameof(CustomerProduct.Comments)},
-                    cp.effective_date AS {nameof(CustomerProduct.EffectiveDate)},
-                    cp.expiry_date AS {nameof(CustomerProduct.ExpiryDate)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
-                FROM crm.customer_products cp
+                FROM crm.customer_product_blacklist cp
                 INNER JOIN crm.products p ON cp.product_id = p.id
                 INNER JOIN crm.categories c ON p.category_id = c.id
                 INNER JOIN crm.brands b ON p.brand_id = b.id
                 INNER JOIN crm.product_groups pg ON p.product_group_id = pg.id
-                WHERE cp.customer_id = @CustomerId AND c.id = @CategoryId AND cp.is_active = true
+                WHERE cp.customer_id = @CustomerId AND is_deleted = false
                    AND (p.name ILIKE '%' || @Search || '%'
                        OR p.sku ILIKE '%' || @Search || '%'
                        OR b.name ILIKE '%' || @Search || '%'
@@ -62,22 +58,18 @@ internal sealed class GetCustomerProductsByCategoryQueryHandler(IDbConnectionFac
                 cp.{nameof(CustomerProduct.CategoryName)},
                 cp.{nameof(CustomerProduct.BrandName)},
                 cp.{nameof(CustomerProduct.ProductGroupName)},
-                cp.{nameof(CustomerProduct.FixedPrice)},
-                cp.{nameof(CustomerProduct.FixedDiscount)},
-                cp.{nameof(CustomerProduct.Comments)},
-                cp.{nameof(CustomerProduct.EffectiveDate)},
-                cp.{nameof(CustomerProduct.ExpiryDate)}
+                cp.{nameof(CustomerProduct.Comments)}
             FROM FilteredCustomerProducts cp
             WHERE cp.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY cp.RowNum;
 
             SELECT Count(*)
-            FROM crm.customer_products cp
+            FROM crm.customer_product_blacklist cp
             INNER JOIN crm.products p ON cp.product_id = p.id
             INNER JOIN crm.categories c ON p.category_id = c.id
             INNER JOIN crm.brands b ON p.brand_id = b.id
             INNER JOIN crm.product_groups pg ON p.product_group_id = pg.id
-            WHERE cp.customer_id = @CustomerId AND c.id = @CategoryId AND cp.is_active = true
+            WHERE cp.customer_id = @CustomerId AND is_deleted = false
                AND (p.name ILIKE '%' || @Search || '%'
                    OR p.sku ILIKE '%' || @Search || '%'
                    OR b.name ILIKE '%' || @Search || '%'

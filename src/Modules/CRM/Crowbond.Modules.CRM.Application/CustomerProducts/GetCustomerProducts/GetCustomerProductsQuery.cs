@@ -1,10 +1,9 @@
 ﻿using Crowbond.Common.Application.Messaging;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsByCategory;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
 
-public sealed record GetCustomerProductsByCategoryQuery(
+public sealed record GetCustomerProductsQuery(
     Guid CustomerId,
-    Guid CategoryId, 
     string Search,
     string Sort,
     string Order,
