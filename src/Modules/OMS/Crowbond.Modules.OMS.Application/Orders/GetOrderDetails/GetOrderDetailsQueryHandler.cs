@@ -7,9 +7,7 @@ using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.Orders.GetOrderDetails;
 
-internal sealed class GetOrderDetailsQueryHandler(
-    IDbConnectionFactory dbConnectionFactory,
-    InventoryService inventoryService)
+internal sealed class GetOrderDetailsQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetOrderDetailsQuery, OrderResponse>
 {
     public async Task<Result<OrderResponse>> Handle(GetOrderDetailsQuery request, CancellationToken cancellationToken)
@@ -53,55 +51,16 @@ internal sealed class GetOrderDetailsQueryHandler(
                  o.original_source AS {nameof(OrderResponse.OriginalSource)},
                  o.external_order_ref AS {nameof(OrderResponse.ExternalOrderRef)},
                  o.tags AS {nameof(OrderResponse.Tags)},
-                 o.status AS {nameof(OrderResponse.Status)},
-                 ol.id AS {nameof(OrderLineResponse.OrderLineId)},
-                 ol.order_header_id AS {nameof(OrderLineResponse.OrderHeaderId)},
-                 ol.product_id AS {nameof(OrderLineResponse.ProductId)},
-                 ol.product_sku AS {nameof(OrderLineResponse.ProductSku)},
-                 ol.product_name AS {nameof(OrderLineResponse.ProductName)},
-                 ol.unit_of_measure_name AS {nameof(OrderLineResponse.UnitOfMeasureName)},
-                 ol.unit_price AS {nameof(OrderLineResponse.UnitPrice)},
-                 ol.qty AS {nameof(OrderLineResponse.Qty)},
-                 ol.sub_total AS {nameof(OrderLineResponse.SubTotal)},
-                 ol.tax AS {nameof(OrderLineResponse.Tax)},
-                 ol.line_total AS {nameof(OrderLineResponse.LineTotal)},
-                 ol.tax_rate_type AS {nameof(OrderLineResponse.TaxRateType)},
-                 ol.status AS {nameof(OrderLineResponse.LineStatus)}
+                 o.status AS {nameof(OrderResponse.Status)}
              FROM oms.order_headers o
-             JOIN oms.order_lines ol ON ol.order_header_id = o.id
              WHERE o.id = @OrderHeaderId AND o.is_deleted = false
              """;
 
-        Dictionary<Guid, OrderResponse> ordersDictionary = [];
-        await connection.QueryAsync<OrderResponse, OrderLineResponse, OrderResponse>(
-            sql,
-            (order, orderLine) =>
-            {
-                if (ordersDictionary.TryGetValue(order.Id, out OrderResponse? existingEvent))
-                {
-                    order = existingEvent;
-                }
-                else
-                {
-                    ordersDictionary.Add(order.Id, order);
-                }
+        OrderResponse? orderResponse = await connection.QuerySingleOrDefaultAsync<OrderResponse>(sql, request);
 
-                order.OrderLines.Add(orderLine);
-
-                return order;
-            },
-            request,
-            splitOn: nameof(OrderLineResponse.OrderLineId));
-
-        if (!ordersDictionary.TryGetValue(request.OrderHeaderId, out OrderResponse orderResponse))
+        if (orderResponse is null)
         {
             return Result.Failure<OrderResponse>(OrderErrors.NotFound(request.OrderHeaderId));
-        }
-
-        foreach (OrderLineResponse line in orderResponse.OrderLines)
-        {
-            decimal availableQty = await inventoryService.GetAvailableQuantityAsync(line.ProductId, cancellationToken);
-            line.AvailableQty = Math.Min(line.Qty , availableQty);
         }
 
         return orderResponse;

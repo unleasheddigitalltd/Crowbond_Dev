@@ -80,7 +80,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
     public string? ExternalOrderRef { get; private set; }
 
-    public string? Tags { get; private set; }
+    public string[] Tags { get; private set; }
 
     public int LastImageSequence { get; private set; }
 
@@ -168,7 +168,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             DueDaysForInvoice = dueDaysForInvoice,
             PaymentMethod = paymentMethod,
             CustomerComment = customerComment,
-            Status = OrderStatus.Pending
+            Status = OrderStatus.Pending,
+            Tags = []
         };
 
         return orderHeader;
@@ -499,4 +500,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         return Result.Success();
     }
 
+    public void UpdateTags(string[] tags)
+    {
+        Tags = tags;
+    }
 }

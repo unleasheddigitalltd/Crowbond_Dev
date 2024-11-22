@@ -38,8 +38,5 @@ public sealed record OrderResponse(
     string? CustomerComment,
     string? OriginalSource,
     string? ExternalOrderRef,
-    string? Tags,
-    OrderStatus Status)
-{
-    public List<OrderLineResponse> OrderLines { get; } = [];
-}
+    string Tags,
+    OrderStatus Status);
