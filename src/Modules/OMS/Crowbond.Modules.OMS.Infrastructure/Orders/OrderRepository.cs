@@ -33,7 +33,7 @@ internal sealed class OrderRepository(OmsDbContext context) : IOrderRepository
 
     public async Task<OrderLine?> GetLineAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.OrderLines.Include(ol => ol.Header).SingleOrDefaultAsync(l => l.Id == id, cancellationToken);
+        return await context.OrderLines.Include(ol => ol.Header).ThenInclude(o => o.Lines).SingleOrDefaultAsync(l => l.Id == id, cancellationToken);
     }
 
     public void Remove(OrderHeader orderHeader)
