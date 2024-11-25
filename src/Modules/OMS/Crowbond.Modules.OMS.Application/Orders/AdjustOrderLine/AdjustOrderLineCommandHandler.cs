@@ -22,12 +22,12 @@ internal sealed class AdjustOrderLineCommandHandler(
 
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
-        if (availableQty >= orderLine.Qty)
+        if (availableQty >= orderLine.OrderedQty)
         {
             return Result.Failure(OrderErrors.NoShortage);
         }
 
-        Result result = orderLine.Header.AdjustLineQty(orderLine.Id, availableQty);
+        Result result = orderLine.Header.AdjustLineOrderedQty(orderLine.Id, availableQty);
 
         if (result.IsFailure)
         {

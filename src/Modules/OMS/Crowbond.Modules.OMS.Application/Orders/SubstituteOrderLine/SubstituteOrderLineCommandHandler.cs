@@ -28,7 +28,7 @@ internal sealed class SubstituteOrderLineCommandHandler(
 
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
-        if (availableQty >= orderLine.Qty)
+        if (availableQty >= orderLine.OrderedQty)
         {
             return Result.Failure<Guid>(OrderErrors.NoShortage);
         }
@@ -70,7 +70,7 @@ internal sealed class SubstituteOrderLineCommandHandler(
             customerProduct.ProductGroupId,
             customerProduct.ProductGroupName,
             customerProduct.UnitPrice,
-            orderLine.Qty,
+            request.Qty,
             (TaxRateType)customerProduct.TaxRateType);
 
         if (newOrderLineResult.IsFailure)

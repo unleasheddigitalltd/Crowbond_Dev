@@ -32,7 +32,7 @@ internal sealed class OrderAcceptedDomainEventHandler(ISender sender, IEventBus 
                 result.Value.Id,
                 result.Value.OrderNo,
                 result.Value.Lines.Select(l => new OrderAcceptedIntegrationEvent.OrderLine(
-                    l.ProductId, l.Qty)).ToList()),
+                    l.ProductId, l.OrderedQty)).ToList()),
             cancellationToken);
     }
 }

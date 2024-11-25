@@ -251,7 +251,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         Guid productGroupId,
         string productGroupName,
         decimal unitPrice,
-        decimal qty,
+        decimal orderedQty,
         TaxRateType taxRateType)
     {
         if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
@@ -271,7 +271,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             productGroupId,
             productGroupName,
             unitPrice,
-            qty,
+            orderedQty,
             taxRateType);
 
         _lines.Add(line);
@@ -301,24 +301,81 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         return Result.Success();
     }
 
-    public Result AdjustLineQty(Guid orderLineId, decimal qty)
+    public Result AdjustLineOrderedQty(Guid orderLineId, decimal orderedQty)
     {
         if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
         {
             return Result.Failure(OrderErrors.NotStockReviewing);
         }
 
-        if (qty < 0)
+        if (orderedQty < 0)
         {
             return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
         }
+
         OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
 
         if (line is null)
         {
             return Result.Failure(OrderErrors.LineNotFound(orderLineId));
         }
-        line.Update(qty);
+
+        line.UpdateOrderedQty(orderedQty);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+    
+    public Result AdjustLineActualQty(Guid orderLineId, decimal actualQty)
+    {
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure(OrderErrors.NotStockReviewing);
+        }
+
+        if (actualQty < 0)
+        {
+            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        line.UpdateActualQty(actualQty);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+
+    public Result DeliverLine(Guid orderLineId, decimal deliveredQty, Guid? rejectReasonId, string? deliveryComments)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderDelivery>(OrderErrors.NotShipped);
+        }
+
+        if (deliveredQty < 0)
+        {
+            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        if (line.Status != OrderLineStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.LineNotPending);
+        }
+
+        line.Deliver(deliveredQty, rejectReasonId, deliveryComments);
         UpdateTotalAmount();
 
         return Result.Success();
@@ -326,8 +383,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
     public void UpdateTotalAmount()
     {
-        OrderTax = _lines.Sum(line => line.Tax);
-        OrderAmount = _lines.Sum(line => line.LineTotal) + DeliveryCharge;
+        OrderTax = _lines.Sum(line => line.Tax - line.DeductionTax ?? 0);
+        OrderAmount = _lines.Sum(line => line.LineTotal - line.DeductionLineTotal ?? 0) + DeliveryCharge;
     }
 
     public Result Accept()
@@ -347,6 +404,11 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         if (Status != OrderStatus.Shipped)
         {
             return Result.Failure<OrderDelivery>(OrderErrors.NotShipped);
+        }
+
+        if (_lines.Any(l => l.Status != OrderLineStatus.Delivered))
+        {
+            return Result.Failure<OrderDelivery>(OrderErrors.PendingOrderLines);
         }
 
         var deliveryDate = DateOnly.FromDateTime(utcNow);

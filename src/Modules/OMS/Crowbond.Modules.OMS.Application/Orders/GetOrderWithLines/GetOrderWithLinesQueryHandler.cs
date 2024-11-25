@@ -22,7 +22,7 @@ internal sealed class GetOrderWithLinesQueryHandler(IDbConnectionFactory dbConne
                  l.id AS {nameof(OrderLineResponse.OrderLineId)},
                  l.order_header_id AS {nameof(OrderLineResponse.OrderHeaderId)},
                  l.product_id AS {nameof(OrderLineResponse.ProductId)},
-                 l.qty AS {nameof(OrderLineResponse.Qty)}
+                 l.ordered_qty AS {nameof(OrderLineResponse.OrderedQty)}
              FROM oms.order_headers o
              INNER JOIN oms.order_lines l ON o.id = l.order_header_id
              WHERE o.id = @OrderHeaderId

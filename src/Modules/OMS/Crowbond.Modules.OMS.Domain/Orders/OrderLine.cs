@@ -36,17 +36,32 @@ public sealed class OrderLine: Entity
 
     public decimal UnitPrice { get; private set; }
 
-    public decimal Qty { get; private set; }
+    public decimal OrderedQty { get; private set; }
+
+    public decimal? ActualQty { get; private set; }
+
+    public decimal? DeliveredQty { get; private set; }
 
     public decimal SubTotal { get; private set; }
 
+    public decimal? DeductionSubTotal { get; private set; }
+
     public decimal Tax { get; private set; }
 
+    public decimal? DeductionTax { get; private set; }
+
     public decimal LineTotal { get; private set; }
+
+    public decimal? DeductionLineTotal { get; private set; }
 
     public TaxRateType TaxRateType { get; private set; } 
 
     public OrderLineStatus Status { get; private set; }
+
+    public Guid? RejectReasonId { get; private set; }
+
+    public string? DeliveryComments { get; private set; }
+
 
     public OrderHeader Header { get; }
 
@@ -62,7 +77,7 @@ public sealed class OrderLine: Entity
         Guid productGroupId,
         string productGroupName,
         decimal unitPrice,
-        decimal qty,
+        decimal orderedQty,
         TaxRateType taxRateType)
     {
         var orderLine = new OrderLine
@@ -80,23 +95,49 @@ public sealed class OrderLine: Entity
             ProductGroupName = productGroupName,
             UnitPrice = unitPrice,
             TaxRateType = taxRateType,
-            Qty = qty,
+            OrderedQty = orderedQty,
             Status = OrderLineStatus.Pending
         };
 
-        orderLine.SubTotal = orderLine.UnitPrice * orderLine.Qty;
+        orderLine.SubTotal = orderLine.UnitPrice * orderLine.OrderedQty;
         orderLine.Tax = orderLine.SubTotal * orderLine.GetTaxRate(orderLine.TaxRateType);
         orderLine.LineTotal = orderLine.SubTotal + orderLine.Tax;
 
         return orderLine;
     }
 
-    internal void Update(decimal qty)
+    internal void UpdateOrderedQty(decimal orderedQty)
     {
-        Qty = qty;
-        SubTotal = UnitPrice * Qty;
+        OrderedQty = orderedQty;
+        SubTotal = UnitPrice * OrderedQty;
         Tax = SubTotal * GetTaxRate(TaxRateType);
         LineTotal = SubTotal + Tax;
+    }
+
+    internal void UpdateActualQty(decimal actualQty)
+    {
+        ActualQty = actualQty;
+        SubTotal = UnitPrice * actualQty;
+        Tax = SubTotal * GetTaxRate(TaxRateType);
+        LineTotal = SubTotal + Tax;
+    }
+    
+    internal void Deliver(decimal deliveredQty, Guid? rejectReasonId, string? deliveryComments)
+    {
+        if (Status != OrderLineStatus.Pending)
+        {
+            return;
+        }
+
+        DeliveredQty = deliveredQty;
+        DeductionSubTotal = UnitPrice * (ActualQty - DeliveredQty);
+        DeductionTax = DeductionSubTotal * GetTaxRate(TaxRateType);
+        DeductionLineTotal = DeductionSubTotal + DeductionTax;
+
+        RejectReasonId = rejectReasonId;
+        DeliveryComments = deliveryComments;
+
+        Status = deliveredQty == 0 ? OrderLineStatus.Returned : OrderLineStatus.Delivered;
     }
 
     private decimal GetTaxRate(TaxRateType taxRateType)

@@ -24,7 +24,7 @@ internal sealed class AcceptOrderCommandHandler(
         {
             decimal availableQty = await inventoryService.GetAvailableQuantityAsync(line.ProductId, cancellationToken);
 
-            if (availableQty < line.Qty)
+            if (availableQty < line.OrderedQty)
             {
                 return Result.Failure(OrderErrors.LineHasShortage(line.Id));
             }

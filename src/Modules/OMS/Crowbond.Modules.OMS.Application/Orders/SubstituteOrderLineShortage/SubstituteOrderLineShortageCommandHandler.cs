@@ -28,7 +28,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
 
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
-        if (availableQty >= orderLine.Qty)
+        if (availableQty >= orderLine.OrderedQty)
         {
             return Result.Failure<Guid>(OrderErrors.NoShortage);
         }
@@ -70,7 +70,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             customerProduct.ProductGroupId,
             customerProduct.ProductGroupName,
             customerProduct.UnitPrice,
-            orderLine.Qty - availableQty,
+            orderLine.OrderedQty - availableQty,
             (TaxRateType)customerProduct.TaxRateType);
 
         if (newOrderLineResult.IsFailure)
@@ -81,7 +81,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
         orderRepository.AddLine(newOrderLineResult.Value);
 
         // Addjust current line qty.
-        Result result = orderLine.Header.AdjustLineQty(orderLine.Id, availableQty);
+        Result result = orderLine.Header.AdjustLineOrderedQty(orderLine.Id, availableQty);
 
         if (result.IsFailure)
         {

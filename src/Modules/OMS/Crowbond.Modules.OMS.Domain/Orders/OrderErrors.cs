@@ -52,6 +52,9 @@ public static class OrderErrors
     
     public static readonly Error NotPending = 
         Error.Problem("Orders.NotPending", "The order is not in pending status");
+    
+    public static readonly Error LineNotPending = 
+        Error.Problem("Orders.LineNotPending", "The order line is not in pending status");
 
     public static readonly Error NotStockReviewing = 
         Error.Problem("Orders.NotStockReviewing", "The order is not in stock reviewing status");
@@ -67,6 +70,9 @@ public static class OrderErrors
 
     public static readonly Error IsDelivered =
         Error.Problem("Orders.IsDelivered", "The order is in delivered status");
+    
+    public static readonly Error PendingOrderLines =
+        Error.Problem("Orders.PendingOrderLines", "Some order lines are still pending delivery");
 
     public static readonly Error NoDeliveryRecordFound = 
         Error.Problem("Orders.NoDeliveryRecordFound", "No delivery record was found.");
@@ -76,6 +82,9 @@ public static class OrderErrors
 
     public static readonly Error InvalidOrderLineQuantity = 
         Error.Problem("Orders.InvalidOrderLineQuantity", "Order line quantity must be greater than zero.");
+    
+    public static readonly Error MissingRejectReason = 
+        Error.Problem("Orders.MissingRejectReason", "A reject reason must be provided when the delivered quantity differs from the actual quantity.");
     
     public static readonly Error NoFilesUploaded = 
         Error.Problem("Orders.NoFilesUploaded", "No files uploaded");

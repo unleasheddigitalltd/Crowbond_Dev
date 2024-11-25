@@ -7,7 +7,6 @@ namespace Crowbond.Modules.OMS.Application.Orders.RemoveOrderLine;
 
 internal sealed class RemoveOrderLineCommandHandler(
     IOrderRepository orderRepository,
-    InventoryService inventoryService,
     IUnitOfWork unitOfWork)
     : ICommandHandler<RemoveOrderLineCommand>
 {
@@ -18,13 +17,6 @@ internal sealed class RemoveOrderLineCommandHandler(
         if (orderLine is null)
         {
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));
-        }
-
-        decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
-
-        if (availableQty >= orderLine.Qty)
-        {
-            return Result.Failure(OrderErrors.NoShortage);
         }
 
         Result result = orderLine.Header.RemoveLine(orderLine.Id);

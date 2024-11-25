@@ -19,7 +19,7 @@ internal sealed class UpdateOrderLineCommandHandler(
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
-        Result result = orderLine.Header.AdjustLineQty(orderLine.Id, request.Qty);
+        Result result = orderLine.Header.AdjustLineOrderedQty(orderLine.Id, request.Qty);
 
         if (result.IsFailure)
         {
