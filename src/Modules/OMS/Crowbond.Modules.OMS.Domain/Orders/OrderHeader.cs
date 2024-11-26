@@ -310,7 +310,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
         if (orderedQty < 0)
         {
-            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+            return Result.Failure(OrderErrors.InvalidQuantity);
         }
 
         OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
@@ -335,7 +335,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
         if (actualQty < 0)
         {
-            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+            return Result.Failure(OrderErrors.InvalidQuantity);
         }
 
         OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
@@ -351,7 +351,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         return Result.Success();
     }
 
-    public Result DeliverLine(Guid orderLineId, decimal deliveredQty, Guid? rejectReasonId, string? deliveryComments)
+    public Result DeliverLine(Guid orderLineId, decimal deliveredQty)
     {
         if (Status != OrderStatus.Shipped)
         {
@@ -360,7 +360,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
         if (deliveredQty < 0)
         {
-            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+            return Result.Failure(OrderErrors.InvalidQuantity);
         }
 
         OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
@@ -370,15 +370,64 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             return Result.Failure(OrderErrors.LineNotFound(orderLineId));
         }
 
-        if (line.Status != OrderLineStatus.Pending)
+        Result result = line.Deliver(deliveredQty);
+
+        if (result.IsFailure)
         {
-            return Result.Failure(OrderErrors.LineNotPending);
+            return result;
         }
 
-        line.Deliver(deliveredQty, rejectReasonId, deliveryComments);
         UpdateTotalAmount();
 
         return Result.Success();
+    }
+
+    public Result<OrderLineReject> AddRejected(Guid orderLineId, decimal qty, Guid rejectReasonId, string? comments)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.NotShipped);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        Result<OrderLineReject> rejectResult = line.AddReaject(qty, rejectReasonId, comments);
+
+        if (rejectResult.IsFailure)
+        {
+            return Result.Failure<OrderLineReject>(rejectResult.Error);
+        }
+
+        return Result.Success(rejectResult.Value);
+    }
+
+    public Result<OrderLineReject> RemoveReject(Guid orderLineId, Guid orderLineRejectId)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.NotShipped);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        Result<OrderLineReject> rejectResult = line.RemoveReaject(orderLineRejectId);
+
+        if (rejectResult.IsFailure)
+        {
+            return Result.Failure<OrderLineReject>(rejectResult.Error);
+        }
+
+        return Result.Success(rejectResult.Value);
     }
 
     public void UpdateTotalAmount()

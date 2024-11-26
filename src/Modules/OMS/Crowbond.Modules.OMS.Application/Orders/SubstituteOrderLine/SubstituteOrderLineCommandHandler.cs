@@ -26,6 +26,13 @@ internal sealed class SubstituteOrderLineCommandHandler(
             return Result.Failure<Guid>(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
+        {
+            return Result.Failure<Guid>(OrderErrors.NotFound(orderLine.OrderHeaderId));
+        }
+
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
         if (availableQty >= orderLine.OrderedQty)
@@ -34,11 +41,11 @@ internal sealed class SubstituteOrderLineCommandHandler(
         }
 
         // Add substitute line.
-        CustomerForOrderResponse? customer = await customerApi.GetAsync(orderLine.Header.CustomerId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetAsync(order.CustomerId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.NotFound(orderLine.Header.CustomerId));
+            return Result.Failure<Guid>(CustomerErrors.NotFound(order.CustomerId));
         }
 
         CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(customer.Id, request.ProductId, cancellationToken);
@@ -58,7 +65,7 @@ internal sealed class SubstituteOrderLineCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
-        Result<OrderLine> newOrderLineResult = orderLine.Header.AddLine(
+        Result<OrderLine> newOrderLineResult = order.AddLine(
             customerProduct.ProductId,
             customerProduct.ProductSku,
             customerProduct.ProductName,
@@ -81,7 +88,7 @@ internal sealed class SubstituteOrderLineCommandHandler(
         orderRepository.AddLine(newOrderLineResult.Value);
 
         // remove current line qty.
-        Result result = orderLine.Header.RemoveLine(orderLine.Id);
+        Result result = order.RemoveLine(orderLine.Id);
 
         if (result.IsFailure)
         {

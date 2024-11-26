@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.OMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(OmsDbContext))]
-    partial class OmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241126125604_Add_OrderLineReject_Table")]
+    partial class Add_OrderLineReject_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1477,12 +1480,14 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderLine", b =>
                 {
-                    b.HasOne("Crowbond.Modules.OMS.Domain.Orders.OrderHeader", null)
+                    b.HasOne("Crowbond.Modules.OMS.Domain.Orders.OrderHeader", "Header")
                         .WithMany("Lines")
                         .HasForeignKey("OrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_order_lines_order_headers_order_header_id");
+
+                    b.Navigation("Header");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.OMS.Domain.Orders.OrderLineReject", b =>

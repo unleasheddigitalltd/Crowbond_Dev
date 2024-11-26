@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.OMS.Presentation.Orders;
+﻿namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public enum OrderLineRejectResponsibility
 {

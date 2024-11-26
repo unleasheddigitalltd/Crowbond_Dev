@@ -5,7 +5,7 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public sealed class OrderLine: Entity
 {
-
+    private readonly List<OrderLineReject> _rejects = new();
     private OrderLine()
     {
     }
@@ -58,12 +58,7 @@ public sealed class OrderLine: Entity
 
     public OrderLineStatus Status { get; private set; }
 
-    public Guid? RejectReasonId { get; private set; }
-
-    public string? DeliveryComments { get; private set; }
-
-
-    public OrderHeader Header { get; }
+    public IReadOnlyCollection<OrderLineReject> Rejects => _rejects;
 
     internal static OrderLine Create(
         Guid productId,
@@ -122,11 +117,16 @@ public sealed class OrderLine: Entity
         LineTotal = SubTotal + Tax;
     }
     
-    internal void Deliver(decimal deliveredQty, Guid? rejectReasonId, string? deliveryComments)
+    internal Result Deliver(decimal deliveredQty)
     {
         if (Status != OrderLineStatus.Pending)
         {
-            return;
+            return Result.Failure(OrderErrors.LineNotPending);
+        }
+
+        if (deliveredQty != ActualQty - _rejects.Sum(r => r.Qty))
+        {
+            return Result.Failure(OrderErrors.InvalidDeliveryQuantity);
         }
 
         DeliveredQty = deliveredQty;
@@ -134,10 +134,45 @@ public sealed class OrderLine: Entity
         DeductionTax = DeductionSubTotal * GetTaxRate(TaxRateType);
         DeductionLineTotal = DeductionSubTotal + DeductionTax;
 
-        RejectReasonId = rejectReasonId;
-        DeliveryComments = deliveryComments;
+        Status = DeliveredQty == 0 ? OrderLineStatus.Returned : OrderLineStatus.Delivered;
 
-        Status = deliveredQty == 0 ? OrderLineStatus.Returned : OrderLineStatus.Delivered;
+        return Result.Success();
+    }
+
+    internal Result<OrderLineReject> AddReaject(decimal rejectQty, Guid rejectReasonId, string? comments)
+    {
+        if (Status != OrderLineStatus.Pending)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotPending);
+        }
+
+        if (rejectQty < 0)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.InvalidQuantity);
+        }
+
+        var reject = OrderLineReject.Create(rejectQty, rejectReasonId, comments);
+        _rejects.Add(reject);
+
+        return Result.Success(reject);
+    }
+
+    internal Result<OrderLineReject> RemoveReaject(Guid orderLineRejectId)
+    {
+        if (Status != OrderLineStatus.Pending)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotPending);
+        }
+
+        OrderLineReject reject = _rejects.SingleOrDefault(r => r.Id == orderLineRejectId);
+
+        if (reject is null)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineRejectNotFound(orderLineRejectId));
+        }
+
+        _rejects.Remove(reject);
+        return Result.Success(reject);
     }
 
     private decimal GetTaxRate(TaxRateType taxRateType)

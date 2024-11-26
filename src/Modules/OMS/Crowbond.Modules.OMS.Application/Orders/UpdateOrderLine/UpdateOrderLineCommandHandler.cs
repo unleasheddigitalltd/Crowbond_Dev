@@ -19,7 +19,14 @@ internal sealed class UpdateOrderLineCommandHandler(
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
-        Result result = orderLine.Header.AdjustLineOrderedQty(orderLine.Id, request.Qty);
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
+        {
+            return Result.Failure(OrderErrors.NotFound(orderLine.OrderHeaderId));
+        }
+
+        Result result = order.AdjustLineOrderedQty(orderLine.Id, request.Qty);
 
         if (result.IsFailure)
         {

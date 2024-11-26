@@ -1,4 +1,6 @@
-﻿namespace Crowbond.Modules.OMS.Application.RouteTrips.GetRouteTripOrders;
+﻿using Crowbond.Modules.OMS.Domain.Orders;
+
+namespace Crowbond.Modules.OMS.Application.RouteTrips.GetRouteTripOrders;
 
 public sealed record OrderLineResponse(
         Guid OrderLineId,
@@ -6,4 +8,7 @@ public sealed record OrderLineResponse(
         Guid ProductId,
         string ProductSku,
         string ProductName,
-        decimal Qty);
+        decimal OrderedQty,
+        decimal ActualQty,
+        decimal DeliveredQty,
+        OrderLineStatus Status);

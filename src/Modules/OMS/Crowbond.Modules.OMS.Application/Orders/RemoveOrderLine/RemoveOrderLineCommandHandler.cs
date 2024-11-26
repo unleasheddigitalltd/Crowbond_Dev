@@ -19,7 +19,14 @@ internal sealed class RemoveOrderLineCommandHandler(
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
-        Result result = orderLine.Header.RemoveLine(orderLine.Id);
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
+        {
+            return Result.Failure(OrderErrors.NotFound(orderLine.OrderHeaderId));
+        }
+
+        Result result = order.RemoveLine(orderLine.Id);
 
         if (result.IsFailure)
         {

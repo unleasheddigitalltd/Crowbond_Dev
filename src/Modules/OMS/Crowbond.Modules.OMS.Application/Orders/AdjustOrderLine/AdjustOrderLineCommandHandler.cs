@@ -20,6 +20,13 @@ internal sealed class AdjustOrderLineCommandHandler(
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
+        {
+            return Result.Failure(OrderErrors.NotFound(orderLine.OrderHeaderId));
+        }
+
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
         if (availableQty >= orderLine.OrderedQty)
@@ -27,7 +34,7 @@ internal sealed class AdjustOrderLineCommandHandler(
             return Result.Failure(OrderErrors.NoShortage);
         }
 
-        Result result = orderLine.Header.AdjustLineOrderedQty(orderLine.Id, availableQty);
+        Result result = order.AdjustLineOrderedQty(orderLine.Id, availableQty);
 
         if (result.IsFailure)
         {

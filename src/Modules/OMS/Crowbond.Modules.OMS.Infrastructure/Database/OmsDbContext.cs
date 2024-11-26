@@ -31,6 +31,8 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
     internal DbSet<Sequence> Sequences { get; set; }
     internal DbSet<OrderHeader> OrderHeaders {  get; set; }
     internal DbSet<OrderLine> OrderLines {  get; set; }
+    internal DbSet<OrderLineReject> OrderLineRejects {  get; set; }
+    internal DbSet<OrderLineRejectReason> OrderLineRejectReasons {  get; set; }
     internal DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
     internal DbSet<PurchaseOrderHeader> PurchaseOrderHeaders { get; set; }
     internal DbSet<Driver> Drivers { get; set; }
@@ -64,6 +66,8 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new PurchaseOrderLineConfiguration());
         modelBuilder.ApplyConfiguration(new OrderHeaderConfiguratin());
         modelBuilder.ApplyConfiguration(new OrderLineConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderLineRejectConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderLineRejectReasonConfiguration());
         modelBuilder.ApplyConfiguration(new DriverConfiguration());
         modelBuilder.ApplyConfiguration(new VehicleConfiguration());
         modelBuilder.ApplyConfiguration(new RouteConfiguration());

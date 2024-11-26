@@ -115,6 +115,7 @@ public sealed class Permission
     public static readonly Permission AcceptOrders = new("orders:accept");
     public static readonly Permission DeliverOrders = new("orders:deliver");
     public static readonly Permission ReviewOrderLine = new ("order-lines:review");
+    public static readonly Permission GetOrderLineRejectReasons = new ("order-line-reject-reasons:read");
 
     public Permission(string code)
     {

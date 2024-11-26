@@ -14,20 +14,16 @@ internal sealed class DeliverOrderLine : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("orders/lines/{id}/deliver", async (Guid id, Request request, IDriverContext driverContext, ISender sender) =>
+        app.MapPut("orders/lines/{id}/deliver", async (Guid id, OrderLineRequest request, IDriverContext driverContext, ISender sender) =>
         {
             Result result = await sender.Send(new DeliverOrderLineCommand(
                 id, 
                 driverContext.DriverId,
-                request.DeliveredQty,
-                request.RejectReasonId,
-                request.DeliveryComments));
+                request));
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.DeliverOrders)
             .WithTags(Tags.Orders);
     }
-
-    private sealed record Request(decimal DeliveredQty, Guid? RejectReasonId, string? DeliveryComments);
 }

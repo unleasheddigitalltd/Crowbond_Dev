@@ -11,6 +11,12 @@ public static class OrderErrors
     public static Error LineNotFound(Guid orderLineId) =>
         Error.NotFound("Orders.LineNotFound", $"The order line with the identifier {orderLineId} was not found");
     
+    public static Error LineRejectNotFound(Guid orderLineRejectId) =>
+        Error.NotFound("Orders.LineRejectNotFound", $"The order line reject with the identifier {orderLineRejectId} was not found");
+    
+    public static Error LineRejectResultNotFound(Guid orderLineRejectResultId) =>
+        Error.NotFound("Orders.LineRejectResultNotFound", $"The order line reject result with the identifier {orderLineRejectResultId} was not found");
+    
     public static Error LineForProductExists(Guid productId) =>
         Error.NotFound("Orders.LineForProductExists", $"An order line for the product with the identifier {productId} already exists");
     
@@ -80,8 +86,11 @@ public static class OrderErrors
     public static readonly Error NoShortage = 
         Error.Problem("Orders.NoShortage", "There is no shortage for this product.");
 
-    public static readonly Error InvalidOrderLineQuantity = 
-        Error.Problem("Orders.InvalidOrderLineQuantity", "Order line quantity must be greater than zero.");
+    public static readonly Error InvalidQuantity = 
+        Error.Problem("Orders.InvalidQuantity", "The quantity must be greater than zero.");
+    
+    public static readonly Error InvalidDeliveryQuantity = 
+        Error.Problem("Orders.InvalidDeliveryQuantity", "The delivered quantity does not match the expected quantity after accounting for rejected items.");
     
     public static readonly Error MissingRejectReason = 
         Error.Problem("Orders.MissingRejectReason", "A reject reason must be provided when the delivered quantity differs from the actual quantity.");

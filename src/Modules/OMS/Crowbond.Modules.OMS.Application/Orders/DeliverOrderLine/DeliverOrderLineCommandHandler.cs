@@ -36,23 +36,25 @@ internal sealed class DeliverOrderLineCommandHandler(
             return Result.Failure(OrderErrors.LineNotFound(request.OrderLineId));            
         }
 
-        if (orderLine.ActualQty != request.DeliveredQty && request.RejectReasonId == null)
+
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
         {
-            return Result.Failure(OrderErrors.MissingRejectReason);            
+            return Result.Failure(OrderErrors.NotFound(orderLine.OrderHeaderId));
         }
 
-        OrderHeader orderHeader = orderLine.Header;
         // check order is assigned to a route trip.
-        if (orderHeader.RouteTripId is null)
+        if (order.RouteTripId is null)
         {
-            return Result.Failure<Guid>(OrderErrors.NotAssignedToRouteTrip(orderHeader.Id));
+            return Result.Failure<Guid>(OrderErrors.NotAssignedToRouteTrip(orderLine.OrderHeaderId));
         }
 
-        RouteTrip? routeTrip = await routeTripRepository.GetAsync((Guid)orderHeader.RouteTripId, cancellationToken);
+        RouteTrip? routeTrip = await routeTripRepository.GetAsync((Guid)order.RouteTripId, cancellationToken);
 
         if (routeTrip == null)
         {
-            return Result.Failure<Guid>(RouteTripErrors.NotFound((Guid)orderHeader.RouteTripId));
+            return Result.Failure<Guid>(RouteTripErrors.NotFound((Guid)order.RouteTripId));
         }
 
         RouteTripLog? routeTripLog = await routeTripLogRepository.GetActiveByDateAndDriverAndRouteTrip(currevtDate, routeTrip.Id, driver.Id, cancellationToken);
@@ -74,7 +76,27 @@ internal sealed class DeliverOrderLineCommandHandler(
             return Result.Failure<Guid>(RouteTripErrors.NotAvailable(routeTrip.Id));
         }
 
-        Result result = orderHeader.DeliverLine(orderLine.Id, request.DeliveredQty, request.RejectReasonId, request.DeliveryComments);
+        foreach (OrderLineRejectRequest reject in request.OrderLine.Rejects)
+        {
+            OrderLineRejectReason? rejectReason = await orderRepository.GetLineRejectReasonAsync(reject.RejectReasonId, cancellationToken);
+
+            if (rejectReason is null)
+            {
+                return Result.Failure<Guid>(OrderErrors.LineRejectResultNotFound(reject.RejectReasonId));
+            }
+
+            Result<OrderLineReject> rejectResult = order.AddRejected(orderLine.Id, reject.RejectQty, reject.RejectReasonId, reject.Comments);
+
+            if (rejectResult.IsFailure)
+            {
+                return Result.Failure<Guid>(rejectResult.Error);
+            }
+
+            orderRepository.AddLineReject(rejectResult.Value);
+        }
+
+
+        Result result = order.DeliverLine(orderLine.Id, request.OrderLine.DeliveredQty);
 
         if (result.IsFailure)
         {

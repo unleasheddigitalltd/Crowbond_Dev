@@ -46,7 +46,10 @@ internal sealed class GetRouteOrdersQueryHandler(IDbConnectionFactory dbConnecti
                 l.product_id AS {nameof(OrderLineResponse.ProductId)},
                 l.product_sku AS {nameof(OrderLineResponse.ProductSku)},
                 l.product_name AS {nameof(OrderLineResponse.ProductName)},
-                l.qty AS {nameof(OrderLineResponse.Qty)}
+                l.ordered_qty AS {nameof(OrderLineResponse.OrderedQty)},
+                l.actual_qty AS {nameof(OrderLineResponse.ActualQty)},
+                l.delivered_qty AS {nameof(OrderLineResponse.DeliveredQty)},
+                l.status AS {nameof(OrderLineResponse.Status)}
              FROM oms.order_lines l
              INNER JOIN oms.order_headers h ON h.id = l.order_header_id
              WHERE h.route_trip_id = @RouteTripId;

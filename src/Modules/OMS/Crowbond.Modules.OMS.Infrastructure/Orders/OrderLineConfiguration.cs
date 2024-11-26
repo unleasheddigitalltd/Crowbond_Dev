@@ -25,11 +25,5 @@ public sealed class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
         builder.Property(o => o.DeductionSubTotal).HasPrecision(10, 2);
         builder.Property(o => o.DeductionTax).HasPrecision(5, 2);
         builder.Property(o => o.DeductionLineTotal).HasPrecision(10, 2);
-        builder.Property(o => o.DeliveryComments).HasMaxLength(255);
-
-        builder.HasOne(ol => ol.Header)
-               .WithMany(oh => oh.Lines)
-               .HasForeignKey(ol => ol.OrderHeaderId)
-               .IsRequired();
     }
 }
