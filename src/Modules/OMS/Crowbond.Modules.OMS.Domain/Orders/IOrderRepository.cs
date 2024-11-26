@@ -12,15 +12,19 @@ public interface IOrderRepository
 
     Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default);
 
+    Task<OrderLineRejectReason?> GetLineRejectReasonAsync(Guid id, CancellationToken cancellationToken = default);
+
     void Insert(OrderHeader orderHeader);
 
-    void Remove(OrderHeader orderHeader);
-
     void AddLine(OrderLine line);
+
+    void AddLineReject(OrderLineReject lineReject);
 
     void AddDelivery(OrderDelivery delivery);
 
     void AddDeliveryImage(OrderDeliveryImage image);
+
+    void Remove(OrderHeader orderHeader);
 
     void RemoveLine(OrderLine line);
 

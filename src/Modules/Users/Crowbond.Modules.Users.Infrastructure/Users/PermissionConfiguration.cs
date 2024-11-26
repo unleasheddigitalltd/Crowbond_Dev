@@ -123,8 +123,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetMyOrders,
             Permission.CreateOrders,
             Permission.CreateMyOrders,
+            Permission.ModifyOrders,
+            Permission.DeleteOrders,
             Permission.AcceptOrders,
             Permission.DeliverOrders,
+            Permission.GetOrderLineRejectReasons,
 
             Permission.ReviewOrderLine);
 
@@ -142,6 +145,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Driver, Permission.DeliverOrders),
                     CreateRolePermission(Role.Driver, Permission.GetVehicles),
                     CreateRolePermission(Role.Driver, Permission.GetCompliances),
+                    CreateRolePermission(Role.Driver, Permission.GetOrderLineRejectReasons),
 
                     // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
@@ -263,7 +267,10 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                     CreateRolePermission(Role.Administrator, Permission.GetOrders),
                     CreateRolePermission(Role.Administrator, Permission.CreateOrders),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyOrders),
+                    CreateRolePermission(Role.Administrator, Permission.DeleteOrders),
                     CreateRolePermission(Role.Administrator, Permission.AcceptOrders),
+                    CreateRolePermission(Role.Administrator, Permission.GetOrderLineRejectReasons),
 
                     CreateRolePermission(Role.Administrator, Permission.ReviewOrderLine));
             });

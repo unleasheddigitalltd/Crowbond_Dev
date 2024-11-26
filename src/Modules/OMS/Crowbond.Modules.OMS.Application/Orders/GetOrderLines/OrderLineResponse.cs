@@ -1,7 +1,7 @@
 ﻿using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Products;
 
-namespace Crowbond.Modules.OMS.Application.Orders.GetOrderDetails;
+namespace Crowbond.Modules.OMS.Application.Orders.GetOrderLines;
 
 public sealed record OrderLineResponse(
     Guid OrderLineId,
@@ -11,12 +11,14 @@ public sealed record OrderLineResponse(
     string ProductName,
     string UnitOfMeasureName,
     decimal UnitPrice,
-    decimal Qty,
+    decimal OrderedQty,
+    decimal? ActualQty,
+    decimal? DeliveredQty,
     decimal SubTotal,
     decimal Tax,
     decimal LineTotal,
+    decimal? DeductionSubTotal,
+    decimal? DeductionTax,
+    decimal? DeductionLineTotal,
     TaxRateType TaxRateType,
-    OrderLineStatus LineStatus)
-{
-    public decimal AvailableQty { get; set; }
-}
+    OrderLineStatus LineStatus);

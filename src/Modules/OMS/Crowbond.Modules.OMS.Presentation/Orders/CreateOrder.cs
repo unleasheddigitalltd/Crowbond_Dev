@@ -15,13 +15,27 @@ internal sealed class CreateOrder : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("orders", async (OrderRequest request, ISender sender) =>
+        app.MapPost("orders", async (Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new CreateOrderCommand(request));
+            Result<Guid> result = await sender.Send(new CreateOrderCommand(
+                request.CustomerId,
+                request.CustomerOutletId,
+                request.ShippingDate,
+                request.DeliveryMethod,
+                request.PaymentMethod,
+                request.CustomerComment));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.CreateOrders)
         .WithTags(Tags.Orders);
-    }        
+    }
+
+    private sealed record Request(
+    Guid CustomerId,
+    Guid CustomerOutletId,
+    DateOnly ShippingDate,
+    int DeliveryMethod,
+    int PaymentMethod,
+    string? CustomerComment);
 }

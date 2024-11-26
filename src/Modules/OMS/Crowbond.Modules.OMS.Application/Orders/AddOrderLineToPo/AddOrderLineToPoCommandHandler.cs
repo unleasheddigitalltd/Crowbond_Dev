@@ -37,12 +37,12 @@ internal sealed class AddOrderLineToPoCommandHandler(
 
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
-        if (availableQty >= orderLine.Qty)
+        if (availableQty >= orderLine.OrderedQty)
         {
             return Result.Failure(OrderErrors.NoShortage);
         }
 
-        decimal shortageQty = orderLine.Qty - availableQty;
+        decimal shortageQty = orderLine.OrderedQty - availableQty;
 
         SupplierResponse supplier = await supplierApi.GetAsync(request.SupplierId, cancellationToken);
 

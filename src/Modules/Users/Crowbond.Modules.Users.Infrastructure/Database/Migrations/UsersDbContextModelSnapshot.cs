@@ -476,11 +476,23 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "orders:update"
+                        },
+                        new
+                        {
+                            Code = "orders:delete"
+                        },
+                        new
+                        {
                             Code = "orders:accept"
                         },
                         new
                         {
                             Code = "orders:deliver"
+                        },
+                        new
+                        {
+                            Code = "order-line-reject-reasons:read"
                         },
                         new
                         {
@@ -632,6 +644,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "compliances:read",
+                            RoleName = "Driver"
+                        },
+                        new
+                        {
+                            PermissionCode = "order-line-reject-reasons:read",
                             RoleName = "Driver"
                         },
                         new
@@ -1081,7 +1098,22 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "orders:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "orders:delete",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "orders:accept",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "order-line-reject-reasons:read",
                             RoleName = "Administrator"
                         },
                         new

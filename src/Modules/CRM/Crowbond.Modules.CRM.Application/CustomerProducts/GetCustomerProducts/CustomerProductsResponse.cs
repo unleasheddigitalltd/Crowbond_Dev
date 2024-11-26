@@ -1,7 +1,6 @@
 ﻿using Crowbond.Common.Application.Pagination;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsBlacklistByCategory;
-
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProducts;
 public sealed class CustomerProductsResponse : PaginatedResponse<CustomerProduct>
 {
     public CustomerProductsResponse(IReadOnlyCollection<CustomerProduct> customerProducts, IPagination pagination)
@@ -19,4 +18,8 @@ public sealed record CustomerProduct(
     string CategoryName,
     string BrandName,
     string ProductGroupName,
-    string? Comments);
+    decimal? FixedPrice,
+    decimal? FixedDiscount,
+    string? Comments,
+    DateOnly? EffectiveDate,
+    DateOnly? ExpiryDate);

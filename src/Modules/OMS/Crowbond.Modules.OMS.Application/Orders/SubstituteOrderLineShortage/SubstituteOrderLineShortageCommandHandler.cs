@@ -26,19 +26,26 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             return Result.Failure<Guid>(OrderErrors.LineNotFound(request.OrderLineId));
         }
 
+        OrderHeader? order = await orderRepository.GetAsync(orderLine.OrderHeaderId, cancellationToken);
+
+        if (order is null)
+        {
+            return Result.Failure<Guid>(OrderErrors.NotFound(orderLine.OrderHeaderId));
+        }
+
         decimal availableQty = await inventoryService.GetAvailableQuantityAsync(orderLine.ProductId, cancellationToken);
 
-        if (availableQty >= orderLine.Qty)
+        if (availableQty >= orderLine.OrderedQty)
         {
             return Result.Failure<Guid>(OrderErrors.NoShortage);
         }
 
         // Add substitute line.
-        CustomerForOrderResponse? customer = await customerApi.GetAsync(orderLine.Header.CustomerId, cancellationToken);
+        CustomerForOrderResponse? customer = await customerApi.GetAsync(order.CustomerId, cancellationToken);
 
         if (customer is null)
         {
-            return Result.Failure<Guid>(CustomerErrors.NotFound(orderLine.Header.CustomerId));
+            return Result.Failure<Guid>(CustomerErrors.NotFound(order.CustomerId));
         }
 
         CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(customer.Id, request.ProductId, cancellationToken);
@@ -48,12 +55,17 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.NotFound(customer.Id, request.ProductId));
         }
 
+        if (customerProduct.IsBlacklisted)
+        {
+            return Result.Failure<Guid>(OrderErrors.ProductIsBlacklisted(request.ProductId));
+        }
+
         if (!Enum.IsDefined(typeof(TaxRateType), customerProduct.TaxRateType))
         {
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
-        Result<OrderLine> newOrderLineResult = orderLine.Header.AddLine(
+        Result<OrderLine> newOrderLineResult = order.AddLine(
             customerProduct.ProductId,
             customerProduct.ProductSku,
             customerProduct.ProductName,
@@ -65,7 +77,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             customerProduct.ProductGroupId,
             customerProduct.ProductGroupName,
             customerProduct.UnitPrice,
-            orderLine.Qty - availableQty,
+            orderLine.OrderedQty - availableQty,
             (TaxRateType)customerProduct.TaxRateType);
 
         if (newOrderLineResult.IsFailure)
@@ -76,7 +88,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
         orderRepository.AddLine(newOrderLineResult.Value);
 
         // Addjust current line qty.
-        Result result = orderLine.Header.AdjustLineQty(orderLine.Id, availableQty);
+        Result result = order.AdjustLineOrderedQty(orderLine.Id, availableQty);
 
         if (result.IsFailure)
         {

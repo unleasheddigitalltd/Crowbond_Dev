@@ -40,9 +40,10 @@ internal sealed class GetOrdersQueryHandler(IDbConnectionFactory dbConnectionFac
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM oms.order_headers
                 WHERE
-                    order_no ILIKE '%' || @Search || '%'
+                    is_deleted = false AND
+                    (order_no ILIKE '%' || @Search || '%'
                     OR customer_account_number ILIKE '%' || @Search || '%'
-                    OR customer_business_name ILIKE '%' || @Search || '%'
+                    OR customer_business_name ILIKE '%' || @Search || '%')
             )
             SELECT 
                 {nameof(Order.Id)},
@@ -61,9 +62,10 @@ internal sealed class GetOrdersQueryHandler(IDbConnectionFactory dbConnectionFac
             SELECT Count(*) 
             FROM oms.order_headers
             WHERE
-                order_no ILIKE '%' || @Search || '%'
-                OR customer_account_number ILIKE '%' || @Search || '%'
-                OR customer_business_name ILIKE '%' || @Search || '%'
+                is_deleted = false AND
+                    (order_no ILIKE '%' || @Search || '%'
+                    OR customer_account_number ILIKE '%' || @Search || '%'
+                    OR customer_business_name ILIKE '%' || @Search || '%')
         ";
 
         SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);

@@ -1,7 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsBlacklistByCategory;
+using Crowbond.Modules.CRM.Application.CustomerProducts.GetCustomerProductsBlacklist;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,13 +9,12 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.CRM.Presentation.CustomerProducts;
 
-internal sealed class GetCustomerProductsBlacklistByCategory : IEndpoint
+internal sealed class GetCustomerProductsBlacklist : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("customers/{customerId}/categories/{categoryId}/product-blacklist", async (
+        app.MapGet("customers/{customerId}/product-blacklist", async (
             Guid customerId,
-            Guid categoryId,
             ISender sender,
             string search = "",
             string sort = "ProductSku",
@@ -25,9 +24,8 @@ internal sealed class GetCustomerProductsBlacklistByCategory : IEndpoint
             ) =>
         {
             Result<CustomerProductsResponse> result = await sender.Send(
-                new GetCustomerProductsBlacklistByCategoryQuery(
+                new GetCustomerProductsBlacklistQuery(
                     customerId,
-                    categoryId,
                     search,
                     sort,
                     order,

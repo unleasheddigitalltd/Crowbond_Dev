@@ -27,7 +27,7 @@ internal sealed class GetOrderQueryHandler(IDbConnectionFactory dbConnectionFact
                  delivery_charge AS {nameof(OrderResponse.DeliveryCharge)},
                  order_amount AS {nameof(OrderResponse.OrderAmount)}
              FROM oms.order_headers
-             WHERE id = @OrderHeaderId
+             WHERE id = @OrderHeaderId AND is_deleted = false
              """;
 
         OrderResponse? order = await connection.QuerySingleOrDefaultAsync<OrderResponse>(sql, request);

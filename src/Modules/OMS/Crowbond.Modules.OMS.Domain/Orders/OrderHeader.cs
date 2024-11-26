@@ -5,7 +5,7 @@ using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
-public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
+public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDetectable
 {
     private readonly List<OrderLine> _lines = new();
     private readonly List<OrderDelivery> _delivery = new();
@@ -80,7 +80,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
 
     public string? ExternalOrderRef { get; private set; }
 
-    public string? Tags { get; private set; }
+    public string[] Tags { get; private set; }
 
     public int LastImageSequence { get; private set; }
 
@@ -168,10 +168,75 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
             DueDaysForInvoice = dueDaysForInvoice,
             PaymentMethod = paymentMethod,
             CustomerComment = customerComment,
-            Status = OrderStatus.Pending
+            Status = OrderStatus.Pending,
+            Tags = []
         };
 
         return orderHeader;
+    }
+
+    public Result Update(
+        string customerBusinessName,
+        string deliveryLocationName,
+        string deliveryFullName,
+        string? deliveryEmail,
+        string deliveryPhone,
+        string? deliveryMobile,
+        string? deliveryNotes,
+        string deliveryAddressLine1,
+        string? deliveryAddressLine2,
+        string deliveryTownCity,
+        string deliveryCounty,
+        string? deliveryCountry,
+        string deliveryPostalCode,
+        DateOnly shippingDate,
+        DeliveryMethod deliveryMethod,
+        decimal deliveryCharge,
+        DueDateCalculationBasis dueDateCalculationBasis,
+        int dueDaysForInvoice,
+        PaymentMethod paymentMethod,
+        string? customerComment,
+        DateTime utcNow)
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        if (PaymentStatus != PaymentStatus.Unpaid)
+        {
+            return Result.Failure(OrderErrors.NotUnpaid);
+        }
+
+        var today = DateOnly.FromDateTime(utcNow);
+
+        if (shippingDate <= today)
+        {
+            return Result.Failure(OrderErrors.InvalidShippingDateError);
+        }
+
+        CustomerBusinessName = customerBusinessName;
+        DeliveryLocationName = deliveryLocationName;
+        DeliveryFullName = deliveryFullName;
+        DeliveryEmail = deliveryEmail;
+        DeliveryPhone = deliveryPhone;
+        DeliveryMobile = deliveryMobile;
+        DeliveryNotes = deliveryNotes;
+        DeliveryAddressLine1 = deliveryAddressLine1;
+        DeliveryAddressLine2 = deliveryAddressLine2;
+        DeliveryTownCity = deliveryTownCity;
+        DeliveryCounty = deliveryCounty;
+        DeliveryCountry = deliveryCountry;
+        DeliveryPostalCode = deliveryPostalCode;
+        ShippingDate = shippingDate;
+        DeliveryMethod = deliveryMethod;
+        DeliveryCharge = deliveryCharge;
+        DueDateCalculationBasis = dueDateCalculationBasis;
+        DueDaysForInvoice = dueDaysForInvoice;
+        PaymentMethod = paymentMethod;
+        CustomerComment = customerComment;
+
+        return Result.Success();
     }
 
     public Result<OrderLine> AddLine(
@@ -186,7 +251,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         Guid productGroupId,
         string productGroupName,
         decimal unitPrice,
-        decimal qty,
+        decimal orderedQty,
         TaxRateType taxRateType)
     {
         if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
@@ -206,10 +271,11 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
             productGroupId,
             productGroupName,
             unitPrice,
-            qty,
+            orderedQty,
             taxRateType);
 
         _lines.Add(line);
+        Raise(new OrderLineAddedDomainEvent(CustomerId, line.ProductId));
         UpdateTotalAmount();
 
         return line;
@@ -235,33 +301,139 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         return Result.Success();
     }
 
-    public Result AdjustLineQty(Guid orderLineId, decimal qty)
+    public Result AdjustLineOrderedQty(Guid orderLineId, decimal orderedQty)
     {
         if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
         {
             return Result.Failure(OrderErrors.NotStockReviewing);
         }
 
-        if (qty < 0)
+        if (orderedQty < 0)
         {
-            return Result.Failure(OrderErrors.InvalidOrderLineQuantity);
+            return Result.Failure(OrderErrors.InvalidQuantity);
         }
+
         OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
 
         if (line is null)
         {
             return Result.Failure(OrderErrors.LineNotFound(orderLineId));
         }
-        line.Update(qty);
+
+        line.UpdateOrderedQty(orderedQty);
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+    
+    public Result AdjustLineActualQty(Guid orderLineId, decimal actualQty)
+    {
+        if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
+        {
+            return Result.Failure(OrderErrors.NotStockReviewing);
+        }
+
+        if (actualQty < 0)
+        {
+            return Result.Failure(OrderErrors.InvalidQuantity);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        line.UpdateActualQty(actualQty);
         UpdateTotalAmount();
 
         return Result.Success();
     }
 
+    public Result DeliverLine(Guid orderLineId, decimal deliveredQty)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderDelivery>(OrderErrors.NotShipped);
+        }
+
+        if (deliveredQty < 0)
+        {
+            return Result.Failure(OrderErrors.InvalidQuantity);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        Result result = line.Deliver(deliveredQty);
+
+        if (result.IsFailure)
+        {
+            return result;
+        }
+
+        UpdateTotalAmount();
+
+        return Result.Success();
+    }
+
+    public Result<OrderLineReject> AddRejected(Guid orderLineId, decimal qty, Guid rejectReasonId, string? comments)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.NotShipped);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        Result<OrderLineReject> rejectResult = line.AddReaject(qty, rejectReasonId, comments);
+
+        if (rejectResult.IsFailure)
+        {
+            return Result.Failure<OrderLineReject>(rejectResult.Error);
+        }
+
+        return Result.Success(rejectResult.Value);
+    }
+
+    public Result<OrderLineReject> RemoveReject(Guid orderLineId, Guid orderLineRejectId)
+    {
+        if (Status != OrderStatus.Shipped)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.NotShipped);
+        }
+
+        OrderLine? line = _lines.SingleOrDefault(l => l.Id == orderLineId);
+
+        if (line is null)
+        {
+            return Result.Failure<OrderLineReject>(OrderErrors.LineNotFound(orderLineId));
+        }
+
+        Result<OrderLineReject> rejectResult = line.RemoveReaject(orderLineRejectId);
+
+        if (rejectResult.IsFailure)
+        {
+            return Result.Failure<OrderLineReject>(rejectResult.Error);
+        }
+
+        return Result.Success(rejectResult.Value);
+    }
+
     public void UpdateTotalAmount()
     {
-        OrderTax = _lines.Sum(line => line.Tax);
-        OrderAmount = _lines.Sum(line => line.LineTotal) + DeliveryCharge;
+        OrderTax = _lines.Sum(line => line.Tax - line.DeductionTax ?? 0);
+        OrderAmount = _lines.Sum(line => line.LineTotal - line.DeductionLineTotal ?? 0) + DeliveryCharge;
     }
 
     public Result Accept()
@@ -281,6 +453,11 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         if (Status != OrderStatus.Shipped)
         {
             return Result.Failure<OrderDelivery>(OrderErrors.NotShipped);
+        }
+
+        if (_lines.Any(l => l.Status != OrderLineStatus.Delivered))
+        {
+            return Result.Failure<OrderDelivery>(OrderErrors.PendingOrderLines);
         }
 
         var deliveryDate = DateOnly.FromDateTime(utcNow);
@@ -312,7 +489,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
         if (delivery is null)
         {
             return Result.Failure<OrderDelivery>(OrderErrors.NoDeliveryRecordFound);
-        }       
+        }
 
         return Result.Success(delivery);
     }
@@ -323,7 +500,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
 
         LastImageSequence++;
 
-        return orderDeliveryImage; 
+        return orderDeliveryImage;
     }
 
     public Result<OrderDeliveryImage> RemoveDeliveryImage(string imageName)
@@ -432,5 +609,10 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable
 
         Status = OrderStatus.StockReviewing;
         return Result.Success();
+    }
+
+    public void UpdateTags(string[] tags)
+    {
+        Tags = tags;
     }
 }

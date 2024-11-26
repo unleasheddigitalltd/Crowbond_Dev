@@ -13,7 +13,7 @@ internal sealed class RemoveOrderLine : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("orders/lines/{id}/remove", async (Guid id, ISender sender) =>
+        app.MapDelete("orders/lines/{id}", async (Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new RemoveOrderLineCommand(id));
 

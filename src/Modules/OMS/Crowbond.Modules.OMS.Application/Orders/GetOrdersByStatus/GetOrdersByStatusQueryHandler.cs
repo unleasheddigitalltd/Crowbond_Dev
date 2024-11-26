@@ -40,7 +40,7 @@ internal sealed class GetOrdersByStatusQueryHandler(IDbConnectionFactory dbConne
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM oms.order_headers
                 WHERE
-                    status = @OrderStatus
+                    status = @OrderStatus AND is_deleted = false
                     AND (order_no ILIKE '%' || @Search || '%'
                     OR customer_account_number ILIKE '%' || @Search || '%'
                     OR customer_business_name ILIKE '%' || @Search || '%')
@@ -62,7 +62,7 @@ internal sealed class GetOrdersByStatusQueryHandler(IDbConnectionFactory dbConne
             SELECT Count(*) 
             FROM oms.order_headers
             WHERE
-                status = @OrderStatus
+                status = @OrderStatus AND is_deleted = false
                 AND (order_no ILIKE '%' || @Search || '%'
                 OR customer_account_number ILIKE '%' || @Search || '%'
                 OR customer_business_name ILIKE '%' || @Search || '%')

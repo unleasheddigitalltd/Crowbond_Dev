@@ -2,6 +2,7 @@
 using Crowbond.Modules.OMS.Domain.RouteTrips;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Orders;
 
@@ -9,6 +10,11 @@ public sealed class OrderHeaderConfiguratin : IEntityTypeConfiguration<OrderHead
 {
     public void Configure(EntityTypeBuilder<OrderHeader> builder)
     {
+        var tagsConverter = new ValueConverter<string[], string>(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.None)
+            );
+
         builder.HasKey(o => o.Id);
         builder.Property(o => o.OrderNo).HasMaxLength(20);
         builder.Property(o => o.PurchaseOrderNo).HasMaxLength(20);
@@ -32,7 +38,7 @@ public sealed class OrderHeaderConfiguratin : IEntityTypeConfiguration<OrderHead
         builder.Property(o => o.CustomerComment).HasMaxLength(3000);
         builder.Property(o => o.OriginalSource).HasMaxLength(100);
         builder.Property(o => o.ExternalOrderRef).HasMaxLength(100);
-        builder.Property(o => o.Tags).HasMaxLength(255);
+        builder.Property(o => o.Tags).HasConversion(tagsConverter).HasMaxLength(255);
 
         builder.HasOne<RouteTrip>().WithMany().HasForeignKey(o => o.RouteTripId).OnDelete(DeleteBehavior.NoAction);
     }

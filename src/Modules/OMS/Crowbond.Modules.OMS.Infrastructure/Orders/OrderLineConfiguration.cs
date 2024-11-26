@@ -16,14 +16,14 @@ public sealed class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
         builder.Property(o => o.BrandName).HasMaxLength(100);
         builder.Property(o => o.ProductGroupName).HasMaxLength(100);
         builder.Property(o => o.UnitPrice).HasPrecision(10, 2);
-        builder.Property(o => o.Qty).HasPrecision(10, 2);
+        builder.Property(o => o.OrderedQty).HasPrecision(10, 2);
+        builder.Property(o => o.ActualQty).HasPrecision(10, 2);
+        builder.Property(o => o.DeliveredQty).HasPrecision(10, 2);
         builder.Property(o => o.SubTotal).HasPrecision(10, 2);
         builder.Property(o => o.Tax).HasPrecision(5, 2);
         builder.Property(o => o.LineTotal).HasPrecision(10, 2);
-
-        builder.HasOne(ol => ol.Header)
-               .WithMany(oh => oh.Lines)
-               .HasForeignKey(ol => ol.OrderHeaderId)
-               .IsRequired();
+        builder.Property(o => o.DeductionSubTotal).HasPrecision(10, 2);
+        builder.Property(o => o.DeductionTax).HasPrecision(5, 2);
+        builder.Property(o => o.DeductionLineTotal).HasPrecision(10, 2);
     }
 }

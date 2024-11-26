@@ -31,6 +31,7 @@ internal sealed class CustomerProductApi(ISender sender) : ICustomerProductApi
                 result.Value.ProductGroupId,
                 result.Value.ProductGroupName,
                 result.Value.UnitPrice,
-                result.Value.TaxRateType);
+                result.Value.TaxRateType,
+                result.Value.IsBlacklisted);
     }
 }
