@@ -10,6 +10,9 @@ internal sealed class DispatchLineConfiguration : IEntityTypeConfiguration<Dispa
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(d => d.Qty).HasPrecision(10, 2);
+        builder.Property(d => d.OrderNo).HasMaxLength(20);
+        builder.Property(d => d.CustomerBusinessName).HasMaxLength(100);
+        builder.Property(d => d.OrderedQty).HasPrecision(10, 2);
+        builder.Property(d => d.PickedQty).HasPrecision(10, 2);
     }
 }

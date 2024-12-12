@@ -13,13 +13,15 @@ internal sealed class ReceiveReceipt : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("receipts/{id}/receive", async (Guid id, ISender sender) =>
+        app.MapPut("receipts/{id}/receive", async (Guid id, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new ReceiveReceiptCommand(id));
+            Result result = await sender.Send(new ReceiveReceiptCommand(id, request.LocationId));
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
             .RequireAuthorization(Permissions.ModifyReceipts)
             .WithTags(Tags.Receipts);
     }
+
+    private sealed record Request (Guid LocationId);
 }

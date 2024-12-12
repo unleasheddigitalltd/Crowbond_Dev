@@ -174,6 +174,14 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
                     b.Property<string>("DispatchNo")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -188,15 +196,19 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_on_utc");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("order_id");
-
-                    b.Property<string>("OrderNo")
+                    b.Property<string>("RouteName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("order_no");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("route_name");
+
+                    b.Property<DateOnly>("RouteTripDate")
+                        .HasColumnType("date")
+                        .HasColumnName("route_trip_date");
+
+                    b.Property<Guid>("RouteTripId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("route_trip_id");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -215,18 +227,47 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("CustomerBusinessName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("customer_business_name");
+
                     b.Property<Guid>("DispatchHeaderId")
                         .HasColumnType("uuid")
                         .HasColumnName("dispatch_header_id");
 
+                    b.Property<bool>("IsPicked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_picked");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<Guid>("OrderLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_line_id");
+
+                    b.Property<string>("OrderNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("order_no");
+
+                    b.Property<decimal>("OrderedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("ordered_qty");
+
+                    b.Property<decimal>("PickedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("picked_qty");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
-
-                    b.Property<decimal>("Qty")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("qty");
 
                     b.HasKey("Id")
                         .HasName("pk_dispatch_lines");
@@ -572,6 +613,14 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
                     b.Property<string>("DeliveryNoteNumber")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
@@ -584,6 +633,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_on_utc");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("location_id");
 
                     b.Property<Guid?>("PurchaseOrderId")
                         .HasColumnType("uuid")
@@ -626,22 +679,36 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("batch_number");
 
+                    b.Property<bool>("IsStored")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_stored");
+
+                    b.Property<decimal>("MissedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("missed_qty");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
-
-                    b.Property<decimal>("QuantityReceived")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("quantity_received");
 
                     b.Property<Guid>("ReceiptHeaderId")
                         .HasColumnType("uuid")
                         .HasColumnName("receipt_header_id");
 
+                    b.Property<decimal>("ReceivedQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("received_qty");
+
                     b.Property<DateOnly?>("SellByDate")
                         .HasColumnType("date")
                         .HasColumnName("sell_by_date");
+
+                    b.Property<decimal>("StoredQty")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("stored_qty");
 
                     b.Property<decimal>("UnitPrice")
                         .HasPrecision(10, 2)
@@ -987,6 +1054,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on_utc");
 
+                    b.Property<DateTime?>("EndDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_date_time");
+
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid")
                         .HasColumnName("last_modified_by");
@@ -994,6 +1065,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.Property<DateTime?>("LastModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_on_utc");
+
+                    b.Property<DateTime?>("StartDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date_time");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -1022,46 +1097,32 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<decimal>("CompletedQty")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("completed_qty");
+                    b.Property<Guid?>("DispatchLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("dispatch_line_id");
 
-                    b.Property<DateTime?>("EndDateTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("end_date_time");
-
-                    b.Property<Guid?>("FromLocationId")
+                    b.Property<Guid>("FromLocationId")
                         .HasColumnType("uuid")
                         .HasColumnName("from_location_id");
-
-                    b.Property<decimal>("MissedQty")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("missed_qty");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
-                    b.Property<decimal>("RequestedQty")
+                    b.Property<decimal>("Qty")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")
-                        .HasColumnName("requested_qty");
+                        .HasColumnName("qty");
 
-                    b.Property<DateTime?>("StartDateTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("start_date_time");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
+                    b.Property<Guid?>("ReceiptLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("receipt_line_id");
 
                     b.Property<Guid>("TaskAssignmentId")
                         .HasColumnType("uuid")
                         .HasColumnName("task_assignment_id");
 
-                    b.Property<Guid?>("ToLocationId")
+                    b.Property<Guid>("ToLocationId")
                         .HasColumnType("uuid")
                         .HasColumnName("to_location_id");
 
@@ -1398,6 +1459,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
                         .WithMany()
                         .HasForeignKey("FromLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_task_assignment_lines_locations_from_location_id");
 
                     b.HasOne("Crowbond.Modules.WMS.Domain.Products.Product", null)
@@ -1417,6 +1480,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.HasOne("Crowbond.Modules.WMS.Domain.Locations.Location", null)
                         .WithMany()
                         .HasForeignKey("ToLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_task_assignment_lines_locations_to_location_id");
 
                     b.Navigation("Assignment");

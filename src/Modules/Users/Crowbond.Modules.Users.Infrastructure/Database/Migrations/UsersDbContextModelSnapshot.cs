@@ -408,6 +408,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "route-trip:approve"
+                        },
+                        new
+                        {
                             Code = "compliances:read"
                         },
                         new
@@ -1039,6 +1043,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "route-trip:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "route-trip:approve",
                             RoleName = "Administrator"
                         },
                         new

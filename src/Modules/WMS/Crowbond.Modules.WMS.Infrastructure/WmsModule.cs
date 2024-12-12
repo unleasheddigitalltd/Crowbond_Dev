@@ -62,6 +62,7 @@ public static class WmsModule
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderApprovedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderCancelledIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteTripApprovedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderAcceptedIntegrationEvent>>();
     }
 

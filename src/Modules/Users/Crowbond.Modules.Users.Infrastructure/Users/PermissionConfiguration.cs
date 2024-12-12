@@ -101,6 +101,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetRouteTrips,
             Permission.ModifyRouteTrips,
             Permission.CreateRouteTrips,
+            Permission.ApproveRouteTrip,
 
             Permission.GetCompliances,
             Permission.ModifyOtherRouteTripLogs,
@@ -252,6 +253,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.ModifyRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.CreateRouteTrips),
+                    CreateRolePermission(Role.Administrator, Permission.ApproveRouteTrip),
 
                     CreateRolePermission(Role.Administrator, Permission.GetCompliances),
                     CreateRolePermission(Role.Administrator, Permission.ModifyOtherRouteTripLogs),

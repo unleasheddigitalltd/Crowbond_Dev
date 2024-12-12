@@ -1,5 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
-using Crowbond.Common.Application.Messaging;
+﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Receipts;
@@ -34,15 +33,8 @@ internal sealed class AssignPutAwayTaskCommandHandler(
             return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.ReceiptId ?? Guid.Empty));
         }
 
-        // Prepare a list of product lines from receiptLines
-        var productLines = receipt.Lines.Select(line => (
-            productId: line.ProductId,
-            requestedQty: line.QuantityReceived
-        )).ToList();
 
-        Result<TaskAssignment> result = taskHeader.AddAssignmentWithLines(
-            request.WarehouseOperatorId,
-            productLines);
+        Result<TaskAssignment> result = taskHeader.AddAssignment(request.WarehouseOperatorId);
 
         if (result.IsFailure)
         {

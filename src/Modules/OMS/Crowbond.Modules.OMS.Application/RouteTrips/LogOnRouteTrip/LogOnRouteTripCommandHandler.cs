@@ -33,7 +33,7 @@ internal sealed class LogOnRouteTripCommandHandler(
         // check route trip is available.
         if (routeTrip.Status != RouteTripStatus.Available)
         {
-            return Result.Failure(RouteTripErrors.NotAvailable(request.RouteTripId));
+            return Result.Failure(RouteTripErrors.InvalidStatus(RouteTripStatus.Available));
         }
 
         // check the route trip is not expired.

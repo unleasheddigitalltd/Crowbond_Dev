@@ -88,6 +88,7 @@ public sealed class Permission
     public static readonly Permission GetRouteTrips = new("route-trip:read");
     public static readonly Permission ModifyRouteTrips = new("route-trip:update");
     public static readonly Permission CreateRouteTrips = new("route-trip:create");
+    public static readonly Permission ApproveRouteTrip = new("route-trip:approve");
 
     public static readonly Permission ModifyOtherRouteTripLogs = new("route-trip-log:update:other");
     public static readonly Permission GetCompliances = new("compliances:read");

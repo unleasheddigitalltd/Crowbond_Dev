@@ -34,9 +34,7 @@ internal sealed class PurchaseOrderCancelledIntegrationDomainEventHandler(ISende
             new PurchaseOrderCancelledIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
-                cancelledHistory.PurchaseOrderHeaderId,
-                cancelledHistory.ChangedBy,
-                cancelledHistory.ChangedAt),
+                cancelledHistory.PurchaseOrderHeaderId),
             cancellationToken);
     }
 }

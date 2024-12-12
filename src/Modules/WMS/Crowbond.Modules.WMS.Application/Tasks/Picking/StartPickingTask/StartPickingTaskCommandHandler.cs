@@ -36,15 +36,7 @@ internal sealed class StartPickingTaskCommandHandler(
             return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.ReceiptId ?? Guid.Empty));
         }
 
-        // Prepare a list of product lines from dispatch lines
-        var productLines = dispatch.Lines.Select(line => (
-            productId: line.ProductId,
-            requestedQty: line.Qty
-        )).ToList();
-
-        Result<TaskAssignment> assignmentResult = taskHeader.AddAssignmentWithLines(
-            request.UserId,
-            productLines);
+        Result<TaskAssignment> assignmentResult = taskHeader.AddAssignment(request.UserId);
 
         if (assignmentResult.IsFailure)
         {

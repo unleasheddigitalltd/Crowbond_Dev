@@ -12,114 +12,39 @@ public sealed class TaskAssignmentLine : Entity
 
     public Guid TaskAssignmentId { get; private set; }
 
-    public DateTime? StartDateTime { get; private set; }
+    public Guid? ReceiptLineId { get; private set; }
 
-    public DateTime? EndDateTime { get; private set; }
+    public Guid? DispatchLineId { get; private set; }
 
-    public Guid? FromLocationId { get; private set; }
+    public Guid FromLocationId { get; private set; }
 
-    public Guid? ToLocationId { get; private set; }
+    public Guid ToLocationId { get; private set; }
 
     public Guid ProductId { get; private set; }
 
-    public decimal RequestedQty { get; private set; }
-
-    public decimal CompletedQty { get; private set; }
-
-    public decimal MissedQty { get; private set; }
-
-    public TaskAssignmentLineStatus Status { get; private set; }
+    public decimal Qty { get; private set; }
 
     public TaskAssignment Assignment { get; }
 
     internal static TaskAssignmentLine Create(
+        Guid? receiptLineId,
+        Guid? dispatchLineId,
+        Guid fromLocationId,
+        Guid toLocationId,
         Guid productId,
-        decimal requestedQty)
+        decimal qty)
     {
         var taskAssignmentLine = new TaskAssignmentLine
         {
             Id = Guid.NewGuid(),
+            ReceiptLineId = receiptLineId,
+            DispatchLineId = dispatchLineId,
+            FromLocationId = fromLocationId,
+            ToLocationId = toLocationId,
             ProductId = productId,
-            RequestedQty = requestedQty,
-            CompletedQty = 0,
-            MissedQty = 0,
-            Status = TaskAssignmentLineStatus.Notstarted
+            Qty = qty
         };
 
         return taskAssignmentLine;
     }
-
-    internal Result Start(DateTime modificationDate)
-    {
-        if (Status is not TaskAssignmentLineStatus.Notstarted)
-        {
-            return Result.Failure(TaskErrors.AlreadyStarted);
-        }
-
-        StartDateTime = modificationDate;
-        Status = TaskAssignmentLineStatus.InProgress;
-
-        return Result.Success();
-    }
-
-    internal Result Complete(DateTime modificationDate)
-    {
-        if (Status is not TaskAssignmentLineStatus.InProgress)
-        {
-            return Result.Failure(TaskErrors.LineNotInProgress);
-        }
-
-        MissedQty = RequestedQty - CompletedQty;
-        Status = TaskAssignmentLineStatus.Completed;
-        EndDateTime = modificationDate;
-
-        return Result.Success();
-    }
-
-    internal Result Close(DateTime modificationDate) 
-    {
-        if (Status is TaskAssignmentLineStatus.Completed )
-        {
-            return Result.Failure(TaskErrors.LineIsCompleted);
-        }
-
-        Status = TaskAssignmentLineStatus.Incomplete;
-        EndDateTime = modificationDate;
-
-        return Result.Success();
-    }
-
-    internal Result IncrementCompletedQty(DateTime modificationDate, decimal Qty)
-    {
-        // check the qty is valid.
-        if (Qty <= 0)
-        {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.QuantityNotGreaterThanZero);
-        }
-
-        // check the line is in progress
-        if (Status != TaskAssignmentLineStatus.InProgress)
-        {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.LineForProductIsNotInProgress(ProductId));
-        }
-
-        // increment the complete quantity.
-        CompletedQty += Qty;
-
-        // check the compelet quantity is not greater then requested.
-        if (RequestedQty < CompletedQty)
-        {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.ProductCompleteQtyExceedsRequestQty(ProductId));
-        }
-
-        // change the status to completed if the compelet quantity is equal to the requested.
-        if (RequestedQty == CompletedQty)
-        {
-            Status = TaskAssignmentLineStatus.Completed;
-            EndDateTime = modificationDate;
-        }
-
-        return Result.Success();
-    }
-
 }

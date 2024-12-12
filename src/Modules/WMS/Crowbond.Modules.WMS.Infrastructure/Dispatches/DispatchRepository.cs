@@ -12,6 +12,11 @@ internal sealed class DispatchRepository(WmsDbContext context) : IDispatchReposi
         return await context.DispatchHeaders.Include(d => d.Lines).SingleOrDefaultAsync(d => d.Id == id, cancellationToken);
     }
 
+    public async Task<DispatchHeader?> GetByRouteTripAsync(Guid routeTripId, CancellationToken cancellationToken = default)
+    {
+        return await context.DispatchHeaders.Include(d => d.Lines).SingleOrDefaultAsync(d => d.RouteTripId == routeTripId, cancellationToken);
+    }
+
     public void Insert(DispatchHeader header)
     {
         context.DispatchHeaders.Add(header);

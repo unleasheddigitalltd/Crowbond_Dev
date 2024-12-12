@@ -16,7 +16,7 @@ internal sealed class CreateRouteTripCommandHandler
     {
         if (request.RouteTrip.Date < DateOnly.FromDateTime(dateTimeProvider.UtcNow))
         {
-            return Result.Failure<Guid>(RouteTripErrors.DateInPast());
+            return Result.Failure<Guid>(RouteTripErrors.DateInPast);
         }
 
         Result<RouteTrip> result = RouteTrip.Create(request.RouteTrip.Date, request.RouteTrip.RouteId, request.RouteTrip.Comments);

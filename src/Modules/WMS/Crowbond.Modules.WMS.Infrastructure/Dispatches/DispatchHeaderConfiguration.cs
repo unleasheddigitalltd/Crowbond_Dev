@@ -11,6 +11,6 @@ internal sealed class DispatchHeaderConfiguration : IEntityTypeConfiguration<Dis
         builder.HasKey(x => x.Id);
 
         builder.Property(d => d.DispatchNo).HasMaxLength(20);
-        builder.Property(d => d.OrderNo).HasMaxLength(20);
+        builder.Property(d => d.RouteName).HasMaxLength(100);
     }
 }

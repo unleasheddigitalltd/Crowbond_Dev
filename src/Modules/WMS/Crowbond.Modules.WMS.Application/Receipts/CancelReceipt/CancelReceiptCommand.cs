@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Receipts.CancelReceipt;
 
-public sealed record CancelReceiptCommand(Guid UserId, DateTime UtcNow, Guid PurchaseOrderId) : ICommand;
+public sealed record CancelReceiptCommand(Guid PurchaseOrderId) : ICommand;

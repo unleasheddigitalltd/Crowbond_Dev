@@ -19,7 +19,7 @@ internal sealed class LocateProductForPutAway : IEndpoint
             Result<Guid> result = await sender.Send(new LocateProductForPutAwayCommand(
                 operatorContext.WarehouseOperatorId,
                 id,
-                request.ProductId,
+                request.ReceiptLineId,
                 request.LocationId,
                 request.Qty));
 
@@ -29,5 +29,5 @@ internal sealed class LocateProductForPutAway : IEndpoint
             .WithTags(Tags.PutAway);
     }
 
-    private sealed record Request(Guid ProductId, Guid LocationId, decimal Qty);
+    private sealed record Request(Guid ReceiptLineId, Guid LocationId, decimal Qty);
 }

@@ -6,8 +6,8 @@ internal sealed class LocateProductForPutAwayCommandValidator : AbstractValidato
 {
     public LocateProductForPutAwayCommandValidator()
     {
-        RuleFor(t => t.TaskId).NotEmpty();
-        RuleFor(t => t.ProductId).NotEmpty();
+        RuleFor(t => t.TaskHeaderId).NotEmpty();
+        RuleFor(t => t.ReceiptLineId).NotEmpty();
         RuleFor(t => t.LocationId).NotEmpty();
         RuleFor(t => t.Qty).GreaterThan(0);
     }

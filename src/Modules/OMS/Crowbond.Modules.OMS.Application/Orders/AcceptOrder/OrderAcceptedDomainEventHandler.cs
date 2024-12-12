@@ -29,10 +29,12 @@ internal sealed class OrderAcceptedDomainEventHandler(ISender sender, IEventBus 
             new OrderAcceptedIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
+                result.Value.RouteTripId,
                 result.Value.Id,
                 result.Value.OrderNo,
+                result.Value.CustomerBusinessName,
                 result.Value.Lines.Select(l => new OrderAcceptedIntegrationEvent.OrderLine(
-                    l.ProductId, l.OrderedQty)).ToList()),
+                    l.OrderLineId, l.ProductId, l.OrderedQty)).ToList()),
             cancellationToken);
     }
 }

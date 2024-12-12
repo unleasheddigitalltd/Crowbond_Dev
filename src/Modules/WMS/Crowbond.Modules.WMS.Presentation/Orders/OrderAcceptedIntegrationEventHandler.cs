@@ -2,6 +2,7 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.IntegrationEvents;
+using Crowbond.Modules.WMS.Application.Dispatches.AddDispatchLines;
 using Crowbond.Modules.WMS.Application.Dispatches.CreateDispatch;
 using MediatR;
 
@@ -14,16 +15,11 @@ internal sealed class OrderAcceptedIntegrationEventHandler(ISender sender)
         OrderAcceptedIntegrationEvent integrationEvent,
         CancellationToken cancellationToken = default)
     {
-        var request = new DispatchRequest(
-            OrderId: integrationEvent.OrderId,
-            OrderNo: integrationEvent.OrderNo)
-        {
-            Lines = integrationEvent.Lines.Select(l => new DispatchLineRequest(
-                l.ProductId, l.Qty)).ToList()
-        };
+        var request = integrationEvent.Lines.Select(l => new DispatchLineRequest(
+                integrationEvent.OrderId, integrationEvent.OrderNo, integrationEvent.CustomerBusinessName, l.OrderLineId, l.ProductId, l.Qty)).ToList();
 
         Result result = await sender.Send(
-            new CreateDispatchCommand(request),
+            new AddDispatchLinesCommand(integrationEvent.RouteTripId, request),
             cancellationToken);
 
         if (result.IsFailure)

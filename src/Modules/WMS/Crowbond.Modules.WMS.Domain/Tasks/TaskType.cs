@@ -2,7 +2,7 @@
 
 public enum TaskType
 {
-    putaway = 0,
-    picking = 1,
-    packing = 2,
+    Putaway = 0,
+    PickingItem = 1,
+    PickingBulk = 2,
 }

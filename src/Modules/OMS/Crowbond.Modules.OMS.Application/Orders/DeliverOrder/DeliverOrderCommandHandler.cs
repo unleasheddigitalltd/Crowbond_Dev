@@ -63,7 +63,7 @@ internal sealed class DeliverOrderCommandHandler(
         // check route trip is available.
         if (routeTrip.Status != RouteTripStatus.Available)
         {
-            return Result.Failure<Guid>(RouteTripErrors.NotAvailable(routeTrip.Id));
+            return Result.Failure<Guid>(RouteTripErrors.InvalidStatus(RouteTripStatus.Available));
         }
 
         // create the delivery

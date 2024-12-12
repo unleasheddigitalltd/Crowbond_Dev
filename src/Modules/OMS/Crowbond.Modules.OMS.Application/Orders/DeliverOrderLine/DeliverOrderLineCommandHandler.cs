@@ -73,7 +73,7 @@ internal sealed class DeliverOrderLineCommandHandler(
         // check route trip is available.
         if (routeTrip.Status != RouteTripStatus.Available)
         {
-            return Result.Failure<Guid>(RouteTripErrors.NotAvailable(routeTrip.Id));
+            return Result.Failure<Guid>(RouteTripErrors.InvalidStatus(RouteTripStatus.Available));
         }
 
         foreach (OrderLineRejectRequest reject in request.OrderLine.Rejects)

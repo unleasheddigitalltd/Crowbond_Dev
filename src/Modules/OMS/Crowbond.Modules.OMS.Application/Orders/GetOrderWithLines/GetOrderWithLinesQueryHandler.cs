@@ -19,6 +19,8 @@ internal sealed class GetOrderWithLinesQueryHandler(IDbConnectionFactory dbConne
              SELECT
                  o.id AS {nameof(OrderResponse.Id)},          
                  o.order_no AS {nameof(OrderResponse.OrderNo)},
+                 o.customer_business_name AS {nameof(OrderResponse.CustomerBusinessName)},
+                 o.route_trip_id AS {nameof(OrderResponse.RouteTripId)},
                  l.id AS {nameof(OrderLineResponse.OrderLineId)},
                  l.order_header_id AS {nameof(OrderLineResponse.OrderHeaderId)},
                  l.product_id AS {nameof(OrderLineResponse.ProductId)},

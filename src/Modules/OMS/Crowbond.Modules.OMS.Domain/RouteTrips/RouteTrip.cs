@@ -40,5 +40,17 @@ public sealed class RouteTrip : Entity
         return routeTrip;
     }
 
+    public Result Approve()
+    {
+        if (Status != RouteTripStatus.Registered)
+        {
+            return Result.Failure(RouteTripErrors.InvalidStatus(RouteTripStatus.Registered));
+        }
+
+        Status = RouteTripStatus.Approved;
+
+        Raise(new RouteTripApprovedDomainEvent(Id));
+        return Result.Success();
+    }
 
 }
