@@ -14,12 +14,16 @@ internal sealed class LocateProductForPutAway : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("tasks/putaway/{id}/locate", async (IWarehouseOperatorContext operatorContext, Guid id, Request request, ISender sender) =>
+        app.MapPost("tasks/putaway/{id}/receipt-lines/{receiptLineId}/locate", async (
+            IWarehouseOperatorContext operatorContext,
+            Guid id, Guid receiptLineId,
+            Request request,
+            ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new LocateProductForPutAwayCommand(
                 operatorContext.WarehouseOperatorId,
                 id,
-                request.ReceiptLineId,
+                receiptLineId,
                 request.LocationId,
                 request.Qty));
 
@@ -29,5 +33,5 @@ internal sealed class LocateProductForPutAway : IEndpoint
             .WithTags(Tags.PutAway);
     }
 
-    private sealed record Request(Guid ReceiptLineId, Guid LocationId, decimal Qty);
+    private sealed record Request(Guid LocationId, decimal Qty);
 }
