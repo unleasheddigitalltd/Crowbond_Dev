@@ -3,12 +3,12 @@ using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Users;
 
-namespace Crowbond.Modules.WMS.Application.Users.ActiveUser;
+namespace Crowbond.Modules.WMS.Application.Users.ActivateUser;
 
-internal sealed class ActiveUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
-    : ICommandHandler<ActiveUserCommand>
+internal sealed class ActivateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    : ICommandHandler<ActivateUserCommand>
 {
-    public async Task<Result> Handle(ActiveUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
     {
         User? user = await userRepository.GetAsync(request.UserId, cancellationToken);
 

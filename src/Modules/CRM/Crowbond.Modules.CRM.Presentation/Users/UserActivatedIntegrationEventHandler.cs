@@ -1,11 +1,11 @@
 ﻿using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.OMS.Application.Users.ActivateUser;
+using Crowbond.Modules.CRM.Application.Users.ActivateUser;
 using Crowbond.Modules.Users.IntegrationEvents;
 using MediatR;
 
-namespace Crowbond.Modules.OMS.Presentation.Users;
+namespace Crowbond.Modules.CRM.Presentation.Users;
 
 internal sealed class UserActivatedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<UserActivatedIntegrationEvent>

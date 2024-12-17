@@ -1,14 +1,14 @@
 ﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.OMS.Application.Abstractions.Data;
-using Crowbond.Modules.OMS.Domain.Users;
+using Crowbond.Modules.CRM.Application.Abstractions.Data;
+using Crowbond.Modules.CRM.Domain.Users;
 
-namespace Crowbond.Modules.OMS.Application.Users.ActiveUser;
+namespace Crowbond.Modules.CRM.Application.Users.ActivateUser;
 
-internal sealed class ActiveUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
-    : ICommandHandler<ActiveUserCommand>
+internal sealed class ActivateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    : ICommandHandler<ActivateUserCommand>
 {
-    public async Task<Result> Handle(ActiveUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
     {
         User? user = await userRepository.GetAsync(request.UserId, cancellationToken);
 

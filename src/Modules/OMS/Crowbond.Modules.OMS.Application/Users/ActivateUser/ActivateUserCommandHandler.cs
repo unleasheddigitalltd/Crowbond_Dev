@@ -3,12 +3,12 @@ using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Users;
 
-namespace Crowbond.Modules.OMS.Application.Users.DeactiveUser;
+namespace Crowbond.Modules.OMS.Application.Users.ActivateUser;
 
-internal sealed class DeactiveUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
-    : ICommandHandler<DeactiveUserCommand>
+internal sealed class ActivateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    : ICommandHandler<ActivateUserCommand>
 {
-    public async Task<Result> Handle(DeactiveUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
     {
         User? user = await userRepository.GetAsync(request.UserId, cancellationToken);
 
@@ -17,7 +17,7 @@ internal sealed class DeactiveUserCommandHandler(IUserRepository userRepository,
             return Result.Failure(UserErrors.NotFound(request.UserId));
         }
 
-        user.Deactivate();
+        user.Activate();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

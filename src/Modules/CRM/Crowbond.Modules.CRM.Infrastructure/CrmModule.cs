@@ -54,6 +54,7 @@ using Crowbond.Modules.CRM.Domain.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Authentication;
 using Crowbond.Modules.CRM.Application.Abstractions.Authentication;
+using Crowbond.Modules.Users.IntegrationEvents;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -86,6 +87,10 @@ public static class CrmModule
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteUpdatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderLineAddedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserDeactivatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

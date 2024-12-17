@@ -1,9 +1,9 @@
 ﻿using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Application.Abstractions.Data;
-using Crowbond.Modules.WMS.Domain.Users;
+using Crowbond.Modules.CRM.Application.Abstractions.Data;
+using Crowbond.Modules.CRM.Domain.Users;
 
-namespace Crowbond.Modules.WMS.Application.Users.DeactiveUser;
+namespace Crowbond.Modules.CRM.Application.Users.DeactivateUser;
 
 internal sealed class DeactiveUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
     : ICommandHandler<DeactiveUserCommand>
