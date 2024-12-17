@@ -1217,7 +1217,7 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                     b.ToTable("task_headers", "wms");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.WarehouseOperators.WarehouseOperator", b =>
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1226,8 +1226,8 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
@@ -1235,6 +1235,10 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -1255,15 +1259,36 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnName("username");
 
                     b.HasKey("Id")
-                        .HasName("pk_warehouse_operators");
+                        .HasName("pk_users");
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("ix_warehouse_operators_email");
+                        .HasDatabaseName("ix_users_email");
+
+                    b.HasIndex("Mobile")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_mobile");
 
                     b.HasIndex("Username")
                         .IsUnique()
-                        .HasDatabaseName("ix_warehouse_operators_username");
+                        .HasDatabaseName("ix_users_username");
+
+                    b.ToTable("users", "wms");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.WMS.Domain.WarehouseOperators.WarehouseOperator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.HasKey("Id")
+                        .HasName("pk_warehouse_operators");
 
                     b.ToTable("warehouse_operators", "wms");
                 });

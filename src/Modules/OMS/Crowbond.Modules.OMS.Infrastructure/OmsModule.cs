@@ -39,6 +39,10 @@ using Crowbond.Modules.OMS.Domain.Vehicles;
 using Crowbond.Modules.OMS.Infrastructure.Vehicles;
 using Crowbond.Modules.OMS.Domain.Compliances;
 using Crowbond.Modules.OMS.Infrastructure.Compliances;
+using Crowbond.Modules.OMS.Domain.Users;
+using Crowbond.Modules.OMS.Infrastructure.Users;
+using MassTransit;
+using Crowbond.Modules.Users.IntegrationEvents;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -57,6 +61,15 @@ public static class OmsModule
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
+    }
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserDeactivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverRoleAddedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverRoleRemovedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -78,6 +91,7 @@ public static class OmsModule
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
         services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IRouteTripRepository, RouteTripRepository>();

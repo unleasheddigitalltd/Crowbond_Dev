@@ -9,53 +9,27 @@ public sealed class Driver : Entity
     }
 
     public Guid Id { get; private set; }
+    public bool IsActive { get; private set; }
 
-    public string FirstName { get; private set; }
-    
-    public string LastName { get; private set; }
-    
-    public string Username { get; private set; }
-    
-    public string Email { get; private set; }
-    
-    public string Mobile { get; private set; }
-
-    public string? VehicleRegn { get; private set; }
-
-    public static Driver Create(
-        string firstName,
-        string lastName,
-        string username,
-        string email,
-        string mobile,
-        string? vehicleRegn)
+    public static Driver Create(Guid userId)
     {
 
         var driver = new Driver
         {
-            Id = Guid.NewGuid(),
-            FirstName = firstName,
-            LastName = lastName,
-            Username = username,
-            Email = email,
-            Mobile = mobile,
-            VehicleRegn = vehicleRegn
+            Id = userId,
+            IsActive = true
         };
-
-        driver.Raise(new DriverCreatedDomainEvent(driver.Id));
 
         return driver;
     }
 
-    public void Update(
-        string firstName,
-        string lastName,
-        string mobile,
-        string? vehicleRegn)
+    public void Activate()
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Mobile = mobile;
-        VehicleRegn = vehicleRegn;
+        IsActive = true;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 }

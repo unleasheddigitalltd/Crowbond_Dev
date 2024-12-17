@@ -69,4 +69,14 @@ internal sealed class KeyCloakClient(HttpClient httpClient)
 
         httpResponseMessage.EnsureSuccessStatusCode();
     }
+    
+    internal async Task UpdateUserAsync(string userId, UserRepresentation user, CancellationToken cancellationToken = default)
+    {
+        HttpResponseMessage httpResponseMessage = await httpClient.PutAsJsonAsync(
+            $"users/{userId}",
+            user,
+            cancellationToken);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+    }
 }

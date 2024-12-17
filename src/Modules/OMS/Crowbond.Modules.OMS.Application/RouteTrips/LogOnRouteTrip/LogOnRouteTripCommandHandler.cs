@@ -5,10 +5,12 @@ using Crowbond.Modules.OMS.Application.Abstractions.Data;
 using Crowbond.Modules.OMS.Domain.Drivers;
 using Crowbond.Modules.OMS.Domain.RouteTripLogs;
 using Crowbond.Modules.OMS.Domain.RouteTrips;
+using Crowbond.Modules.OMS.Domain.Users;
 
 namespace Crowbond.Modules.OMS.Application.RouteTrips.LogOnRouteTrip;
 
 internal sealed class LogOnRouteTripCommandHandler(
+    IUserRepository userRepository,
     IDriverRepository driverRepository,
     IRouteTripRepository routeTripRepository,
     IRouteTripLogRepository routeTripLogRepository,
@@ -50,11 +52,13 @@ internal sealed class LogOnRouteTripCommandHandler(
 
         if (conflictingRouteTripLog != null)
         {
-            Driver? existDriver = await driverRepository.GetAsync(conflictingRouteTripLog.DriverId, cancellationToken);
+            User? existDriver = await userRepository.GetAsync(conflictingRouteTripLog.DriverId, cancellationToken);
+            
             if (existDriver == null)
             {
                 return Result.Failure(DriverErrors.NotFound(conflictingRouteTripLog.DriverId));
             }
+
             return Result.Failure(RouteTripLogErrors.OtherLogAlreadyExistsForRouteTrip($"{existDriver.FirstName} {existDriver.LastName}"));
         }
 

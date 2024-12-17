@@ -20,8 +20,11 @@ internal sealed class DeactivateUserCommandHandler(
         {
             return Result.Failure(UserErrors.NotFound(request.UserId));
         }
-                
-        Result result = await identityProviderService.DeleteUser(user.IdentityId, cancellationToken);
+
+        Result result = await identityProviderService.UpdateUserAsync(
+            user.IdentityId,
+            new UserModel(user.Username, user.Email, string.Empty, user.FirstName, user.LastName, user.Mobile, false),
+            cancellationToken);
 
         if (result.IsFailure)
         {

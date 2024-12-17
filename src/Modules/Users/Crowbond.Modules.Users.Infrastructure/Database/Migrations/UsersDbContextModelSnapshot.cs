@@ -535,7 +535,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Name = "WarhouseOperator"
+                            Name = "WarehouseOperator"
                         },
                         new
                         {
@@ -552,14 +552,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("first_name");
 
                     b.Property<string>("IdentityId")
@@ -573,8 +573,8 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("last_name");
 
                     b.Property<string>("Mobile")
@@ -585,8 +585,8 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("username");
 
                     b.HasKey("Id")
@@ -658,27 +658,27 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "tasks:putaway:read",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "tasks:putaway:execute",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "tasks:picking:execute",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "locations:read",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "stocks:adjust",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {

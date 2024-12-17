@@ -23,12 +23,15 @@ using Crowbond.Modules.OMS.Domain.Vehicles;
 using Crowbond.Modules.OMS.Infrastructure.Vehicles;
 using Crowbond.Modules.OMS.Domain.Compliances;
 using Crowbond.Modules.OMS.Infrastructure.Compliances;
+using Crowbond.Modules.OMS.Domain.Users;
+using Crowbond.Modules.OMS.Infrastructure.Users;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Database;
 
 public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbContext(options), IUnitOfWork
 {
     internal DbSet<Sequence> Sequences { get; set; }
+    internal DbSet<User> Users { get; set; }
     internal DbSet<OrderHeader> OrderHeaders {  get; set; }
     internal DbSet<OrderLine> OrderLines {  get; set; }
     internal DbSet<OrderLineReject> OrderLineRejects {  get; set; }
@@ -62,6 +65,7 @@ public sealed class OmsDbContext(DbContextOptions<OmsDbContext> options) : DbCon
         modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new SequenceConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new PurchaseOrderHeaderConfiguratin());
         modelBuilder.ApplyConfiguration(new PurchaseOrderLineConfiguration());
         modelBuilder.ApplyConfiguration(new OrderHeaderConfiguratin());

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
-using Crowbond.Modules.Users.Infrastructure.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
@@ -21,7 +20,7 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
             user.LastName,
             new UserAttribute(user.Mobile),
             true,
-            true,
+            user.Enabled,
             [new CredentialRepresentation(PasswordCredentialType, user.Password, false)]);
 
         try
@@ -56,6 +55,23 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
     public async Task<Result> DeleteUser(string identityId, CancellationToken cancellationToken = default)
     {
         await keyCloakClient.DeleteUserAsync(identityId, cancellationToken);
+        return Result.Success();
+    }
+
+    // PUT /admin/realms/{realm}/users/{user-id}
+    public async Task<Result> UpdateUserAsync(string identityId, UserModel user, CancellationToken cancellationToken = default)
+    {
+        var userRepresentation = new UserRepresentation(
+            user.Username,
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            new UserAttribute(user.Mobile),
+            true,
+            user.Enabled,
+            []);
+
+        await keyCloakClient.UpdateUserAsync(identityId, userRepresentation, cancellationToken);
         return Result.Success();
     }
 }

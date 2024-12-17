@@ -17,7 +17,7 @@ internal sealed class CreateUserCommandHandler(
         const  string defaultPassword = "123456";
 
         Result<string> result = await identityProviderService.RegisterUserAsync(
-            new UserModel(request.Username, request.Email, defaultPassword, request.FirstName, request.LastName, request.Mobile),
+            new UserModel(request.Username, request.Email, defaultPassword, request.FirstName, request.LastName, request.Mobile, true),
             cancellationToken);
 
         if (result.IsFailure)

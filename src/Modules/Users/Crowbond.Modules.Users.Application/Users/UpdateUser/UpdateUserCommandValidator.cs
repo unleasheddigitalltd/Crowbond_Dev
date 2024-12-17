@@ -7,7 +7,10 @@ internal sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserC
     public UpdateUserCommandValidator()
     {
         RuleFor(c => c.UserId).NotEmpty();
-        RuleFor(c => c.FirstName).NotEmpty();
-        RuleFor(c => c.LastName).NotEmpty();
+        RuleFor(c => c.Username).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.Email).NotEmpty().EmailAddress().MaximumLength(150);
+        RuleFor(c => c.FirstName).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.LastName).NotEmpty().MaximumLength(100);
+        RuleFor(c => c.Mobile).NotEmpty().MaximumLength(20).Matches(@"^(\+44|0)7\d{9}$");
     }
 }

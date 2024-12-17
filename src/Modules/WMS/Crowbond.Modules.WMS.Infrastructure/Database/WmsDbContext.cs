@@ -21,6 +21,8 @@ using Crowbond.Modules.WMS.Domain.Tasks;
 using Crowbond.Common.Infrastructure.Configuration;
 using Crowbond.Modules.WMS.Domain.Dispatches;
 using Crowbond.Modules.WMS.Infrastructure.Dispatches;
+using Crowbond.Modules.WMS.Domain.Users;
+using Crowbond.Modules.WMS.Infrastructure.Users;
 
 namespace Crowbond.Modules.WMS.Infrastructure.Database;
 
@@ -50,6 +52,7 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<TaskAssignmentStatusHistory> TaskAssignmentStatusHistories { get; set; }
     internal DbSet<DispatchHeader> DispatchHeaders { get; set; }
     internal DbSet<DispatchLine> DispatchLines { get; set; }
+    internal DbSet<User> Users { get; set; }
 
 
 
@@ -94,5 +97,7 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
 
         modelBuilder.ApplyConfiguration(new DispatchHeaderConfiguration());
         modelBuilder.ApplyConfiguration(new DispatchLineConfiguration());
+
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }
