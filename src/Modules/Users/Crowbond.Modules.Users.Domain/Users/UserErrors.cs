@@ -29,4 +29,9 @@ public static class UserErrors
         Error.Conflict("Users.DriverActiveRouteTripApiSentNoValue", $"The driver active route trip api has sent no value.");
     public static Error DriverAlreadyLoggedOn(string routeName) =>
         Error.Conflict("Users.DriverAlreadyLoggedOn", $"The driver is already has active log on {routeName} route.");
+
+    public static readonly Error WarehouseOperatorActiveTaskApiSentNoValue =
+        Error.Conflict("Users.WarehouseOperatorActiveTaskApiSentNoValue", $"The warehouse operator active task api has sent no value.");
+    public static Error WarehouseOperatorAlreadyAssigned(string taskNo) =>
+        Error.Conflict("Users.WarehouseOperatorAlreadyAssigned", $"The warehouse operator is already has active assignment on {taskNo} task.");
 }

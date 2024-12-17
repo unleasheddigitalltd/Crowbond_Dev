@@ -113,6 +113,7 @@ public static class WmsModule
         services.AddScoped<IWarehouseOperatorContext, WarehouseOperatorContext>();
 
         services.AddScoped<IStockApi, StockApi>();
+        services.AddScoped<IWarehouseOperatorApi, WarehouseOperatorApi>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 

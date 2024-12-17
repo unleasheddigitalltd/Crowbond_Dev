@@ -3,11 +3,13 @@ using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.PublicApi;
 using Crowbond.Modules.Users.Application.Abstractions.Data;
 using Crowbond.Modules.Users.Domain.Users;
+using Crowbond.Modules.WMS.PublicApi;
 
 namespace Crowbond.Modules.Users.Application.Users.UnassignRole;
 
 internal sealed class UnassignRoleCommandHandler(
     IDriverApi driverApi,
+    IWarehouseOperatorApi warehouseOperatorApi,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UnassignRoleCommand>
@@ -28,16 +30,34 @@ internal sealed class UnassignRoleCommandHandler(
             return Result.Failure(UserErrors.RoleNotFound(request.RoleName));
         }
 
-        ActiveRouteTripResponse? driverActiveRouteTrip = await driverApi.GetDriverActiveRouteTripAsync(request.UserId, cancellationToken);
-
-        if (driverActiveRouteTrip is null)
+        if (role.Name == Role.Driver.Name)
         {
-            return Result.Failure(UserErrors.DriverActiveRouteTripApiSentNoValue);
+            ActiveRouteTripResponse? driverActiveRouteTrip = await driverApi.GetDriverActiveRouteTripAsync(request.UserId, cancellationToken);
+
+            if (driverActiveRouteTrip is null)
+            {
+                return Result.Failure(UserErrors.DriverActiveRouteTripApiSentNoValue);
+            }
+
+            if (driverActiveRouteTrip.ActiveRouteName is not null)
+            {
+                return Result.Failure(UserErrors.DriverAlreadyLoggedOn(driverActiveRouteTrip.ActiveRouteName));
+            }
         }
 
-        if (driverActiveRouteTrip.ActiveRouteName is not null)
+        if (role.Name == Role.WarehouseOperator.Name)
         {
-            return Result.Failure(UserErrors.DriverAlreadyLoggedOn(driverActiveRouteTrip.ActiveRouteName));            
+            ActiveTaskAssignmentResponse? operatorActiveTask = await warehouseOperatorApi.GetWarehouseOperatorActiveTaskAssignmentAsync(request.UserId, cancellationToken);
+
+            if (operatorActiveTask is null)
+            {
+                return Result.Failure(UserErrors.DriverActiveRouteTripApiSentNoValue);
+            }
+
+            if (operatorActiveTask.TaskNo is not null)
+            {
+                return Result.Failure(UserErrors.WarehouseOperatorAlreadyAssigned(operatorActiveTask.TaskNo));
+            }
         }
 
         Result result = user.RemoveRole(role);
