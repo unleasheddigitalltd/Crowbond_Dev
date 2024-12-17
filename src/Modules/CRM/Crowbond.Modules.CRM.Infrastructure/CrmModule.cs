@@ -55,6 +55,8 @@ using Crowbond.Modules.CRM.Infrastructure.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Authentication;
 using Crowbond.Modules.CRM.Application.Abstractions.Authentication;
 using Crowbond.Modules.Users.IntegrationEvents;
+using Crowbond.Modules.CRM.Domain.Users;
+using Crowbond.Modules.CRM.Infrastructure.Users;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -123,6 +125,7 @@ public static class CrmModule
         services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<ISupplierApi, SupplierApi>();
         services.AddScoped<ISupplierProductApi, SupplierProductsApi>();
