@@ -43,6 +43,8 @@ using Crowbond.Modules.OMS.Domain.Users;
 using Crowbond.Modules.OMS.Infrastructure.Users;
 using MassTransit;
 using Crowbond.Modules.Users.IntegrationEvents;
+using Crowbond.Modules.OMS.PublicApi;
+using Crowbond.Modules.OMS.Infrastructure.PublicApi;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
@@ -100,6 +102,8 @@ public static class OmsModule
         services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.AddScoped<IComplianceRepository, ComplianceRepository>();
+
+        services.AddScoped<IDriverApi, DriverApi>();
 
         services.AddSingleton<CartService>();
         services.AddScoped<InventoryService>();

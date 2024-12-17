@@ -35,10 +35,10 @@ internal sealed class GetUsersQueryHandler(IDbConnectionFactory dbConnectionFact
                 u.last_name AS {nameof(User.LastName)},
                 u.mobile AS {nameof(User.Mobile)},
                 u.is_active AS {nameof(User.IsActive)},
-                STRING_AGG(ur.role_name, ',') AS {nameof(User.Roles)},
+                COALESCE(STRING_AGG(ur.role_name, ','), '') AS {nameof(User.Roles)},
                 ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
             FROM users.users u
-            INNER JOIN users.user_roles ur ON u.id = ur.user_id
+            LEFT JOIN users.user_roles ur ON u.id = ur.user_id
             WHERE
                 u.username ILIKE '%' || @Search || '%'
                 OR u.email ILIKE '%' || @Search || '%'
@@ -62,7 +62,7 @@ internal sealed class GetUsersQueryHandler(IDbConnectionFactory dbConnectionFact
 
         SELECT COUNT(u.id)
         FROM users.users u
-        INNER JOIN users.user_roles ur ON u.id = ur.user_id
+        LEFT JOIN users.user_roles ur ON u.id = ur.user_id
         WHERE
             u.username ILIKE '%' || @Search || '%'
             OR u.email ILIKE '%' || @Search || '%'

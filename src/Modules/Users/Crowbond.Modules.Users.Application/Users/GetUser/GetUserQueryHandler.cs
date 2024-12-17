@@ -24,9 +24,9 @@ internal sealed class GetUserQueryHandler(IDbConnectionFactory dbConnectionFacto
                  u.last_name AS {nameof(UserResponse.LastName)},
                  u.mobile AS {nameof(UserResponse.Mobile)},
                  u.is_active AS {nameof(UserResponse.IsActive)},
-                 STRING_AGG(ur.role_name, ',') AS {nameof(UserResponse.Roles)}
+                 COALESCE(STRING_AGG(ur.role_name, ','), '') AS {nameof(UserResponse.Roles)}
              FROM users.users u
-             INNER JOIN users.user_roles ur ON u.id = ur.user_id             
+             LEFT JOIN users.user_roles ur ON u.id = ur.user_id             
              WHERE u.id = @UserId
              GROUP BY u.id, u.username, u.email, u.first_name, u.last_name, u.mobile, u.is_active;
              """;

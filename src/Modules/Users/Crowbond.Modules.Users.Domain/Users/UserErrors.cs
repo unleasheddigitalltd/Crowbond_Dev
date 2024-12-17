@@ -24,4 +24,9 @@ public static class UserErrors
 
     public static Error UserRoleNotExist(string roleName) =>
         Error.Conflict("Users.UserRoleNotExist", $"The {roleName} role for this user was not exist.");
+
+    public static readonly Error DriverActiveRouteTripApiSentNoValue =
+        Error.Conflict("Users.DriverActiveRouteTripApiSentNoValue", $"The driver active route trip api has sent no value.");
+    public static Error DriverAlreadyLoggedOn(string routeName) =>
+        Error.Conflict("Users.DriverAlreadyLoggedOn", $"The driver is already has active log on {routeName} route.");
 }
