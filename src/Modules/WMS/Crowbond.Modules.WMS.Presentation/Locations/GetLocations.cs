@@ -2,7 +2,6 @@
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.WMS.Application.Locations.GetLocations;
-using Crowbond.Modules.WMS.Domain.Locations;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +13,20 @@ internal sealed class GetLocations : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("locations", async (LocationLayer locationLayer, LocationType locationType, ISender sender) =>
+        app.MapGet("locations", async (ISender sender,
+            string search = "",
+            string sort = "name",
+            string order = "asc",
+            int page = 0,
+            int size = 10
+            ) =>
         {
-            Result<IReadOnlyCollection<LocationResponse>> result = await sender.Send(new GetLocationsQuery(locationLayer, locationType));
+            Result<LocationsResponse> result = await sender.Send(
+                new GetLocationsQuery(search, sort, order, page, size));
+
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.GetLocations)
-            .WithTags(Tags.Locations);
+        .RequireAuthorization(Permissions.GetLocations)
+        .WithTags(Tags.Locations);
     }
 }

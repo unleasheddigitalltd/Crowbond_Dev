@@ -3,6 +3,9 @@
 internal static class Permissions
 {
     internal const string GetLocations = "locations:read";
+    internal const string ModifyLocations = "locations:update";
+    internal const string CreateLocations = "locations:create";
+    internal const string DeleteLocations = "locations:delete";
 
     internal const string GetProducts = "products:read";
     internal const string ModifyProducts = "products:update";

@@ -3,5 +3,5 @@
 public enum LocationStatus
 {
     Active = 0,
-    Hold = 1
+    Held = 1
 }

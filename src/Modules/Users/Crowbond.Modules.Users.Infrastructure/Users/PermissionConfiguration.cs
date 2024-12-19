@@ -30,6 +30,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetEventStatistics,
 
             Permission.GetLocations,
+            Permission.ModifyLocations,
+            Permission.CreateLocations,
+            Permission.DeleteLocations,
 
             Permission.GetProducts,
             Permission.CreateProducts,
@@ -182,6 +185,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
 
                     CreateRolePermission(Role.Administrator, Permission.GetLocations),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyLocations),
+                    CreateRolePermission(Role.Administrator, Permission.CreateLocations),
 
                     CreateRolePermission(Role.Administrator, Permission.GetProducts),
                     CreateRolePermission(Role.Administrator, Permission.CreateProducts),

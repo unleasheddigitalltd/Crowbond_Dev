@@ -17,6 +17,9 @@ public sealed class Permission
     public static readonly Permission GetEventStatistics = new("event-statistics:read");
 
     public static readonly Permission GetLocations = new("locations:read");
+    public static readonly Permission ModifyLocations = new("locations:update");
+    public static readonly Permission CreateLocations = new("locations:create");
+    public static readonly Permission DeleteLocations = new("locations:delete");
 
     public static readonly Permission GetProducts = new("products:read");
     public static readonly Permission CreateProducts = new("products:create");
