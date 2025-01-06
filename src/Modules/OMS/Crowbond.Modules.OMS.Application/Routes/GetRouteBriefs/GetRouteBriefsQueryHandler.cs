@@ -4,7 +4,7 @@ using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.OMS.Application.Routes.GetRoutes;
+namespace Crowbond.Modules.OMS.Application.Routes.GetRouteBriefs;
 
 internal sealed class GetRouteBriefsQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetRouteBriefsQuery, IReadOnlyCollection<RouteResponse>>
@@ -22,7 +22,7 @@ internal sealed class GetRouteBriefsQueryHandler(IDbConnectionFactory dbConnecti
              FROM oms.routes
              """;
 
-        List <RouteResponse> routes = (await connection.QueryAsync<RouteResponse>(sql, request)).AsList();
+        List<RouteResponse> routes = (await connection.QueryAsync<RouteResponse>(sql, request)).AsList();
 
         return routes;
     }
