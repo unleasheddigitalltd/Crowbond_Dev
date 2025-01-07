@@ -3,8 +3,12 @@
 namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
 public static class CustomerOutletErrors
-{    public static Error NotFound(Guid customerOutletId) =>
+{    
+    public static Error NotFound(Guid customerOutletId) =>
     Error.NotFound("CustomerOutlet.NotFound", $"The customer outlet with the identifier {customerOutletId} was not found");
+      
+    public static Error RouteNotFound(Guid customerOutletRouteId) =>
+    Error.NotFound("CustomerOutlet.RouteNotFound", $"The customer outlet route with the identifier {customerOutletRouteId} was not found");
 
     public static Error InvalitTimeFormat(string property) =>
     Error.Problem("CustomerOutlet.InvalitTimeFormat", $"Invalid time format in {property}. Expected format is HH:mm or HH:mm:ss.");
@@ -17,4 +21,8 @@ public static class CustomerOutletErrors
     public static readonly Error AlreadyDeactivated = Error.Problem(
     "CustomerOutlet.AlreadyDeactivated",
     "The outlet was already deactivated");
+
+    public static readonly Error RouteHasConflict = Error.Conflict(
+    "CustomerOutlet.RouteHasConflict",
+    "The route has conflict");
 }

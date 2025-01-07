@@ -26,7 +26,6 @@ using Crowbond.Modules.CRM.Domain.CustomerProducts;
 using Crowbond.Modules.CRM.Infrastructure.CustomerOutlets;
 using Crowbond.Modules.CRM.Infrastructure.CustomerContacts;
 using Crowbond.Modules.CRM.Infrastructure.CustomerProducts;
-using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Domain.CustomerSettings;
 using Crowbond.Modules.CRM.Infrastructure.CustomerSettings;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;

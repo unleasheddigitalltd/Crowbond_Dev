@@ -2,8 +2,11 @@
 
 namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
-public sealed class CustomerOutlet : Entity , ISoftDeletable, IAuditable
+public sealed class CustomerOutlet : Entity, ISoftDeletable, IAuditable
 {
+
+    private readonly List<CustomerOutletRoute> _routes = new();
+
     private CustomerOutlet()
     {
     }
@@ -57,6 +60,8 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable, IAuditable
     public Guid? DeletedBy { get; set; }
 
     public DateTime? DeletedOnUtc { get; set; }
+
+    public IReadOnlyCollection<CustomerOutletRoute> Routes => _routes;
 
     public static CustomerOutlet Create(
         Guid customerId,
@@ -132,6 +137,38 @@ public sealed class CustomerOutlet : Entity , ISoftDeletable, IAuditable
         DeliveryTimeFrom = deliveryTimeFrom;
         DeliveryTimeTo = deliveryTimeTo;
         Is24HrsDelivery = is24HrsDelivery;
+    }
+
+    public Result<CustomerOutletRoute> AddRoute(Guid routeId, Weekday weekday)
+    {
+        if (_routes.Any(route => route.Weekday == weekday))
+        {
+            return Result.Failure<CustomerOutletRoute>(CustomerOutletErrors.RouteHasConflict);
+        }
+
+        var route = CustomerOutletRoute.Create(routeId, weekday);
+
+
+        _routes.Add(route);
+        return Result.Success(route);
+    }
+
+    public Result RemoveRoute(CustomerOutletRoute customerOuteletRoute)
+    {
+        CustomerOutletRoute? route = _routes.Find(r => r.Id == customerOuteletRoute.Id);
+
+        if (route == null)
+        {
+            return Result.Failure(CustomerOutletErrors.RouteNotFound(customerOuteletRoute.Id));
+        }
+
+        _routes.Remove(route);
+        return Result.Success();
+    }
+
+    public void RemoveRoutes()
+    {
+        _routes.Clear();
     }
 
     public Result Activate()

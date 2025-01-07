@@ -8,7 +8,7 @@ internal sealed class CustomerOutletRepository(CrmDbContext context) : ICustomer
 {
     public async Task<CustomerOutlet?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await context.CustomerOutlets.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
+        return await context.CustomerOutlets.Include(c => c.Routes).SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<CustomerOutlet>> GetByCustomerIdAsync(Guid customerId, CancellationToken cancellationToken = default)
@@ -21,8 +21,18 @@ internal sealed class CustomerOutletRepository(CrmDbContext context) : ICustomer
         context.CustomerOutlets.Add(customerOutlet);
     }
 
+    public void InsertRoute(CustomerOutletRoute route)
+    {
+        context.CustomerOutletRoutes.Add(route);
+    }
+
     public void Remove(CustomerOutlet customerOutlet)
     {
         context.CustomerOutlets.Remove(customerOutlet);
+    }
+
+    public void RemoveRoutes(IEnumerable<CustomerOutletRoute> routes)
+    {
+        context.CustomerOutletRoutes.RemoveRange(routes);
     }
 }

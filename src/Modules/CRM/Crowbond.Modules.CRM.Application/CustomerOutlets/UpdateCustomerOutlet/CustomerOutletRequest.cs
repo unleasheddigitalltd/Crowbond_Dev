@@ -15,4 +15,5 @@ public sealed record CustomerOutletRequest(
     string? DeliveryNote,
     string DeliveryTimeFrom,
     string DeliveryTimeTo,
-    bool Is24HrsDelivery);
+    bool Is24HrsDelivery,
+    List<CustomerOutletRouteRequest> Routes);

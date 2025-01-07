@@ -1,36 +1,32 @@
-﻿using System;
+﻿
 using Crowbond.Common.Domain;
+using Crowbond.Modules.CRM.Domain.Routes;
 
-namespace Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
+namespace Crowbond.Modules.CRM.Domain.CustomerOutlets;
 
 public sealed class CustomerOutletRoute : Entity
 {
     private CustomerOutletRoute()
     {
-        
     }
 
     public Guid Id { get; private set; }
-    public Guid CustomerOutletId { get; private set; }
-    public Guid RouteId { get; private set; }
-    public string DaysOfWeek { get; private set; }
 
-    public static CustomerOutletRoute Create(Guid customerOutletId, Guid routeId, string daysOfWeek)
+    public Guid CustomerOutletId { get; private set; }
+
+    public Guid RouteId { get; private set; }
+
+    public Weekday Weekday { get; private set; }
+
+    internal static CustomerOutletRoute Create(Guid routeId, Weekday weekday)
     {
         var customerOutletRoute = new CustomerOutletRoute
         {
             Id = Guid.NewGuid(),
-            CustomerOutletId = customerOutletId,
             RouteId = routeId,
-            DaysOfWeek = daysOfWeek
+            Weekday = weekday
         };
 
         return customerOutletRoute;
-    }
-
-    public void Update(Guid routeId, string daysOfWeek)
-    {
-        RouteId = routeId;
-        DaysOfWeek = daysOfWeek;
     }
 }
