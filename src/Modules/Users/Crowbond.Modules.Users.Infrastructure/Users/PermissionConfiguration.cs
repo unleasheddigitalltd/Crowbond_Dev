@@ -133,6 +133,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.DeliverOrders,
             Permission.GetOrderLineRejectReasons,
 
+            Permission.GetSettings,
+            Permission.ModifySettings,
+
             Permission.ReviewOrderLine);
 
 
@@ -278,6 +281,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.DeleteOrders),
                     CreateRolePermission(Role.Administrator, Permission.AcceptOrders),
                     CreateRolePermission(Role.Administrator, Permission.GetOrderLineRejectReasons),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetSettings),
+                    CreateRolePermission(Role.Administrator, Permission.ModifySettings),
 
                     CreateRolePermission(Role.Administrator, Permission.ReviewOrderLine));
             });

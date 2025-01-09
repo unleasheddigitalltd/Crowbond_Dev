@@ -121,6 +121,9 @@ public sealed class Permission
     public static readonly Permission ReviewOrderLine = new ("order-lines:review");
     public static readonly Permission GetOrderLineRejectReasons = new ("order-line-reject-reasons:read");
 
+    public static readonly Permission GetSettings = new ("settings:read");
+    public static readonly Permission ModifySettings = new ("settings:update");
+
     public Permission(string code)
     {
         Code = code;

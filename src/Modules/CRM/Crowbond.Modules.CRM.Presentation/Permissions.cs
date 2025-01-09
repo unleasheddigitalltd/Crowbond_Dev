@@ -33,4 +33,7 @@ internal static class Permissions
 
     internal const string GetPriceTiers = "price-tiers:read";
     internal const string ModifyPriceTiers = "price-tiers:update";
+
+    internal const string GetSettings = "settings:read";
+    internal const string ModifySettings = "settings:update";
 }
