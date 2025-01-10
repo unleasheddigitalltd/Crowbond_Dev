@@ -5,12 +5,12 @@ using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
 using Dapper;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetAllCustomersProducts;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetAllCustomerProducts;
 
-internal sealed class GetAllCustomersProductsQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetAllCustomersProductsQuery, AllCustomersProductsResponse>
+internal sealed class GetAllCustomerProductsQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    : IQueryHandler<GetAllCustomerProductsQuery, CustomerProductsResponse>
 {
-    public async Task<Result<AllCustomersProductsResponse>> Handle(GetAllCustomersProductsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerProductsResponse>> Handle(GetAllCustomerProductsQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -86,6 +86,6 @@ internal sealed class GetAllCustomersProductsQueryHandler(IDbConnectionFactory d
         int startIndex = currentPage * pageSize;
         int endIndex = totalCount == 0 ? 0 : Math.Min(startIndex + pageSize - 1, totalCount - 1);
 
-        return new AllCustomersProductsResponse(customerProducts, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
+        return new CustomerProductsResponse(customerProducts, new Pagination(totalCount, pageSize, currentPage, totalPages, startIndex, endIndex));
     }
 }

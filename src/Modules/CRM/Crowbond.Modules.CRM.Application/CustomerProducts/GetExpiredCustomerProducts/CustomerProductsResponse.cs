@@ -1,10 +1,10 @@
 ﻿using Crowbond.Common.Application.Pagination;
 
-namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetAllCustomersProducts;
+namespace Crowbond.Modules.CRM.Application.CustomerProducts.GetExpiredCustomerProducts;
 
-public sealed class AllCustomersProductsResponse : PaginatedResponse<CustomerProduct>
+public sealed class CustomerProductsResponse : PaginatedResponse<CustomerProduct>
 {
-    public AllCustomersProductsResponse(IReadOnlyCollection<CustomerProduct> customerProducts, IPagination pagination)
+    public CustomerProductsResponse(IReadOnlyCollection<CustomerProduct> customerProducts, IPagination pagination)
         : base(customerProducts, pagination)
     { }
 }

@@ -1,7 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
-using Crowbond.Modules.CRM.Application.CustomerProducts.GetAllCustomerProducts;
+using Crowbond.Modules.CRM.Application.CustomerProducts.GetExpiredCustomerProducts;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.CRM.Presentation.CustomerProducts;
 
-internal sealed class GetAllCustomersProducts : IEndpoint
+public sealed class GetExpiredCustomerProducts : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("customers/products", async (
+        app.MapGet("customers/products/{expiryDate}", async (
+            DateOnly expiryDate,
             ISender sender,
             string search = "",
             string sort = "BusinessName",
@@ -23,7 +24,8 @@ internal sealed class GetAllCustomersProducts : IEndpoint
             ) =>
         {
             Result<CustomerProductsResponse> result = await sender.Send(
-                new GetAllCustomerProductsQuery(
+                new GetExpiredCustomerProductsQuery(
+                    expiryDate,
                     search,
                     sort,
                     order,
