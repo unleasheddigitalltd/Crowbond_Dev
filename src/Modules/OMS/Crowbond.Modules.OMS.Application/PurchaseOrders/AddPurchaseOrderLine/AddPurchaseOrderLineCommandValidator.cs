@@ -8,6 +8,7 @@ internal sealed class AddPurchaseOrderLineCommandValidator: AbstractValidator<Ad
     {
         RuleFor(ol => ol.ProductId).NotEmpty();
         RuleFor(ol => ol.Qty).GreaterThan(0);
+        RuleFor(ol => ol.UnitPrice).GreaterThan(0);
         RuleFor(ol => ol.Comments).MaximumLength(255);
     }
 }

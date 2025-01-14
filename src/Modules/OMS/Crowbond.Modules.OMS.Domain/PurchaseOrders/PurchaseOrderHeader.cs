@@ -184,42 +184,61 @@ public sealed class PurchaseOrderHeader : Entity, IAuditable
             return Result.Failure<PurchaseOrderLine>(PurchaseOrderErrors.NotDraft);
         }
 
-        PurchaseOrderLine line;
-
         if (_lines.Any(l => l.ProductId == productId))
         {
-            line = _lines.Single(l => l.ProductId == productId);
-            line.IncreasQty(qty);
+            return Result.Failure<PurchaseOrderLine>(PurchaseOrderErrors.LineWithSameProductAlreadyExists(productId));
         }
-        else
+
+        Result<PurchaseOrderLine> purchaseOrderLine = PurchaseOrderLine.Create(
+            productId,
+            productSku,
+            productName,
+            unitOfMeasureName,
+            categoryId,
+            categoryName,
+            brandId,
+            brandName,
+            productGroupId,
+            productGroupName,
+            unitPrice,
+            qty,
+            taxRateType,
+            comments);
+
+        if (purchaseOrderLine.IsFailure)
         {
-            Result<PurchaseOrderLine> purchaseOrderLine = PurchaseOrderLine.Create(
-                productId,
-                productSku,
-                productName,
-                unitOfMeasureName,
-                categoryId,
-                categoryName,
-                brandId,
-                brandName,
-                productGroupId,
-                productGroupName,
-                unitPrice,
-                qty,
-                taxRateType,
-                comments);
-
-            if (purchaseOrderLine.IsFailure)
-            {
-                return Result.Failure<PurchaseOrderLine>(purchaseOrderLine.Error);
-            }
-
-            line = purchaseOrderLine.Value;
-            _lines.Add(line);
+            return Result.Failure<PurchaseOrderLine>(purchaseOrderLine.Error);
         }
+
+        PurchaseOrderLine line = purchaseOrderLine.Value;
+        _lines.Add(line);
 
         UpdateTotalAmount();
         return line;
+    }
+
+    public Result UpdateLine(
+        Guid purchaseOrderLineId,
+        decimal unitPrice,
+        decimal qty,
+        string? comments)
+    {
+        if (Status != PurchaseOrderStatus.Draft)
+        {
+            return Result.Failure(PurchaseOrderErrors.NotDraft);
+        }
+
+        PurchaseOrderLine line = _lines.SingleOrDefault(l => l.Id == purchaseOrderLineId);
+
+        if (line == null)
+        {
+            return Result.Failure(PurchaseOrderErrors.LineNotFound(purchaseOrderLineId));
+        }
+
+        line.UpdateLine(unitPrice, qty, comments);
+
+        UpdateTotalAmount();
+        return Result.Success();
     }
 
     public void UpdateDetails(

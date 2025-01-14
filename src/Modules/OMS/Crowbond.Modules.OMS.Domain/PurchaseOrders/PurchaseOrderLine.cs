@@ -89,6 +89,17 @@ public sealed class PurchaseOrderLine
         return purchaseOrderLine;
     }
 
+    internal void UpdateLine(decimal unitPrice, decimal qty, string? comments)
+    {
+        UnitPrice = unitPrice;
+        Qty = qty;
+        Comments = comments;
+
+        SubTotal = UnitPrice * Qty;
+        Tax = SubTotal * GetTaxRate(TaxRateType);
+        LineTotal = SubTotal + Tax;
+    }
+
     internal void IncreasQty(decimal qty)
     {
         Qty += qty;

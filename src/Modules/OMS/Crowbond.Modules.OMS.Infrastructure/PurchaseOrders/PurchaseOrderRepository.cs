@@ -22,6 +22,11 @@ internal sealed class PurchaseOrderRepository(OmsDbContext context) : IPurchaseO
         return await context.PurchaseOrderHeaders.Include(p => p.Lines).Include(p => p.StatusHistory).SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
+    public async Task<PurchaseOrderLine?> GetLineAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.PurchaseOrderLines.SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
     public async Task<PurchaseOrderHeader?> GetDraftBySupplierIdAsync(Guid supplierId, CancellationToken cancellationToken = default)
     {
         return await context.PurchaseOrderHeaders.Include(p => p.Lines).Include(p => p.StatusHistory).SingleOrDefaultAsync(p => p.SupplierId == supplierId && p.Status == PurchaseOrderStatus.Draft, cancellationToken);
