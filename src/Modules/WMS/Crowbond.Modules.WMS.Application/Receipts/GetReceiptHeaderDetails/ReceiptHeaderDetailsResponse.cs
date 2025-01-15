@@ -1,5 +1,13 @@
-﻿namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaderDetails;
+﻿using Crowbond.Modules.WMS.Domain.Receipts;
+
+namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaderDetails;
 
 public sealed record ReceiptHeaderDetailsResponse(
-    Guid Id
-    );
+    Guid Id,
+    string ReceiptNo,    
+    DateOnly? ReceivedDate,    
+    Guid? PurchaseOrderId,    
+    string? PurchaseOrderNo,    
+    string? DeliveryNoteNumber,    
+    Guid? LocationId,    
+    ReceiptStatus Status);

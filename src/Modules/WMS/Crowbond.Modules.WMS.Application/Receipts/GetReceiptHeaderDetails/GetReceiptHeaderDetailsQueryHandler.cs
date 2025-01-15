@@ -17,7 +17,14 @@ internal sealed class GetReceiptHeaderDetailsQueryHandler(IDbConnectionFactory d
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(ReceiptHeaderDetailsResponse.Id)}
+                 id AS {nameof(ReceiptHeaderDetailsResponse.Id)},
+                 receipt_no AS {nameof(ReceiptHeaderDetailsResponse.ReceiptNo)},
+                 received_date AS {nameof(ReceiptHeaderDetailsResponse.ReceivedDate)},
+                 purchase_order_id AS {nameof(ReceiptHeaderDetailsResponse.PurchaseOrderId)},
+                 purchase_order_no AS {nameof(ReceiptHeaderDetailsResponse.PurchaseOrderNo)},
+                 delivery_note_number AS {nameof(ReceiptHeaderDetailsResponse.DeliveryNoteNumber)},
+                 location_id AS {nameof(ReceiptHeaderDetailsResponse.LocationId)},
+                 status AS {nameof(ReceiptHeaderDetailsResponse.Status)}
              FROM wms.receipt_headers
              WHERE id = @ReceiptHeaderId
              """;

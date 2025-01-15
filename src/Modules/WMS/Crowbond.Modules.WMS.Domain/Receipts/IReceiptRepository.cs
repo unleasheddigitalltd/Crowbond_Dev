@@ -6,7 +6,11 @@ public interface IReceiptRepository
 {
     Task<ReceiptHeader?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
+    Task<ReceiptLine?> GetLineAsync(Guid id, CancellationToken cancellationToken = default);
+
     Task<ReceiptHeader?> GetByPurchaseOrderIdAsync(Guid purchaseOrderId, CancellationToken cancellationToken = default);
+
+    void AddLine(ReceiptLine purchaseOrderLine);
 
     void AddLines(IEnumerable<ReceiptLine> purchaseOrderLines);
 

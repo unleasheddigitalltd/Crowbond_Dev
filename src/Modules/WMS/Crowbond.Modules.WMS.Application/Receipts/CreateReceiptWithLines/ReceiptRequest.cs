@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceipt;
+﻿namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceiptWithLines;
 
 public sealed record ReceiptRequest(
     Guid PurchaseOrderId,
@@ -8,5 +8,5 @@ public sealed record ReceiptRequest(
     public sealed record ReceiptLineRequest(
         Guid ProductId,
         decimal QuantityReceived,
-        decimal UnitPrice);       
+        decimal UnitPrice);
 }

@@ -39,7 +39,7 @@ public sealed class ReceiptHeader : Entity, IAuditable
 
     public static ReceiptHeader Create(
         string receiptNo,
-        Guid purchaseOrderId,
+        Guid? purchaseOrderId,
         string? purchaseOrderNumber)
     {
         var receiptHeader = new ReceiptHeader
@@ -89,6 +89,46 @@ public sealed class ReceiptHeader : Entity, IAuditable
         _lines.Add(receiptLine);
 
         return Result.Success(receiptLine);
+    }
+
+    public Result UpdateLine(
+        Guid purchaseOrderLineId,
+        decimal unitPrice,
+        decimal qty)
+    {
+        if (Status != ReceiptStatus.Shipping)
+        {
+            return Result.Failure(ReceiptErrors.NotShipping);
+        }
+
+        ReceiptLine line = _lines.SingleOrDefault(l => l.Id == purchaseOrderLineId);
+
+        if (line == null)
+        {
+            return Result.Failure(ReceiptErrors.LineNotFound(purchaseOrderLineId));
+        }
+
+        line.Update(unitPrice, qty);
+
+        return Result.Success();
+    }
+
+    public Result RemoveLine(Guid lineId)
+    {
+        if (Status != ReceiptStatus.Shipping)
+        {
+            return Result.Failure(ReceiptErrors.NotShipping);
+        }
+
+        ReceiptLine? line = _lines.SingleOrDefault(l => l.Id == lineId);
+        if (line == null)
+        {
+            return Result.Failure(ReceiptErrors.LineNotFound(lineId));
+        }
+
+        _lines.Remove(line);
+
+        return Result.Success();
     }
 
     public Result StoreLine(Guid receivedLineId, decimal Qty)

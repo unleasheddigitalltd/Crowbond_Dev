@@ -2,14 +2,15 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.WMS.Domain.Receipts;
 using Dapper;
 
-namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptLines;
+namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptLine;
 
-internal sealed class GetReceiptLinesQueryHandler(IDbConnectionFactory dbConnectionFactory)
-    : IQueryHandler<GetReceiptLinesQuery, IReadOnlyCollection<ReceiptLineResponse>>
+internal sealed class GetReceiptLineQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    : IQueryHandler<GetReceiptLineQuery, ReceiptLineResponse>
 {
-    public async Task<Result<IReadOnlyCollection<ReceiptLineResponse>>> Handle(GetReceiptLinesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ReceiptLineResponse>> Handle(GetReceiptLineQuery request, CancellationToken cancellationToken)
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -28,11 +29,16 @@ internal sealed class GetReceiptLinesQueryHandler(IDbConnectionFactory dbConnect
              FROM wms.receipt_lines r
              INNER JOIN wms.products p ON p.id = r.product_id
              WHERE
-                r.receipt_header_id = @ReceiptHeaderId
+                r.id = @ReceiptLineId
              """;
 
-        List<ReceiptLineResponse> receiptLines = (await connection.QueryAsync<ReceiptLineResponse>(sql, request)).AsList();
+        ReceiptLineResponse? receiptLine = await connection.QuerySingleOrDefaultAsync<ReceiptLineResponse>(sql, request);
 
-        return receiptLines;
+        if (receiptLine == null)
+        {
+            return Result.Failure<ReceiptLineResponse>(ReceiptErrors.LineNotFound(request.ReceiptLineId));
+        }
+
+        return receiptLine;
     }
 }

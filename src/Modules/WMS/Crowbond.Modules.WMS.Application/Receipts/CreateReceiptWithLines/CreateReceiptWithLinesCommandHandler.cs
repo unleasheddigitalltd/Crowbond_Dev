@@ -4,14 +4,14 @@ using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Sequences;
 
-namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceipt;
+namespace Crowbond.Modules.WMS.Application.Receipts.CreateReceiptWithLines;
 
-internal sealed class CreateReceiptCommandHandler(
+internal sealed class CreateReceiptWithLinesCommandHandler(
     IReceiptRepository receiptRepository,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CreateReceiptCommand, Guid>
+    : ICommandHandler<CreateReceiptWithLinesCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(CreateReceiptCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateReceiptWithLinesCommand request, CancellationToken cancellationToken)
     {
         Sequence? sequence = await receiptRepository.GetSequenceAsync(cancellationToken);
 
@@ -22,8 +22,16 @@ internal sealed class CreateReceiptCommandHandler(
 
         Result<ReceiptHeader> result = ReceiptHeader.Create(
             sequence.GetNumber(),
-            request.PurchaseOrderId,
-            request.PurchaseOrderNo);                     
+            request.Receipt.PurchaseOrderId,
+            request.Receipt.PurchaseOrderNo);
+
+        foreach (ReceiptRequest.ReceiptLineRequest line in request.Receipt.ReceiptLines)
+        {
+            result.Value.AddLine(
+                line.ProductId,
+                line.QuantityReceived,
+                line.UnitPrice);
+        }
 
         receiptRepository.Insert(result.Value);
 

@@ -141,7 +141,7 @@ public sealed class PurchaseOrderHeader : Entity, IAuditable
         PurchaseOrderLine? line = _lines.SingleOrDefault(l => l.Id == lineId);
         if (line == null)
         {
-            return Result.Failure(PurchaseOrderErrors.NotFound(lineId));
+            return Result.Failure(PurchaseOrderErrors.LineNotFound(lineId));
         }
 
         _lines.Remove(line);
