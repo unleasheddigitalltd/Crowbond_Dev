@@ -6,7 +6,7 @@ using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.Orders.GetOrderLines;
 
-internal sealed class GetOrderLinesQueryHandle(IDbConnectionFactory dbConnectionFactory)
+internal sealed class GetOrderLinesQueryHandler(IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetOrderLinesQuery, IReadOnlyCollection<OrderLineResponse>>
 {
     public async Task<Result<IReadOnlyCollection<OrderLineResponse>>> Handle(GetOrderLinesQuery request, CancellationToken cancellationToken)

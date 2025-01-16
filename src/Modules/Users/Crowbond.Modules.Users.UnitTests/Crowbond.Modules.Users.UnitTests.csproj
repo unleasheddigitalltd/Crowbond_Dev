@@ -18,11 +18,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-
 	</ItemGroup>
-	
+
 	<ItemGroup>
-		<ProjectReference Include="..\Crowbond.Modules.WMS.Domain\Crowbond.Modules.WMS.Domain.csproj" />
+		<ProjectReference Include="..\Crowbond.Modules.Users.Domain\Crowbond.Modules.Users.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

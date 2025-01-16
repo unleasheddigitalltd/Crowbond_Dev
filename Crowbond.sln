@@ -105,7 +105,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.UnitTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.WMS.IntegrationTests", "src\Modules\WMS\Crowbond.Modules.WMS.IntegrationTests\Crowbond.Modules.WMS.IntegrationTests.csproj", "{38F208A0-3E2E-48F1-9027-378D10F737A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.PublicApi", "src\Modules\OMS\Crowbond.Modules.OMS.PublicApi\Crowbond.Modules.OMS.PublicApi.csproj", "{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crowbond.Modules.OMS.PublicApi", "src\Modules\OMS\Crowbond.Modules.OMS.PublicApi\Crowbond.Modules.OMS.PublicApi.csproj", "{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.IntegrationTests", "src\Modules\CRM\Crowbond.Modules.CRM.IntegrationTests\Crowbond.Modules.CRM.IntegrationTests.csproj", "{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.IntegrationTests", "src\Modules\OMS\Crowbond.Modules.OMS.IntegrationTests\Crowbond.Modules.OMS.IntegrationTests.csproj", "{10E69BB1-C4A1-4D90-B06A-CE9093743F8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.OMS.UnitTests", "src\Modules\OMS\Crowbond.Modules.OMS.UnitTests\Crowbond.Modules.OMS.UnitTests.csproj", "{C897329C-D5A1-481A-B78B-F0EDFD568DA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.CRM.UnitTests", "src\Modules\CRM\Crowbond.Modules.CRM.UnitTests\Crowbond.Modules.CRM.UnitTests.csproj", "{40F2B24E-0507-4040-B707-64C3D1CF2457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Users.IntegrationTests", "src\Modules\Users\Crowbond.Modules.Users.IntegrationTests\Crowbond.Modules.Users.IntegrationTests.csproj", "{2E47D1BB-0831-418B-9F97-9E56D2782C5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crowbond.Modules.Users.UnitTests", "src\Modules\Users\Crowbond.Modules.Users.UnitTests\Crowbond.Modules.Users.UnitTests.csproj", "{2F77C948-752D-4860-B292-E805AF721195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +269,30 @@ Global
 		{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E69BB1-C4A1-4D90-B06A-CE9093743F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E69BB1-C4A1-4D90-B06A-CE9093743F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E69BB1-C4A1-4D90-B06A-CE9093743F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E69BB1-C4A1-4D90-B06A-CE9093743F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C897329C-D5A1-481A-B78B-F0EDFD568DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C897329C-D5A1-481A-B78B-F0EDFD568DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C897329C-D5A1-481A-B78B-F0EDFD568DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C897329C-D5A1-481A-B78B-F0EDFD568DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F2B24E-0507-4040-B707-64C3D1CF2457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F2B24E-0507-4040-B707-64C3D1CF2457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F2B24E-0507-4040-B707-64C3D1CF2457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F2B24E-0507-4040-B707-64C3D1CF2457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E47D1BB-0831-418B-9F97-9E56D2782C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E47D1BB-0831-418B-9F97-9E56D2782C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E47D1BB-0831-418B-9F97-9E56D2782C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E47D1BB-0831-418B-9F97-9E56D2782C5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F77C948-752D-4860-B292-E805AF721195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F77C948-752D-4860-B292-E805AF721195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F77C948-752D-4860-B292-E805AF721195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F77C948-752D-4860-B292-E805AF721195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -308,6 +344,12 @@ Global
 		{75E6EA8E-5BB6-40EF-A27D-C7DC75157CD9} = {CD31215E-119A-453E-876A-F541676AF633}
 		{38F208A0-3E2E-48F1-9027-378D10F737A3} = {CD31215E-119A-453E-876A-F541676AF633}
 		{777EDD2B-DC20-4F45-82D0-A91A2C28ED3A} = {CF31CEC9-5A24-4DC6-856C-6D3E26EE8D12}
+		{B7545CBA-CEAB-4EB2-A400-98DCD9D26AFE} = {D2FFA242-71E5-48FE-8CF8-F337663C0DA9}
+		{10E69BB1-C4A1-4D90-B06A-CE9093743F8D} = {00BF6A0E-DB64-47D1-B744-2379A3CDE04B}
+		{C897329C-D5A1-481A-B78B-F0EDFD568DA8} = {00BF6A0E-DB64-47D1-B744-2379A3CDE04B}
+		{40F2B24E-0507-4040-B707-64C3D1CF2457} = {D2FFA242-71E5-48FE-8CF8-F337663C0DA9}
+		{2E47D1BB-0831-418B-9F97-9E56D2782C5A} = {6B572AB1-8519-46E8-A41D-24013B0AE210}
+		{2F77C948-752D-4860-B292-E805AF721195} = {6B572AB1-8519-46E8-A41D-24013B0AE210}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E42AE86-7F3C-45F4-A386-AB71CC4446CB}

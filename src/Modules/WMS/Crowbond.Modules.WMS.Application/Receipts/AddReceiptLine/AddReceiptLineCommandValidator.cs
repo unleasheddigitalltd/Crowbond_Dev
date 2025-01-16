@@ -9,7 +9,7 @@ internal sealed class AddReceiptLineCommandValidator : AbstractValidator<AddRece
         RuleFor(r => r.ReceiptHeaderId).NotEmpty();
         RuleFor(r => r.ProductId).NotEmpty();
         RuleFor(r => r.UnitPrice).GreaterThan(decimal.Zero);
-        RuleFor(r => r.QuantityReceived).GreaterThan(decimal.Zero);
+        RuleFor(r => r.ReceivedQty).GreaterThan(decimal.Zero);
 
     }
 }
