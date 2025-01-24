@@ -3,7 +3,7 @@
 public sealed record ReceiptResponse(
     Guid Id,
     string ReceiptNo,
-    DateTime ReceivedDate,
-    string PurchaseOrderNo,
-    string DeliveryNoteNumber,
+    DateTime? ReceivedDate,
+    string? PurchaseOrderNo,
+    string? DeliveryNoteNumber,
     string Status);

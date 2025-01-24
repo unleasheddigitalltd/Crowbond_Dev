@@ -30,8 +30,6 @@ using Crowbond.Modules.CRM.Domain.PriceTiers;
 using Crowbond.Modules.CRM.Infrastructure.PriceTiers;
 using Crowbond.Modules.CRM.Domain.ProductPrices;
 using Crowbond.Modules.CRM.Infrastructure.ProductPrices;
-using Crowbond.Modules.CRM.Domain.CustomerOutletRoutes;
-using Crowbond.Modules.CRM.Infrastructure.CustomerOutletRoutes;
 using Crowbond.Modules.CRM.Domain.Routes;
 using Crowbond.Modules.CRM.Infrastructure.Routes;
 using Crowbond.Modules.CRM.Domain.SupplierContacts;
@@ -54,6 +52,10 @@ using Crowbond.Modules.CRM.Domain.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Settings;
 using Crowbond.Modules.CRM.Infrastructure.Authentication;
 using Crowbond.Modules.CRM.Application.Abstractions.Authentication;
+using Crowbond.Modules.Users.IntegrationEvents;
+using Crowbond.Modules.CRM.Domain.Users;
+using Crowbond.Modules.CRM.Infrastructure.Users;
+using Crowbond.Modules.CRM.Application.Routes;
 
 namespace Crowbond.Modules.CRM.Infrastructure;
 public static class CrmModule
@@ -86,6 +88,10 @@ public static class CrmModule
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteUpdatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderLineAddedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserDeactivatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -115,9 +121,11 @@ public static class CrmModule
         services.AddScoped<IProductPriceRepository, ProductPriceRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
-        services.AddScoped<ICustomerOutletRouteRepository, CustomerOutletRouteRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddSingleton<RouteService>();
 
         services.AddScoped<ISupplierApi, SupplierApi>();
         services.AddScoped<ISupplierProductApi, SupplierProductsApi>();

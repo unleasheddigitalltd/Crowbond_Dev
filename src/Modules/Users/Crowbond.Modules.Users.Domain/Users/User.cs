@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.Users.Domain.Users;
 
-public sealed class User : Entity
+public sealed class User : Entity, IChangeDetectable
 {
     private readonly List<Role> _roles = [];
 
@@ -26,7 +26,7 @@ public sealed class User : Entity
 
     public bool IsActive { get; private set; }
 
-    public IReadOnlyCollection<Role> Roles => _roles.ToList();
+    public IReadOnlyCollection<Role> Roles => _roles;
 
     public static User Create(Guid id, string username, string email, string firstName, string lastName, string mobile, string identityId)
     {
@@ -47,32 +47,92 @@ public sealed class User : Entity
         return user;
     }
 
-    public void AddRole(Role role)
+    public Result AddRole(Role role)
     {
-        _roles.Add(role);
-    }
-
-    public void Update(string firstName, string lastName)
-    {
-        if (FirstName == firstName && LastName == lastName)
+        if (_roles.Contains(role))
         {
-            return;
+            return Result.Failure(UserErrors.UserRoleAlreadyExist(role.Name));
         }
 
-        FirstName = firstName;
-        LastName = lastName;
+        if (role == Role.Customer || role == Role.Supplier)
+        {
+            return Result.Failure(UserErrors.InvalidRole(role.Name));
+        }
 
-        Raise(new UserProfileUpdatedDomainEvent(Id, FirstName, LastName));
+        _roles.Add(role);
+
+        switch (role.Name)
+        {
+            case "Driver":
+                Raise(new DriverRoleAddedDomainEvent(Id));
+                break;
+            case "WarehouseOperator":
+                Raise(new WarehouseOperatorRoleAddedDomainEvent(Id));
+                break;
+            case "WarehouseManager":
+                // No action needed for WarehouseManager
+                break;
+            default:
+                return Result.Failure(UserErrors.UnhandledRole(role.Name));
+        }
+
+        return Result.Success();
+    }
+    
+    public Result RemoveRole(Role role)
+    {
+        if (!_roles.Contains(role))
+        {
+            return Result.Failure(UserErrors.UserRoleNotExist(role.Name));
+        }
+
+        if (role == Role.Customer || role == Role.Supplier)
+        {
+            return Result.Failure(UserErrors.InvalidRole(role.Name));
+        }
+
+        _roles.Remove(role);
+
+        switch (role.Name)
+        {
+            case "Driver":
+                Raise(new DriverRoleRemovedDomainEvent(Id));
+                break;
+            case "WarehouseOperator":
+                Raise(new WarehouseOperatorRoleRemovedDomainEvent(Id));
+                break;
+            case "WarehouseManager":
+                // No action needed for WarehouseManager
+                break;
+            default:
+                return Result.Failure(UserErrors.UnhandledRole(role.Name));
+        }
+
+        return Result.Success();
     }
 
-    public void Activate(string identityId)
+
+    public void Update(string username, string email, string firstName, string lastName, string mobile)
+    {
+        Username = username;
+        Email = email;
+        FirstName = firstName;
+        LastName = lastName;
+        Mobile = mobile;
+
+        Raise(new UserProfileUpdatedDomainEvent(Id, Username, Email, FirstName, LastName, Mobile));
+    }
+
+    public void Activate()
     {
         if (IsActive)
         {
             return;
         }
-        IdentityId = identityId;
+
         IsActive = true;
+
+        Raise(new UserActivatedDomainEvent(Id));
     }
 
     public void Deactivate()
@@ -83,5 +143,7 @@ public sealed class User : Entity
         }
 
         IsActive = false;
+
+        Raise(new UserDeactivatedDomainEvent(Id));
     }
 }

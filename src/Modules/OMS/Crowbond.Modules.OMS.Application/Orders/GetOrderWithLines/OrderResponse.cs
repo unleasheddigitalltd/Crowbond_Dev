@@ -2,7 +2,9 @@
 
 public sealed record OrderResponse(
     Guid Id,
-    string OrderNo)
+    Guid RouteTripId,
+    string OrderNo,
+    string CustomerBusinessName)
 {
     public List<OrderLineResponse> Lines { get; } = [];
 }

@@ -2,7 +2,7 @@
 using Crowbond.Common.Application.Exceptions;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.IntegrationEvents;
-using Crowbond.Modules.WMS.Application.Receipts.CreateReceipt;
+using Crowbond.Modules.WMS.Application.Receipts.CreateReceiptWithLines;
 using MediatR;
 
 namespace Crowbond.Modules.WMS.Presentation.PurchaseOrders;
@@ -20,12 +20,12 @@ internal sealed class PurchaseOrderApprovedIntegrationEventHandler(ISender sende
                 l.ProductId, l.Qty, l.UnitPrice)).ToList());
 
         Result result = await sender.Send(
-            new CreateReceiptCommand(request),
+            new CreateReceiptWithLinesCommand(request),
             cancellationToken);
 
         if (result.IsFailure)
         {
-            throw new CrowbondException(nameof(CreateReceiptCommand), result.Error);
+            throw new CrowbondException(nameof(CreateReceiptWithLinesCommand), result.Error);
         }
     }
 }

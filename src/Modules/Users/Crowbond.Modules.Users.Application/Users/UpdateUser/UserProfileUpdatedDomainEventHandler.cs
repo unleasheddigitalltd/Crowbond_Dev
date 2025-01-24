@@ -17,8 +17,11 @@ internal sealed class UserProfileUpdatedDomainEventHandler(IEventBus eventBus)
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
                 domainEvent.UserId,
+                domainEvent.Username,
+                domainEvent.Email,
                 domainEvent.FirstName,
-                domainEvent.LastName),
+                domainEvent.LastName,
+                domainEvent.Mobile),
             cancellationToken);
     }
 }

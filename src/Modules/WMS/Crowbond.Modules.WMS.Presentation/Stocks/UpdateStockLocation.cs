@@ -15,7 +15,13 @@ internal sealed class UpdateStockLocation : IEndpoint
     {
         app.MapPut("stocks/{id}/relocate", async (Guid id, Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new UpdateStockLocationCommand(id, request.TransactionNote, request.Reason, request.Quantity, request.Destination));
+            Result<Guid> result = await sender.Send(new UpdateStockLocationCommand(
+                id,
+                request.TransactionNote,
+                request.Reason,
+                request.Quantity,
+                request.Destination));
+
             return result.Match(Results.Ok, ApiResults.Problem);
         })
         .RequireAuthorization(Permissions.AdjustStocks)

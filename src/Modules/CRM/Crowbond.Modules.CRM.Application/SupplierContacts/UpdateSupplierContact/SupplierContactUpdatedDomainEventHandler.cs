@@ -30,8 +30,11 @@ internal sealed class SupplierContactUpdatedDomainEventHandler(ISender sender, I
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,
                 result.Value.Id,
+                result.Value.Username,
+                result.Value.Email,
                 result.Value.FirstName,
-                result.Value.LastName),
+                result.Value.LastName,
+                result.Value.Mobile),
             cancellationToken);
     }
 }

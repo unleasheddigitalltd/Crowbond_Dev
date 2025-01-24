@@ -21,9 +21,8 @@ internal sealed class ActivateUserCommandHandler(
             return Result.Failure(UserErrors.NotFound(request.UserId));
         }
 
-        string password = Guid.NewGuid().ToString("N");
-        Result<string> result = await identityProviderService.RegisterUserAsync(
-            new UserModel(user.Username, user.Email, password, user.FirstName, user.LastName, user.Mobile),
+        Result result = await identityProviderService.UpdateUserAsync(user.IdentityId,
+            new UserModel(user.Username, user.Email, string.Empty, user.FirstName, user.LastName, user.Mobile, true),
             cancellationToken);
 
         if (result.IsFailure)
@@ -31,7 +30,7 @@ internal sealed class ActivateUserCommandHandler(
             return Result.Failure<Guid>(result.Error);
         }
 
-        user.Activate(result.Value);
+        user.Activate();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

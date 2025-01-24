@@ -18,6 +18,10 @@ public sealed class TaskAssignment : Entity , IAuditable
 
     public Guid AssignedOperatorId { get; private set; }
 
+    public DateTime? StartDateTime { get; private set; }
+
+    public DateTime? EndDateTime { get; private set; }
+
     public TaskAssignmentStatus Status { get; private set; }
 
     public Guid CreatedBy { get; set; }
@@ -45,17 +49,29 @@ public sealed class TaskAssignment : Entity , IAuditable
         return taskAssignment;
     }
 
-    internal Result<TaskAssignmentLine> AddLine(Guid productId, decimal requestedQty)
+    internal Result<TaskAssignmentLine> AddLine(
+        Guid? receiptLineId, 
+        Guid? dispatchLineId,
+        Guid fromLocationId,
+        Guid toLocationId,
+        Guid productId,
+        decimal qty)
     {
         // check the Task assignment was not started.
-        if (Status != TaskAssignmentStatus.Pending)
+        if (Status != TaskAssignmentStatus.InProgress)
         {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyStarted);
+            return Result.Failure<TaskAssignmentLine>(TaskErrors.NotInProgress);
         }
 
         // create a task assignment line.
         Result<TaskAssignmentLine> result = 
-            TaskAssignmentLine.Create(productId, requestedQty);
+            TaskAssignmentLine.Create(
+                receiptLineId,
+                dispatchLineId,
+                fromLocationId, 
+                toLocationId,
+                productId,
+                qty);
 
         if (result.IsFailure)
         {
@@ -67,7 +83,7 @@ public sealed class TaskAssignment : Entity , IAuditable
         return result.Value;
     }
 
-    internal Result Start(DateTime modificationDate)
+    internal Result Start(DateTime utcNow)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.Pending and not TaskAssignmentStatus.Paused)
@@ -75,15 +91,7 @@ public sealed class TaskAssignment : Entity , IAuditable
             return Result.Failure<TaskAssignmentLine>(TaskErrors.AlreadyStarted);
         }
 
-        // start all the lines.
-        foreach (TaskAssignmentLine line in _lines)
-        {
-            Result result = line.Start(modificationDate);
-            if (result.IsFailure)
-            {
-                return result;
-            }
-        }
+        StartDateTime = utcNow;
 
         // update the status.
         Status = TaskAssignmentStatus.InProgress;
@@ -119,7 +127,7 @@ public sealed class TaskAssignment : Entity , IAuditable
         return Result.Success();
     }
 
-    internal Result Quit(DateTime modificationDate)
+    internal Result Quit(DateTime utcNow)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
@@ -127,18 +135,7 @@ public sealed class TaskAssignment : Entity , IAuditable
             return Result.Failure<TaskAssignmentLine>(TaskErrors.NotInProgress);
         }
 
-        // close all the incomplete lines.
-        IEnumerable<TaskAssignmentLine> notCompleteLines = 
-            _lines.Where(l => l.Status is not TaskAssignmentLineStatus.Completed);
-        
-        foreach (TaskAssignmentLine line in notCompleteLines)
-        {
-            Result result = line.Close(modificationDate);
-            if (result.IsFailure)
-            {
-                return result;
-            }
-        }
+        EndDateTime = utcNow;
 
         // update the status.
         Status = TaskAssignmentStatus.Quit;
@@ -146,7 +143,7 @@ public sealed class TaskAssignment : Entity , IAuditable
         return Result.Success();
     }
 
-    internal Result Complete(DateTime modificationDate)
+    internal Result Complete(DateTime utcNow)
     {
         // check the task not already started.
         if (Status is not TaskAssignmentStatus.InProgress and not TaskAssignmentStatus.Paused)
@@ -154,49 +151,11 @@ public sealed class TaskAssignment : Entity , IAuditable
             return Result.Failure<TaskAssignmentLine>(TaskErrors.NotInProgress);
         }
 
-        // complete all the incomplete lines.
-        IEnumerable<TaskAssignmentLine> notCompleteLines = 
-            _lines.Where(l => l.Status is not TaskAssignmentLineStatus.Completed);
-        
-        foreach (TaskAssignmentLine line in notCompleteLines)
-        {
-            Result result = line.Complete(modificationDate);
-            if (result.IsFailure)
-            {
-                return result;
-            }
-        }
+        EndDateTime = utcNow;
 
         // update the status.
         Status = TaskAssignmentStatus.Completed;
 
         return Result.Success();
-    }
-
-    internal Result<TaskAssignmentLine> IncrementCompletedQty(DateTime modificationDate, Guid productId, decimal Quantity)
-    {
-        // select the specific line with this product.
-        TaskAssignmentLine? line = _lines.Find(l => l.ProductId == productId);
-
-        if (line is null)
-        {
-            return Result.Failure<TaskAssignmentLine>(TaskErrors.LineForProductNotFound(productId));
-        }
-
-        // increament the complete quantity.
-        Result result = line.IncrementCompletedQty(modificationDate, Quantity);
-
-        if (result.IsFailure)
-        {
-            return Result.Failure<TaskAssignmentLine>(result.Error);
-        }
-
-        // change status to completed all lines are completed.
-        if (_lines.TrueForAll(l => l.Status is TaskAssignmentLineStatus.Completed))
-        {
-            Status = TaskAssignmentStatus.Completed;
-        }
-
-        return Result.Success(line);
-    }
+    }    
 }

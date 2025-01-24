@@ -19,7 +19,7 @@ internal sealed class CancelReceiptCommandHandler(
             return Result.Failure(ReceiptErrors.PurchaseOrderNotFound(request.PurchaseOrderId));
         }
 
-        Result result = receiptHeader.Cancel(request.UserId, request.UtcNow);
+        Result result = receiptHeader.Cancel();
 
         if (result.IsFailure)
         {

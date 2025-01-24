@@ -2,7 +2,7 @@
 
 namespace Crowbond.Modules.WMS.Domain.Dispatches;
 
-public sealed class DispatchHeader : Entity
+public sealed class DispatchHeader : Entity, IAuditable
 {
     private readonly List<DispatchLine> _lines = new();
 
@@ -14,29 +14,38 @@ public sealed class DispatchHeader : Entity
 
     public string DispatchNo { get; private set; }
 
-    public Guid OrderId { get; private set; }
+    public Guid RouteTripId { get; private set; }
 
-    public string OrderNo { get; private set; }
+    public DateOnly RouteTripDate { get; private set; }
+
+    public string RouteName { get; private set; }
 
     public DispatchStatus Status { get; private set; }
 
-    public Guid? LastModifiedBy { get; private set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime? LastModifiedOnUtc { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
+
+    public Guid? LastModifiedBy { get; set; }
+
+    public DateTime? LastModifiedOnUtc { get; set; }
 
     public IReadOnlyCollection<DispatchLine> Lines => _lines;
 
+
     public static DispatchHeader Create(
         string dispatchNo,
-        Guid orderId,
-        string orderNo)
+        Guid routeTripId,
+        DateOnly routeTripDate,
+        string routeName)
     {
         var header = new DispatchHeader
         {
             Id = Guid.NewGuid(),
             DispatchNo = dispatchNo,
-            OrderId = orderId,
-            OrderNo = orderNo,
+            RouteTripId = routeTripId,
+            RouteTripDate = routeTripDate,
+            RouteName = routeName,
             Status = DispatchStatus.NotStarted
         };
 
@@ -44,10 +53,20 @@ public sealed class DispatchHeader : Entity
     }
 
     public DispatchLine AddLine(
+        Guid orderId,
+        string orderNo,
+        string customerBusinessName,
+        Guid orderLineId,
         Guid productId,
-        decimal qty)
+        decimal orderedQty)
     {
-        var line = DispatchLine.Create(productId, qty);
+        var line = DispatchLine.Create(
+            orderId,
+            orderNo,
+            customerBusinessName,
+            orderLineId,
+            productId, 
+            orderedQty);
         _lines.Add(line);
         return line;
     }

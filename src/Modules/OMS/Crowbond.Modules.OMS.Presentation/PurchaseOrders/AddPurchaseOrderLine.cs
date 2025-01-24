@@ -15,13 +15,13 @@ internal sealed class AddPurchaseOrderLine : IEndpoint
     {
         app.MapPost("purchase-orders/{id}/lines", async (Guid id, Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new AddPurchaseOrderLineCommand(id, request.ProductId, request.Qty, request.Comments));
+            Result<Guid> result = await sender.Send(new AddPurchaseOrderLineCommand(id, request.ProductId, request.UnitPrice, request.Qty, request.Comments));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-            .RequireAuthorization(Permissions.CreatePurchaseOrders)
+            .RequireAuthorization(Permissions.ModifyPurchaseOrders)
             .WithTags(Tags.PurchaseOrders);
     }
 
-    public sealed record Request(Guid ProductId, decimal Qty, string? Comments);
+    public sealed record Request(Guid ProductId, decimal UnitPrice, decimal Qty, string? Comments);
 }

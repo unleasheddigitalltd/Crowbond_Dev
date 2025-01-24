@@ -17,6 +17,9 @@ public sealed class Permission
     public static readonly Permission GetEventStatistics = new("event-statistics:read");
 
     public static readonly Permission GetLocations = new("locations:read");
+    public static readonly Permission ModifyLocations = new("locations:update");
+    public static readonly Permission CreateLocations = new("locations:create");
+    public static readonly Permission DeleteLocations = new("locations:delete");
 
     public static readonly Permission GetProducts = new("products:read");
     public static readonly Permission CreateProducts = new("products:create");
@@ -27,6 +30,7 @@ public sealed class Permission
 
     public static readonly Permission GetStocks = new("stocks:read");
     public static readonly Permission GetStockTransactions = new("stock-transactions:read");
+    public static readonly Permission CreateStocks = new("stocks:create");
     public static readonly Permission AdjustStocks = new("stocks:adjust");
     public static readonly Permission RelocateStocks = new("stocks:relocate");
 
@@ -88,6 +92,7 @@ public sealed class Permission
     public static readonly Permission GetRouteTrips = new("route-trip:read");
     public static readonly Permission ModifyRouteTrips = new("route-trip:update");
     public static readonly Permission CreateRouteTrips = new("route-trip:create");
+    public static readonly Permission ApproveRouteTrip = new("route-trip:approve");
 
     public static readonly Permission ModifyOtherRouteTripLogs = new("route-trip-log:update:other");
     public static readonly Permission GetCompliances = new("compliances:read");
@@ -116,6 +121,9 @@ public sealed class Permission
     public static readonly Permission DeliverOrders = new("orders:deliver");
     public static readonly Permission ReviewOrderLine = new ("order-lines:review");
     public static readonly Permission GetOrderLineRejectReasons = new ("order-line-reject-reasons:read");
+
+    public static readonly Permission GetSettings = new ("settings:read");
+    public static readonly Permission ModifySettings = new ("settings:update");
 
     public Permission(string code)
     {

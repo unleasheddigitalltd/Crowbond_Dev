@@ -11,6 +11,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database;
 public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IUnitOfWork
 {
     internal DbSet<User> Users { get; set; }
+    internal DbSet<Role> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

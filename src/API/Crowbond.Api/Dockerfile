@@ -35,6 +35,7 @@ COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Domain/Crowbond.Modules.OMS.Domain.c
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/Crowbond.Modules.OMS.Infrastructure.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Infrastructure/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/Crowbond.Modules.OMS.IntegrationEvents.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.IntegrationEvents/"]
 COPY ["src/Modules/OMS/Crowbond.Modules.OMS.Presentation/Crowbond.Modules.OMS.Presentation.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.Presentation/"]
+COPY ["src/Modules/OMS/Crowbond.Modules.OMS.PublicApi/Crowbond.Modules.OMS.PublicApi.csproj", "src/Modules/OMS/Crowbond.Modules.OMS.PublicApi/"]
 
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .

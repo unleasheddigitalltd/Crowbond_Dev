@@ -14,8 +14,8 @@ public sealed record ReceiptHeader
 {
     public Guid Id { get; }
     public string ReceiptNo { get; }
-    public DateTime ReceivedDate { get; }
-    public string PurchaseOrderNo { get; }
-    public string DeliveryNoteNumber { get; }
+    public DateTime? ReceivedDate { get; }
+    public string? PurchaseOrderNo { get; }
+    public string? DeliveryNoteNumber { get; }
     public string Status { get; }
 }

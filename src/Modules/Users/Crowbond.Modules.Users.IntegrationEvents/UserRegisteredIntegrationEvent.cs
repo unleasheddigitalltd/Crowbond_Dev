@@ -11,7 +11,8 @@ public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
         string username,
         string email,
         string firstName,
-        string lastName)
+        string lastName,
+        string mobile)
         : base(id, occurredOnUtc)
     {
         UserId = userId;
@@ -19,6 +20,7 @@ public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
         Email = email;
         FirstName = firstName;
         LastName = lastName;
+        Mobile = mobile;
     }
 
     public Guid UserId { get; init; }
@@ -30,4 +32,6 @@ public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
     public string FirstName { get; init; }
 
     public string LastName { get; init; }
+
+    public string Mobile { get; init; }
 }

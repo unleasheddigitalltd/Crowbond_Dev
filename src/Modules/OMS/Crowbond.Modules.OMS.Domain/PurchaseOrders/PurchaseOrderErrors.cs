@@ -5,6 +5,12 @@ public static class PurchaseOrderErrors
 {
     public static Error NotFound(Guid purchaseOrderId) =>
     Error.NotFound("PurchaseOrders.NotFound", $"The purchase order with the identifier {purchaseOrderId} was not found");
+    
+    public static Error LineNotFound(Guid purchaseOrderLineId) =>
+    Error.NotFound("PurchaseOrders.LineNotFound", $"The purchase order line with the identifier {purchaseOrderLineId} was not found");
+    
+    public static Error LineWithSameProductAlreadyExists(Guid productId) =>
+    Error.Conflict("PurchaseOrders.LineWithSameProductAlreadyExists", $"A purchase order line with the product identifier {productId} already exists.");
 
     public static Error SequenceNotFound() =>
     Error.NotFound("Sequence.NotFound", $"The sequence for the purchase order type was not found");

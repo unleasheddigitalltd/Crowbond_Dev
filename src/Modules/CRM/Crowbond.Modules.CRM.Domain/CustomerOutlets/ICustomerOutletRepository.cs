@@ -8,6 +8,9 @@ public interface ICustomerOutletRepository
 
     void Insert(CustomerOutlet customerOutlet);
 
+    void InsertRoute(CustomerOutletRoute route);
+
     void Remove(CustomerOutlet customerOutlet);
 
+    void RemoveRoutes(IEnumerable<CustomerOutletRoute> routes);
 }

@@ -2,6 +2,8 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
+using Crowbond.Modules.CRM.Application.Customers.GetCustomerDetails;
+using Crowbond.Modules.CRM.Domain.CustomerContacts;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
 using Dapper;
 
@@ -35,15 +37,34 @@ internal sealed class GetCustomerOutletDetailsQueryHandler(IDbConnectionFactory 
                  delivery_time_to AS {nameof(CustomerOutletDetailsResponse.DeliveryTimeTo)}, 
                  is24hrs_delivery AS {nameof(CustomerOutletDetailsResponse.Is24HrsDelivery)}
              FROM crm.customer_outlets
-             WHERE id = @CustomerOutletId AND is_deleted = false           
+             WHERE id = @CustomerOutletId AND is_deleted = false;
+             
+             SELECT
+                 cr.customer_outlet_id AS {nameof(CustomerOutletRouteResponse.CustomerOutletId)},
+                 cr.route_id AS {nameof(CustomerOutletRouteResponse.RouteId)},
+                 r.name AS {nameof(CustomerOutletRouteResponse.RouteName)},
+                 cr.weekday AS {nameof(CustomerOutletRouteResponse.Weekday)}
+             FROM crm.customer_outlet_routes cr
+             INNER JOIN crm.routes r ON r.id = cr.route_id
+             WHERE cr.customer_outlet_id = @CustomerOutletId
+             ORDER BY cr.weekday ASC;
              """;
 
-        CustomerOutletDetailsResponse? customerOutlet = await connection.QuerySingleOrDefaultAsync<CustomerOutletDetailsResponse>(sql, request);
+
+        SqlMapper.GridReader multi = await connection.QueryMultipleAsync(sql, request);
+
+        var customerOutlets = (await multi.ReadAsync<CustomerOutletDetailsResponse>()).ToList();
+        var customerOutletRoutes = (await multi.ReadAsync<CustomerOutletRouteResponse>()).ToList();
+
+        CustomerOutletDetailsResponse? customerOutlet = customerOutlets.SingleOrDefault();
 
         if (customerOutlet is null)
         {
             return Result.Failure<CustomerOutletDetailsResponse>(CustomerOutletErrors.NotFound(request.CustomerOutletId));
         }
+
+        customerOutlet.Routes = customerOutletRoutes.Where(a => a.CustomerOutletId == customerOutlet.Id).ToList();
+
 
         return customerOutlet;
     }

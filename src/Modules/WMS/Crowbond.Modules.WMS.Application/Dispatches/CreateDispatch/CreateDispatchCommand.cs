@@ -2,4 +2,4 @@
 
 namespace Crowbond.Modules.WMS.Application.Dispatches.CreateDispatch;
 
-public sealed record CreateDispatchCommand(DispatchRequest Dispatch) : ICommand;
+public sealed record CreateDispatchCommand(Guid RouteTripId, DateOnly RouteTripDate, string RouteName) : ICommand;

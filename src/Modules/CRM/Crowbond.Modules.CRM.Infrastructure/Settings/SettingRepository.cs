@@ -10,4 +10,14 @@ public sealed class SettingRepository(CrmDbContext context) : ISettingRepository
     {
         return await context.Settings.SingleOrDefaultAsync(cancellationToken);
     }
+
+    public void Insert(Setting setting)
+    {
+        context.Settings.Add(setting);
+    }
+
+    public void Remove(Setting setting)
+    {
+        context.Settings.Remove(setting);
+    }
 }

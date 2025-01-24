@@ -241,32 +241,6 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("customer_contacts", "crm");
                 });
 
-            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutletRoutes.CustomerOutletRoute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CustomerOutletId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("customer_outlet_id");
-
-                    b.Property<string>("DaysOfWeek")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("days_of_week");
-
-                    b.Property<Guid>("RouteId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("route_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_customer_outlet_routes");
-
-                    b.ToTable("customer_outlet_routes", "crm");
-                });
-
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutlet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -396,6 +370,34 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_customer_outlets_customer_id");
 
                     b.ToTable("customer_outlets", "crm");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutletRoute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CustomerOutletId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_outlet_id");
+
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("route_id");
+
+                    b.Property<int>("Weekday")
+                        .HasColumnType("integer")
+                        .HasColumnName("weekday");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customer_outlet_routes");
+
+                    b.HasIndex("CustomerOutletId")
+                        .HasDatabaseName("ix_customer_outlet_routes_customer_outlet_id");
+
+                    b.ToTable("customer_outlet_routes", "crm");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
@@ -1427,6 +1429,65 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                     b.ToTable("suppliers", "crm");
                 });
 
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.Users.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
+
+                    b.HasIndex("Mobile")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_mobile");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_username");
+
+                    b.ToTable("users", "crm");
+                });
+
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerContacts.CustomerContact", b =>
                 {
                     b.HasOne("Crowbond.Modules.CRM.Domain.Customers.Customer", null)
@@ -1445,6 +1506,16 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_customer_outlets_customers_customer_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutletRoute", b =>
+                {
+                    b.HasOne("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutlet", null)
+                        .WithMany("Routes")
+                        .HasForeignKey("CustomerOutletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_customer_outlet_routes_customer_outlets_customer_outlet_id");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>
@@ -1579,6 +1650,11 @@ namespace Crowbond.Modules.CRM.Infrastructure.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_supplier_product_blacklist_suppliers_supplier_id");
+                });
+
+            modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerOutlets.CustomerOutlet", b =>
+                {
+                    b.Navigation("Routes");
                 });
 
             modelBuilder.Entity("Crowbond.Modules.CRM.Domain.CustomerProducts.CustomerProduct", b =>

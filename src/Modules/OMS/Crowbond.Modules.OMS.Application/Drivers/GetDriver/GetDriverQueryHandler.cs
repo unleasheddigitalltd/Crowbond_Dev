@@ -17,15 +17,15 @@ internal sealed class GetDriverQueryHandler(IDbConnectionFactory dbConnectionFac
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(DriverResponse.Id)},
-                 first_name AS {nameof(DriverResponse.FirstName)},
-                 last_name AS {nameof(DriverResponse.LastName)},
-                 username AS {nameof(DriverResponse.Username)},
-                 email AS {nameof(DriverResponse.Email)},
-                 mobile AS {nameof(DriverResponse.Mobile)},
-                 vehicle_regn AS {nameof(DriverResponse.VehicleRegn)}
-             FROM oms.drivers
-             WHERE id = @DriverId
+                 u.id AS {nameof(DriverResponse.Id)},
+                 u.first_name AS {nameof(DriverResponse.FirstName)},
+                 u.last_name AS {nameof(DriverResponse.LastName)},
+                 u.username AS {nameof(DriverResponse.Username)},
+                 u.email AS {nameof(DriverResponse.Email)},
+                 u.mobile AS {nameof(DriverResponse.Mobile)}
+             FROM oms.drivers d
+             INNER JOIN users u ON u.id = d.id
+             WHERE d.id = @DriverId
              """;
 
         DriverResponse? driver = await connection.QuerySingleOrDefaultAsync<DriverResponse>(sql, request);

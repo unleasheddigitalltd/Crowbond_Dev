@@ -7,7 +7,5 @@ internal sealed class CancelReceiptCommandValidator : AbstractValidator<CancelRe
     public CancelReceiptCommandValidator()
     {
         RuleFor(r => r.PurchaseOrderId).NotEmpty();
-        RuleFor(r => r.UtcNow).NotEmpty();
-        RuleFor(r => r.UserId).NotEmpty();
     }
 }

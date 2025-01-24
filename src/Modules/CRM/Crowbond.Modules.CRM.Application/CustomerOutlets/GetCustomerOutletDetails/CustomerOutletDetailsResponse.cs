@@ -1,6 +1,5 @@
-﻿using System;
+﻿namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletDetails;
 
-namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletDetails;
 public sealed record CustomerOutletDetailsResponse(
     Guid Id,
     Guid CustomerId,
@@ -18,4 +17,7 @@ public sealed record CustomerOutletDetailsResponse(
     string? DeliveryNote,
     TimeOnly DeliveryTimeFrom,
     TimeOnly DeliveryTimeTo,
-    bool Is24HrsDelivery);
+    bool Is24HrsDelivery)
+{
+    public List<CustomerOutletRouteResponse> Routes { get; set; }
+};

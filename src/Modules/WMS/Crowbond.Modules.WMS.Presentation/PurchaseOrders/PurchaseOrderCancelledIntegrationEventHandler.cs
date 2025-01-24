@@ -14,10 +14,7 @@ internal sealed class PurchaseOrderCancelledIntegrationEventHandler(ISender send
         CancellationToken cancellationToken = default)
     {
         Result result = await sender.Send(
-            new CancelReceiptCommand(
-                integrationEvent.UserId,
-                integrationEvent.UtcNow,
-                integrationEvent.PurchaseOrderId),
+            new CancelReceiptCommand(integrationEvent.PurchaseOrderId),
             cancellationToken);
 
         if (result.IsFailure)

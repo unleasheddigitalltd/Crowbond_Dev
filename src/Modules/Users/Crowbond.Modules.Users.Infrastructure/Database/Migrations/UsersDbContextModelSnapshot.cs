@@ -196,6 +196,18 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "locations:update"
+                        },
+                        new
+                        {
+                            Code = "locations:create"
+                        },
+                        new
+                        {
+                            Code = "locations:delete"
+                        },
+                        new
+                        {
                             Code = "products:read"
                         },
                         new
@@ -225,6 +237,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             Code = "stock-transactions:read"
+                        },
+                        new
+                        {
+                            Code = "stocks:create"
                         },
                         new
                         {
@@ -408,6 +424,10 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "route-trip:approve"
+                        },
+                        new
+                        {
                             Code = "compliances:read"
                         },
                         new
@@ -496,6 +516,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "settings:read"
+                        },
+                        new
+                        {
+                            Code = "settings:update"
+                        },
+                        new
+                        {
                             Code = "order-lines:review"
                         });
                 });
@@ -531,7 +559,7 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
-                            Name = "WarhouseOperator"
+                            Name = "WarehouseOperator"
                         },
                         new
                         {
@@ -548,14 +576,14 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("first_name");
 
                     b.Property<string>("IdentityId")
@@ -569,8 +597,8 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("last_name");
 
                     b.Property<string>("Mobile")
@@ -581,8 +609,8 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("username");
 
                     b.HasKey("Id")
@@ -654,27 +682,32 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "tasks:putaway:read",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "tasks:putaway:execute",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "tasks:picking:execute",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "locations:read",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
+                        },
+                        new
+                        {
+                            PermissionCode = "stocks:read",
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
                             PermissionCode = "stocks:adjust",
-                            RoleName = "WarhouseOperator"
+                            RoleName = "WarehouseOperator"
                         },
                         new
                         {
@@ -778,6 +811,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "locations:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "locations:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "products:read",
                             RoleName = "Administrator"
                         },
@@ -814,6 +857,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "stock-transactions:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "stocks:create",
                             RoleName = "Administrator"
                         },
                         new
@@ -1043,6 +1091,11 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "route-trip:approve",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
                             PermissionCode = "compliances:read",
                             RoleName = "Administrator"
                         },
@@ -1114,6 +1167,16 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "order-line-reject-reasons:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "settings:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "settings:update",
                             RoleName = "Administrator"
                         },
                         new

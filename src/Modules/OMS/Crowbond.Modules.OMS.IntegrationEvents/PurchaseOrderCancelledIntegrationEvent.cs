@@ -7,20 +7,12 @@ public sealed class PurchaseOrderCancelledIntegrationEvent : IntegrationEvent
     public PurchaseOrderCancelledIntegrationEvent(
         Guid id,
         DateTime occurredOnUtc,
-        Guid purchaseOrderId,
-        Guid userId,
-        DateTime utcNow)
+        Guid purchaseOrderId)
         : base(id, occurredOnUtc)
     {
         PurchaseOrderId = purchaseOrderId;
-        UserId = userId;
-        UtcNow = utcNow;
     }
 
     public Guid PurchaseOrderId { get; init; }
-
-    public Guid UserId { get; init; }
-
-    public DateTime UtcNow { get; init; }
 
 }

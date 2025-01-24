@@ -53,16 +53,10 @@ public static class UsersModule
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactUpdatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactActivatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<CustomerContactDeactivatedIntegrationEvent>>();
-
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverCreatedIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<DriverUpdatedIntegrationEvent>>();
-
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactCreatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactUpdatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactActivatedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<SupplierContactDeactivatedIntegrationEvent>>();
-
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<WarehouseOperatorCreatedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

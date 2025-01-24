@@ -12,7 +12,7 @@ internal sealed class DeliverOrderLineCommandValidator : AbstractValidator<Deliv
         RuleForEach(ol => ol.OrderLine.Rejects)
             .ChildRules(reject =>
             {
-                reject.RuleFor(r => r.RejectQty).NotEmpty().GreaterThanOrEqualTo(decimal.Zero);
+                reject.RuleFor(r => r.RejectQty).NotEmpty().GreaterThan(decimal.Zero);
                 reject.RuleFor(r => r.RejectReasonId).NotEmpty();
                 reject.RuleFor(r => r.Comments).MaximumLength(255);
             });

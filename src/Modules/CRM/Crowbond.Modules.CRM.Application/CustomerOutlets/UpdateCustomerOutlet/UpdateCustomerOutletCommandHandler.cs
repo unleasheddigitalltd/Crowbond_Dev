@@ -2,11 +2,15 @@
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.Abstractions.Data;
+using Crowbond.Modules.CRM.Application.Routes;
 using Crowbond.Modules.CRM.Domain.CustomerOutlets;
+using Crowbond.Modules.CRM.Domain.Routes;
 
 namespace Crowbond.Modules.CRM.Application.CustomerOutlets.UpdateCustomerOutlet;
 
 internal sealed class UpdateCustomerOutletCommandHandler(
+    RouteService routeService,
+    IRouteRepository routeRepository,
     ICustomerOutletRepository customerOutletRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<UpdateCustomerOutletCommand>
@@ -30,7 +34,7 @@ internal sealed class UpdateCustomerOutletCommandHandler(
 
         if (customerOutlet is null)
         {
-            return Result.Failure(CustomerOutletErrors.NotFound(request.CustomerOutletId));        
+            return Result.Failure(CustomerOutletErrors.NotFound(request.CustomerOutletId));
         }
 
         customerOutlet.Update(
@@ -49,6 +53,33 @@ internal sealed class UpdateCustomerOutletCommandHandler(
             deliveryTimeFrom,
             deliveryTimeTo,
             request.CustomerOutlet.Is24HrsDelivery);
+
+            customerOutlet.RemoveRoutes();
+            customerOutletRepository.RemoveRoutes(customerOutlet.Routes);
+
+        foreach (CustomerOutletRouteRequest routeRequest in request.CustomerOutlet.Routes)
+        {
+            Route route = await routeRepository.GetAsync(routeRequest.RouteId, cancellationToken);
+
+            if (route is null)
+            {
+                return Result.Failure<Guid>(RouteErrors.NotFound(routeRequest.RouteId));
+            }
+
+            if (!routeService.IsDayActive(route.DaysOfWeek, routeRequest.Weekday))
+            {
+                return Result.Failure<Guid>(RouteErrors.DayIsNotAvailable(route.Id, routeRequest.Weekday));
+            }
+
+            Result<CustomerOutletRoute> routeResult = customerOutlet.AddRoute(routeRequest.RouteId, routeRequest.Weekday);
+
+            if (routeResult.IsFailure)
+            {
+                return Result.Failure<Guid>(routeResult.Error);
+            }
+
+            customerOutletRepository.InsertRoute(routeResult.Value);
+        }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

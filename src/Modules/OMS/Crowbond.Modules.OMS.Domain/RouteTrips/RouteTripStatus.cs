@@ -3,5 +3,6 @@
 public enum RouteTripStatus
 {
     Registered = 0,
-    Available = 1
+    Approved = 1,
+    Available = 2
 }

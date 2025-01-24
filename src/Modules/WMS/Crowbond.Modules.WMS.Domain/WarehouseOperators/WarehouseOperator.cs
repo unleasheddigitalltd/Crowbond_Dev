@@ -7,47 +7,27 @@ public sealed class WarehouseOperator : Entity
     private WarehouseOperator() { }
 
     public Guid Id { get; private set; }
+    public bool IsActive { get; private set; }
 
-    public string FirstName { get; private set; }
-
-    public string LastName { get; private set; }
-
-    public string Username { get; private set; }
-
-    public string Email { get; private set; }
-
-    public string Mobile { get; private set; }
-
-    public static WarehouseOperator Create(
-        string firstName,
-        string lastName,
-        string username,
-        string email,
-        string mobile)
+    public static WarehouseOperator Create(Guid userId)
     {
 
         var @operator = new WarehouseOperator
         {
-            Id = Guid.NewGuid(),
-            FirstName = firstName,
-            LastName = lastName,
-            Username = username,
-            Email = email,
-            Mobile = mobile
+            Id = userId,
+            IsActive = true,
         };
-
-        @operator.Raise(new WarehouseOperatorCreatedDomainEvent(@operator.Id));
 
         return @operator;
     }
 
-    public void Update(
-        string firstName,
-        string lastName,
-        string mobile)
+    public void Activate()
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Mobile = mobile;
+        IsActive = true;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 }

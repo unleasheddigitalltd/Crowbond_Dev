@@ -4,6 +4,10 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public sealed class OrderLineRejectReason : Entity
 {
+    private OrderLineRejectReason()
+    {        
+    }
+
     public Guid Id { get; private set; }
 
     public string Title { get; private set; }

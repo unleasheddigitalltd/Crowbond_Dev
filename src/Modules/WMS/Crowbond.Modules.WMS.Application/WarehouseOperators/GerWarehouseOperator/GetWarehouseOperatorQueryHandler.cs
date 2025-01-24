@@ -17,14 +17,15 @@ internal sealed class GetWarehouseOperatorQueryHandler(IDbConnectionFactory dbCo
         const string sql =
             $"""
              SELECT
-                 id AS {nameof(WarehouseOperatorResponse.Id)},
-                 first_name AS {nameof(WarehouseOperatorResponse.FirstName)},
-                 last_name AS {nameof(WarehouseOperatorResponse.LastName)},
-                 username AS {nameof(WarehouseOperatorResponse.Username)},
-                 email AS {nameof(WarehouseOperatorResponse.Email)},
-                 mobile AS {nameof(WarehouseOperatorResponse.Mobile)}
-             FROM wms.warehouse_operators
-             WHERE id = @OperatorId
+                 w.id AS {nameof(WarehouseOperatorResponse.Id)},
+                 u.first_name AS {nameof(WarehouseOperatorResponse.FirstName)},
+                 u.last_name AS {nameof(WarehouseOperatorResponse.LastName)},
+                 u.username AS {nameof(WarehouseOperatorResponse.Username)},
+                 u.email AS {nameof(WarehouseOperatorResponse.Email)},
+                 u.mobile AS {nameof(WarehouseOperatorResponse.Mobile)}
+             FROM wms.warehouse_operators w
+             INNER JOIN wms.users u ON u.id = w.id
+             WHERE w.id = @OperatorId
              """;
 
         WarehouseOperatorResponse? driver = await connection.QuerySingleOrDefaultAsync<WarehouseOperatorResponse>(sql, request);

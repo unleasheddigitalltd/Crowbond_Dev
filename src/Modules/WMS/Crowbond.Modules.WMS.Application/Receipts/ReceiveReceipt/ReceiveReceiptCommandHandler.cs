@@ -24,7 +24,7 @@ internal sealed class ReceiveReceiptCommandHandler(
             return Result.Failure(ReceiptErrors.NotFound(request.ReceiptId));
         }
 
-        Result receiptResult = receipt.Receive(dateTimeProvider.UtcNow);
+        Result receiptResult = receipt.Receive(dateTimeProvider.UtcNow, request.LocationId);
 
         if (receiptResult.IsFailure)
         {
@@ -41,7 +41,7 @@ internal sealed class ReceiveReceiptCommandHandler(
             sequence.GetNumber(),
             receipt.Id,
             null,
-            TaskType.putaway);
+            TaskType.Putaway);
 
         if (taskResult.IsFailure)
         {

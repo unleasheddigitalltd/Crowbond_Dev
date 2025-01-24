@@ -73,6 +73,7 @@ internal sealed class GetSuppliersQueryHandler(IDbConnectionFactory dbConnection
                 s.{nameof(Supplier.County)},
                 s.{nameof(Supplier.Country)},
                 s.{nameof(Supplier.PostalCode)},
+                s.{nameof(Supplier.IsActive)},
                 s.{nameof(Supplier.FirstName)},
                 s.{nameof(Supplier.LastName)},
                 s.{nameof(Supplier.PhoneNumber)},

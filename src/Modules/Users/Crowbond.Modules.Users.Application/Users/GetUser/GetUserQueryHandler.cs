@@ -22,11 +22,13 @@ internal sealed class GetUserQueryHandler(IDbConnectionFactory dbConnectionFacto
                  u.email AS {nameof(UserResponse.Email)},
                  u.first_name AS {nameof(UserResponse.FirstName)},
                  u.last_name AS {nameof(UserResponse.LastName)},
-                 STRING_AGG(ur.role_name, ',') AS {nameof(UserResponse.Roles)}
+                 u.mobile AS {nameof(UserResponse.Mobile)},
+                 u.is_active AS {nameof(UserResponse.IsActive)},
+                 COALESCE(STRING_AGG(ur.role_name, ','), '') AS {nameof(UserResponse.Roles)}
              FROM users.users u
-             INNER JOIN users.user_roles ur ON u.id = ur.user_id             
+             LEFT JOIN users.user_roles ur ON u.id = ur.user_id             
              WHERE u.id = @UserId
-             GROUP BY u.id, u.username, u.email, u.first_name, u.last_name;
+             GROUP BY u.id, u.username, u.email, u.first_name, u.last_name, u.mobile, u.is_active;
              """;
 
         UserResponse? user = await connection.QuerySingleOrDefaultAsync<UserResponse>(sql, request);

@@ -1,4 +1,6 @@
 ﻿using Crowbond.Common.Domain;
+using Crowbond.Modules.WMS.Domain.Tasks;
+using Serilog.Parsing;
 
 namespace Crowbond.Modules.WMS.Domain.Locations;
 
@@ -22,14 +24,28 @@ public sealed class Location : Entity
 
     public LocationStatus Status { get; private set; }
 
-
-    public static Location Create(
-        Guid parentId,
+    public static Result<Location> Create(
+        Guid? parentId,
         string name,
         string? scanCode,
         LocationType? locationType,
         LocationLayer locationLayer)
     {
+        if (locationLayer != LocationLayer.Location && locationType != null)
+        {
+            return Result.Failure<Location>(LocationErrors.InvalidLocationTypeAssignment);
+        }
+
+        if (parentId is null &&(locationLayer == LocationLayer.Area || locationLayer == LocationLayer.Location))
+        {
+            return Result.Failure<Location>(LocationErrors.NeedParent);            
+        }
+
+        if (locationLayer == LocationLayer.Site && parentId is not null)
+        {
+            return Result.Failure<Location>(LocationErrors.CanNotHaveParent);
+        }
+
         var location = new Location
         {
             Id = Guid.NewGuid(),
@@ -42,5 +58,60 @@ public sealed class Location : Entity
         };
 
         return location;
+    }
+
+    public Result Update(
+        Guid? parentId,
+        string name,
+        string? scanCode,
+        LocationType? locationType,
+        LocationLayer locationLayer)
+    {
+        if (locationLayer != LocationLayer.Location && locationType != null)
+        {
+            return Result.Failure(LocationErrors.InvalidLocationTypeAssignment);
+        }
+
+        if (parentId is null && (locationLayer == LocationLayer.Area || locationLayer == LocationLayer.Location))
+        {
+            return Result.Failure(LocationErrors.NeedParent);
+        }
+
+        if (locationLayer == LocationLayer.Site)
+        {
+            return Result.Failure(LocationErrors.CanNotHaveParent);
+        }
+
+        ParentId = parentId;
+        Name = name;
+        ScanCode = scanCode;
+        LocationType = locationType;
+        LocationLayer = locationLayer;
+
+        return Result.Success();
+    }
+
+    public Result Activate()
+    {
+        if (Status == LocationStatus.Active)
+        {
+            return Result.Failure(LocationErrors.IsAlreadyActive(Id));
+        }
+
+        Status = LocationStatus.Active;
+
+        return Result.Success();
+    }
+
+    public Result Hold()
+    {
+        if (Status == LocationStatus.Held)
+        {
+            return Result.Failure(LocationErrors.IsAlreadyHeld(Id));
+        }
+
+        Status = LocationStatus.Held;
+
+        return Result.Success();
     }
 }

@@ -41,7 +41,7 @@ internal sealed class AddPurchaseOrderLineCommandHandler(
             supplierProduct.BrandName,
             supplierProduct.ProductGroupId,
             supplierProduct.ProductGroupName,
-            supplierProduct.UnitPrice,
+            request.UnitPrice,
             request.Qty,
             (TaxRateType)supplierProduct.TaxRateType,
             request.Comments);

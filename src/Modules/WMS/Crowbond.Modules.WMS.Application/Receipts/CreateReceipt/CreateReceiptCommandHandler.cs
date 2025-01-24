@@ -22,17 +22,8 @@ internal sealed class CreateReceiptCommandHandler(
 
         Result<ReceiptHeader> result = ReceiptHeader.Create(
             sequence.GetNumber(),
-            request.Receipt.PurchaseOrderId,
-            request.Receipt.PurchaseOrderNo);
-
-
-        foreach (ReceiptRequest.ReceiptLineRequest line in request.Receipt.ReceiptLines)
-        {
-            result.Value.AddLine(
-                line.ProductId, 
-                line.QuantityReceived,
-                line.UnitPrice);
-        }
+            request.PurchaseOrderId,
+            request.PurchaseOrderNo);                     
 
         receiptRepository.Insert(result.Value);
 

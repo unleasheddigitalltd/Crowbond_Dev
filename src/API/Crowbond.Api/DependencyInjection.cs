@@ -41,6 +41,7 @@ public static class DependencyInjection
             [
                 UsersModule.ConfigureConsumers,
                 WmsModule.ConfigureConsumers,
+                OmsModule.ConfigureConsumers,
                 CrmModule.ConfigureConsumers,
             ],
             databaseConnectionString,

@@ -38,6 +38,9 @@ using Crowbond.Modules.WMS.Domain.Dispatches;
 using Crowbond.Modules.WMS.Infrastructure.Dispatches;
 using Crowbond.Modules.WMS.PublicApi;
 using Crowbond.Modules.WMS.Infrastructure.PublicApi;
+using Crowbond.Modules.WMS.Domain.Users;
+using Crowbond.Modules.WMS.Infrastructure.Users;
+using Crowbond.Modules.Users.IntegrationEvents;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -62,7 +65,14 @@ public static class WmsModule
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderApprovedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<PurchaseOrderCancelledIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<RouteTripApprovedIntegrationEvent>>();
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<OrderAcceptedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserActivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserDeactivatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<WarehouseOperatorRoleAddedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<WarehouseOperatorRoleRemovedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -86,6 +96,8 @@ public static class WmsModule
 
         services.AddScoped<IStockRepository, StockRepository>();
 
+        services.AddScoped<IUserRepository, UserRepository>();
+
         services.AddScoped<ILocationRepository, LocationRepository>();
 
         services.AddScoped<ISettingRepository, SettingRepository>();
@@ -101,6 +113,7 @@ public static class WmsModule
         services.AddScoped<IWarehouseOperatorContext, WarehouseOperatorContext>();
 
         services.AddScoped<IStockApi, StockApi>();
+        services.AddScoped<IWarehouseOperatorApi, WarehouseOperatorApi>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("WMS:Outbox"));
 

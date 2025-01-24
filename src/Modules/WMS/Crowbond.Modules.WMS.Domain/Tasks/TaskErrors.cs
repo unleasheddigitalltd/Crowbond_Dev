@@ -59,6 +59,9 @@ public static class TaskErrors
     
     public static readonly Error ExceedsRequestedQuantity =
         Error.Problem("Tasks.ExceedsRequestedQuantity", "The quantity exceeds requested quantity");
+    
+    public static readonly Error NotAvailableForAssignment =
+        Error.Problem("Tasks.ExceedsRequestedQuantity", "The task cannot be assigned because its status is not set to \"Not Assigned.\"");
 
     public static Error UnknownStatus(TaskHeaderStatus status) => 
         Error.Problem("Tasks.UnknownStatus", $"The task is in an unknown status: {status}.");

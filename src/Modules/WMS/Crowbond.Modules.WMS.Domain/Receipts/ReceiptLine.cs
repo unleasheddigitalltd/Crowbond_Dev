@@ -14,7 +14,11 @@ public sealed class ReceiptLine : Entity
 
     public Guid ProductId { get; private set; }
 
-    public decimal QuantityReceived { get; private set; }
+    public decimal ReceivedQty { get; private set; }
+
+    public decimal StoredQty { get; private set; }
+
+    public decimal MissedQty { get; private set; }
 
     public decimal UnitPrice { get; private set; }
 
@@ -24,21 +28,63 @@ public sealed class ReceiptLine : Entity
 
     public string BatchNumber { get; private set; }
 
+    public bool IsStored { get; private set; }
+
     internal static ReceiptLine Create(
         Guid productId,
-        decimal quantityReceived,
+        decimal receivedQty,
         decimal unitPrice)
     {
         var receiptLine = new ReceiptLine
         {
             Id = Guid.NewGuid(),
             ProductId = productId,
-            QuantityReceived = quantityReceived,
+            ReceivedQty = receivedQty,
+            StoredQty = 0,
+            MissedQty = 0,
             UnitPrice = unitPrice,
-            BatchNumber = GenerateBatchNumber()
+            BatchNumber = GenerateBatchNumber(),
+            IsStored = false
         };
 
         return receiptLine;
+    }
+
+    internal Result Update(
+        decimal receivedQty,
+        decimal unitPrice)
+    {
+        if (IsStored)
+        {
+            return Result.Failure(ReceiptErrors.LineAlreadyStored);    
+        }
+
+        ReceivedQty = receivedQty;
+        UnitPrice = unitPrice;
+
+        return Result.Success();
+    }
+
+    internal Result Store(decimal qty)
+    {
+        if (IsStored)
+        {
+            return Result.Failure(ReceiptErrors.LineAlreadyStored);
+        }
+
+        StoredQty += qty;
+
+        IsStored = StoredQty == ReceivedQty;
+
+        return Result.Success();
+    }
+
+    internal Result FinalizeStorage()
+    {
+        MissedQty = ReceivedQty - StoredQty;
+        IsStored = true;
+
+        return Result.Success();
     }
 
     private static string GenerateBatchNumber()

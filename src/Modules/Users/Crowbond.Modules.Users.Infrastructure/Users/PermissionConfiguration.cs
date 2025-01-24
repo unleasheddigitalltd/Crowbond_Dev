@@ -30,6 +30,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetEventStatistics,
 
             Permission.GetLocations,
+            Permission.ModifyLocations,
+            Permission.CreateLocations,
+            Permission.DeleteLocations,
 
             Permission.GetProducts,
             Permission.CreateProducts,
@@ -40,6 +43,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
             Permission.GetStocks,
             Permission.GetStockTransactions,
+            Permission.CreateStocks,
             Permission.AdjustStocks,
             Permission.RelocateStocks,
 
@@ -101,6 +105,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.GetRouteTrips,
             Permission.ModifyRouteTrips,
             Permission.CreateRouteTrips,
+            Permission.ApproveRouteTrip,
 
             Permission.GetCompliances,
             Permission.ModifyOtherRouteTripLogs,
@@ -129,6 +134,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.DeliverOrders,
             Permission.GetOrderLineRejectReasons,
 
+            Permission.GetSettings,
+            Permission.ModifySettings,
+
             Permission.ReviewOrderLine);
 
 
@@ -152,6 +160,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePickingTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetLocations),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.GetStocks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.AdjustStocks),
 
                     // Warehouse Manager permissions
@@ -181,6 +190,8 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetEventStatistics),
 
                     CreateRolePermission(Role.Administrator, Permission.GetLocations),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyLocations),
+                    CreateRolePermission(Role.Administrator, Permission.CreateLocations),
 
                     CreateRolePermission(Role.Administrator, Permission.GetProducts),
                     CreateRolePermission(Role.Administrator, Permission.CreateProducts),
@@ -191,6 +202,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                     CreateRolePermission(Role.Administrator, Permission.GetStocks),
                     CreateRolePermission(Role.Administrator, Permission.GetStockTransactions),
+                    CreateRolePermission(Role.Administrator, Permission.CreateStocks),
                     CreateRolePermission(Role.Administrator, Permission.AdjustStocks),
                     CreateRolePermission(Role.Administrator, Permission.RelocateStocks),
 
@@ -252,6 +264,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.GetRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.ModifyRouteTrips),
                     CreateRolePermission(Role.Administrator, Permission.CreateRouteTrips),
+                    CreateRolePermission(Role.Administrator, Permission.ApproveRouteTrip),
 
                     CreateRolePermission(Role.Administrator, Permission.GetCompliances),
                     CreateRolePermission(Role.Administrator, Permission.ModifyOtherRouteTripLogs),
@@ -271,6 +284,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.DeleteOrders),
                     CreateRolePermission(Role.Administrator, Permission.AcceptOrders),
                     CreateRolePermission(Role.Administrator, Permission.GetOrderLineRejectReasons),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetSettings),
+                    CreateRolePermission(Role.Administrator, Permission.ModifySettings),
 
                     CreateRolePermission(Role.Administrator, Permission.ReviewOrderLine));
             });

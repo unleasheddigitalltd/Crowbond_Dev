@@ -17,8 +17,11 @@ internal sealed class SupplierContactUpdatedIntegrationEventHandler(ISender send
         Result result = await sender.Send(
             new UpdateUserCommand(
                 integrationEvent.UserId,
+                integrationEvent.Username,
+                integrationEvent.Email,
                 integrationEvent.FirstName,
-                integrationEvent.LastName),
+                integrationEvent.LastName,
+                integrationEvent.Mobile),
             cancellationToken);
 
         if (result.IsFailure)
