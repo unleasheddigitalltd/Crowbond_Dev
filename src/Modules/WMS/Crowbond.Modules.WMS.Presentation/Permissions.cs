@@ -17,6 +17,7 @@ internal static class Permissions
 
     internal const string GetStocks = "stocks:read";
     internal const string GetStockTransactions = "stock-transactions:read";
+    internal const string CreateStocks = "stocks:create";
     internal const string AdjustStocks = "stocks:adjust";
     internal const string RelocateStocks = "stocks:relocate";
 

@@ -43,6 +43,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
             Permission.GetStocks,
             Permission.GetStockTransactions,
+            Permission.CreateStocks,
             Permission.AdjustStocks,
             Permission.RelocateStocks,
 
@@ -201,6 +202,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
                     CreateRolePermission(Role.Administrator, Permission.GetStocks),
                     CreateRolePermission(Role.Administrator, Permission.GetStockTransactions),
+                    CreateRolePermission(Role.Administrator, Permission.CreateStocks),
                     CreateRolePermission(Role.Administrator, Permission.AdjustStocks),
                     CreateRolePermission(Role.Administrator, Permission.RelocateStocks),
 
