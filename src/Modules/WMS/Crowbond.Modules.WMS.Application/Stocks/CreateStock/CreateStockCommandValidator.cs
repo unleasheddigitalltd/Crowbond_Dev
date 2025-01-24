@@ -5,6 +5,8 @@ internal sealed class CreateStockCommandValidator : AbstractValidator<CreateStoc
 {
     public CreateStockCommandValidator()
     {
-
+        RuleFor(s => s.ReceiptLineId).NotEmpty();
+        RuleFor(s => s.LocationId).NotEmpty();
+        RuleFor(s => s.Qty).GreaterThan(decimal.Zero);
     }
 }
