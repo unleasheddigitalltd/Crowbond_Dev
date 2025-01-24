@@ -5,9 +5,11 @@ public sealed record ReceiptLineResponse(
     string ProductSku,
     string ProductName,
     string UnitOfMeasure,
-    decimal QuantityReceived,
+    decimal ReceivedQty,
+    decimal StoredQty,
     decimal UnitPrice,
     DateTime? SellByDate,
     DateTime? UseByDate,
-    string Batch);
+    string Batch,
+    bool IsStored);
 

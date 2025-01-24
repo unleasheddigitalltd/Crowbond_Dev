@@ -15,6 +15,7 @@ internal sealed class ActionTypeConfiguration : IEntityTypeConfiguration<ActionT
             ActionType.Adjustment,
             ActionType.Relocating,
             ActionType.PutAway,
-            ActionType.Picking);
+            ActionType.Picking,
+            ActionType.BlinedReceive);
     }
 }

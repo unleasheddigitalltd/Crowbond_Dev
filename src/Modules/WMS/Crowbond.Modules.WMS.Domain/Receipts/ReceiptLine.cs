@@ -74,16 +74,13 @@ public sealed class ReceiptLine : Entity
 
         StoredQty += qty;
 
+        IsStored = StoredQty == ReceivedQty;
+
         return Result.Success();
     }
 
     internal Result FinalizeStorage()
     {
-        if (IsStored)
-        {
-            return Result.Failure(ReceiptErrors.LineAlreadyStored);
-        }
-
         MissedQty = ReceivedQty - StoredQty;
         IsStored = true;
 

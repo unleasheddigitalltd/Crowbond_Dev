@@ -20,5 +20,9 @@ public static class ReceiptErrors
 
     public static readonly Error NotShipping = Error.Problem("Receipts.NotShipping", "The receipt is not in shipping status");
 
+    public static readonly Error NotReceived = Error.Problem("Receipts.NotReceived", "The receipt is not in received status");
+
+    public static readonly Error StoredExceedsReceived = Error.Problem("Receipts.StoredExceedsReceived", "The recorded stored quantity exceeds the actual received quantity");
+
     public static readonly Error LineAlreadyStored = Error.Problem("Receipts.LineAlreadyStored", "The selected receipt line has already been marked as stored in the warehouse and cannot be processed further.");
 }

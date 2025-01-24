@@ -21,11 +21,13 @@ internal sealed class GetReceiptLineQueryHandler(IDbConnectionFactory dbConnecti
                 p.sku AS {nameof(ReceiptLineResponse.ProductSku)},
                 p.name AS {nameof(ReceiptLineResponse.ProductName)},
                 p.unit_of_measure_name AS {nameof(ReceiptLineResponse.UnitOfMeasure)},
-                r.received_qty AS {nameof(ReceiptLineResponse.QuantityReceived)},
+                r.received_qty AS {nameof(ReceiptLineResponse.ReceivedQty)},
+                r.stored_qty AS {nameof(ReceiptLineResponse.StoredQty)},
                 r.unit_price AS {nameof(ReceiptLineResponse.UnitPrice)},
                 r.sell_by_date AS {nameof(ReceiptLineResponse.SellByDate)},
                 r.use_by_date AS {nameof(ReceiptLineResponse.UseByDate)},
-                r.batch_number AS {nameof(ReceiptLineResponse.Batch)}
+                r.batch_number AS {nameof(ReceiptLineResponse.Batch)},
+                r.is_stored As {nameof(ReceiptLineResponse.IsStored)}
              FROM wms.receipt_lines r
              INNER JOIN wms.products p ON p.id = r.product_id
              WHERE

@@ -8,6 +8,7 @@ public sealed class ActionType : Entity
     public static readonly ActionType Relocating = new("Relocating");
     public static readonly ActionType PutAway = new("PutAway");
     public static readonly ActionType Picking = new("Picking");
+    public static readonly ActionType BlinedReceive = new("BlinedReceive");
 
     private ActionType(string name)
     {

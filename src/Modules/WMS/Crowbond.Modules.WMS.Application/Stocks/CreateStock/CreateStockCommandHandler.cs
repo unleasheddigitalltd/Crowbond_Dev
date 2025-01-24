@@ -6,56 +6,32 @@ using Crowbond.Modules.WMS.Domain.Locations;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Settings;
 using Crowbond.Modules.WMS.Domain.Stocks;
-using Crowbond.Modules.WMS.Domain.Tasks;
-using Crowbond.Modules.WMS.Domain.WarehouseOperators;
 
-namespace Crowbond.Modules.WMS.Application.Tasks.PutAway.LocateProductForPutAway;
-internal sealed class LocateProductForPutAwayCommandHandler(
-    IWarehouseOperatorRepository warehouseOperatorRepository,
-    IReceiptRepository receiptRepository,
-    ITaskRepository taskRepository,
-    ILocationRepository locationRepository,
+namespace Crowbond.Modules.WMS.Application.Stocks.CreateStock;
+internal sealed class CreateStockCommandHandler(
     IStockRepository stockRepository,
-    IDateTimeProvider dateTimeProvider,
+    IReceiptRepository receiptRepository,
+    ILocationRepository locationRepository,
     ISettingRepository settingRepository,
+    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<LocateProductForPutAwayCommand, Guid>
+    : ICommandHandler<CreateStockCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(LocateProductForPutAwayCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {
-        // Retrieve operator
-        WarehouseOperator? warehouseOperator = await warehouseOperatorRepository.GetAsync(request.UserId, cancellationToken);
-
-        if (warehouseOperator is null)
-        {
-            return Result.Failure<Guid>(WarehouseOperatorErrors.NotFound(request.UserId));
-        }
-
-        TaskHeader? taskHeader = await taskRepository.GetAsync(request.TaskHeaderId, cancellationToken);
-
-        if (taskHeader is null)
-        {
-            return Result.Failure<Guid>(TaskErrors.NotFound(request.TaskHeaderId));            
-        }
-
-        if (!taskHeader.IsAssignedTo(request.UserId))
-        {
-            return Result.Failure<Guid>(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));            
-        }
-                
-        // Retrieve receipt
-        ReceiptHeader? receiptHeader = await receiptRepository.GetAsync(taskHeader.ReceiptId ?? Guid.Empty, cancellationToken);
-
-        if (receiptHeader is null)
-        {
-            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.ReceiptId ?? Guid.Empty));
-        }
-
-        ReceiptLine? receiptLine = receiptHeader.Lines.SingleOrDefault(l => l.Id == request.ReceiptLineId);
+        ReceiptLine? receiptLine = await receiptRepository.GetLineAsync(request.ReceiptLineId, cancellationToken);
 
         if (receiptLine is null)
         {
-            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.ReceiptId ?? Guid.Empty));            
+            return Result.Failure<Guid>(ReceiptErrors.LineNotFound(request.ReceiptLineId));
+        }
+
+        // Retrieve receipt
+        ReceiptHeader? receiptHeader = await receiptRepository.GetAsync(receiptLine.ReceiptHeaderId, cancellationToken);
+
+        if (receiptHeader is null)
+        {
+            return Result.Failure<Guid>(ReceiptErrors.NotFound(receiptLine.ReceiptHeaderId));
         }
 
         // Retrieve location
@@ -73,21 +49,6 @@ internal sealed class LocateProductForPutAwayCommandHandler(
         {
             return Result.Failure<Guid>(SettingErrors.NotFound);
         }
-
-        Result<TaskAssignmentLine> assignmentLineResult = taskHeader.AddAssignmentLine(
-            request.ReceiptLineId, 
-            null, 
-            receiptHeader.LocationId ?? Guid.Empty, 
-            request.LocationId, 
-            receiptLine.ProductId, 
-            request.Qty);
-
-        if (assignmentLineResult.IsFailure)
-        {
-            return Result.Failure<Guid>(assignmentLineResult.Error);            
-        }
-
-        taskRepository.AddAssignmentLine(assignmentLineResult.Value);
 
         // Update stored qty in receipt line id
         Result addReceiptLineResult = receiptHeader.StoreLine(request.ReceiptLineId, request.Qty);
@@ -116,7 +77,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
                 receiptLine.ProductId,
                 location.Id,
                 receiptLine.BatchNumber,
-                receiptHeader.ReceivedDate??DateOnly.MinValue,
+                receiptHeader.ReceivedDate ?? DateOnly.MinValue,
                 receiptLine.SellByDate,
                 receiptLine.UseByDate,
                 receiptLine.Id,
@@ -131,7 +92,7 @@ internal sealed class LocateProductForPutAwayCommandHandler(
             stockRepository.InsertStock(destStock);
         }
 
-        Result<StockTransaction> transResult = destStock.StockIn(assignmentLineResult.Value.Id, ActionType.PutAway.Name, dateTimeProvider.UtcNow, null, null, request.Qty);
+        Result<StockTransaction> transResult = destStock.StockIn(null, ActionType.BlinedReceive.Name, dateTimeProvider.UtcNow, null, null, request.Qty);
 
         if (transResult.IsFailure)
         {

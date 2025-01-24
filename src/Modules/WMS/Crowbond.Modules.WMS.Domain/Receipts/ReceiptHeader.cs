@@ -133,11 +133,20 @@ public sealed class ReceiptHeader : Entity, IAuditable
 
     public Result StoreLine(Guid receivedLineId, decimal Qty)
     {
+        if (Status != ReceiptStatus.Received)
+        {
+            return Result.Failure(ReceiptErrors.NotReceived);
+        }
         ReceiptLine? receiptLine = _lines.SingleOrDefault(l => l.Id == receivedLineId);
 
         if (receiptLine is null)
         {
             return Result.Failure(ReceiptErrors.LineNotFound(receivedLineId));
+        }
+
+        if (receiptLine.ReceivedQty < receiptLine.StoredQty + Qty)
+        {
+            return Result.Failure(ReceiptErrors.StoredExceedsReceived);
         }
 
         Result result = receiptLine.Store(Qty);
