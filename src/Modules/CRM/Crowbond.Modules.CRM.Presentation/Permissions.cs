@@ -36,4 +36,6 @@ internal static class Permissions
 
     internal const string GetSettings = "settings:read";
     internal const string ModifySettings = "settings:update";
+
+    internal const string GetRoutes = "routes:read";
 }
