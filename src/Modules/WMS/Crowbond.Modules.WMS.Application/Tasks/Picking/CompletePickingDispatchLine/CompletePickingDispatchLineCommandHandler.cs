@@ -6,16 +6,16 @@ using Crowbond.Modules.WMS.Domain.Dispatches;
 using Crowbond.Modules.WMS.Domain.Receipts;
 using Crowbond.Modules.WMS.Domain.Tasks;
 
-namespace Crowbond.Modules.WMS.Application.Tasks.Picking.StartPickingTask;
+namespace Crowbond.Modules.WMS.Application.Tasks.Picking.CompletePickingDispatchLine;
 
-internal sealed class StartPickingTaskCommandHandler(
+internal sealed class CompletePickingDispatchLineCommandHandler(
     ITaskRepository taskRepository,
     IDispatchRepository dispatchRepository,
     IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
-    : ICommandHandler<StartPickingTaskCommand>
+    : ICommandHandler<CompletePickingDispatchLineCommand>
 {
-    public async Task<Result> Handle(StartPickingTaskCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CompletePickingDispatchLineCommand request, CancellationToken cancellationToken)
     {
         TaskHeader? taskHeader = await taskRepository.GetAsync(request.TaskHeaderId, cancellationToken);
 
@@ -29,25 +29,24 @@ internal sealed class StartPickingTaskCommandHandler(
             return Result.Failure(TaskErrors.ActiveAssignmentForOperatorNotFound(request.UserId));
         }
 
-        Result result = taskHeader.Start(dateTimeProvider.UtcNow);
+        DispatchHeader? dispatch = await dispatchRepository.GetAsync(taskHeader.DispatchId ?? Guid.Empty, cancellationToken);
+
+        if (dispatch is null)
+        {
+            return Result.Failure(ReceiptErrors.NotFound(taskHeader.DispatchId ?? Guid.Empty));
+        }
+
+        Result result = dispatch.FinalizeLinePicking(request.DispatchLineId);
 
         if (result.IsFailure)
         {
             return Result.Failure(result.Error);
         }
 
-        DispatchHeader? dispatchHeader = await dispatchRepository.GetAsync(taskHeader.DispatchId ?? Guid.Empty, cancellationToken);
-
-        if (dispatchHeader is null)
+        // Check if all dispatch lines are picked the Complete the task.
+        if (dispatch.Lines.All(l => l.IsPicked))
         {
-            return Result.Failure(DispatchErrors.NotFound(taskHeader.DispatchId ?? Guid.Empty));
-        }
-
-        Result dispatchResult = dispatchHeader.StartProcessing();
-
-        if (dispatchResult.IsFailure)
-        {
-            return Result.Failure(dispatchResult.Error);            
+            taskHeader.Complete(dateTimeProvider.UtcNow);
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

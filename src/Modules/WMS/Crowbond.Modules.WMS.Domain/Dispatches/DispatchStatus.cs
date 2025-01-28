@@ -4,7 +4,7 @@ public enum DispatchStatus
 {
     NotStarted = 0,
     Processing = 1,
-    Completed = 3,
-    Shipped = 4,
-    Cancelled = 5,
+    Completed = 2,
+    Shipped = 3,
+    Cancelled = 4,
 }

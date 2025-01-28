@@ -115,6 +115,9 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ManagePutAwayTasks,
             Permission.ExecutePutAwayTasks,
 
+            Permission.GetPickingTasks,
+            Permission.ModifyPickingTasks,
+            Permission.ManagePickingTasks,
             Permission.ExecutePickingTasks,
 
             Permission.GetWarehouseOperators,
@@ -158,6 +161,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     // Warehouse Operator permissions
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.GetPickingTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePickingTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetLocations),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetStocks),
@@ -273,6 +277,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyPutAwayTasks),
                     CreateRolePermission(Role.Administrator, Permission.ManagePutAwayTasks),
                     CreateRolePermission(Role.Administrator, Permission.ExecutePutAwayTasks),
+
+                    CreateRolePermission(Role.Administrator, Permission.GetPickingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyPickingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ManagePickingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ExecutePickingTasks),
                     
                     CreateRolePermission(Role.Administrator, Permission.GetWarehouseOperators),
                     CreateRolePermission(Role.Administrator, Permission.ModifyWarehouseOperators),

@@ -19,7 +19,6 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
         {
             "TaskNo" => "t.task_no",
             "DispatchNo" => "d.dispatch_no",
-            "OrderNo" => "d.order_no",
             _ => "t.task_no" // Default sorting
         };
 
@@ -29,44 +28,44 @@ internal sealed class GetPickingTasksUnassignedQueryHandler(IDbConnectionFactory
                     t.id AS {nameof(PickingTask.Id)},
                     t.task_no AS {nameof(PickingTask.TaskNo)},
                     d.dispatch_no AS {nameof(PickingTask.DispatchNo)},
-                    d.order_no AS {nameof(PickingTask.OrderNo)},
-                    'Jeff’s Grocer’s Ltd' AS {nameof(PickingTask.CustomerName)},
+                    d.route_trip_id AS {nameof(PickingTask.RouteTripId)},
+                    d.route_name AS {nameof(PickingTask.RouteName)},
+                    d.route_trip_date AS {nameof(PickingTask.RouteTripDate)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
                 FROM wms.task_headers t
-                LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
                 INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
                 WHERE
-                    t.task_type = 1 
-                    AND ta.id IS NULL
+                    t.task_type IN (1, 2)
+                    AND t.status = 0
                     AND (
                         t.task_no ILIKE '%' || @Search || '%'
                         OR d.dispatch_no ILIKE '%' || @Search || '%'   
-                        OR d.order_no ILIKE '%' || @Search || '%'
+                        OR d.route_name ILIKE '%' || @Search || '%'
                     )
                 GROUP BY
-                    t.id, t.task_no, d.dispatch_no, d.order_no
+                    t.id, t.task_no, d.dispatch_no, d.route_trip_id, d.route_name, d.route_trip_date
             )
             SELECT 
                 t.{nameof(PickingTask.Id)},
                 t.{nameof(PickingTask.TaskNo)},
                 t.{nameof(PickingTask.DispatchNo)},
-                t.{nameof(PickingTask.OrderNo)},
-                t.{nameof(PickingTask.CustomerName)}
+                t.{nameof(PickingTask.RouteTripId)},
+                t.{nameof(PickingTask.RouteName)},
+                t.{nameof(PickingTask.RouteTripDate)}             
             FROM FilteredPutAwayTasks t
             WHERE t.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
             ORDER BY t.RowNum;
 
             SELECT Count(t.id) 
             FROM wms.task_headers t
-            LEFT JOIN wms.task_assignments ta ON ta.task_header_id = t.id
             INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
             WHERE
-                t.task_type = 1 
-                AND ta.id IS NULL
+                t.task_type IN (1, 2)
+                AND t.status = 0
                 AND (
                     t.task_no ILIKE '%' || @Search || '%'
-                    OR d.dispatch_no ILIKE '%' || @Search || '%'   
-                    OR d.order_no ILIKE '%' || @Search || '%'
+                    OR d.dispatch_no ILIKE '%' || @Search || '%'    
+                    OR d.route_name ILIKE '%' || @Search || '%'
                 )
         ";
 

@@ -64,4 +64,17 @@ public sealed class DispatchLine : Entity
 
         return Result.Success();
     }
+
+    
+    internal Result FinalizePiking()
+    {
+        if (OrderedQty != PickedQty)
+        {
+            return Result.Failure(DispatchErrors.QuantityMismatch);
+        }
+
+        IsPicked = true;
+
+        return Result.Success();
+    }
 }

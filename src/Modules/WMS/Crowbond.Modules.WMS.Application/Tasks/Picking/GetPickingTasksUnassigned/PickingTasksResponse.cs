@@ -15,6 +15,7 @@ public sealed record PickingTask
     public Guid Id { get; }
     public string TaskNo { get; }
     public string DispatchNo { get; }
-    public string OrderNo { get; }
-    public string CustomerName { get; }
+    public Guid RouteTripId { get; }
+    public string RouteName { get; }
+    public DateOnly RouteTripDate { get; }
 }
