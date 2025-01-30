@@ -58,6 +58,8 @@ public sealed class OrderLine: Entity
 
     public OrderLineStatus Status { get; private set; }
 
+    public bool IsBulk { get; private set; }
+
     public IReadOnlyCollection<OrderLineReject> Rejects => _rejects;
 
     internal static OrderLine Create(
@@ -73,7 +75,8 @@ public sealed class OrderLine: Entity
         string productGroupName,
         decimal unitPrice,
         decimal orderedQty,
-        TaxRateType taxRateType)
+        TaxRateType taxRateType,
+        bool isBulk)
     {
         var orderLine = new OrderLine
         {
@@ -91,6 +94,7 @@ public sealed class OrderLine: Entity
             UnitPrice = unitPrice,
             TaxRateType = taxRateType,
             OrderedQty = orderedQty,
+            IsBulk = isBulk,
             Status = OrderLineStatus.Pending
         };
 

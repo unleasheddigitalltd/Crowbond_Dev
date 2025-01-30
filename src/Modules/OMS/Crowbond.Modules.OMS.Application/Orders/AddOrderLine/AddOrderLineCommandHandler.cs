@@ -60,6 +60,7 @@ internal sealed class AddOrderLineCommandHandler(
         customerProduct.ProductGroupName,
         customerProduct.UnitPrice,
         request.Qty,
+        request.IsBulk,
         (TaxRateType)customerProduct.TaxRateType);
 
         if (result.IsFailure)

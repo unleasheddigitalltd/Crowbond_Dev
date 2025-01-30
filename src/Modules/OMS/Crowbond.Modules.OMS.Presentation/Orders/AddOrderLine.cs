@@ -15,7 +15,7 @@ internal sealed class AddOrderLine : IEndpoint
     {
         app.MapPost("orders/{id}/lines", async (Guid id, Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new AddOrderLineCommand(id, request.ProductId, request.Qty));
+            Result<Guid> result = await sender.Send(new AddOrderLineCommand(id, request.ProductId, request.Qty, request.IsBulk));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
@@ -23,5 +23,5 @@ internal sealed class AddOrderLine : IEndpoint
             .WithTags(Tags.Orders);
     }
 
-    private sealed record Request(Guid ProductId, decimal Qty);
+    private sealed record Request(Guid ProductId, decimal Qty, bool IsBulk);
 }

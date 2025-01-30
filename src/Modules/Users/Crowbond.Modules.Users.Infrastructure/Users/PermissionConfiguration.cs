@@ -119,6 +119,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
             Permission.ModifyPickingTasks,
             Permission.ManagePickingTasks,
             Permission.ExecutePickingTasks,
+            
+            Permission.GetCheckingTasks,
+            Permission.ModifyCheckingTasks,
+            Permission.ManageCheckingTasks,
+            Permission.ExecuteCheckingTasks,
 
             Permission.GetWarehouseOperators,
             Permission.ModifyWarehouseOperators,
@@ -163,6 +168,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePutAwayTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetPickingTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.ExecutePickingTasks),
+                    CreateRolePermission(Role.WarehouseOperator, Permission.ExecuteCheckingTasks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetLocations),
                     CreateRolePermission(Role.WarehouseOperator, Permission.GetStocks),
                     CreateRolePermission(Role.WarehouseOperator, Permission.AdjustStocks),
@@ -282,6 +288,11 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
                     CreateRolePermission(Role.Administrator, Permission.ModifyPickingTasks),
                     CreateRolePermission(Role.Administrator, Permission.ManagePickingTasks),
                     CreateRolePermission(Role.Administrator, Permission.ExecutePickingTasks),
+                    
+                    CreateRolePermission(Role.Administrator, Permission.GetCheckingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ModifyCheckingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ManageCheckingTasks),
+                    CreateRolePermission(Role.Administrator, Permission.ExecuteCheckingTasks),
                     
                     CreateRolePermission(Role.Administrator, Permission.GetWarehouseOperators),
                     CreateRolePermission(Role.Administrator, Permission.ModifyWarehouseOperators),

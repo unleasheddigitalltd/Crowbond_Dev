@@ -35,6 +35,11 @@ internal static class Permissions
     internal const string ModifyPickingTasks = "tasks:picking:update";
     internal const string ManagePickingTasks = "tasks:picking:manage";
     internal const string ExecutePickingTasks = "tasks:picking:execute";
+    
+    internal const string GetCheckingTasks = "tasks:checking:read";
+    internal const string ModifyCheckingTasks = "tasks:checking:update";
+    internal const string ManageCheckingTasks = "tasks:checking:manage";
+    internal const string ExecuteCheckingTasks = "tasks:checking:execute";
 
     internal const string GetWarehouseOperators = "warehouse-operators:read";
     internal const string ModifyWarehouseOperators = "warehouse-operators:update";

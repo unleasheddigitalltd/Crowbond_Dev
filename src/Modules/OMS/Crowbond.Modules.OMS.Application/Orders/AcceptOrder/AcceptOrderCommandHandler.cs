@@ -9,7 +9,6 @@ namespace Crowbond.Modules.OMS.Application.Orders.AcceptOrder;
 internal sealed class AcceptOrderCommandHandler(
     IOrderRepository orderRepository,
     IRouteTripRepository routeTripRepository,
-    InventoryService inventoryService,
     IUnitOfWork unitOfWork)
     : ICommandHandler<AcceptOrderCommand>
 {
@@ -35,15 +34,7 @@ internal sealed class AcceptOrderCommandHandler(
             return Result.Failure(RouteTripErrors.NotFound((Guid)orderHeader.RouteTripId));
         }
 
-        foreach (OrderLine line in orderHeader.Lines)
-        {
-            decimal availableQty = await inventoryService.GetAvailableQuantityAsync(line.ProductId, cancellationToken);
-
-            if (availableQty < line.OrderedQty)
-            {
-                return Result.Failure(OrderErrors.LineHasShortage(line.Id));
-            }
-        }
+        // Add get available quantity and check the avalable quantity here if nventoryService.GetAvailableQuantityAsync is implemented
 
         Result result = orderHeader.Accept();
 

@@ -59,7 +59,8 @@ public sealed class DispatchHeader : Entity, IAuditable
         string customerBusinessName,
         Guid orderLineId,
         Guid productId,
-        decimal orderedQty)
+        decimal orderedQty,
+        bool isBulk)
     {
         var line = DispatchLine.Create(
             orderId,
@@ -67,7 +68,8 @@ public sealed class DispatchHeader : Entity, IAuditable
             customerBusinessName,
             orderLineId,
             productId,
-            orderedQty);
+            orderedQty,
+            isBulk);
         _lines.Add(line);
         return line;
     }
@@ -95,6 +97,32 @@ public sealed class DispatchHeader : Entity, IAuditable
 
         return result;
     }
+
+    
+    public Result CheckLine(Guid dispatchLineId, bool isChecked)
+    {
+        if (Status != DispatchStatus.Processing)
+        {
+            return Result.Failure(DispatchErrors.NotProcessing);
+        }
+
+        DispatchLine? dispatchLine = _lines.SingleOrDefault(l => l.Id == dispatchLineId);
+
+        if (dispatchLine is null)
+        {
+            return Result.Failure(DispatchErrors.LineNotFound(dispatchLineId));
+        }
+
+        Result result = dispatchLine.Check(isChecked);
+
+        if (_lines.TrueForAll(l => l.IsChecked))
+        {
+            Status = DispatchStatus.Completed;
+        }
+
+        return result;
+    }
+
     public Result FinalizeLinePicking(Guid dispatchLineId)
     {
         DispatchLine? dispatchLine = _lines.SingleOrDefault(l => l.Id == dispatchLineId);

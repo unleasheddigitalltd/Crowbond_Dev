@@ -34,7 +34,7 @@ internal sealed class OrderAcceptedDomainEventHandler(ISender sender, IEventBus 
                 result.Value.OrderNo,
                 result.Value.CustomerBusinessName,
                 result.Value.Lines.Select(l => new OrderAcceptedIntegrationEvent.OrderLine(
-                    l.OrderLineId, l.ProductId, l.OrderedQty)).ToList()),
+                    l.OrderLineId, l.ProductId, l.OrderedQty, l.IsBulk)).ToList()),
             cancellationToken);
     }
 }

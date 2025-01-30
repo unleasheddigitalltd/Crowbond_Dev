@@ -106,6 +106,11 @@ public sealed class Permission
     public static readonly Permission ModifyPickingTasks = new("tasks:picking:update");
     public static readonly Permission ManagePickingTasks = new("tasks:picking:manage");
     public static readonly Permission ExecutePickingTasks = new("tasks:picking:execute");
+    
+    public static readonly Permission GetCheckingTasks = new("tasks:checking:read");
+    public static readonly Permission ModifyCheckingTasks = new("tasks:checking:update");
+    public static readonly Permission ManageCheckingTasks = new("tasks:checking:manage");
+    public static readonly Permission ExecuteCheckingTasks = new("tasks:checking:execute");
 
     public static readonly Permission GetWarehouseOperators = new("warehouse-operators:read");
     public static readonly Permission ModifyWarehouseOperators = new("warehouse-operators:update");

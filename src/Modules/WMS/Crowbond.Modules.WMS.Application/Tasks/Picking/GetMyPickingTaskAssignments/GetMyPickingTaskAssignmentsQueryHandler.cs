@@ -2,7 +2,6 @@
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
-using Crowbond.Modules.WMS.Domain.Stocks;
 using Crowbond.Modules.WMS.Domain.Tasks;
 using Dapper;
 
@@ -31,8 +30,8 @@ internal sealed class GetMyPickingTaskAssignmentsQueryHandler(IDbConnectionFacto
                  d.route_trip_date AS {nameof(TaskAssignmentResponse.RouteTripDate)},
                  ta.status AS {nameof(TaskAssignmentResponse.Status)},
                  CASE t.task_type {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(TaskAssignmentResponse.TaskType)},
-                 dl.ordered_qty AS {nameof(TaskAssignmentResponse.TotalLines)},
-                 dl.picked_qty AS {nameof(TaskAssignmentResponse.FinishedLines)}
+                 COUNT(dl.id) AS {nameof(TaskAssignmentResponse.TotalLines)}, 
+                 SUM(CASE WHEN dl.is_picked = true THEN 1 ELSE 0 END) AS {nameof(TaskAssignmentResponse.FinishedLines)}
              FROM wms.task_headers t
              INNER JOIN wms.dispatch_headers d ON t.dispatch_id = d.id
              INNER JOIN wms.dispatch_lines dl ON d.id = dl.dispatch_header_id
@@ -41,6 +40,9 @@ internal sealed class GetMyPickingTaskAssignmentsQueryHandler(IDbConnectionFacto
                  t.task_type IN (1, 2)
                  AND ta.assigned_operator_id = @WarehouseOperatorId
                  AND ta.status IN (0, 1, 2)
+             GROUP BY 
+                 t.id, t.task_no, d.dispatch_no, d.route_trip_id, d.route_name, 
+                 d.route_trip_date, ta.status, t.task_type
              ORDER BY t.task_no;
              """;
 

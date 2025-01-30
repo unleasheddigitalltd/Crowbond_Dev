@@ -26,7 +26,11 @@ public sealed class DispatchLine : Entity
 
     public decimal PickedQty { get; private set; }
 
+    public bool IsBulk { get; private set; }
+
     public bool IsPicked { get; private set; }
+
+    public bool IsChecked { get; private set; }
 
     internal static DispatchLine Create(
         Guid orderId,
@@ -34,7 +38,8 @@ public sealed class DispatchLine : Entity
         string customerBusinessName,
         Guid orderLineId,
         Guid productId,
-        decimal orderedQty)
+        decimal orderedQty,
+        bool isBulk)
     {
         var line = new DispatchLine
         {
@@ -46,6 +51,7 @@ public sealed class DispatchLine : Entity
             ProductId = productId,
             OrderedQty = orderedQty,
             PickedQty = 0,
+            IsBulk = isBulk,
             IsPicked = false
         };
 
@@ -62,6 +68,17 @@ public sealed class DispatchLine : Entity
         PickedQty += Qty;
         IsPicked = PickedQty >= OrderedQty;
 
+        return Result.Success();
+    }
+    
+    internal Result Check(bool isChecked)
+    {
+        if (!IsPicked)
+        {
+            return Result.Failure(DispatchErrors.LineNotPicked(Id));
+        }
+
+        IsChecked = isChecked;
         return Result.Success();
     }
 

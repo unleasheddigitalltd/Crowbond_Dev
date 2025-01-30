@@ -22,6 +22,13 @@ public static class DispatchErrors
     
     public static Error LineAlreadyPicked(Guid dispatchLineId) =>
         Error.NotFound("Dispatches.LineAlreadyPicked", $"The dispatch line with the identifier {dispatchLineId} was already picked");
+    
+    public static Error LineAlreadyChecked(Guid dispatchLineId) =>
+        Error.NotFound("Dispatches.LineAlreadyChecked", $"The dispatch line with the identifier {dispatchLineId} was already checked");
+    
+    public static Error LineNotPicked(Guid dispatchLineId) =>
+        Error.NotFound("Dispatches.LineNotPicked", $"The dispatch line with the identifier {dispatchLineId} was not picked");
+
 
     public static readonly Error NotProcessing = Error.Problem("Receipts.NotProcessing", "The dispatch is not in processing status");
 

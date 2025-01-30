@@ -26,7 +26,7 @@ internal sealed class GetPickingTaskDispatchLinesQueryHandler(IDbConnectionFacto
              INNER JOIN wms.dispatch_lines dl ON dl.dispatch_header_id = d.id
              INNER JOIN wms.products p ON dl.product_id = p.id
              WHERE 
-                t.id = @TaskHeaderId
+                t.task_type IN (1, 2) AND t.id = @TaskHeaderId
              """;
 
         List<TaskDispatchLineResponse> dispatchLines = (await connection.QueryAsync<TaskDispatchLineResponse>(sql, request)).AsList();

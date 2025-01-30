@@ -237,6 +237,14 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("dispatch_header_id");
 
+                    b.Property<bool>("IsBulk")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_bulk");
+
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_checked");
+
                     b.Property<bool>("IsPicked")
                         .HasColumnType("boolean")
                         .HasColumnName("is_picked");

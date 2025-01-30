@@ -21,7 +21,8 @@ internal sealed class OrderAcceptedIntegrationEventHandler(ISender sender)
                 integrationEvent.CustomerBusinessName,
                 l.OrderLineId, 
                 l.ProductId,
-                l.Qty)).ToList();
+                l.Qty,
+                l.IsBulk)).ToList();
 
         Result result = await sender.Send(
             new AddDispatchLinesCommand(integrationEvent.RouteTripId, request),

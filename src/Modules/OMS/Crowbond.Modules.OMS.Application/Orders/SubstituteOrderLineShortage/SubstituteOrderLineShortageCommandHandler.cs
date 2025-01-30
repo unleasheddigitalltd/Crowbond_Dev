@@ -78,6 +78,7 @@ internal sealed class SubstituteOrderLineShortageCommandHandler(
             customerProduct.ProductGroupName,
             customerProduct.UnitPrice,
             orderLine.OrderedQty - availableQty,
+            orderLine.IsBulk,
             (TaxRateType)customerProduct.TaxRateType);
 
         if (newOrderLineResult.IsFailure)
