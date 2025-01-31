@@ -14,7 +14,7 @@ internal sealed class AssignPutAwayTaskToSelf : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("tasks/put-away/assign-to-self", async (Request request, IWarehouseOperatorContext warehouseOperatorContext, ISender sender) =>
+        app.MapPost("tasks/putaway/assign-to-self", async (Request request, IWarehouseOperatorContext warehouseOperatorContext, ISender sender) =>
         {
             Result result = await sender.Send(new AssignPutAwayTaskCommand(
                 request.TaskHeaderId,

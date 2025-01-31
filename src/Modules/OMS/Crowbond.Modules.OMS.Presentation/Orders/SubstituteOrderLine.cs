@@ -15,7 +15,7 @@ internal sealed class SubstituteOrderLine : IEndpoint
     {
         app.MapPut("orders/lines/{id}/substitute", async(Guid id, Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new SubstituteOrderLineCommand(id, request.ProductId, request.Qty));
+            Result<Guid> result = await sender.Send(new SubstituteOrderLineCommand(id, request.ProductId, request.Qty, request.IsBulk));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
@@ -23,5 +23,5 @@ internal sealed class SubstituteOrderLine : IEndpoint
             .WithTags(Tags.Orders);
     }
 
-    private sealed record Request(Guid ProductId, decimal Qty);
+    private sealed record Request(Guid ProductId, decimal Qty, bool IsBulk);
 }

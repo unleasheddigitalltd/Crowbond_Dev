@@ -141,6 +141,7 @@ internal sealed class CreateMyOrderCommandHandler(
                 item.ProductGroupName,
                 item.UnitPrice,
                 item.Qty,
+                item.IsBulk,
                 item.TaxRateType);
 
             if (lineResult.IsFailure)

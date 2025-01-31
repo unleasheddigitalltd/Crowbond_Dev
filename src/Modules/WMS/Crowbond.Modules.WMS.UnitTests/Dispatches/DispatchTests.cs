@@ -44,9 +44,10 @@ public class DispatchTests : BaseTest
         var orderLineId = Guid.NewGuid();
         var productId = Guid.NewGuid();
         decimal orderQty = Faker.Random.Decimal(0);
+        bool isBulk = false;
 
         // Act
-        Result<DispatchLine> result = header.Value.AddLine(orderId, orderNo, customerBusinessName, orderLineId, productId, orderQty);
+        Result<DispatchLine> result = header.Value.AddLine(orderId, orderNo, customerBusinessName, orderLineId, productId, orderQty, isBulk);
 
         // Assert
         result.IsSuccess.Should().BeTrue();

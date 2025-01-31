@@ -17,4 +17,5 @@ public sealed class CartItem
     public decimal Qty { get; set; }
     public decimal UnitPrice { get; set; }
     public TaxRateType TaxRateType { get; set; }
+    public bool IsBulk { get; set; }
 }

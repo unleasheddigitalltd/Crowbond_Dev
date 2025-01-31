@@ -452,7 +452,35 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            Code = "tasks:picking:read"
+                        },
+                        new
+                        {
+                            Code = "tasks:picking:update"
+                        },
+                        new
+                        {
+                            Code = "tasks:picking:manage"
+                        },
+                        new
+                        {
                             Code = "tasks:picking:execute"
+                        },
+                        new
+                        {
+                            Code = "tasks:checking:read"
+                        },
+                        new
+                        {
+                            Code = "tasks:checking:update"
+                        },
+                        new
+                        {
+                            Code = "tasks:checking:manage"
+                        },
+                        new
+                        {
+                            Code = "tasks:checking:execute"
                         },
                         new
                         {
@@ -691,7 +719,17 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         },
                         new
                         {
+                            PermissionCode = "tasks:picking:read",
+                            RoleName = "WarehouseOperator"
+                        },
+                        new
+                        {
                             PermissionCode = "tasks:picking:execute",
+                            RoleName = "WarehouseOperator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:checking:execute",
                             RoleName = "WarehouseOperator"
                         },
                         new
@@ -1122,6 +1160,46 @@ namespace Crowbond.Modules.Users.Infrastructure.Database.Migrations
                         new
                         {
                             PermissionCode = "tasks:putaway:execute",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:picking:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:picking:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:picking:manage",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:picking:execute",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:checking:read",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:checking:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:checking:manage",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "tasks:checking:execute",
                             RoleName = "Administrator"
                         },
                         new

@@ -618,6 +618,10 @@ namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
                         .HasColumnType("numeric(10,2)")
                         .HasColumnName("delivered_qty");
 
+                    b.Property<bool>("IsBulk")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_bulk");
+
                     b.Property<decimal>("LineTotal")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)")

@@ -252,6 +252,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         string productGroupName,
         decimal unitPrice,
         decimal orderedQty,
+        bool isBulk,
         TaxRateType taxRateType)
     {
         if (Status != OrderStatus.Pending && Status != OrderStatus.StockReviewing)
@@ -272,7 +273,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             productGroupName,
             unitPrice,
             orderedQty,
-            taxRateType);
+            taxRateType,
+            isBulk);
 
         _lines.Add(line);
         Raise(new OrderLineAddedDomainEvent(CustomerId, line.ProductId));

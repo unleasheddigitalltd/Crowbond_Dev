@@ -46,4 +46,13 @@ internal sealed class PurchaseOrderRepository(OmsDbContext context) : IPurchaseO
     {
         context.PurchaseOrderStatusHistories.Add(orderStatusHistory);
     }
+
+    public async Task<List<PurchaseOrderLine>> GetLinesPendingByProductAsync(Guid productId, CancellationToken cancellationToken = default)
+    {
+        return await (from line in context.PurchaseOrderLines
+                      join order in context.PurchaseOrderHeaders on line.PurchaseOrderHeaderId equals order.Id
+                      where line.ProductId == productId && (order.Status == PurchaseOrderStatus.Draft || order.Status == PurchaseOrderStatus.Pending)
+                      select line)
+                 .ToListAsync(cancellationToken);
+    }
 }

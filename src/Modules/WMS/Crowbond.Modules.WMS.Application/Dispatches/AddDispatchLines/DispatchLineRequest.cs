@@ -6,4 +6,5 @@ public sealed record DispatchLineRequest(
     string CustomerBusinessName,
     Guid OrderLineId,
     Guid ProductId,
-    decimal Qty);
+    decimal Qty,
+    bool IsBulk);

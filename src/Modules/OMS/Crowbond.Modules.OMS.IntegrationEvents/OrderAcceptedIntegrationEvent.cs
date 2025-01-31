@@ -30,5 +30,6 @@ public sealed class OrderAcceptedIntegrationEvent: IntegrationEvent
     public sealed record OrderLine(
         Guid OrderLineId,
         Guid ProductId,
-        decimal Qty);
+        decimal Qty,
+        bool IsBulk);
 }

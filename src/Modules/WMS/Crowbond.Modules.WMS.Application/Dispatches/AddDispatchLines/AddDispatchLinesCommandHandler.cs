@@ -48,11 +48,12 @@ internal sealed class AddDispatchLinesCommandHandler(
                 line.CustomerBusinessName,
                 line.OrderLineId,
                 line.ProductId,
-                line.Qty);
+                line.Qty,
+                line.IsBulk);
 
             dispatchRepository.AddLine(dispatchLine);
 
-            if (!tasks.Any(t => t.TaskType == TaskType.PickingItem) && product.UnitOfMeasureName != UnitOfMeasure.Kg.Name)
+            if (!tasks.Any(t => t.TaskType == TaskType.PickingItem) && !dispatchLine.IsBulk)
             {
                 // generate the picking item task          
                 Result<TaskHeader> pickingItemTaskResult = TaskHeader.Create(
@@ -69,7 +70,7 @@ internal sealed class AddDispatchLinesCommandHandler(
                 taskRepository.Insert(pickingItemTaskResult.Value);
             }
 
-            if (!tasks.Any(t => t.TaskType == TaskType.PickingBulk) && product.UnitOfMeasureName == UnitOfMeasure.Kg.Name)
+            if (!tasks.Any(t => t.TaskType == TaskType.PickingBulk) && dispatchLine.IsBulk)
             {
                 // generate the picking bulk task
                 Result<TaskHeader> pickingBulkTaskResult = TaskHeader.Create(
@@ -77,6 +78,39 @@ internal sealed class AddDispatchLinesCommandHandler(
                 null,
                 dispatchHeader.Id,
                 TaskType.PickingBulk);
+
+                if (pickingBulkTaskResult.IsFailure)
+                {
+                    return Result.Failure(pickingBulkTaskResult.Error);
+                }
+
+                taskRepository.Insert(pickingBulkTaskResult.Value);
+            }
+            if (!tasks.Any(t => t.TaskType == TaskType.CheckingItem) && !dispatchLine.IsBulk)
+            {
+                // generate the checking item task          
+                Result<TaskHeader> pickingItemTaskResult = TaskHeader.Create(
+                    taskSeq.GetNumber(),
+                    null,
+                    dispatchHeader.Id,
+                    TaskType.CheckingItem);
+
+                if (pickingItemTaskResult.IsFailure)
+                {
+                    return Result.Failure(pickingItemTaskResult.Error);
+                }
+
+                taskRepository.Insert(pickingItemTaskResult.Value);
+            }
+
+            if (!tasks.Any(t => t.TaskType == TaskType.CheckingBulk) && dispatchLine.IsBulk)
+            {
+                // generate the checking bulk task
+                Result<TaskHeader> pickingBulkTaskResult = TaskHeader.Create(
+                taskSeq.GetNumber(),
+                null,
+                dispatchHeader.Id,
+                TaskType.CheckingBulk);
 
                 if (pickingBulkTaskResult.IsFailure)
                 {

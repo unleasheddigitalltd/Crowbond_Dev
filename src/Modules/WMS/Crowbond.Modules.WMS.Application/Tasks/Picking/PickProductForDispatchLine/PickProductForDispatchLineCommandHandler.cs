@@ -84,6 +84,15 @@ internal sealed class PickProductForDispatchLineCommandHandler(
                 return Result.Failure<Guid>(taskAssignmentLineResult.Error);
         }
 
+        taskRepository.AddAssignmentLine(taskAssignmentLineResult.Value);
+
+        Result pickResult = dispatchHeader.PickLine(dispatchLine.Id, request.Qty);
+
+        if (pickResult.IsFailure)
+        {
+            return Result.Failure<Guid>(pickResult.Error);
+        }
+
         Location? location = await locationRepository.GetAsync(request.ToLocationId, cancellationToken);
 
         if (location == null)

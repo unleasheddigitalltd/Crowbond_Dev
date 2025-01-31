@@ -10,8 +10,8 @@ namespace Crowbond.Modules.WMS.Application.Tasks.Picking.StartPickingTask;
 
 internal sealed class StartPickingTaskCommandHandler(
     ITaskRepository taskRepository,
-    IDateTimeProvider dateTimeProvider,
     IDispatchRepository dispatchRepository,
+    IDateTimeProvider dateTimeProvider,
     IUnitOfWork unitOfWork)
     : ICommandHandler<StartPickingTaskCommand>
 {
@@ -21,29 +21,8 @@ internal sealed class StartPickingTaskCommandHandler(
 
         if (taskHeader is null)
         {
-            return Result.Failure<Guid>(TaskErrors.NotFound(request.TaskHeaderId));
+            return Result.Failure(TaskErrors.NotFound(request.TaskHeaderId));
         }
-
-        DispatchHeader? dispatch = await dispatchRepository.GetAsync(taskHeader.DispatchId ?? Guid.Empty, cancellationToken);
-
-        if (dispatch is null)
-        {
-            return Result.Failure<Guid>(ReceiptErrors.NotFound(taskHeader.ReceiptId ?? Guid.Empty));
-        }
-
-        if (!dispatch.Lines.Any())
-        {
-            return Result.Failure<Guid>(ReceiptErrors.HasNoLines(taskHeader.ReceiptId ?? Guid.Empty));
-        }
-
-        Result<TaskAssignment> assignmentResult = taskHeader.AddAssignment(request.UserId);
-
-        if (assignmentResult.IsFailure)
-        {
-            return Result.Failure<Guid>(assignmentResult.Error);
-        }
-
-        taskRepository.AddAssignment(assignmentResult.Value);             
 
         if (!taskHeader.IsAssignedTo(request.UserId))
         {
@@ -55,6 +34,20 @@ internal sealed class StartPickingTaskCommandHandler(
         if (result.IsFailure)
         {
             return Result.Failure(result.Error);
+        }
+
+        DispatchHeader? dispatchHeader = await dispatchRepository.GetAsync(taskHeader.DispatchId ?? Guid.Empty, cancellationToken);
+
+        if (dispatchHeader is null)
+        {
+            return Result.Failure(DispatchErrors.NotFound(taskHeader.DispatchId ?? Guid.Empty));
+        }
+
+        Result dispatchResult = dispatchHeader.StartProcessing();
+
+        if (dispatchResult.IsFailure)
+        {
+            return Result.Failure(dispatchResult.Error);            
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

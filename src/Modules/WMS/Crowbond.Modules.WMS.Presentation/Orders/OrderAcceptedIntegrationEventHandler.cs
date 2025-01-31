@@ -16,7 +16,13 @@ internal sealed class OrderAcceptedIntegrationEventHandler(ISender sender)
         CancellationToken cancellationToken = default)
     {
         var request = integrationEvent.Lines.Select(l => new DispatchLineRequest(
-                integrationEvent.OrderId, integrationEvent.OrderNo, integrationEvent.CustomerBusinessName, l.OrderLineId, l.ProductId, l.Qty)).ToList();
+                integrationEvent.OrderId,
+                integrationEvent.OrderNo,
+                integrationEvent.CustomerBusinessName,
+                l.OrderLineId, 
+                l.ProductId,
+                l.Qty,
+                l.IsBulk)).ToList();
 
         Result result = await sender.Send(
             new AddDispatchLinesCommand(integrationEvent.RouteTripId, request),

@@ -10,6 +10,8 @@ public interface IPurchaseOrderRepository
     
     Task<PurchaseOrderHeader?> GetDraftBySupplierIdAsync(Guid supplierId, CancellationToken cancellationToken = default);
 
+    Task<List<PurchaseOrderLine>> GetLinesPendingByProductAsync(Guid productId, CancellationToken cancellationToken = default);
+
     void AddLines(IEnumerable<PurchaseOrderLine> purchaseOrderLines);
 
     void AddLine(PurchaseOrderLine purchaseOrderLine);
