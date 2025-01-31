@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   crowbond.api:
@@ -8,11 +8,17 @@ services:
       context: .
       dockerfile: src/API/Crowbond.Api/Dockerfile
     ports:
-      - 5000:8080
+      - 5002:8080
       - 5001:8081
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
     volumes:
-      - /root/.microsoft/usersecrets:/root/.microsoft/usersecrets
-      - /usr/local/share/aspnet/Https:/root/.aspnet/https
+      - ${APPDATA:-$HOME/.microsoft}/usersecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA:-$HOME/.aspnet}/https:/root/.aspnet/https:ro
 
   crowbond.database:
     image: postgres:latest
