@@ -1,0 +1,121 @@
+name: "Terraform"
+
+on:
+  push:
+    paths:
+      - "terraform/**"
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      rds_changes: ${{ steps.filter.outputs.rds }}
+      api_changes: ${{ steps.filter.outputs.api }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            rds:
+              - 'terraform/rds/**'
+            api:
+              - 'terraform/api/**'
+
+  terraform-rds:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.rds_changes == 'true' }}
+    name: "Terraform RDS"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/rds
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -var-file="production.tfvars" -var="db_password=${{ secrets.DB_PASSWORD }}" -no-color
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -var-file="production.tfvars" -var="db_password=${{ secrets.DB_PASSWORD }}" -auto-approve
+
+  terraform-api:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.api_changes == 'true' }}
+    name: "Terraform API"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/api
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -var-file="production.tfvars" -no-color
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -var-file="production.tfvars" -auto-approve

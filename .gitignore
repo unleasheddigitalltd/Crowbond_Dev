@@ -399,3 +399,10 @@ FodyWeavers.xsd
 
 # .containers Folder
 .containers/
+
+
+# rest files
+*.rest
+
+# .DS_Store
+.DS_Store
