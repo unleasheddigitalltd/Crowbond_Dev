@@ -10,7 +10,7 @@ resource "aws_db_instance" "crowbond" {
   password = var.db_password
 
   skip_final_snapshot    = true
-  publicly_accessible    = true  # Set to false in production
+  publicly_accessible    = true # For development purposes
   vpc_security_group_ids = [aws_security_group.rds.id]
 
   backup_retention_period = 7
@@ -31,7 +31,7 @@ resource "aws_security_group" "rds" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Update this to production IP range
+    cidr_blocks = ["0.0.0.0/0"] # Open for development
   }
 
   egress {
