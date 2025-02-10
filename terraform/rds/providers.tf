@@ -9,5 +9,5 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
-  profile = "crowbond-dev"
+  # Profile is handled by GitHub Actions credentials
 }
