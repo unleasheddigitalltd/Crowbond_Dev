@@ -55,7 +55,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=rds/terraform.tfstate" -backend-config="region=us-east-1"
+        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=rds/terraform.tfstate" -backend-config="region=eu-west-1"
 
       - name: Terraform Format
         id: fmt
@@ -101,7 +101,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/terraform.tfstate" -backend-config="region=us-east-1"
+        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/terraform.tfstate" -backend-config="region=eu-west-1"
 
       - name: Terraform Format
         id: fmt

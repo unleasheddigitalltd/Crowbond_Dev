@@ -6,14 +6,10 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket  = "crowbond-terraform-state"
-    key     = "api/terraform.tfstate"
-    region  = "us-east-1"
-  }
+  backend "s3" {}  # Empty backend config, will be provided by -backend-config
 }
 
 provider "aws" {
   region  = "eu-west-1"
-  # Profile is handled by GitHub Actions credentials
+  profile = "crowbond-dev"  # Only used locally, overridden by GitHub Actions
 }
