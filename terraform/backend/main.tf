@@ -22,3 +22,41 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
     }
   }
 }
+
+# Create IAM policy for Terraform state management
+resource "aws_iam_policy" "terraform_state" {
+  name        = "terraform-state-management"
+  description = "Policy for managing Terraform state in S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          aws_s3_bucket.terraform_state.arn,
+          "${aws_s3_bucket.terraform_state.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+# Attach policy to your user
+resource "aws_iam_user_policy_attachment" "terraform_state" {
+  user       = "devteam" 
+  policy_arn = aws_iam_policy.terraform_state.arn
+}
+
+
+# Output the policy ARN for reference
+output "terraform_state_policy_arn" {
+  value       = aws_iam_policy.terraform_state.arn
+  description = "ARN of the Terraform state management policy"
+}
