@@ -68,6 +68,9 @@ csharp_style_expression_bodied_indexers = true:error
 csharp_style_expression_bodied_accessors = true:error
 csharp_style_expression_bodied_lambdas = true:error
 csharp_style_expression_bodied_local_functions = true:error
+csharp_prefer_system_threading_lock = true:suggestion
+dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.CA2263.severity = none
 
 [*.{cs,vb}]
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
@@ -387,3 +390,6 @@ dotnet_diagnostic.S4136.severity = none
 
 # S6605: Collection-specific "Exists" method should be used instead of the "Any" extension
 dotnet_diagnostic.S6605.severity = none
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 4
+indent_size = 4
