@@ -20,6 +20,7 @@ internal sealed class GetPurchaseOrderQueryHandler(IDbConnectionFactory dbConnec
                  id AS {nameof(PurchaseOrderResponse.Id)},          
                  purchase_order_no AS {nameof(PurchaseOrderResponse.PurchaseOrderNo)},
                  purchase_date AS {nameof(PurchaseOrderResponse.PurchaseDate)},
+                 supplier_id AS {nameof(PurchaseOrderResponse.SupplierId)},
                  supplier_name AS {nameof(PurchaseOrderResponse.SupplierName)},
                  contact_full_name AS {nameof(PurchaseOrderResponse.ContactFullName)},
                  contact_phone AS {nameof(PurchaseOrderResponse.ContactPhone)},
