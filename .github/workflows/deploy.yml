@@ -46,9 +46,16 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY || steps.login-ecr.outputs.registry }}
+          DOCKER_BUILDKIT: 1
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./src/API/Crowbond.Api
+          # Mask the registry URL in logs
+          echo "::add-mask::$ECR_REGISTRY"
+
+          # Build from repository root to ensure all project files are accessible
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+                      -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+                      -f src/API/Crowbond.Api/Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 

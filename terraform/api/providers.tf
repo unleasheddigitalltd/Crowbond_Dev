@@ -5,8 +5,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "s3" {
+    bucket  = "crowbond-terraform-state"
+    key     = "api/terraform.tfstate"
+    region  = "eu-west-1"
+  }
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region  = "eu-west-1"
+  # Profile is handled by GitHub Actions credentials
 }
