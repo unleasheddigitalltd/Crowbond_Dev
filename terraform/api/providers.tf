@@ -10,6 +10,5 @@ terraform {
 }
 
 provider "aws" {
-  region  = "eu-west-1"
-  profile = "crowbond-dev"  # Only used locally, overridden by GitHub Actions
+  region = "eu-west-1"
 }
