@@ -11,5 +11,5 @@ terraform {
 
 provider "aws" {
   region  = "eu-west-1"
-  profile = "crowbond-dev"  # Add profile for local development, GitHub Actions will override
+  # profile = "crowbond-dev"  # Add profile for local development, GitHub Actions will override
 }
