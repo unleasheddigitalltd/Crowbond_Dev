@@ -4,6 +4,7 @@ public sealed record PurchaseOrderResponse(
     Guid Id,
     string? PurchaseOrderNo,
     DateOnly? PurchaseDate,
+    Guid SupplierId,
     string SupplierName,
     string? ContactFullName,
     string? ContactPhone,
