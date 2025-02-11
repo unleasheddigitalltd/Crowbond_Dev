@@ -9,7 +9,7 @@ terraform {
   backend "s3" {
     bucket  = "crowbond-terraform-state"
     key     = "api/terraform.tfstate"
-    region  = "eu-west-1"
+    region  = "us-east-1"
   }
 }
 
