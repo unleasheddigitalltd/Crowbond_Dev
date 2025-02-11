@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "Terraform Production"
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
   terraform-rds:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.rds_changes == 'true' }}
-    name: "Terraform RDS"
+    name: "Terraform RDS Production"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=rds/terraform.tfstate" -backend-config="region=eu-west-1"
+        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=rds/production.tfstate" -backend-config="region=eu-west-1"
 
       - name: Terraform Format
         id: fmt
@@ -77,7 +77,7 @@ jobs:
   terraform-api:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.api_changes == 'true' }}
-    name: "Terraform API"
+    name: "Terraform API Production"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -101,7 +101,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/terraform.tfstate" -backend-config="region=eu-west-1"
+        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/production.tfstate" -backend-config="region=eu-west-1"
 
       - name: Terraform Format
         id: fmt
@@ -110,7 +110,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var-file="production.tfvars" -no-color
+        run: terraform plan -var-file="production.tfvars" -var="db_password=${{ secrets.DB_PASSWORD }}" -no-color
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -118,4 +118,4 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -var-file="production.tfvars" -auto-approve
+        run: terraform apply -var-file="production.tfvars" -var="db_password=${{ secrets.DB_PASSWORD }}" -auto-approve

@@ -1,4 +1,4 @@
 bucket  = "crowbond-terraform-state"
-key     = "api/terraform.tfstate"
+key     = "api/development.tfstate"
 region  = "eu-west-1"
 profile = "crowbond-dev"
