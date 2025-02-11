@@ -1,3 +1,8 @@
+resource "aws_ecr_repository" "api" {
+  name = "${var.app_name}-${var.environment}"
+  force_delete = true
+}
+
 resource "aws_iam_role" "app_runner" {
   name = "${var.app_name}-${var.environment}-role"
 
@@ -31,7 +36,7 @@ resource "aws_apprunner_service" "api" {
           DB_PASSWORD = var.db_password
         }
       }
-      image_identifier      = "${var.app_name}:latest"
+      image_identifier      = "${aws_ecr_repository.api.repository_url}:latest"
       image_repository_type = "ECR"
     }
   }
@@ -49,4 +54,9 @@ resource "aws_apprunner_service" "api" {
 
 output "service_url" {
   value = aws_apprunner_service.api.service_url
+}
+
+output "ecr_repository_url" {
+  value = aws_ecr_repository.api.repository_url
+  description = "URL of the ECR repository"
 }
