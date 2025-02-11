@@ -28,8 +28,8 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
             _ => "receive_date" // Default sorting
         };
 
-        string[] caseClauses = Enum.GetValues(typeof(ReceiptStatus))
-                          .Cast<ReceiptStatus>()
+        string[] caseClauses = Enum.GetValues<ReceiptStatus>()
+                       //   .Cast<ReceiptStatus>()
                           .Select(status => $"WHEN {(int)status} THEN '{status}'")
                           .ToArray();
 

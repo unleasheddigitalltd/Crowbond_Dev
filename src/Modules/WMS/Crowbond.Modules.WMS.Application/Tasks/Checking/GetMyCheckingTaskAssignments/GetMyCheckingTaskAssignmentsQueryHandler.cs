@@ -14,8 +14,8 @@ internal sealed class GetMyCheckingTaskAssignmentsQueryHandler(IDbConnectionFact
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
-        string[] caseClauses = Enum.GetValues(typeof(TaskType))
-                          .Cast<TaskType>()
+        string[] caseClauses = Enum.GetValues<TaskType>()
+                         // .Cast<TaskType>()
                           .Select(status => $"WHEN {(int)status} THEN '{status}'")
                           .ToArray();
 
