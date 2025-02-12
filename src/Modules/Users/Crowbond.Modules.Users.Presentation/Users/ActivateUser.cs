@@ -13,7 +13,7 @@ internal sealed class ActivateUser : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("users/{id}/avtivate", async (Guid id, ISender sender) =>
+        app.MapPut("users/{id}/activate", async (Guid id, ISender sender) =>
         {
             Result result = await sender.Send(new ActivateUserCommand(id));
 
