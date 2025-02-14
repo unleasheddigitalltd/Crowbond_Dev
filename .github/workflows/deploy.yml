@@ -18,8 +18,8 @@ env:
   AWS_REGION: eu-west-1
   ECR_REPOSITORY: crowbond-api
   IMAGE_TAG: ${{ github.sha }}
-  ECS_CLUSTER: crowbond
-  ECS_SERVICE: crowbond-api
+  ECS_CLUSTER: crowbond-api-production-cluster
+  ECS_SERVICE: crowbond-api-production
 
 jobs:
   deploy:
