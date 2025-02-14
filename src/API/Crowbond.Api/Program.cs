@@ -5,24 +5,27 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
+// Add environment variable replacement first
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbConnString = builder.Configuration.GetConnectionString("Database")
+    ?.Replace("${DB_PASSWORD}", dbPassword);
+builder.Configuration["ConnectionStrings:Database"] = dbConnString;
+
+builder.Configuration.AddModuleConfiguration(["users", "wms", "crm", "oms"]);
+
+// Now add services with the updated connection string
 builder.Services.AddServices(builder.Configuration);
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
-builder.Configuration.AddModuleConfiguration(["users", "wms", "crm", "oms"]);
+var app = builder.Build();
 
-WebApplication app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    app.ApplyMigrations();
-}
-
+app.ApplyMigrations();
 app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

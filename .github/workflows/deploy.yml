@@ -18,7 +18,8 @@ env:
   AWS_REGION: eu-west-1
   ECR_REPOSITORY: crowbond-api
   IMAGE_TAG: ${{ github.sha }}
-  APP_RUNNER_SERVICE: crowbond-api-production
+  ECS_CLUSTER: crowbond
+  ECS_SERVICE: crowbond-api
 
 jobs:
   deploy:
@@ -53,13 +54,14 @@ jobs:
           echo "::add-mask::$ECR_REGISTRY"
 
           # Build from repository root to ensure all project files are accessible
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+          docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
                       -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
-                      -f src/API/Crowbond.Api/Dockerfile .
+                      -f src/Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      - name: Update App Runner service
+      - name: Update ECS service
         run: |
-          aws apprunner update-service --service-name $APP_RUNNER_SERVICE \
-            --source-configuration '{"ImageRepository": {"ImageIdentifier": "'$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG'", "ImageRepositoryType": "ECR"}}'
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} \
+                                --service ${{ env.ECS_SERVICE }} \
+                                --force-new-deployment

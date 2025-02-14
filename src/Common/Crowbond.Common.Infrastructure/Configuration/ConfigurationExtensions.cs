@@ -9,7 +9,13 @@ public static class ConfigurationExtensions
 {
     public static string GetConnectionStringOrThrow(this IConfiguration configuration, string name)
     {
-        return configuration.GetConnectionString(name) ??
+        // Try the direct path first (how we set it)
+        string? connString = configuration[$"ConnectionStrings:{name}"];
+        
+        // Fall back to GetConnectionString if not found
+        connString ??= configuration.GetConnectionString(name);
+        
+        return connString ?? 
                throw new InvalidOperationException($"The connection string {name} was not found");
     }
 
