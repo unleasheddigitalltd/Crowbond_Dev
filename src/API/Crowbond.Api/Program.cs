@@ -37,10 +37,7 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+app.UseCors();
 
 app.UseAntiforgery();
 
