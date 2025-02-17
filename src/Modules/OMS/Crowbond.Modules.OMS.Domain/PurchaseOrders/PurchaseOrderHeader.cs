@@ -341,10 +341,6 @@ public sealed class PurchaseOrderHeader : Entity, IAuditable
 
     public Result<PurchaseOrderStatusHistory> Cancel(DateTime utcNow)
     {
-        if (Status != PurchaseOrderStatus.Approved)
-        {
-            return Result.Failure<PurchaseOrderStatusHistory>(PurchaseOrderErrors.NotApproved);
-        }
 
         Status = PurchaseOrderStatus.Cancelled;
 
