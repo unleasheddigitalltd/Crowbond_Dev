@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "src/API/**"
+      - "src/**"
       - ".github/workflows/deploy.yml"
   workflow_run:
     workflows: ["Terraform"]
