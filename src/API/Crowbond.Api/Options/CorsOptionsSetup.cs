@@ -1,15 +1,21 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Api.Options;
 
-public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration configuration) : IConfigureOptions<CorsOptions>
+public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration configuration, ILogger<CorsOptionsSetup> logger) : IConfigureOptions<CorsOptions>
 {
     public void Configure(CorsOptions options)
     {        
+         logger.LogInformation("Configuring CORS");
+         logger.LogInformation("Environment: {0}", environment.EnvironmentName);
+    
         if(environment.IsDevelopment())
         {
+           logger.LogInformation("Using development CORS policy");
+       
             options.AddDefaultPolicy(policy => 
                 policy
                 .AllowAnyOrigin()
@@ -18,13 +24,14 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
         }
         else
         {
+            logger.LogInformation("Using production CORS policy");
             var corsConfig = configuration.GetSection("Cors");
             var allowedOrigins = corsConfig.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
             var allowedMethods = corsConfig.GetSection("AllowedMethods").Get<string[]>() ?? new[] { "GET", "POST", "PUT", "DELETE", "OPTIONS" };
             var allowedHeaders = corsConfig.GetSection("AllowedHeaders").Get<string[]>() ?? new[] { "Authorization", "Content-Type", "Accept" };
 
 
-            Console.WriteLine($"Configured origins: {string.Join(", ", allowedOrigins)}");  // or use proper logging
+            logger.LogInformation("Configuring CORS with allowed origins: {0}", string.Join(", ", allowedOrigins));
        
             options.AddDefaultPolicy(policy =>
                 policy
@@ -32,7 +39,7 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
                 .WithMethods(allowedMethods)
                 .WithHeaders(allowedHeaders)
                 .AllowCredentials()
-        .WithExposedHeaders("*"));
+                .WithExposedHeaders("*"));
         }        
     }
 }
