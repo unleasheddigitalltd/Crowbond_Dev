@@ -16,7 +16,7 @@ on:
 
 env:
   AWS_REGION: eu-west-1
-  ECR_REPOSITORY: crowbond-api
+  ECR_REPOSITORY: crowbond-api-production
   IMAGE_TAG: ${{ github.sha }}
   ECS_CLUSTER: crowbond-api-production-cluster
   ECS_SERVICE: crowbond-api-production
@@ -57,8 +57,7 @@ jobs:
           docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
                       -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
                       -f Dockerfile .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push --all-tags $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Update ECS service
         run: |
