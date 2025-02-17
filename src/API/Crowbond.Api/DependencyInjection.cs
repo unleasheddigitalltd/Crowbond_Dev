@@ -59,10 +59,10 @@ public static class DependencyInjection
         services.AddCRMModule(configuration);
         services.AddOMSModule(configuration);
 
-        services.AddCors();
         services.ConfigureOptions<CorsOptionsSetup>();
+        services.AddCors();
 
-        services.AddAntiforgery();
         services.ConfigureOptions<AntiForgeryOptionsSetup>();
+        services.AddAntiforgery();
     }
 }

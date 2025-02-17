@@ -23,11 +23,16 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
             var allowedMethods = corsConfig.GetSection("AllowedMethods").Get<string[]>() ?? new[] { "GET", "POST", "PUT", "DELETE", "OPTIONS" };
             var allowedHeaders = corsConfig.GetSection("AllowedHeaders").Get<string[]>() ?? new[] { "Authorization", "Content-Type", "Accept" };
 
+
+            Console.WriteLine($"Configured origins: {string.Join(", ", allowedOrigins)}");  // or use proper logging
+       
             options.AddDefaultPolicy(policy =>
                 policy
                 .WithOrigins(allowedOrigins)
                 .WithMethods(allowedMethods)
-                .WithHeaders(allowedHeaders));
+                .WithHeaders(allowedHeaders)
+                .AllowCredentials()
+        .WithExposedHeaders("*"));
         }        
     }
 }
