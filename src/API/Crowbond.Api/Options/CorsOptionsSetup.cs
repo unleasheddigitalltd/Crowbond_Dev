@@ -10,7 +10,7 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
     public void Configure(CorsOptions options)
     {        
          logger.LogInformation("Configuring CORS");
-         logger.LogInformation("Environment: {0}", environment.EnvironmentName);
+         logger.LogInformation("Environment: {Env}", environment.EnvironmentName);
     
         if(environment.IsDevelopment())
         {
@@ -31,7 +31,7 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
             var allowedHeaders = corsConfig.GetSection("AllowedHeaders").Get<string[]>() ?? new[] { "Authorization", "Content-Type", "Accept" };
 
 
-            logger.LogInformation("Configuring CORS with allowed origins: {0}", string.Join(", ", allowedOrigins));
+            logger.LogInformation("Configuring CORS with allowed origins: {Origins}", string.Join(", ", allowedOrigins));
        
             options.AddDefaultPolicy(policy =>
                 policy
