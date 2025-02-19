@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,7 +37,7 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
             {
                 policy.SetIsOriginAllowed(origin =>
                 {
-                    if (origin.StartsWith("http://localhost:") || origin.StartsWith("https://localhost:"))
+                    if (origin.StartsWith("http://localhost:", StringComparison.Ordinal) || origin.StartsWith("https://localhost:", StringComparison.Ordinal))
                         return true;
                     
                     return allowedOrigins.Contains(origin);
