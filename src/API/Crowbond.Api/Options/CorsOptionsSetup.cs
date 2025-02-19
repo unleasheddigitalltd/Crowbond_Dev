@@ -34,12 +34,19 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
             logger.LogInformation("Configuring CORS with allowed origins: {Origins}", string.Join(", ", allowedOrigins));
        
             options.AddDefaultPolicy(policy =>
-                policy
-                .WithOrigins(allowedOrigins)
+            {
+                policy.SetIsOriginAllowed(origin =>
+                {
+                    if (origin.StartsWith("http://localhost:") || origin.StartsWith("https://localhost:"))
+                        return true;
+                    
+                    return allowedOrigins.Contains(origin);
+                })
                 .WithMethods(allowedMethods)
                 .WithHeaders(allowedHeaders)
                 .AllowCredentials()
-                .WithExposedHeaders("*"));
+                .WithExposedHeaders("*");
+            });
         }        
     }
 }
