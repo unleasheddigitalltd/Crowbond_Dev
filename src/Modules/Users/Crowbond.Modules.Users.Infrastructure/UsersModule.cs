@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Authorization;
+using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Infrastructure.AuditEntity;
@@ -63,10 +63,9 @@ public static class UsersModule
     {
         services.AddScoped<IPermissionService, PermissionService>();
 
+        // Configure Keycloak
         services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));
-
         services.AddTransient<KeyCloakAuthDelegatingHandler>();
-
         services
             .AddHttpClient<KeyCloakClient>((serviceProvider, httpClient) =>
             {
@@ -77,6 +76,11 @@ public static class UsersModule
             })
             .AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
 
+        // Configure Cognito
+        services.Configure<CognitoOptions>(configuration.GetSection("Users:Cognito"));
+        services.AddTransient<CognitoIdentityProviderService>();
+
+        // Register the default identity provider (Keycloak)
         services.AddTransient<IIdentityProviderService, IdentityProviderService>();
 
         services.AddDbContext<UsersDbContext>((sp, options) =>
