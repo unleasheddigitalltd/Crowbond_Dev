@@ -240,6 +240,10 @@ resource "aws_ecs_task_definition" "app" {
         {
           name  = "DB_PASSWORD"
           value = var.db_password
+        },
+        {
+          name  = "COGNITO_CLIENT_SECRET"
+          value = var.cognito_client_secret
         }
       ]
 

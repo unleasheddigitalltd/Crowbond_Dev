@@ -32,3 +32,10 @@ variable "db_password" {
   type      = string
   sensitive = true
 }
+
+variable "cognito_client_secret" {
+  description = "AWS Cognito User Pool Client Secret"
+  type        = string
+  sensitive   = true
+  default     = "1qpfkaphq814i2kp07a6mc0v04l5iglb3r9k4g0c7c784jriu3uh"
+}

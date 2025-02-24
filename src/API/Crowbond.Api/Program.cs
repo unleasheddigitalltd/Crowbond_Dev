@@ -42,6 +42,7 @@ app.UseCors();
 app.UseAntiforgery();
 
 app.UseAuthentication();
+app.UseCognitoTokenValidation();
 
 app.UseAuthorization();
 

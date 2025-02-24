@@ -11,4 +11,9 @@
 	<InternalsVisibleTo Include="Crowbond.IntegrationTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.406.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+  </ItemGroup>
+
 </Project>
