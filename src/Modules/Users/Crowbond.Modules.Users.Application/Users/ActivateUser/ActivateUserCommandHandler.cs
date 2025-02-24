@@ -21,7 +21,7 @@ internal sealed class ActivateUserCommandHandler(
             return Result.Failure(UserErrors.NotFound(request.UserId));
         }
 
-        Result result = await identityProviderService.UpdateUserAsync(user.IdentityId,
+        var result = await identityProviderService.UpdateUserAsync(user.IdentityId,
             new UserModel(user.Username, user.Email, string.Empty, user.FirstName, user.LastName, user.Mobile, true),
             cancellationToken);
 
@@ -34,7 +34,7 @@ internal sealed class ActivateUserCommandHandler(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        Result resetPasswordResult = await identityProviderService.ResetUserPasswordAsync(
+        var resetPasswordResult = await identityProviderService.ResetUserPasswordAsync(
             user.IdentityId,
             cancellationToken);
 
