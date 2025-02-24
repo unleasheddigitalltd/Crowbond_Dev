@@ -1,27 +1,25 @@
 using Crowbond.Common.Domain;
+using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Application.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.Users.Presentation.Authentication;
 
-public static class Authenticate
+public sealed class Authenticate : IEndpoint
 {
-    public sealed record AuthenticateRequest(
-        string Username,
-        string Password);
+    public void MapEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapPost("users/authenticate", AuthenticateUser)
+            .AllowAnonymous()
+            .WithTags("Authentication");
+    }
 
-    public sealed record AuthenticateResponse(
-        string AccessToken,
-        string IdToken,
-        string RefreshToken,
-        int ExpiresIn);
-
-    [AllowAnonymous]
-    [HttpPost("users/authenticate")]
-    public static async Task<IResult> AuthenticateUser(
+    private static async Task<IResult> AuthenticateUser(
         [FromBody] AuthenticateRequest request,
         IIdentityProviderService identityProviderService,
         CancellationToken cancellationToken)
@@ -42,4 +40,14 @@ public static class Authenticate
 
         return Results.Ok(response);
     }
+
+    public sealed record AuthenticateRequest(
+        string Username,
+        string Password);
+
+    public sealed record AuthenticateResponse(
+        string AccessToken,
+        string IdToken,
+        string RefreshToken,
+        int ExpiresIn);
 }

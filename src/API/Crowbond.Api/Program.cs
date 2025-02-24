@@ -4,7 +4,7 @@ using Crowbond.Common.Presentation.Endpoints;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
-
+using Crowbond.Modules.Users.Infrastructure.Authentication;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,9 +41,8 @@ app.UseCors();
 
 app.UseAntiforgery();
 
-app.UseAuthentication();
 app.UseCognitoTokenValidation();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapEndpoints();

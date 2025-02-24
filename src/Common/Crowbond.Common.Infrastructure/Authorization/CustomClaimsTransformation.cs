@@ -12,6 +12,8 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
 {
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
+        var identityId = principal.GetIdentityId();
+
         if (principal.HasClaim(c => c.Type == CustomClaims.Sub))
         {
             return principal;
@@ -19,20 +21,24 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
 
         using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-        IPermissionService permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
-
-        string identityId = principal.GetIdentityId();
-
-        Result<PermissionsResponse> result = await permissionService.GetUserPermissionsAsync(identityId);
+        var permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
+        var result = await permissionService.GetUserPermissionsAsync(identityId);
 
         if (result.IsFailure)
         {
             throw new CrowbondException(nameof(IPermissionService.GetUserPermissionsAsync), result.Error);
         }
 
-        var claimsIdentity = new ClaimsIdentity();
+        var claimsIdentity = new ClaimsIdentity(
+            principal.Identity as ClaimsIdentity ?? 
+            new ClaimsIdentity(principal.Identity?.AuthenticationType ?? "Bearer"));
 
-        claimsIdentity.AddClaim(new Claim(CustomClaims.Sub, result.Value.UserId.ToString()));
+        foreach (var claim in principal.Claims.Where(c => c.Type != CustomClaims.Permission))
+        {
+            claimsIdentity.AddClaim(claim);
+        }
+
+        claimsIdentity.AddClaim(new Claim(CustomClaims.Sub, identityId));
 
         foreach (string permission in result.Value.Permissions)
         {
@@ -40,7 +46,8 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
         }
 
         principal.AddIdentity(claimsIdentity);
-
+        
         return principal;
     }
+#pragma warning restore CA1303
 }

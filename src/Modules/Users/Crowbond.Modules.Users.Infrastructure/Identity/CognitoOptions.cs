@@ -1,6 +1,6 @@
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
 
-internal sealed class CognitoOptions
+public class CognitoOptions
 {
     public string UserPoolId { get; set; }
     public string UserPoolClientId { get; set; }

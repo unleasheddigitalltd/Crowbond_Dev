@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Crowbond.Common.Infrastructure.Authentication;
 
@@ -8,7 +10,8 @@ internal static class AuthenticationExtensions
     {
         services.AddAuthorization();
 
-        services.AddAuthentication().AddJwtBearer();
+        services.AddAuthentication()
+            .AddJwtBearer();
 
         services.AddHttpContextAccessor();
 

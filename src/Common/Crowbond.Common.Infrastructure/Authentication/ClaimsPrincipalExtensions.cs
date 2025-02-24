@@ -16,7 +16,9 @@ public static class ClaimsPrincipalExtensions
 
     public static string GetIdentityId(this ClaimsPrincipal? principal)
     {
-        return principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+        // For Cognito, use the sub claim which matches our stored identity_id
+        return principal?.FindFirst("sub")?.Value ??
+               principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
                throw new CrowbondException("User identity is unavailable");
     }
 

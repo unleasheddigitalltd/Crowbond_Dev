@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Amazon.CognitoIdentityProvider;
+using Crowbond.Modules.Users.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -12,23 +13,20 @@ public class CognitoTokenValidationMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly CognitoOptions _options;
-    private readonly IAmazonCognitoIdentityProvider _cognitoClient;
 
     public CognitoTokenValidationMiddleware(
         RequestDelegate next,
-        IOptions<CognitoOptions> options,
-        IAmazonCognitoIdentityProvider cognitoClient)
+        IOptions<CognitoOptions> options)
     {
         _next = next;
         _options = options.Value;
-        _cognitoClient = cognitoClient;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
         string? authHeader = context.Request.Headers.Authorization.FirstOrDefault();
 
-        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.Ordinal))
         {
             await _next(context);
             return;

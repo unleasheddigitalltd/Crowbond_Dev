@@ -1,15 +1,16 @@
 resource "aws_cognito_user_pool" "main" {
   name = "${var.environment}-${var.application_name}-user-pool"
 
-  username_attributes      = ["email"]
+  # Allow regular usernames, but let users sign in with email too
+  alias_attributes = ["email"]
   auto_verified_attributes = ["email"]
 
   password_policy {
-    minimum_length                   = 8
-    require_lowercase               = true
-    require_numbers                 = true
-    require_symbols                 = true
-    require_uppercase               = true
+    minimum_length                  = 6
+    require_lowercase               = false
+    require_numbers                 = false
+    require_symbols                 = false
+    require_uppercase               = false
     temporary_password_validity_days = 7
   }
 

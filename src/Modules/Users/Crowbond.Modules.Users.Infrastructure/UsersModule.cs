@@ -1,3 +1,5 @@
+using Amazon;
+using Amazon.CognitoIdentityProvider;
 using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
@@ -79,9 +81,14 @@ public static class UsersModule
         // Configure Cognito
         services.Configure<CognitoOptions>(configuration.GetSection("Users:Cognito"));
         services.AddTransient<CognitoIdentityProviderService>();
+        services.AddSingleton<IAmazonCognitoIdentityProvider>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<CognitoOptions>>().Value;
+            return new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(options.Region));
+        });
 
-        // Register the default identity provider (Keycloak)
-        services.AddTransient<IIdentityProviderService, IdentityProviderService>();
+        // Register the default identity provider (Cognito)
+        services.AddTransient<IIdentityProviderService, CognitoIdentityProviderService>();
 
         services.AddDbContext<UsersDbContext>((sp, options) =>
             options
