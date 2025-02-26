@@ -88,7 +88,8 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
                 tokenResponse.AccessToken,
                 tokenResponse.IdToken,
                 tokenResponse.RefreshToken,
-                tokenResponse.ExpiresIn);
+                tokenResponse.ExpiresIn,
+                tokenResponse.Sub);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
@@ -104,6 +105,33 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
 
     public async Task<Result<AuthenticationResult>> RefreshTokenAsync(
         string refreshToken,
+        string sub,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var tokenResponse = await keyCloakClient.RefreshTokenAsync(refreshToken, sub, cancellationToken);
+            return new AuthenticationResult(
+                tokenResponse.AccessToken,
+                tokenResponse.IdToken,
+                tokenResponse.RefreshToken,
+                tokenResponse.ExpiresIn,
+                tokenResponse.Sub);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            logger.LogWarning(ex, "Invalid refresh token for user {Sub}", sub);
+            return Result.Failure<AuthenticationResult>(Error.Failure("Auth.InvalidToken", "Invalid refresh token"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error refreshing token for user {Sub}", sub);
+            return Result.Failure<AuthenticationResult>(Error.Problem("Auth.Error", "An error occurred during token refresh"));
+        }
+    }
+
+    public async Task<Result<AuthenticationResult>> RefreshTokenAsync(
+        string refreshToken,
         CancellationToken cancellationToken = default)
     {
         try
@@ -113,7 +141,8 @@ internal sealed class IdentityProviderService(KeyCloakClient keyCloakClient, ILo
                 tokenResponse.AccessToken,
                 tokenResponse.IdToken,
                 tokenResponse.RefreshToken,
-                tokenResponse.ExpiresIn);
+                tokenResponse.ExpiresIn,
+                tokenResponse.Sub);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {

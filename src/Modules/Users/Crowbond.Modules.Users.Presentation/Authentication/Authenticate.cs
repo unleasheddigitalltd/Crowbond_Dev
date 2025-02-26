@@ -36,7 +36,8 @@ public sealed class Authenticate : IEndpoint
             result.Value.AccessToken,
             result.Value.IdToken,
             result.Value.RefreshToken,
-            result.Value.ExpiresIn);
+            result.Value.ExpiresIn,
+            result.Value.Sub);
 
         return Results.Ok(response);
     }
@@ -49,5 +50,6 @@ public sealed class Authenticate : IEndpoint
         string AccessToken,
         string IdToken,
         string RefreshToken,
-        int ExpiresIn);
+        int ExpiresIn,
+        string Sub);
 }

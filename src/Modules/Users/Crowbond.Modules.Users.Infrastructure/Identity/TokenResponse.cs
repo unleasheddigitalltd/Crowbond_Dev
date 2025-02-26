@@ -15,4 +15,7 @@ internal sealed class TokenResponse
 
     [JsonPropertyName("expires_in")]
     public int ExpiresIn { get; set; }
+
+    [JsonPropertyName("sub")]
+    public string Sub { get; set; } = null!;
 }

@@ -206,7 +206,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 AccessToken = response.AuthenticationResult.AccessToken
             };
             var userResponse = await _cognitoClient.GetUserAsync(getUserRequest, cancellationToken);
-            var sub = userResponse.UserAttributes.FirstOrDefault(attr => attr.Name == "sub")?.Value;
+            var sub = userResponse.UserAttributes.Find(attr => attr.Name == "sub")?.Value;
 
             if (string.IsNullOrEmpty(sub))
             {
@@ -243,14 +243,13 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
 
     public async Task<Result<AuthenticationResult>> RefreshTokenAsync(
         string refreshToken,
-        string username,
+        string sub,
         CancellationToken cancellationToken = default)
     {
         try
         {
 
-            // For refresh token flow, we must use the sub as the username
-            var secretHash = CalculateSecretHash(username); // username should be the sub here
+            var secretHash = CalculateSecretHash(sub);
             var refreshRequest = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.REFRESH_TOKEN_AUTH,
@@ -258,7 +257,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 AuthParameters = new Dictionary<string, string>
                 {
                     {"REFRESH_TOKEN", refreshToken},
-                    {"USERNAME", username}, // This must be the sub
+                    {"USERNAME", sub},
                     {"SECRET_HASH", secretHash}
                 }
             };
@@ -269,7 +268,8 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 response.AuthenticationResult.AccessToken,
                 response.AuthenticationResult.IdToken,
                 refreshToken,
-                response.AuthenticationResult.ExpiresIn);
+                response.AuthenticationResult.ExpiresIn,
+                sub);
         }
         catch (NotAuthorizedException ex)
         {

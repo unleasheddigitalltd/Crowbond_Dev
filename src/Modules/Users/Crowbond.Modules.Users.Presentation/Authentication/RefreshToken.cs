@@ -3,8 +3,10 @@ using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Application.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.Users.Presentation.Authentication;
@@ -21,11 +23,15 @@ internal sealed class RefreshToken : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("users/refresh-token", async (
-            RefreshTokenRequest request,
-            ClaimsPrincipal claimsPrincipal,
-            IIdentityProviderService identityProviderService,
-            CancellationToken cancellationToken) =>
+        app.MapPost("users/refresh-token", RefreshUserToken)
+            .AllowAnonymous()
+            .WithTags("Authentication");
+    }
+
+    private static async Task<IResult> RefreshUserToken(
+        [FromBody] RefreshTokenRequest request,
+        IIdentityProviderService identityProviderService,
+        CancellationToken cancellationToken)
         {
             Result<AuthenticationResult> result = await identityProviderService
                 .RefreshTokenAsync(request.RefreshToken, request.Sub, cancellationToken);
@@ -42,9 +48,7 @@ internal sealed class RefreshToken : IEndpoint
                 result.Value.ExpiresIn);
 
             return Results.Ok(response);
-        })
-        .AllowAnonymous()
-        .WithTags("Authentication");
+        }
     }
-}
+
 

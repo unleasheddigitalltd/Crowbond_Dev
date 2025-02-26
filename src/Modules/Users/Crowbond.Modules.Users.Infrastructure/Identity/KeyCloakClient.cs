@@ -52,6 +52,20 @@ internal sealed class KeyCloakClient(HttpClient httpClient)
         var response = await httpClient.PostAsJsonAsync("protocol/openid-connect/token", tokenRequest, cancellationToken);
         response.EnsureSuccessStatusCode();
 
+        return await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken) ?? throw new InvalidOperationException("Token response was null");
+    }
+
+    internal async Task<TokenResponse> RefreshTokenAsync(string refreshToken, string sub, CancellationToken cancellationToken = default)
+    {
+        var tokenRequest = new TokenRequest
+        {
+            RefreshToken = refreshToken,
+            GrantType = "refresh_token"
+        };
+
+        var response = await httpClient.PostAsJsonAsync("protocol/openid-connect/token", tokenRequest, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
         return await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken)
             ?? throw new InvalidOperationException("Failed to deserialize token response");
     }
