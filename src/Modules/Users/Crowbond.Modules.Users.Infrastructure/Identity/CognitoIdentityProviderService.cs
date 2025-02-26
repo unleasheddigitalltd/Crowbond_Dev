@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Security.Cryptography;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
 
@@ -198,13 +200,29 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
 
             var response = await _cognitoClient.InitiateAuthAsync(authRequest, cancellationToken);
             
-            _logger.LogInformation("Successfully authenticated user {Username}", username);
+            // Get the user's sub which is needed for refresh token
+            var getUserRequest = new GetUserRequest
+            {
+                AccessToken = response.AuthenticationResult.AccessToken
+            };
+            var userResponse = await _cognitoClient.GetUserAsync(getUserRequest, cancellationToken);
+            var sub = userResponse.UserAttributes.FirstOrDefault(attr => attr.Name == "sub")?.Value;
 
+            if (string.IsNullOrEmpty(sub))
+            {
+                _logger.LogWarning("Could not get sub from user attributes");
+                return Result.Failure<AuthenticationResult>(Error.Failure("Auth.MissingSub", "Could not get user sub from Cognito"));
+            }
+
+            _logger.LogInformation("Successfully authenticated user {Username} with sub {Sub}", username, sub);
+
+            // Store sub in claims
             return new AuthenticationResult(
                 response.AuthenticationResult.AccessToken,
                 response.AuthenticationResult.IdToken,
                 response.AuthenticationResult.RefreshToken,
-                response.AuthenticationResult.ExpiresIn);
+                response.AuthenticationResult.ExpiresIn,
+                sub);
         }
         catch (NotAuthorizedException ex)
         {
@@ -225,17 +243,23 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
 
     public async Task<Result<AuthenticationResult>> RefreshTokenAsync(
         string refreshToken,
+        string username,
         CancellationToken cancellationToken = default)
     {
         try
         {
+
+            // For refresh token flow, we must use the sub as the username
+            var secretHash = CalculateSecretHash(username); // username should be the sub here
             var refreshRequest = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.REFRESH_TOKEN_AUTH,
                 ClientId = _options.UserPoolClientId,
                 AuthParameters = new Dictionary<string, string>
                 {
-                    {"REFRESH_TOKEN", refreshToken}
+                    {"REFRESH_TOKEN", refreshToken},
+                    {"USERNAME", username}, // This must be the sub
+                    {"SECRET_HASH", secretHash}
                 }
             };
 

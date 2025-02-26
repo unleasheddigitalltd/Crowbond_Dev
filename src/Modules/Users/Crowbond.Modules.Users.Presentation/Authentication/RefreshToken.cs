@@ -1,15 +1,17 @@
 using Crowbond.Common.Domain;
+using Crowbond.Common.Presentation.Endpoints;
+using Crowbond.Common.Presentation.Results;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Application.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace Crowbond.Modules.Users.Presentation.Authentication;
 
-public static class RefreshToken
+internal sealed class RefreshToken : IEndpoint
 {
-    public sealed record RefreshTokenRequest(string RefreshToken);
+    public sealed record RefreshTokenRequest(string RefreshToken, string Sub);
 
     public sealed record RefreshTokenResponse(
         string AccessToken,
@@ -17,27 +19,32 @@ public static class RefreshToken
         string RefreshToken,
         int ExpiresIn);
 
-    [AllowAnonymous]
-    [HttpPost("users/refresh-token")]
-    public static async Task<IResult> RefreshUserToken(
-        [FromBody] RefreshTokenRequest request,
-        IIdentityProviderService identityProviderService,
-        CancellationToken cancellationToken)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        Result<AuthenticationResult> result = await identityProviderService
-            .RefreshTokenAsync(request.RefreshToken, cancellationToken);
+        app.MapPost("users/refresh-token", async (
+            RefreshTokenRequest request,
+            ClaimsPrincipal claimsPrincipal,
+            IIdentityProviderService identityProviderService,
+            CancellationToken cancellationToken) =>
+        {
+            Result<AuthenticationResult> result = await identityProviderService
+                .RefreshTokenAsync(request.RefreshToken, request.Sub, cancellationToken);
 
         if (result.IsFailure)
         {
-            return Results.BadRequest(result.Error);
+                return Results.BadRequest(result.Error);
         }
 
-        var response = new RefreshTokenResponse(
-            result.Value.AccessToken,
-            result.Value.IdToken,
-            result.Value.RefreshToken,
-            result.Value.ExpiresIn);
+            var response = new RefreshTokenResponse(
+                result.Value.AccessToken,
+                result.Value.IdToken,
+                result.Value.RefreshToken,
+                result.Value.ExpiresIn);
 
-        return Results.Ok(response);
+            return Results.Ok(response);
+        })
+        .AllowAnonymous()
+        .WithTags("Authentication");
     }
 }
+

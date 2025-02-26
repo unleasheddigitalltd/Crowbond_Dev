@@ -17,5 +17,5 @@ public interface IIdentityProviderService
 
     Task<Result<AuthenticationResult>> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default);
 
-    Task<Result<AuthenticationResult>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
+    Task<Result<AuthenticationResult>> RefreshTokenAsync(string refreshToken, string sub, CancellationToken cancellationToken = default);
 }
