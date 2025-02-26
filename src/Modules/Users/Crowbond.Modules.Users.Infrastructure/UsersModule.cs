@@ -3,6 +3,7 @@ using Amazon.CognitoIdentityProvider;
 using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
+using Crowbond.Common.Application.Users;
 using Crowbond.Common.Infrastructure.AuditEntity;
 using Crowbond.Common.Infrastructure.ChangeDetection;
 using Crowbond.Common.Infrastructure.Outbox;
@@ -64,6 +65,7 @@ public static class UsersModule
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IUserService, UserService>();
 
         // Configure Keycloak
         services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Crowbond.Common.Domain;
 using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Presentation.Endpoints;
@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Modules.Users.Presentation.Users;
 
@@ -15,9 +16,11 @@ internal sealed class GetUserProfile : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("users/profile", async (ClaimsPrincipal claims, ISender sender) =>
+        app.MapGet("users/profile", async (ClaimsPrincipal claims, ISender sender, ILogger<GetUserProfile> logger) =>
         {
-            Result<UserResponse> result = await sender.Send(new GetUserQuery(claims.GetUserId()));
+            var userId = claims.GetUserId(); 
+            logger.LogInformation("GetUserProfile endpoint called for user: {UserId}", userId);
+            Result<UserResponse> result = await sender.Send(new GetUserQuery(userId));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

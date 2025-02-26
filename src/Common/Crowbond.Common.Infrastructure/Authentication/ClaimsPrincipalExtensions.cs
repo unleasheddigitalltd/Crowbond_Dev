@@ -1,13 +1,17 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Crowbond.Common.Application.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Common.Infrastructure.Authentication;
 
 public static class ClaimsPrincipalExtensions
 {
+    private static readonly ILogger Logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger(typeof(ClaimsPrincipalExtensions));
     public static Guid GetUserId(this ClaimsPrincipal? principal)
     {
-        string? userId = principal?.FindFirst(CustomClaims.Sub)?.Value;
+        string? userId = principal?.FindFirst(CustomClaims.UserId)?.Value;
+
+        Logger.LogInformation("GetUserId called. User ID from claims: {UserId}", userId);
 
         return Guid.TryParse(userId, out Guid parsedUserId) ?
             parsedUserId :
