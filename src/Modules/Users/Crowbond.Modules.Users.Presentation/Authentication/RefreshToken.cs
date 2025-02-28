@@ -33,7 +33,7 @@ internal sealed class RefreshToken : IEndpoint
         IIdentityProviderService identityProviderService,
         CancellationToken cancellationToken)
         {
-            Result<AuthenticationResult> result = await identityProviderService
+            var result = await identityProviderService
                 .RefreshTokenAsync(request.RefreshToken, request.Sub, cancellationToken);
 
         if (result.IsFailure)

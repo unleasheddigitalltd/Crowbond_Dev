@@ -8,8 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Security.Cryptography;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
 
@@ -44,12 +42,12 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 Password = user.Password,
                 Username = user.Username,
                 SecretHash = secretHash,
-                UserAttributes = new List<AttributeType>
-                {
-                    new() { Name = "email", Value = user.Email },
-                    new() { Name = "given_name", Value = user.FirstName },
-                    new() { Name = "family_name", Value = user.LastName }
-                }
+                UserAttributes =
+                [
+                    new() {Name = "email", Value = user.Email},
+                    new() {Name = "given_name", Value = user.FirstName},
+                    new() {Name = "family_name", Value = user.LastName}
+                ]
             };
 
             var response = await _cognitoClient.SignUpAsync(signUpRequest, cancellationToken);
@@ -222,7 +220,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 response.AuthenticationResult.IdToken,
                 response.AuthenticationResult.RefreshToken,
                 response.AuthenticationResult.ExpiresIn,
-                sub);
+                username);
         }
         catch (NotAuthorizedException ex)
         {
@@ -248,7 +246,6 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
     {
         try
         {
-
             var secretHash = CalculateSecretHash(sub);
             var refreshRequest = new InitiateAuthRequest
             {
@@ -283,28 +280,25 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
     }
 
+
     private string CalculateSecretHash(string username)
     {
-        _logger.LogDebug("Calculating secret hash for username {Username}", username);
-        
-        var message = username + _options.UserPoolClientId;
-        var messageBytes = Encoding.UTF8.GetBytes(message);
+        var messageBytes = Encoding.UTF8.GetBytes($"{username} + {_options.UserPoolClientId}");
         var keyBytes = Encoding.UTF8.GetBytes(_options.UserPoolClientSecret);
         
         using var hmac = new HMACSHA256(keyBytes);
         var hashBytes = hmac.ComputeHash(messageBytes);
-        var base64Hash = Convert.ToBase64String(hashBytes);
-        
-        _logger.LogDebug("Secret hash calculated successfully");
-        return base64Hash;
+        return Convert.ToBase64String(hashBytes);
     }
 
     public void Dispose()
     {
-        if (!_disposed)
+        if (_disposed)
         {
-            _cognitoClient?.Dispose();
-            _disposed = true;
+            return;
         }
+
+        _cognitoClient.Dispose();
+        _disposed = true;
     }
 }

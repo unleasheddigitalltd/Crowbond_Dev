@@ -38,8 +38,10 @@ public class CorsOptionsSetup(IWebHostEnvironment environment, IConfiguration co
                 policy.SetIsOriginAllowed(origin =>
                 {
                     if (origin.StartsWith("http://localhost:", StringComparison.Ordinal) || origin.StartsWith("https://localhost:", StringComparison.Ordinal))
+                    {
                         return true;
-                    
+                    }
+
                     return allowedOrigins.Contains(origin);
                 })
                 .WithMethods(allowedMethods)

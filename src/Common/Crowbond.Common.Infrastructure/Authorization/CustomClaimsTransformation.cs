@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.Users;
-using Crowbond.Common.Domain;
 using Crowbond.Common.Infrastructure.Authentication;
 using Crowbond.Common.Application.Exceptions;
 using Microsoft.AspNetCore.Authentication;
@@ -21,7 +20,7 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
             return principal;
         }
 
-        using IServiceScope scope = serviceScopeFactory.CreateScope();
+        using var scope = serviceScopeFactory.CreateScope();
 
         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
         var permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
@@ -51,7 +50,7 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
         claimsIdentity.AddClaim(new Claim(CustomClaims.Sub, identityId));
         claimsIdentity.AddClaim(new Claim(CustomClaims.UserId, userResult.Value.Id.ToString()));
 
-        foreach (string permission in result.Value.Permissions)
+        foreach (var permission in result.Value.Permissions)
         {
             claimsIdentity.AddClaim(new Claim(CustomClaims.Permission, permission));
         }
@@ -60,5 +59,4 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
         
         return principal;
     }
-#pragma warning restore CA1303
 }
