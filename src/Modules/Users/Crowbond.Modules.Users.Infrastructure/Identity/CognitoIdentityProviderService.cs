@@ -246,7 +246,8 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
     {
         try
         {
-            var secretHash = CalculateSecretHash(sub);
+            var username = await GetUsername(refreshToken, sub, cancellationToken);
+            var secretHash = CalculateSecretHash(username);
             var refreshRequest = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.REFRESH_TOKEN_AUTH,
@@ -254,7 +255,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 AuthParameters = new Dictionary<string, string>
                 {
                     {"REFRESH_TOKEN", refreshToken},
-                    {"USERNAME", sub},
+                    {"USERNAME", username},
                     {"SECRET_HASH", secretHash}
                 }
             };
@@ -283,7 +284,8 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
 
     private string CalculateSecretHash(string username)
     {
-        var messageBytes = Encoding.UTF8.GetBytes($"{username} + {_options.UserPoolClientId}");
+        var message = username + _options.UserPoolClientId;
+        var messageBytes = Encoding.UTF8.GetBytes(message);
         var keyBytes = Encoding.UTF8.GetBytes(_options.UserPoolClientSecret);
         
         using var hmac = new HMACSHA256(keyBytes);
