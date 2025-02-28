@@ -246,8 +246,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
     {
         try
         {
-            var username = await GetUsername(refreshToken, sub, cancellationToken);
-            var secretHash = CalculateSecretHash(username);
+            var secretHash = CalculateSecretHash(sub);
             var refreshRequest = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.REFRESH_TOKEN_AUTH,
@@ -255,7 +254,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 AuthParameters = new Dictionary<string, string>
                 {
                     {"REFRESH_TOKEN", refreshToken},
-                    {"USERNAME", username},
+                    {"USERNAME", sub },
                     {"SECRET_HASH", secretHash}
                 }
             };
