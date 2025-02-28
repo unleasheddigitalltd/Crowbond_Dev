@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
@@ -38,6 +38,51 @@ internal sealed class KeyCloakClient(HttpClient httpClient)
             cancellationToken);
 
         httpResponseMessage.EnsureSuccessStatusCode();
+    }
+
+    internal async Task<TokenResponse> GetTokenAsync(string username, string password, CancellationToken cancellationToken = default)
+    {
+        var tokenRequest = new TokenRequest
+        {
+            Username = username,
+            Password = password,
+            GrantType = "password"
+        };
+
+        var response = await httpClient.PostAsJsonAsync("protocol/openid-connect/token", tokenRequest, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken) ?? throw new InvalidOperationException("Token response was null");
+    }
+
+    internal async Task<TokenResponse> RefreshTokenAsync(string refreshToken, string sub, CancellationToken cancellationToken = default)
+    {
+        var tokenRequest = new TokenRequest
+        {
+            RefreshToken = refreshToken,
+            GrantType = "refresh_token"
+        };
+
+        var response = await httpClient.PostAsJsonAsync("protocol/openid-connect/token", tokenRequest, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken)
+            ?? throw new InvalidOperationException("Failed to deserialize token response");
+    }
+
+    internal async Task<TokenResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    {
+        var tokenRequest = new TokenRequest
+        {
+            RefreshToken = refreshToken,
+            GrantType = "refresh_token"
+        };
+
+        var response = await httpClient.PostAsJsonAsync("protocol/openid-connect/token", tokenRequest, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken)
+            ?? throw new InvalidOperationException("Failed to deserialize token response");
     }
 
     private static string ExtractIdentityIdFromLocationHeader(

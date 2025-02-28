@@ -14,6 +14,12 @@
       "ConfidentialClientId": "crowbond-confidential-client",
       "ConfidentialClientSecret": "PzotcrvZRF9BHCKcUxdKfHWlIPECG49k",
       "PublicClientId": "crowbond-public-client"
+    },
+    "Cognito": {
+      "UserPoolId": "eu-west-1_RYVPEbdrb",
+      "UserPoolClientId": "6e4vht20uv27dlq75vq9j4hqm9",
+      "UserPoolClientSecret": "3rbckn058407oipi6hqfc9k9mj3auru98qfq9u5k6bch280br0a",
+      "Region": "eu-west-1"
     }
   }
 }
