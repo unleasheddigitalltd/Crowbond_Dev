@@ -13,6 +13,11 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
 {
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
+        if (IsClientCredentials(principal))
+        {
+            return HandleClientCredentials(principal);
+        }
+
         var identityId = principal.GetIdentityId();
 
         if (principal.HasClaim(c => c.Type == CustomClaims.Sub))
@@ -57,6 +62,38 @@ internal sealed class CustomClaimsTransformation(IServiceScopeFactory serviceSco
 
         principal.AddIdentity(claimsIdentity);
         
+        return principal;
+    }
+
+    private static bool IsClientCredentials(ClaimsPrincipal principal) => 
+        !principal.HasClaim(c => c is {Type: "username"});
+
+    private static ClaimsPrincipal HandleClientCredentials(ClaimsPrincipal principal)
+    {
+        var scopeClaim = principal.Claims.FirstOrDefault(c => c.Type == "scope");
+        if (scopeClaim is null)
+        {
+            return principal;
+        }
+        var claimsIdentity = new ClaimsIdentity(
+            principal.Identity as ClaimsIdentity ?? 
+            new ClaimsIdentity(principal.Identity?.AuthenticationType ?? "Bearer"));
+
+        // Add all existing claims except permissions
+        foreach (var claim in principal.Claims.Where(c => c.Type != CustomClaims.Permission))
+        {
+            claimsIdentity.AddClaim(claim);
+        }
+
+        // Convert each scope to a permission claim
+        var scopes = scopeClaim.Value.Split(' ');
+        foreach (var scope in scopes)
+        {
+            claimsIdentity.AddClaim(new Claim(CustomClaims.Permission, scope["crowbond-rs-1/".Length..]));
+        }
+
+        principal.AddIdentity(claimsIdentity);
+
         return principal;
     }
 }

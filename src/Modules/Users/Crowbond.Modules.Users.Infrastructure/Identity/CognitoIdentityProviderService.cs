@@ -1,4 +1,3 @@
-using Amazon;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Crowbond.Modules.Users.Application.Authentication;
@@ -11,30 +10,24 @@ using System.Security.Cryptography;
 
 namespace Crowbond.Modules.Users.Infrastructure.Identity;
 
-internal sealed class CognitoIdentityProviderService : IIdentityProviderService, IDisposable
+internal sealed class CognitoIdentityProviderService(
+    IAmazonCognitoIdentityProvider cognitoClient,
+    IOptions<CognitoOptions> options,
+    ILogger<CognitoIdentityProviderService> logger)
+    : IIdentityProviderService, IDisposable
 {
-    private readonly AmazonCognitoIdentityProviderClient _cognitoClient;
-    private readonly CognitoOptions _options;
-    private readonly ILogger<CognitoIdentityProviderService> _logger;
+    private readonly AmazonCognitoIdentityProviderClient _cognitoClient = (AmazonCognitoIdentityProviderClient)cognitoClient;
+    private readonly CognitoOptions _options = options.Value;
     private bool _disposed;
-
-    public CognitoIdentityProviderService(
-        IOptions<CognitoOptions> options,
-        ILogger<CognitoIdentityProviderService> logger)
-    {
-        _options = options.Value;
-        _logger = logger;
-        _cognitoClient = new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(_options.Region));
-    }
 
     public async Task<Result<string>> RegisterUserAsync(UserModel user, CancellationToken cancellationToken = default)
     {
         try
         {
-            _logger.LogInformation("Attempting to register user {Username}", user.Username);
+            logger.LogDebug("Attempting to register user {Username}", user.Username);
             
             var secretHash = CalculateSecretHash(user.Username);
-            _logger.LogDebug("Generated secret hash for registration");
+            logger.LogDebug("Generated secret hash for registration");
 
             var signUpRequest = new SignUpRequest
             {
@@ -51,7 +44,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
             };
 
             var response = await _cognitoClient.SignUpAsync(signUpRequest, cancellationToken);
-            _logger.LogInformation("Successfully registered user {Username}. Auto-confirming user...", user.Username);
+            logger.LogDebug("Successfully registered user {Username}. Auto-confirming user...", user.Username);
 
             // Auto-confirm the user
             var confirmRequest = new AdminConfirmSignUpRequest
@@ -61,23 +54,23 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
             };
 
             await _cognitoClient.AdminConfirmSignUpAsync(confirmRequest, cancellationToken);
-            _logger.LogInformation("Successfully confirmed user {Username}", user.Username);
+            logger.LogDebug("Successfully confirmed user {Username}", user.Username);
             
             return response.UserSub;
         }
         catch (UsernameExistsException ex)
         {
-            _logger.LogWarning(ex, "Username {Username} already exists", user.Username);
+            logger.LogWarning(ex, "Username {Username} already exists", user.Username);
             return Result.Failure<string>(Error.Conflict("Auth.UsernameExists", "Username already exists"));
         }
         catch (InvalidParameterException ex)
         {
-            _logger.LogWarning(ex, "Invalid parameter for user {Username}: {Message}", user.Username, ex.Message);
+            logger.LogWarning(ex, "Invalid parameter for user {Username}: {Message}", user.Username, ex.Message);
             return Result.Failure<string>(Error.Failure("Auth.InvalidParameter", $"Invalid parameter: {ex.Message}"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to register or confirm user {Username}. Error: {Message}", user.Username, ex.Message);
+            logger.LogError(ex, "Failed to register or confirm user {Username}. Error: {Message}", user.Username, ex.Message);
             return Result.Failure<string>(Error.Failure("Auth.Error", "Failed to register or confirm user"));
         }
     }
@@ -104,7 +97,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update user {IdentityId}", identityId);
+            logger.LogError(ex, "Failed to update user {IdentityId}", identityId);
             return Result.Failure(Error.Problem("Auth.Error", "Failed to update user"));
         }
     }
@@ -124,7 +117,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to reset password for user {IdentityId}", identityId);
+            logger.LogError(ex, "Failed to reset password for user {IdentityId}", identityId);
             return Result.Failure(Error.Problem("Auth.Error", "Failed to reset user password"));
         }
     }
@@ -144,7 +137,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to log out user {IdentityId}", identityId);
+            logger.LogError(ex, "Failed to log out user {IdentityId}", identityId);
             return Result.Failure(Error.Problem("Auth.Error", "Failed to log out user"));
         }
     }
@@ -164,7 +157,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to delete user {IdentityId}", identityId);
+            logger.LogError(ex, "Failed to delete user {IdentityId}", identityId);
             return Result.Failure(Error.Problem("Auth.Error", "Failed to delete user"));
         }
     }
@@ -176,10 +169,10 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
     {
         try
         {
-            _logger.LogInformation("Attempting to authenticate user {Username}", username);
+            logger.LogInformation("Attempting to authenticate user {Username}", username);
             
             var secretHash = CalculateSecretHash(username);
-            _logger.LogDebug("Generated secret hash for user {Username}", username);
+            logger.LogDebug("Generated secret hash for user {Username}", username);
 
             var authRequest = new InitiateAuthRequest
             {
@@ -193,7 +186,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 }
             };
 
-            _logger.LogDebug("Sending authentication request for user {Username} with client ID {ClientId}", 
+            logger.LogDebug("Sending authentication request for user {Username} with client ID {ClientId}", 
                 username, _options.UserPoolClientId);
 
             var response = await _cognitoClient.InitiateAuthAsync(authRequest, cancellationToken);
@@ -208,11 +201,11 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
 
             if (string.IsNullOrEmpty(sub))
             {
-                _logger.LogWarning("Could not get sub from user attributes");
+                logger.LogWarning("Could not get sub from user attributes");
                 return Result.Failure<AuthenticationResult>(Error.Failure("Auth.MissingSub", "Could not get user sub from Cognito"));
             }
 
-            _logger.LogInformation("Successfully authenticated user {Username} with sub {Sub}", username, sub);
+            logger.LogInformation("Successfully authenticated user {Username} with sub {Sub}", username, sub);
 
             // Store sub in claims
             return new AuthenticationResult(
@@ -224,17 +217,17 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (NotAuthorizedException ex)
         {
-            _logger.LogWarning(ex, "Invalid credentials for user {Username}. Error: {Message}", username, ex.Message);
+            logger.LogWarning(ex, "Invalid credentials for user {Username}. Error: {Message}", username, ex.Message);
             return Result.Failure<AuthenticationResult>(Error.Failure("Auth.InvalidCredentials", "Invalid credentials"));
         }
         catch (UserNotFoundException ex)
         {
-            _logger.LogWarning(ex, "User {Username} not found. Error: {Message}", username, ex.Message);
+            logger.LogWarning(ex, "User {Username} not found. Error: {Message}", username, ex.Message);
             return Result.Failure<AuthenticationResult>(Error.NotFound("Auth.UserNotFound", "User not found"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error authenticating user {Username}. Error: {Message}", username, ex.Message);
+            logger.LogError(ex, "Error authenticating user {Username}. Error: {Message}", username, ex.Message);
             return Result.Failure<AuthenticationResult>(Error.Problem("Auth.Error", "An error occurred during authentication"));
         }
     }
@@ -254,7 +247,7 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
                 AuthParameters = new Dictionary<string, string>
                 {
                     {"REFRESH_TOKEN", refreshToken},
-                    {"USERNAME", sub },
+                    {"USERNAME", sub},
                     {"SECRET_HASH", secretHash}
                 }
             };
@@ -270,12 +263,12 @@ internal sealed class CognitoIdentityProviderService : IIdentityProviderService,
         }
         catch (NotAuthorizedException ex)
         {
-            _logger.LogWarning(ex, "Invalid refresh token");
+            logger.LogWarning(ex, "Invalid refresh token");
             return Result.Failure<AuthenticationResult>(Error.Failure("Auth.InvalidToken", "Invalid refresh token"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error refreshing token");
+            logger.LogError(ex, "Error refreshing token");
             return Result.Failure<AuthenticationResult>(Error.Problem("Auth.Error", "An error occurred while refreshing the token"));
         }
     }

@@ -1,5 +1,7 @@
 using Amazon;
 using Amazon.CognitoIdentityProvider;
+using Amazon.Runtime;
+using Amazon.Runtime.CredentialManagement;
 using Crowbond.Common.Application.Authorization;
 using Crowbond.Common.Application.EventBus;
 using Crowbond.Common.Application.Messaging;
@@ -11,7 +13,6 @@ using Crowbond.Common.Infrastructure.SoftDelete;
 using Crowbond.Common.Infrastructure.TrackEntityChange;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.CRM.IntegrationEvents;
-using Crowbond.Modules.OMS.IntegrationEvents;
 using Crowbond.Modules.Users.Application.Abstractions.Data;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
 using Crowbond.Modules.Users.Domain.Users;
@@ -22,7 +23,6 @@ using Crowbond.Modules.Users.Infrastructure.Inbox;
 using Crowbond.Modules.Users.Infrastructure.Outbox;
 using Crowbond.Modules.Users.Infrastructure.Users;
 using Crowbond.Modules.Users.Presentation;
-using Crowbond.Modules.WMS.IntegrationEvents;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -66,31 +66,33 @@ public static class UsersModule
     {
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<IUserService, UserService>();
-
-        // Configure Keycloak
-        services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));
-        services.AddTransient<KeyCloakAuthDelegatingHandler>();
-        services
-            .AddHttpClient<KeyCloakClient>((serviceProvider, httpClient) =>
-            {
-                KeyCloakOptions keycloakOptions = serviceProvider
-                    .GetRequiredService<IOptions<KeyCloakOptions>>().Value;
-
-                httpClient.BaseAddress = new Uri(keycloakOptions.AdminUrl);
-            })
-            .AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
-
+        
         // Configure Cognito
         services.Configure<CognitoOptions>(configuration.GetSection("Users:Cognito"));
-        services.AddTransient<CognitoIdentityProviderService>();
+
+        // Register AWS Cognito client as singleton
         services.AddSingleton<IAmazonCognitoIdentityProvider>(sp =>
         {
             var options = sp.GetRequiredService<IOptions<CognitoOptions>>().Value;
-            return new AmazonCognitoIdentityProviderClient(RegionEndpoint.GetBySystemName(options.Region));
+            var region = RegionEndpoint.GetBySystemName(options.Region);
+            var config = new AmazonCognitoIdentityProviderConfig
+            {
+                RegionEndpoint = region,
+                MaxErrorRetry = 3,
+                Timeout = TimeSpan.FromSeconds(10)
+            };
+
+            var chain = new CredentialProfileStoreChain();
+            if (!chain.TryGetAWSCredentials("crowbond-dev", out var credentials))
+            {
+                throw new InvalidOperationException("Could not find AWS credentials for profile 'crowbond-dev'");
+            }
+
+            return new AmazonCognitoIdentityProviderClient(credentials, config);
         });
 
-        // Register the default identity provider (Cognito)
-        services.AddTransient<IIdentityProviderService, CognitoIdentityProviderService>();
+        // Register the identity provider service as singleton to match AWS client lifetime
+        services.AddSingleton<IIdentityProviderService, CognitoIdentityProviderService>();
 
         services.AddDbContext<UsersDbContext>((sp, options) =>
             options

@@ -39,3 +39,9 @@ variable "cognito_client_secret" {
   sensitive   = true
   default     = "1qpfkaphq814i2kp07a6mc0v04l5iglb3r9k4g0c7c784jriu3uh"
 }
+
+variable "cognito_user_pool_arn" {
+  description = "ARN of the Cognito user pool"
+  type        = string
+  default     = "arn:aws:cognito-idp:eu-west-1:499713595443:userpool/eu-west-1_RYVPEbdrb"
+}

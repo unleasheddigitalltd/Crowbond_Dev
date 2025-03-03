@@ -1,8 +1,5 @@
-using Crowbond.Common.Domain;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.Users.Application.Abstractions.Identity;
-using Crowbond.Modules.Users.Application.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +21,7 @@ public sealed class Authenticate : IEndpoint
         IIdentityProviderService identityProviderService,
         CancellationToken cancellationToken)
     {
-        Result<AuthenticationResult> result = await identityProviderService
+        var result = await identityProviderService
             .AuthenticateAsync(request.Username, request.Password, cancellationToken);
 
         if (result.IsFailure)
