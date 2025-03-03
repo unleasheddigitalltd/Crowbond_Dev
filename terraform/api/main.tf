@@ -159,6 +159,29 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 }
 
+# Cognito permissions for ECS task role
+resource "aws_iam_role_policy" "ecs_task_role_cognito_policy" {
+  name = "${var.app_name}-${var.environment}-cognito-policy"
+  role = aws_iam_role.ecs_task_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-idp:AdminConfirmSignUp",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:ListUsers",
+          "cognito-idp:AdminDeleteUser"
+        ]
+        Resource = var.cognito_user_pool_arn
+      }
+    ]
+  })
+}
+
 # ECS Task Execution Role
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.app_name}-${var.environment}-ecsTaskExecutionRole"

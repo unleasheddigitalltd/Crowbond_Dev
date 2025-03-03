@@ -27,8 +27,6 @@ internal sealed class ProcessOutboxJob(
 
     public async Task Execute(IJobExecutionContext context)
     {
-        logger.LogInformation("{Module} - Beginning to process outbox messages", ModuleName);
-
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
         await using DbTransaction transaction = await connection.BeginTransactionAsync();
 
@@ -70,8 +68,6 @@ internal sealed class ProcessOutboxJob(
         }
 
         await transaction.CommitAsync();
-
-        logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
     }
 
     private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync(
