@@ -82,13 +82,15 @@ public static class UsersModule
                 Timeout = TimeSpan.FromSeconds(10)
             };
 
+            // Try to get credentials from profile first
             var chain = new CredentialProfileStoreChain();
-            if (!chain.TryGetAWSCredentials("crowbond-dev", out var credentials))
+            if (chain.TryGetAWSCredentials("crowbond-dev", out var credentials))
             {
-                throw new InvalidOperationException("Could not find AWS credentials for profile 'crowbond-dev'");
+                return new AmazonCognitoIdentityProviderClient(credentials, config);
             }
 
-            return new AmazonCognitoIdentityProviderClient(credentials, config);
+            // If profile not found, fall back to environment variables or instance profile
+            return new AmazonCognitoIdentityProviderClient(config);
         });
 
         // Register the identity provider service as singleton to match AWS client lifetime
