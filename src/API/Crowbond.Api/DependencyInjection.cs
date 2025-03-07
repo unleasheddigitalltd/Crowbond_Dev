@@ -44,12 +44,9 @@ public static class DependencyInjection
                 CrmModule.ConfigureConsumers,
             ],
             databaseConnectionString);
-
-        Uri keyCloakHealthUrl = configuration.GetKeyCloakHealthUrl();
-
+        
         services.AddHealthChecks()
-            .AddNpgSql(databaseConnectionString)
-            .AddKeyCloak(keyCloakHealthUrl);
+            .AddNpgSql(databaseConnectionString);
             
         services.AddUsersModule(configuration);
         services.AddWMSModule(configuration);
