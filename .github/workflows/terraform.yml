@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./terraform/api
+        working-directory: ./terraform/api/production
 
     steps:
       - name: Checkout
@@ -101,7 +101,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/production.tfstate" -backend-config="region=eu-west-1"
+        run: terraform init -backend-config="bucket=crowbond-terraform-state" -backend-config="key=api/production/production.tfstate" -backend-config="region=eu-west-1"
 
       - name: Terraform Format
         id: fmt
