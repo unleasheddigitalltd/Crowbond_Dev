@@ -16,6 +16,10 @@ public static class CustomerProductErrors
     public static Error BlacklistExists(Guid productId) =>
     Error.NotFound("CustomerProducts.Exists", $"The product with ID {productId} already exists in blacklist for the specified customer");
 
+    public static Error NotFoundBySku(string productSku) =>
+        Error.NotFound("CustomerProducts.Exists",
+            $"The product with SKU {productSku} was not found for the specified customer");
+    
     public static readonly Error EffectiveDateIsNull = Error.Problem(
         "CustomerProducts.EffectiveDateIsNull",
         "The effective date cannot be null");
