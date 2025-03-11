@@ -64,7 +64,7 @@ internal sealed class ChocoOrderCreated: IEndpoint
                 logger.LogError(ex, "Error processing webhook: {ExMessage}", ex.Message);
                 return Results.Problem($"An error occurred: {ex.Message}");
             }
-        });
+        }).AllowAnonymous();
     }
     
     private const string WebhookSecret = "bb4a216378f1746a21fcffdf1f2f89ae30edb263a2763f2f1964e32a0209ddd2cc500ae976a0eec38f6a3fc0fd5bbcbe";
