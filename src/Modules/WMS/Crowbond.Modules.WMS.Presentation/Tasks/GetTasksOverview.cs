@@ -29,7 +29,7 @@ internal sealed class GetTasksOverview : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .RequireAuthorization(Permissions.ViewTasks)
-        .WithTags(Tags.Tasks);
+        .RequireAuthorization(Permissions.GetPickingTasks, Permissions.GetCheckingTasks)
+        .WithTags(Tags.Picking, Tags.Checking);
     }
 }

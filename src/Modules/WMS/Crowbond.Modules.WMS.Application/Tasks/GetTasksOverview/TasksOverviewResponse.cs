@@ -3,8 +3,14 @@ using Crowbond.Modules.WMS.Domain.Tasks;
 
 namespace Crowbond.Modules.WMS.Application.Tasks.GetTasksOverview;
 
-public sealed record TasksOverviewResponse(IReadOnlyCollection<TaskOverview> Items, int TotalCount, int Page, int PageSize)
-    : PaginatedResponse<TaskOverview>(Items, TotalCount, Page, PageSize);
+public sealed class TasksOverviewResponse : PaginatedResponse<TaskOverview>
+{
+    public TasksOverviewResponse(
+        IReadOnlyCollection<TaskOverview> items,
+        IPagination pagination) : base(items, pagination)
+    {
+    }
+}
 
 public sealed record TaskOverview(
     Guid TaskId,

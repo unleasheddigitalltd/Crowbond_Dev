@@ -1,6 +1,7 @@
 using System.Data.Common;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
+using Crowbond.Common.Application.Pagination;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Domain.Tasks;
 using Dapper;
@@ -41,8 +42,8 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                     wo.full_name AS {nameof(TaskOverview.AssignedOperatorName)},
                     COUNT(dl.id) AS {nameof(TaskOverview.TotalLines)},
                     SUM(CASE 
-                        WHEN t.task_type = {(int)TaskType.Picking} AND dl.is_picked = true THEN 1
-                        WHEN t.task_type = {(int)TaskType.Checking} AND dl.is_checked = true THEN 1
+                        WHEN t.task_type IN ({(int)TaskType.PickingItem}, {(int)TaskType.PickingBulk}) AND dl.is_picked = true THEN 1
+                        WHEN t.task_type IN ({(int)TaskType.CheckingItem}, {(int)TaskType.CheckingBulk}) AND dl.is_checked = true THEN 1
                         ELSE 0 
                     END) AS {nameof(TaskOverview.CompletedLines)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
@@ -51,7 +52,7 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                 INNER JOIN wms.dispatch_lines dl ON d.id = dl.dispatch_header_id
                 LEFT JOIN wms.task_assignments ta ON t.id = ta.task_id
                 LEFT JOIN wms.warehouse_operators wo ON ta.warehouse_operator_id = wo.id
-                WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Assigned}, {(int)TaskAssignmentStatus.InProgress}))
+                WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Pending}, {(int)TaskAssignmentStatus.InProgress}))
                 GROUP BY t.id, t.task_no, d.dispatch_no, d.route_trip_id, d.route_name, d.route_trip_date, 
                          t.task_type, ta.status, wo.full_name
             )
@@ -64,7 +65,7 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                 SELECT t.id
                 FROM wms.task_headers t
                 LEFT JOIN wms.task_assignments ta ON t.id = ta.task_id
-                WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Assigned}, {(int)TaskAssignmentStatus.InProgress}))
+                WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Pending}, {(int)TaskAssignmentStatus.InProgress}))
                 GROUP BY t.id
             ) AS TaskCount;";
 
@@ -79,6 +80,8 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
         var tasks = await multi.ReadAsync<TaskOverview>();
         var totalCount = await multi.ReadSingleAsync<int>();
 
-        return Result.Success(new TasksOverviewResponse(tasks.ToList(), totalCount, request.Page, request.PageSize));
+        var lastPage = (int)Math.Ceiling(totalCount / (double)request.PageSize);
+        var pagination = new Pagination(totalCount, request.Page, request.PageSize, lastPage, request.PageSize, totalCount);
+        return Result.Success(new TasksOverviewResponse(tasks.ToList(), pagination));
     }
 }
