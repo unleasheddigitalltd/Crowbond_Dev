@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.CRM.PublicApi;
+namespace Crowbond.Modules.CRM.PublicApi;
 
 public interface ICustomerApi
 {
@@ -7,6 +7,8 @@ public interface ICustomerApi
     Task<CustomerForOrderResponse?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<CustomerOutletForOrderResponse?> GetOutletForOrderAsync(Guid outletId, CancellationToken cancellationToken = default);
+
+    Task<CustomerOutletRouteResponse?> GetOutletRouteForDayAsync(Guid outletId, DayOfWeek weekday, CancellationToken cancellationToken = default);
 }
 
 public sealed record CustomerForOrderResponse(
@@ -43,3 +45,7 @@ public sealed record CustomerOutletForOrderResponse(
     TimeOnly DeliveryTimeFrom,
     TimeOnly DeliveryTimeTo,
     bool Is24HrsDelivery);
+
+public sealed record CustomerOutletRouteResponse(
+    Guid RouteId,
+    string RouteName);

@@ -6,13 +6,13 @@ namespace Crowbond.Modules.OMS.Infrastructure.RouteTrips;
 
 internal sealed class RouteTripRepository(OmsDbContext context) : IRouteTripRepository
 {
-    public async Task<RouteTrip?> GetAsync(Guid Id, CancellationToken cancellationToken = default)
-    {
-        return await context.RouteTrips.SingleOrDefaultAsync(r => r.Id == Id, cancellationToken);
-    }
+    public async Task<RouteTrip?> GetAsync(Guid id, CancellationToken cancellationToken = default) => 
+        await context.RouteTrips.SingleOrDefaultAsync(r => r.Id == id, cancellationToken);
 
-    public void Insert(RouteTrip routeTrip)
-    {
+    public async Task<RouteTrip?> GetByDateAndRouteAsync(DateOnly date, Guid routeId, CancellationToken cancellationToken = default) =>
+        await context.RouteTrips.SingleOrDefaultAsync(r => r.Date == date && r.RouteId == routeId,
+            cancellationToken);
+
+    public void Insert(RouteTrip routeTrip) => 
         context.RouteTrips.Add(routeTrip);
-    }
 }

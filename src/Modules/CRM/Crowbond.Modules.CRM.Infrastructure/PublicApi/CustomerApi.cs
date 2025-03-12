@@ -113,4 +113,9 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             result.Value.DeliveryTimeTo,
             result.Value.Is24HrsDelivery);
     }
+
+    public Task<CustomerOutletRouteResponse?> GetOutletRouteForDayAsync(Guid outletId, DayOfWeek weekday, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }

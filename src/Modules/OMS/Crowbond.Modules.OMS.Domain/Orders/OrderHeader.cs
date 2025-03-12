@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Domain;
+using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Products;
@@ -21,6 +21,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
     public string? PurchaseOrderNo { get; private set; }
 
     public Guid CustomerId { get; private set; }
+
+    public Guid CustomerOutletId { get; private set; }
 
     public string CustomerAccountNumber { get; private set; }
 
@@ -51,7 +53,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
     public string DeliveryPostalCode { get; private set; }
 
     public DateOnly ShippingDate { get; private set; }
-
+    
     public Guid? RouteTripId { get; private set; }
 
     public string? RouteName { get; private set; }
@@ -108,6 +110,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         string orderNo,
         string? purchaseOrderNo,
         Guid customerId,
+        Guid customerOutletId,
         string customerAccountNumber,
         string customerBusinessName,
         string deliveryLocationName,
@@ -144,6 +147,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             OrderNo = orderNo,
             PurchaseOrderNo = purchaseOrderNo,
             CustomerId = customerId,
+            CustomerOutletId = customerOutletId,
             CustomerAccountNumber = customerAccountNumber,
             CustomerBusinessName = customerBusinessName,
             DeliveryLocationName = deliveryLocationName,
@@ -171,12 +175,13 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
             Status = OrderStatus.Pending,
             Tags = []
         };
-
+        
         return orderHeader;
     }
 
     public Result Update(
         string customerBusinessName,
+        Guid customerOutletId,
         string deliveryLocationName,
         string deliveryFullName,
         string? deliveryEmail,
@@ -216,6 +221,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         }
 
         CustomerBusinessName = customerBusinessName;
+        CustomerOutletId = customerOutletId;
         DeliveryLocationName = deliveryLocationName;
         DeliveryFullName = deliveryFullName;
         DeliveryEmail = deliveryEmail;
@@ -436,6 +442,35 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
     {
         OrderTax = _lines.Sum(line => line.Tax - line.DeductionTax ?? 0);
         OrderAmount = _lines.Sum(line => line.LineTotal - line.DeductionLineTotal ?? 0) + DeliveryCharge;
+    }
+
+    public Result Created()
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        Raise(new OrderCreatedDomainEvent(Id));
+        return Result.Success();
+    }
+
+    public Result AssignRouteTrip(Guid routeTripId, string routeName)
+    {
+        if (Status != OrderStatus.Pending)
+        {
+            return Result.Failure(OrderErrors.NotPending);
+        }
+
+        if (RouteTripId.HasValue)
+        {
+            return Result.Failure(OrderErrors.RouteAlreadyAssigned);
+        }
+
+        RouteTripId = routeTripId;
+        RouteName = routeName;
+
+        return Result.Success();
     }
 
     public Result Accept()
