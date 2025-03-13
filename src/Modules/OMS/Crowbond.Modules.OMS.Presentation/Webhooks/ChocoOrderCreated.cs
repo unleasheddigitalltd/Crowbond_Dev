@@ -7,22 +7,28 @@ using Crowbond.Modules.OMS.Domain.Webhooks.Choco;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
 namespace Crowbond.Modules.OMS.Presentation.Webhooks;
 
-internal sealed class ChocoOrderCreated: IEndpoint
+internal sealed class ChocoOrderCreated : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("webhook/choco/order-created", async (HttpContext httpContext, IServiceProvider serviceProvider, ILogger<ChocoOrderCreated> logger) =>
+        app.MapPost("webhook/choco/order-created", async (HttpContext httpContext, 
+            IServiceProvider serviceProvider,
+            ILogger<ChocoOrderCreated> logger,
+            IConfiguration configuration) =>
         {
             try
             {
                 // Read the raw request body
                 string requestBody = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
+                
+                logger.LogInformation("Received webhook request: {RequestBody}", requestBody);
                 
                 // Extract the signature from the headers
                 if (!httpContext.Request.Headers.TryGetValue("X-Choco-Signature", out StringValues signatureHeader))
@@ -34,7 +40,7 @@ internal sealed class ChocoOrderCreated: IEndpoint
                 string providedSignature = signatureHeader.ToString();
 
                 // Validate the signature
-                if (!IsValidSignature(requestBody, providedSignature))
+                if (!IsValidSignature(configuration, requestBody, providedSignature))
                 {
                     logger.LogWarning("Invalid webhook signature");
                     return Results.Unauthorized();
@@ -48,7 +54,8 @@ internal sealed class ChocoOrderCreated: IEndpoint
                 }
 
                 // Resolve command handler from DI
-                ChocoOrderCreatedCommandHandler commandHandler = serviceProvider.GetRequiredService<ChocoOrderCreatedCommandHandler>();
+                ChocoOrderCreatedCommandHandler commandHandler =
+                    serviceProvider.GetRequiredService<ChocoOrderCreatedCommandHandler>();
 
                 // Run command asynchronously
                 _ = Task.Run(async () =>
@@ -66,12 +73,17 @@ internal sealed class ChocoOrderCreated: IEndpoint
             }
         }).AllowAnonymous();
     }
-    
-    private const string WebhookSecret = "bb4a216378f1746a21fcffdf1f2f89ae30edb263a2763f2f1964e32a0209ddd2cc500ae976a0eec38f6a3fc0fd5bbcbe";
-    
-    private static bool IsValidSignature(string requestBody, string providedSignature)
+
+    private static bool IsValidSignature(IConfiguration configuration, string requestBody, string providedSignature)
     {
-        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(WebhookSecret));
+        string? webhookSecret = configuration["OMS:Choco:Secret"];
+        
+        if (string.IsNullOrWhiteSpace(webhookSecret))
+        {
+            return false;
+        }
+        
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(webhookSecret));
         byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody));
         string computedSignature = Convert.ToBase64String(computedHash);
         return providedSignature.Equals(computedSignature, StringComparison.OrdinalIgnoreCase);

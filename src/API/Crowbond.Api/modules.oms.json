@@ -14,6 +14,9 @@
       "FtpPassword": "Unleashed51*",
       "DeliveryStoragePath": "/deliveries",
       "ComplianceStoragePath": "/compliances"
+    },
+    "Choco": {
+      "Secret": "88b04577da9b2cafc04a11f204616f51cffa022bcc1d281cbdd54953ad73517c4e1c89157e8beb8a508d09e8a69197aa"
     }
   }
 }
