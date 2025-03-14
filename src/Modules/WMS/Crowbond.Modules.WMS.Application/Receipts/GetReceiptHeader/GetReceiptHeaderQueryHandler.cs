@@ -14,8 +14,8 @@ internal sealed class GetReceiptHeaderQueryHandler(IDbConnectionFactory dbConnec
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
-        string[] caseClauses = Enum.GetValues(typeof(ReceiptStatus))
-                          .Cast<ReceiptStatus>()
+        string[] caseClauses = Enum.GetValues<ReceiptStatus>()
+                       //   .Cast<ReceiptStatus>()
                           .Select(status => $"WHEN {(int)status} THEN '{status}'")
                           .ToArray();
 

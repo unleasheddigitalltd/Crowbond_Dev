@@ -9,11 +9,11 @@
       "BatchSize": 50
     },
     "KeyCloak": {
-      "AdminUrl": "",
-      "TokenUrl": "",
-      "ConfidentialClientId": "",
-      "ConfidentialClientSecret": "",
-      "PublicClientId": ""
+      "AdminUrl": "http://54.174.231.61:18080/admin/realms/crowbond/",
+      "TokenUrl": "http://54.174.231.61:18080/realms/crowbond/protocol/openid-connect/token",
+      "ConfidentialClientId": "crowbond-confidential-client",
+      "ConfidentialClientSecret": "PzotcrvZRF9BHCKcUxdKfHWlIPECG49k",
+      "PublicClientId": "crowbond-public-client"
     }
   }
 }

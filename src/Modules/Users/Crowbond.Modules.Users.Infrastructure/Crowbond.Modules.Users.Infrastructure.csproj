@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Infrastructure\Crowbond.Common.Infrastructure.csproj" />
@@ -9,6 +9,12 @@
   <ItemGroup>
 	<InternalsVisibleTo Include="Crowbond.Modules.Users.IntegrationTests" />
 	<InternalsVisibleTo Include="Crowbond.IntegrationTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.406.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.1" />
   </ItemGroup>
 
 </Project>

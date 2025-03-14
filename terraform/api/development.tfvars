@@ -1,0 +1,5 @@
+environment = "development"
+app_name    = "crowbond-api"
+db_name     = "crowbond"
+db_username = "postgres" 
+db_password = "postgres" 

@@ -9,11 +9,17 @@
       "BatchSize": 20
     },
     "KeyCloak": {
-      "AdminUrl": "http://crowbond.identity:8080/admin/realms/crowbond/",
-      "TokenUrl": "http://crowbond.identity:8080/realms/crowbond/protocol/openid-connect/token",
+      "AdminUrl": "http://54.174.231.61:18080/admin/realms/crowbond/",
+      "TokenUrl": "http://54.174.231.61:18080/realms/crowbond/protocol/openid-connect/token",
       "ConfidentialClientId": "crowbond-confidential-client",
       "ConfidentialClientSecret": "PzotcrvZRF9BHCKcUxdKfHWlIPECG49k",
       "PublicClientId": "crowbond-public-client"
+    },
+    "Cognito": {
+      "UserPoolId": "eu-west-1_RYVPEbdrb",
+      "UserPoolClientId": "6e4vht20uv27dlq75vq9j4hqm9",
+      "UserPoolClientSecret": "3rbckn058407oipi6hqfc9k9mj3auru98qfq9u5k6bch280br0a",
+      "Region": "eu-west-1"
     }
   }
 }

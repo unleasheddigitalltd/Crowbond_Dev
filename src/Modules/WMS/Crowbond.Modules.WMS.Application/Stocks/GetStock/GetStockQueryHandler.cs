@@ -14,8 +14,8 @@ internal sealed class GetStockQueryHandler(IDbConnectionFactory dbConnectionFact
     {
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
-        string[] caseClauses = Enum.GetValues(typeof(StockStatus))
-                          .Cast<StockStatus>()
+        string[] caseClauses = Enum.GetValues<StockStatus>()
+                        //  .Cast<StockStatus>()
                           .Select(status => $"WHEN {(int)status} THEN '{status}'")
                           .ToArray();
 

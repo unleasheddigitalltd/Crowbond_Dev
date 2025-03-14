@@ -14,7 +14,7 @@ internal sealed class UserRegisteredIntegrationEventHandler(ISender sender)
         UserRegisteredIntegrationEvent integrationEvent,
         CancellationToken cancellationToken = default)
     {
-        Result result = await sender.Send(new CreateUserCommand(
+       var result = await sender.Send(new CreateUserCommand(
             integrationEvent.UserId,
             integrationEvent.Username,
             integrationEvent.Email,

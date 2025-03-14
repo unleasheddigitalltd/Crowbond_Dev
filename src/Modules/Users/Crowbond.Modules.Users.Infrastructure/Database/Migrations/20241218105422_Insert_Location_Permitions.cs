@@ -26,24 +26,28 @@ public partial class Insert_Location_Permitions : Migration
 
         migrationBuilder.InsertData(
             schema: "users",
+            table: "roles",
+            column: "name",
+            value: "WarehouseOperator");
+
+        migrationBuilder.InsertData(
+            schema: "users",
             table: "role_permissions",
             columns: [ "permission_code", "role_name" ],
             values: new object[,]
             {
                 { "locations:create", "Administrator" },
-                { "locations:update", "Administrator" }
+                { "locations:update", "Administrator" },
+                { "locations:create", "WarehouseOperator" },
+                { "locations:update", "WarehouseOperator" }
             });
+
+
     }
 
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DeleteData(
-            schema: "users",
-            table: "permissions",
-            keyColumn: "code",
-            keyValue: "locations:delete");
-
         migrationBuilder.DeleteData(
             schema: "users",
             table: "role_permissions",
@@ -55,6 +59,30 @@ public partial class Insert_Location_Permitions : Migration
             table: "role_permissions",
             keyColumns: [ "permission_code", "role_name" ],
             keyValues: new object[] { "locations:update", "Administrator" });
+
+        migrationBuilder.DeleteData(
+            schema: "users",
+            table: "role_permissions",
+            keyColumns: [ "permission_code", "role_name" ],
+            keyValues: new object[] { "locations:create", "WarehouseOperator" });
+
+        migrationBuilder.DeleteData(
+            schema: "users",
+            table: "role_permissions",
+            keyColumns: [ "permission_code", "role_name" ],
+            keyValues: new object[] { "locations:update", "WarehouseOperator" });
+
+        migrationBuilder.DeleteData(
+            schema: "users",
+            table: "roles",
+            keyColumn: "name",
+            keyValue: "WarehouseOperator");
+
+        migrationBuilder.DeleteData(
+            schema: "users",
+            table: "permissions",
+            keyColumn: "code",
+            keyValue: "locations:delete");
 
         migrationBuilder.DeleteData(
             schema: "users",

@@ -37,7 +37,7 @@ public class LocationTests : BaseTest
         var parentId = Guid.NewGuid();
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
-        LocationType? locationType = Enum.GetValues(typeof(LocationType)).Cast<LocationType>().FirstOrDefault();
+        LocationType? locationType = Enum.GetValues<LocationType>().FirstOrDefault();
         LocationLayer nonLocationLayer = Enum.GetValues(typeof(LocationLayer))
                                .Cast<LocationLayer>()
                                .FirstOrDefault(layer => layer != LocationLayer.Location);

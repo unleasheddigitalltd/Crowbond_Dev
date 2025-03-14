@@ -19,7 +19,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Quartz;
-using StackExchange.Redis;
 
 namespace Crowbond.Common.Infrastructure;
 
@@ -28,8 +27,7 @@ public static class InfrastructureConfiguration
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
-        string databaseConnectionString,
-        string redisConnectionString)
+        string databaseConnectionString)
     {
         services.AddAuthenticationInternal();
 
@@ -65,24 +63,11 @@ public static class InfrastructureConfiguration
             var scheduler = Guid.NewGuid();
             configurator.SchedulerId = $"default-id-{scheduler}";
             configurator.SchedulerName = $"default-name-{scheduler}";
-        }
-            
-                );
+        });
 
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-        try
-        {
-            IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-            services.TryAddSingleton(connectionMultiplexer);
-
-            services.AddStackExchangeRedisCache(options =>
-                options.ConnectionMultiplexerFactory = () => Task.FromResult(connectionMultiplexer));
-        }
-        catch
-        {
-            services.AddDistributedMemoryCache();
-        }
+        services.AddDistributedMemoryCache();
 
         services.TryAddSingleton<ICacheService, CacheService>();
 

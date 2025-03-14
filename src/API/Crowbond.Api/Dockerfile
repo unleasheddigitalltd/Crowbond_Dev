@@ -39,7 +39,7 @@ COPY ["src/Modules/OMS/Crowbond.Modules.OMS.PublicApi/Crowbond.Modules.OMS.Publi
 
 RUN dotnet restore "./src/API/Crowbond.Api/Crowbond.Api.csproj"
 COPY . .
-WORKDIR "src/API/Crowbond.Api"
+WORKDIR "/src/src/API/Crowbond.Api"
 RUN dotnet build "./Crowbond.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

@@ -35,7 +35,6 @@ public static class DependencyInjection
         services.AddApplication(moduleApplicationAssemblies);
 
         string databaseConnectionString = configuration.GetConnectionStringOrThrow("Database");
-        string redisConnectionString = configuration.GetConnectionStringOrThrow("Cache");
 
         services.AddInfrastructure(
             [
@@ -44,25 +43,20 @@ public static class DependencyInjection
                 OmsModule.ConfigureConsumers,
                 CrmModule.ConfigureConsumers,
             ],
-            databaseConnectionString,
-            redisConnectionString);
-
-        Uri keyCloakHealthUrl = configuration.GetKeyCloakHealthUrl();
-
+            databaseConnectionString);
+        
         services.AddHealthChecks()
-            .AddNpgSql(databaseConnectionString)
-            .AddRedis(redisConnectionString)
-            .AddKeyCloak(keyCloakHealthUrl);
-
+            .AddNpgSql(databaseConnectionString);
+            
         services.AddUsersModule(configuration);
         services.AddWMSModule(configuration);
         services.AddCRMModule(configuration);
         services.AddOMSModule(configuration);
 
-        services.AddCors();
         services.ConfigureOptions<CorsOptionsSetup>();
+        services.AddCors();
 
-        services.AddAntiforgery();
         services.ConfigureOptions<AntiForgeryOptionsSetup>();
+        services.AddAntiforgery();
     }
 }

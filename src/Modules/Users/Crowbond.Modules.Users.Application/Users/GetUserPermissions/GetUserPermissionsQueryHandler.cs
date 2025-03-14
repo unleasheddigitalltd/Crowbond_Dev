@@ -28,8 +28,8 @@ internal sealed class GetUserPermissionsQueryHandler(IDbConnectionFactory dbConn
              WHERE u.identity_id = @IdentityId
              """;
 
-        List<UserPermission> permissions = (await connection.QueryAsync<UserPermission>(sql, request)).AsList();
-
+        var permissions = (await connection.QueryAsync<UserPermission>(sql, request)).AsList();
+        
         if (!permissions.Any())
         {
             return Result.Failure<PermissionsResponse>(UserErrors.NotFound(request.IdentityId));
