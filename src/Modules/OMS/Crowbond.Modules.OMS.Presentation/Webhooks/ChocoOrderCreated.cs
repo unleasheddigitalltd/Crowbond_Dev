@@ -78,17 +78,19 @@ internal sealed class ChocoOrderCreated : IEndpoint
         string requestBody, string providedSignature)
     {
         string? webhookSecret = configuration["OMS:Choco:Secret"];
-        
+    
         if (string.IsNullOrWhiteSpace(webhookSecret))
         {
             logger.LogWarning("Webhook secret is missing");
             return false;
         }
-        
+    
         using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(webhookSecret));
         byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody));
-        string computedSignature = Convert.ToBase64String(computedHash);
-        
+    
+        // Convert the hash to a HEX string
+        string computedSignature = Convert.ToHexString(computedHash).ToLowerInvariant();
+    
         logger.LogInformation("Computed: {ComputedSignature}, Provided: {ProvidedSignature}", computedSignature, providedSignature);
         return providedSignature.Equals(computedSignature, StringComparison.OrdinalIgnoreCase);
     }
