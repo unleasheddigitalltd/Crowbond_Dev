@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Crowbond.Common.Infrastructure\Crowbond.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Application\Crowbond.Modules.OMS.Application.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Presentation\Crowbond.Modules.OMS.Presentation.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.PublicApi\Crowbond.Modules.OMS.PublicApi.csproj" />
   </ItemGroup>

@@ -45,6 +45,7 @@ using MassTransit;
 using Crowbond.Modules.Users.IntegrationEvents;
 using Crowbond.Modules.OMS.PublicApi;
 using Crowbond.Modules.OMS.Infrastructure.PublicApi;
+using System.Reflection;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 

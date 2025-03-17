@@ -5,14 +5,14 @@ using Crowbond.Common.Domain;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Infrastructure.Serialization;
 using Crowbond.Modules.OMS.Application;
+using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
-using System.Data.Common;
 using System.Data;
-using Dapper;
+using System.Data.Common;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Outbox;
 
@@ -38,6 +38,12 @@ internal sealed class ProcessOutboxJob(
             Exception? exception = null;
             try
             {
+                logger.LogInformation(
+                    "{Module} - Processing outbox message {MessageId}. Content: {Content}",
+                    ModuleName,
+                    outboxMessage.Id,
+                    outboxMessage.Content);
+
                 IDomainEvent domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
                     outboxMessage.Content,
                     SerializerSettings.Instance)!;
@@ -52,6 +58,19 @@ internal sealed class ProcessOutboxJob(
                 foreach (IDomainEventHandler domainEventHandler in domainEventHandlers)
                 {
                     await domainEventHandler.Handle(domainEvent);
+
+                    // Record the consumer after successful processing
+                    await connection.ExecuteAsync(
+                        """
+                        INSERT INTO oms.outbox_messages_consumers (outbox_message_id, name)
+                        VALUES (@OutboxMessageId, @Name)
+                        """,
+                        new
+                        {
+                            OutboxMessageId = outboxMessage.Id,
+                            Name = domainEventHandler.GetType().Name
+                        },
+                        transaction: transaction);
                 }
             }
             catch (Exception caughtException)

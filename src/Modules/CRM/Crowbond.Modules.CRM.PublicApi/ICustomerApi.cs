@@ -8,7 +8,7 @@ public interface ICustomerApi
 
     Task<CustomerOutletForOrderResponse?> GetOutletForOrderAsync(Guid outletId, CancellationToken cancellationToken = default);
 
-    Task<CustomerOutletRouteResponse?> GetOutletRouteForDayAsync(Guid outletId, DayOfWeek weekday, CancellationToken cancellationToken = default);
+    Task<CustomerOutletRouteForDayResponse?> GetOutletRouteForDayAsync(Guid outletId, DayOfWeek weekday, CancellationToken cancellationToken = default);
 }
 
 public sealed record CustomerForOrderResponse(
@@ -49,3 +49,6 @@ public sealed record CustomerOutletForOrderResponse(
 public sealed record CustomerOutletRouteResponse(
     Guid RouteId,
     string RouteName);
+
+
+public sealed record CustomerOutletRouteForDayResponse(Guid RouteId, string RouteName);

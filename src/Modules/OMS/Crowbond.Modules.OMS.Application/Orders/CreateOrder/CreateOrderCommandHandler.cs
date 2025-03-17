@@ -120,10 +120,10 @@ internal sealed class CreateOrderCommandHandler(
         
         var order = result.Value;
         orderRepository.Insert(order);
-
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         order.Created();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(order.Id);
     }
 }
