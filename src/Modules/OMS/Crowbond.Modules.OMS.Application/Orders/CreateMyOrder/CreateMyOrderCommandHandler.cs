@@ -98,6 +98,7 @@ internal sealed class CreateMyOrderCommandHandler(
             sequence.GetNumber(),
             null,
             customer.Id,
+            outlet.Id,
             customer.AccountNumber,
             customer.BusinessName,
             outlet.LocationName,

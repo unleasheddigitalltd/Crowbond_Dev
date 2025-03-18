@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
@@ -85,10 +85,11 @@ internal sealed class CreateOrderCommandHandler(
         }
 
 
-        Result<OrderHeader> result = OrderHeader.Create(
+        var result = OrderHeader.Create(
             sequence.GetNumber(),
             null,
             customer.Id,
+            request.CustomerOutletId,
             customer.AccountNumber,
             customer.BusinessName,
             outlet.LocationName,
@@ -117,10 +118,12 @@ internal sealed class CreateOrderCommandHandler(
             return Result.Failure<Guid>(result.Error);
         }
         
-        orderRepository.Insert(result.Value);
-
+        var order = result.Value;
+        orderRepository.Insert(order);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(result.Value.Id);
+        order.Created();
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success(order.Id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrder;
+using Crowbond.Modules.CRM.Application.CustomerOutlets.GetOutletRouteForDay;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerByAccountNumber;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrderByContactId;
@@ -149,5 +150,13 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
             result.Value.DeliveryTimeFrom,
             result.Value.DeliveryTimeTo,
             result.Value.Is24HrsDelivery);
+    }
+
+    public async Task<CustomerOutletRouteForDayResponse?> GetOutletRouteForDayAsync(Guid outletId, DayOfWeek weekday, CancellationToken cancellationToken = default)
+    {
+       var result =
+            await sender.Send(new GetOutletRouteForDayQuery(outletId, weekday), cancellationToken);
+
+       return result.IsFailure ? null : new CustomerOutletRouteForDayResponse(result.Value.routeId, result.Value.routeName);
     }
 }
