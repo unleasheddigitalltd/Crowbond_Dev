@@ -131,7 +131,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         DueDateCalculationBasis dueDateCalculationBasis,
         int dueDaysForInvoice,
         PaymentMethod paymentMethod,
-        string? customerComment,
+        string? customerComment,    
         DateTime utcNow)
     {
         var today = DateOnly.FromDateTime(utcNow);
