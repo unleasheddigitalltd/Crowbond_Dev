@@ -1,6 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrder;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetOutletRouteForDay;
+using Crowbond.Modules.CRM.Application.Customers.GetCustomerByAccountNumber;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrderByContactId;
 using Crowbond.Modules.CRM.PublicApi;
@@ -16,6 +17,42 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
     {
         Result<Application.Customers.GetCustomerForOrder.CustomerForOrderResponse> result =
             await sender.Send(new GetCustomerForOrderQuery(id), cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return null;
+        }
+
+        if (result.Value.DueDateCalculationBasis == null)
+        {
+            throw new InvalidOperationException("DueDateCalculationBasis cannot be null.");
+        }
+
+        if (result.Value.DueDaysForInvoice == null)
+        {
+            throw new InvalidOperationException("DueDaysForInvoice cannot be null.");
+        }
+
+        return new CustomerForOrderResponse(
+            result.Value.Id,
+            result.Value.AccountNumber,
+            result.Value.BusinessName,
+            result.Value.PriceTierId,
+            result.Value.Discount,
+            result.Value.NoDiscountSpecialItem,
+            result.Value.NoDiscountFixedPrice,
+            result.Value.DetailedInvoice,
+            (int)result.Value.DueDateCalculationBasis,
+            (int)result.Value.DueDaysForInvoice,
+            result.Value.CustomerNotes,
+            result.Value.DeliveryFeeSetting,
+            result.Value.DeliveryMinOrderValue,
+            result.Value.DeliveryCharge);
+    }
+
+    public async Task<CustomerForOrderResponse?> GetByAccountNumberAsync(string accountNumber, CancellationToken cancellationToken = default)
+    {
+        Result<Application.Customers.GetCustomerByAccountNumber.CustomerForOrderResponse> result = await sender.Send(new GetCustomerByAccountNumberQuery(accountNumber), cancellationToken);
 
         if (result.IsFailure)
         {

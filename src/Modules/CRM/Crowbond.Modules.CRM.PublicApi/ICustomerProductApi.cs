@@ -3,6 +3,9 @@
 public interface ICustomerProductApi
 {
     Task<CustomerProductResponse> GetAsync(Guid customerId, Guid productId, CancellationToken cancellationToken = default);
+
+    Task<CustomerProductResponse> GetBySkuAsync(Guid customerId, string productSku,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record CustomerProductResponse(
