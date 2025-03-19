@@ -50,7 +50,7 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                 FROM wms.task_headers t
                 INNER JOIN wms.dispatch_headers d ON d.id = t.dispatch_id
                 INNER JOIN wms.dispatch_lines dl ON d.id = dl.dispatch_header_id
-                LEFT JOIN wms.task_assignments ta ON t.id = ta.task_id
+                LEFT JOIN wms.task_assignments ta ON t.id = ta.task_header_id
                 LEFT JOIN wms.warehouse_operators wo ON ta.warehouse_operator_id = wo.id
                 WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Pending}, {(int)TaskAssignmentStatus.InProgress}))
                 GROUP BY t.id, t.task_no, d.dispatch_no, d.route_trip_id, d.route_name, d.route_trip_date, 
@@ -64,7 +64,7 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
             FROM (
                 SELECT t.id
                 FROM wms.task_headers t
-                LEFT JOIN wms.task_assignments ta ON t.id = ta.task_id
+                LEFT JOIN wms.task_assignments ta ON t.id = ta.task_header_id
                 WHERE (ta.status IS NULL OR ta.status IN ({(int)TaskAssignmentStatus.Pending}, {(int)TaskAssignmentStatus.InProgress}))
                 GROUP BY t.id
             ) AS TaskCount;";
