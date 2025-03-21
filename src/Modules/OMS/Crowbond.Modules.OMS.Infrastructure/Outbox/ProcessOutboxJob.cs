@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
@@ -43,6 +43,33 @@ internal sealed class ProcessOutboxJob(
                     ModuleName,
                     outboxMessage.Id,
                     outboxMessage.Content);
+
+                // Log assembly and type information for debugging
+                var assemblyInfo = AssemblyReference.Assembly.FullName;
+                logger.LogInformation(
+                    "{Module} - Current assembly info: {AssemblyInfo}",
+                    ModuleName,
+                    assemblyInfo);
+
+                // Try to parse the type information from JSON without deserializing
+                var jsonObject = JsonConvert.DeserializeObject<dynamic>(outboxMessage.Content);
+                var typeString = (string)jsonObject?["$type"];
+                
+                if (typeString != null)
+                {
+                    logger.LogInformation(
+                        "{Module} - Attempting to deserialize type: {TypeString}",
+                        ModuleName,
+                        typeString);
+
+                    // Check if type exists in assembly
+                    var type = AssemblyReference.Assembly.GetType(typeString);
+                    logger.LogInformation(
+                        "{Module} - Type found in assembly: {TypeFound}, Machine Name: {MachineName}",
+                        ModuleName,
+                        type != null,
+                        Environment.MachineName);
+                }
 
                 IDomainEvent domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
                     outboxMessage.Content,
