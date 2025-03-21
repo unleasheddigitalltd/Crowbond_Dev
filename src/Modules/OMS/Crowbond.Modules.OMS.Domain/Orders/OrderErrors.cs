@@ -4,6 +4,9 @@ namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public static class OrderErrors
 {
+    public static Error Unknown(Guid orderId) =>
+        Error.NotFound("Orders.Unknown", $"The action on order with the identifier {orderId} was failed for an unknown reason");
+
     public static Error NotFound(Guid orderId) =>
         Error.NotFound("Orders.NotFound", $"The order with the identifier {orderId} was not found");
 

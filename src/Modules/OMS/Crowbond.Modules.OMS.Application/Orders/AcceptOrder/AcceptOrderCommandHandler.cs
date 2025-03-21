@@ -97,7 +97,7 @@ internal sealed class AcceptOrderCommandHandler(
                 ex,
                 "Unexpected error while accepting order {OrderId}",
                 request.OrderId);
-            throw;
+            return Result.Failure(OrderErrors.Unknown(request.OrderId));
         }
     }
 }
