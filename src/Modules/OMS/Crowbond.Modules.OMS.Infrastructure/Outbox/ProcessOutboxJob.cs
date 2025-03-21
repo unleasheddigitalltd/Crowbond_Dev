@@ -51,6 +51,25 @@ internal sealed class ProcessOutboxJob(
                     ModuleName,
                     assemblyInfo);
 
+                // Log all loaded assemblies in the current AppDomain
+                var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                logger.LogInformation(
+                    "{Module} - Loaded assemblies in AppDomain on {MachineName}:\n{Assemblies}",
+                    ModuleName,
+                    Environment.MachineName,
+                    string.Join("\n", loadedAssemblies.Select(a => 
+                    {
+                        try
+                        {
+                            var loadContext = System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a);
+                            return $"- {a.FullName} (Context: {loadContext?.Name ?? "Default"})";
+                        }
+                        catch
+                        {
+                            return $"- {a.FullName} (Context: Unknown)";
+                        }
+                    })));
+
                 // Try to parse the type information from JSON without deserializing
                 var jsonObject = JsonConvert.DeserializeObject<dynamic>(outboxMessage.Content);
                 var typeString = (string)jsonObject?["$type"];
