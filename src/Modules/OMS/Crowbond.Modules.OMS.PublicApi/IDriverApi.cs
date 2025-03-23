@@ -7,3 +7,8 @@ public interface IDriverApi
 
 public sealed record ActiveRouteTripResponse(Guid DriverId, Guid? ActiveRouteTripId, string? ActiveRouteName);
 
+
+public interface IRouteTripApi
+{
+    Task AssignRouteTripToOrderAsync(Guid orderId, CancellationToken cancellationToken = default);
+}

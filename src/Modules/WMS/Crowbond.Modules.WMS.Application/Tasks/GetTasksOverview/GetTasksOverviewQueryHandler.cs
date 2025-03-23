@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Application.Pagination;
@@ -37,8 +36,20 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                     d.route_trip_id AS {nameof(TaskOverview.RouteTripId)},
                     d.route_name AS {nameof(TaskOverview.RouteName)},
                     d.route_trip_date AS {nameof(TaskOverview.RouteTripDate)},
-                    t.task_type AS {nameof(TaskOverview.TaskType)},
-                    COALESCE(ta.status, 0) AS {nameof(TaskOverview.Status)},
+                    CASE t.task_type 
+                        WHEN 0 THEN 'Putaway'
+                        WHEN 1 THEN 'PickingItem'
+                        WHEN 2 THEN 'PickingBulk'
+                        WHEN 3 THEN 'CheckingItem'
+                        WHEN 4 THEN 'CheckingBulk'
+                    END AS {nameof(TaskOverview.TaskType)},
+                    CASE t.status
+                        WHEN 0 THEN 'NotAssigned'
+                        WHEN 1 THEN 'Assigned'
+                        WHEN 2 THEN 'InProgress'
+                        WHEN 3 THEN 'Completed'
+                        WHEN 4 THEN 'Canceled'
+                     END AS {nameof(TaskOverview.Status)},
                     wo.id AS {nameof(TaskOverview.AssignedOperatorName)},
                     COUNT(dl.id) AS {nameof(TaskOverview.TotalLines)},
                     SUM(CASE 
@@ -69,7 +80,7 @@ internal sealed class GetTasksOverviewQueryHandler(IDbConnectionFactory dbConnec
                 GROUP BY t.id
             ) AS TaskCount;";
 
-        using var multi = await connection.QueryMultipleAsync(
+        await using var multi = await connection.QueryMultipleAsync(
             sql,
             new
             {

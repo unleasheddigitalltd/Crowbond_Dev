@@ -22,7 +22,7 @@ internal sealed class AcceptOrderCommandHandler(
 
         try
         {
-            OrderHeader? orderHeader = await orderRepository.GetAsync(request.OrderId, cancellationToken);
+            var orderHeader = await orderRepository.GetAsync(request.OrderId, cancellationToken);
 
             if (orderHeader is null)
             {
@@ -50,7 +50,7 @@ internal sealed class AcceptOrderCommandHandler(
                 orderHeader.RouteTripId,
                 request.OrderId);
 
-            RouteTrip? routeTrip = await routeTripRepository.GetAsync((Guid)orderHeader.RouteTripId, cancellationToken);
+            var routeTrip = await routeTripRepository.GetAsync((Guid)orderHeader.RouteTripId, cancellationToken);
 
             if (routeTrip is null)
             {
@@ -61,13 +61,18 @@ internal sealed class AcceptOrderCommandHandler(
                 return Result.Failure(RouteTripErrors.NotFound((Guid)orderHeader.RouteTripId));
             }
 
-            // Add get available quantity and check the available quantity here if InventoryService.GetAvailableQuantityAsync is implemented
+            if (routeTrip.Status is not RouteTripStatus.Approved)
+            {
+                logger.LogInformation("Route trip {RouteTripId} has no status is not yet approved.", orderHeader.RouteTripId);
+                return Result.Failure(RouteTripErrors.InvalidStatus(RouteTripStatus.Approved));
+            }
+
             logger.LogInformation(
                 "Route trip {RouteTripId} validated. Accepting order {OrderId}",
                 routeTrip.Id,
                 request.OrderId);
 
-            Result result = orderHeader.Accept();
+            var result = orderHeader.Accept();
 
             if (result.IsFailure)
             {

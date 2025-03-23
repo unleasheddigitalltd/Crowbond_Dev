@@ -8,11 +8,13 @@ using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Domain.Settings;
+using Crowbond.Modules.OMS.PublicApi;
 
 namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
 
 internal sealed class CreateOrderCommandHandler(
     ICustomerApi customerApi,
+    IRouteTripApi routeTripApi,
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IDateTimeProvider dateTimeProvider,
@@ -121,9 +123,8 @@ internal sealed class CreateOrderCommandHandler(
         var order = result.Value;
         orderRepository.Insert(order);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        order.Created();
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        await routeTripApi.AssignRouteTripToOrderAsync(order.Id, cancellationToken);
         return Result.Success(order.Id);
     }
 }
