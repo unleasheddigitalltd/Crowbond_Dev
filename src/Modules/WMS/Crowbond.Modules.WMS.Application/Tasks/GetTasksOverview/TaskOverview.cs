@@ -1,4 +1,3 @@
-
 namespace Crowbond.Modules.WMS.Application.Tasks.GetTasksOverview;
 
 public sealed class TaskOverview(
@@ -8,8 +7,8 @@ public sealed class TaskOverview(
     Guid routeTripId,
     string routeName,
     DateTime routeTripDate,
-    int taskType,
-    int status,
+    string taskType,
+    string status,
     Guid assignedOperatorName,
     long totalLines,
     long completedLines,
@@ -21,8 +20,8 @@ public sealed class TaskOverview(
     public Guid RouteTripId { get; } = routeTripId;
     public string RouteName { get; } = routeName;
     public DateTime RouteTripDate { get; } = routeTripDate;
-    public int TaskType { get; } = taskType;
-    public int Status { get; } = status;
+    public string TaskType { get; } = taskType;
+    public string Status { get; } = status;
     public Guid AssignedOperatorName { get; } = assignedOperatorName;
     public long TotalLines { get; } = totalLines;
     public long CompletedLines { get; } = completedLines;

@@ -444,17 +444,6 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         OrderAmount = _lines.Sum(line => line.LineTotal - line.DeductionLineTotal ?? 0) + DeliveryCharge;
     }
 
-    public Result Created()
-    {
-        if (Status != OrderStatus.Pending)
-        {
-            return Result.Failure(OrderErrors.NotPending);
-        }
-
-        Raise(new OrderCreatedDomainEvent(Id));
-        return Result.Success();
-    }
-
     public Result AssignRouteTrip(Guid routeTripId, string routeName)
     {
         if (Status != OrderStatus.Pending)

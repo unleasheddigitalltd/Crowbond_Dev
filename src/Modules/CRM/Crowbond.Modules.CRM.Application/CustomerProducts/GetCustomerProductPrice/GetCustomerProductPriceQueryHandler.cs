@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Globalization;
 using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
@@ -36,12 +37,12 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                      CASE
                          -- When customer-specific pricing is available
                          WHEN cp.fixed_price IS NOT NULL 
-                              AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                              AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date IS NULL)
+                              AND cp.effective_date <= CAST('{dateTimeProvider.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}' AS DATE)
+                              AND (cp.expiry_date > CAST('{dateTimeProvider.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}' AS DATE) OR cp.expiry_date IS NULL)
                               THEN cp.fixed_price
                          WHEN cp.fixed_discount IS NOT NULL 
-                              AND cp.effective_date <= CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE)
-                              AND (cp.expiry_date > CAST('{DateOnly.FromDateTime(dateTimeProvider.UtcNow)}' AS DATE) OR cp.expiry_date IS NULL)
+                              AND cp.effective_date <= CAST('{dateTimeProvider.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}' AS DATE)
+                              AND (cp.expiry_date > CAST('{dateTimeProvider.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}' AS DATE) OR cp.expiry_date IS NULL)
                               THEN pp.sale_price * (1 - cp.fixed_discount / 100.0)
                          -- Fallback to price-tier price
                          ELSE pp.sale_price

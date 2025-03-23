@@ -5,5 +5,6 @@
     <ProjectReference Include="..\..\WMS\Crowbond.Modules.WMS.PublicApi\Crowbond.Modules.WMS.PublicApi.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.Domain\Crowbond.Modules.OMS.Domain.csproj" />
     <ProjectReference Include="..\Crowbond.Modules.OMS.IntegrationEvents\Crowbond.Modules.OMS.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\Crowbond.Modules.OMS.PublicApi\Crowbond.Modules.OMS.PublicApi.csproj" />
   </ItemGroup>
 </Project>
