@@ -14,7 +14,7 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
     public class ChocoOrderCreatedTests
     {
         private const string Secret =
-            "88b04577da9b2cafc04a11f204616f51cffa022bcc1d281cbdd54953ad73517c4e1c89157e8beb8a508d09e8a69197aa";
+            "7204319714fef9ef1def67df218040a1d1e6b20352211adad8f2cfdc730983425becfa6b2541d8d425a7ebc57f6a45e9";
 
         /// <summary>
         /// Helper to compute the HMACSHA256 signature given a secret and request body.
@@ -125,6 +125,8 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
             Assert.Equal(StatusCodes.Status401Unauthorized, context.Response.StatusCode);
         }
 
+        
+        
         [Fact]
         public async Task InvalidPayload_ReturnsBadRequest()
         {
