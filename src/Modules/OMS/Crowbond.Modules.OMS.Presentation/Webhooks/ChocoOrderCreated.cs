@@ -4,11 +4,11 @@ using System.Text.Json;
 using Crowbond.Common.Presentation.Endpoints;
 using Crowbond.Modules.OMS.Application.Webhooks.Choco;
 using Crowbond.Modules.OMS.Domain.Webhooks.Choco;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Modules.OMS.Presentation.Webhooks;
@@ -18,16 +18,16 @@ public sealed class ChocoOrderCreated : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("webhook/choco/order-created", (HttpContext httpContext, 
-            IServiceProvider serviceProvider,
+            ISender sender,
             ILogger<ChocoOrderCreated> logger,
             IConfiguration configuration) =>
         {
-            return HandleAsync(httpContext, serviceProvider, logger, configuration);
+            return HandleAsync(httpContext, sender, logger, configuration);
         }).AllowAnonymous();
     }
 
     public async Task<IResult> HandleAsync(HttpContext httpContext,
-        IServiceProvider serviceProvider,
+        ISender sender,
         ILogger<ChocoOrderCreated> logger,
         IConfiguration configuration)
     {
@@ -59,12 +59,7 @@ public sealed class ChocoOrderCreated : IEndpoint
             }
 
             // Resolve command handler and process command asynchronously.
-            var commandHandler = serviceProvider.GetRequiredService<ChocoOrderCreatedCommandHandler>();
-            _ = Task.Run(async () =>
-            {
-                var command = new ChocoOrderCreatedCommand(payload);
-                await commandHandler.Handle(command, CancellationToken.None);
-            });
+            await sender.Send(new ChocoOrderCreatedCommand(payload));
 
             return Results.Ok(new { Message = "Webhook received successfully, processing asynchronously." });
         }
