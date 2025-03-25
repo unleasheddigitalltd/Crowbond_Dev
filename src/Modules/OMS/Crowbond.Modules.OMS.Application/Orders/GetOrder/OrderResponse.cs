@@ -9,8 +9,9 @@ public sealed record OrderResponse(
     string OrderNo,
     string CustomerAccountNumber,
     string CustomerBusinessName,
-    DateOnly ShippingDate,
-    OrderStatus Status,
+    DateTime ShippingDate,
+    int Status,
     decimal DeliveryCharge,
-    decimal OrderAmount);
+    decimal OrderAmount
+    );
 
