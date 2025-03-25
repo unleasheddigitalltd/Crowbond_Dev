@@ -15,14 +15,18 @@ using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Application.Webhooks.Choco;
 
-public sealed class ChocoOrderCreatedCommandHandler(
+public interface IChocoOrderCreatedCommandHandler
+{
+    Task<Result> Handle(ChocoOrderCreatedCommand command, CancellationToken cancellationToken);
+}
+public class ChocoOrderCreatedCommandHandler(
     ICustomerApi customerApi,
     ICustomerProductApi customerProductApi,
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IUnitOfWork unitOfWork,
     IDateTimeProvider dateTimeProvider)
-    : ICommandHandler<ChocoOrderCreatedCommand>
+    : ICommandHandler<ChocoOrderCreatedCommand>, IChocoOrderCreatedCommandHandler
 {
     public async Task<Result> Handle(ChocoOrderCreatedCommand request, CancellationToken cancellationToken)
     {
