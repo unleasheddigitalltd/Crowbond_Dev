@@ -44,11 +44,11 @@ public class ChocoOrder
     [JsonPropertyName("vendorReferenceNumber")]
     public string VendorReferenceNumber { get; set; } = string.Empty;
 
-    [JsonPropertyName("confirmedAt")] public DateTime ConfirmedAt { get; set; }
+    [JsonPropertyName("confirmedAt")] public DateTime? ConfirmedAt { get; set; }
 
-    [JsonPropertyName("createdAt")] public DateTime CreatedAt { get; set; }
+    [JsonPropertyName("createdAt")] public DateTime? CreatedAt { get; set; }
 
-    [JsonPropertyName("updatedAt")] public DateTime UpdatedAt { get; set; }
+    [JsonPropertyName("updatedAt")] public DateTime? UpdatedAt { get; set; }
 
     [JsonPropertyName("status")] public string Status { get; set; } = string.Empty;
 
@@ -158,7 +158,7 @@ public class ChocoProduct
 
     [JsonPropertyName("conversionFactor")] public ChocoConversionFactor ConversionFactor { get; set; } = new();
 
-    [JsonPropertyName("leadTimeDays")] public int LeadTimeDays { get; set; }
+    [JsonPropertyName("leadTimeDays")] public int? LeadTimeDays { get; set; }
 
     [JsonPropertyName("cutOffTime")] public string CutOffTime { get; set; } = string.Empty;
 
