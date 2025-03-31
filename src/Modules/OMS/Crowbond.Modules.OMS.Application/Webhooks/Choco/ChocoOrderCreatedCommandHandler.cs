@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
@@ -57,9 +58,11 @@ public class ChocoOrderCreatedCommandHandler(
         {
             return Result.Failure(OrderErrors.SequenceNotFound);
         }
-
-        // Get customer outlet
-        CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderAsync(customer.Id, cancellationToken);
+        
+        string fullDeliveryAddress = orderData.Customer.DeliveryAddress.Full;
+        string postcode = Regex.Match(fullDeliveryAddress, @"[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}").Value;
+        
+        CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderByPostcodeAsync(postcode, customer.Id, cancellationToken);
         if (outlet is null)
         {
             return Result.Failure(CustomerErrors.OutletNotFound(customer.Id));

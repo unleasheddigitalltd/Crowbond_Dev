@@ -8,6 +8,7 @@ public interface ICustomerApi
     Task<CustomerForOrderResponse?> GetByAccountNumberAsync(string accountNumber, CancellationToken cancellationToken = default);
 
     Task<CustomerOutletForOrderResponse?> GetOutletForOrderAsync(Guid outletId, CancellationToken cancellationToken = default);
+    Task<CustomerOutletForOrderResponse?> GetOutletForOrderByPostcodeAsync(string postcode, Guid customerId, CancellationToken cancellationToken = default);
 }
 
 public sealed record CustomerForOrderResponse(

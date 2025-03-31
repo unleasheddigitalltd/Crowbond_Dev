@@ -58,7 +58,6 @@ public sealed class ChocoOrderCreated : IEndpoint
                 return Results.BadRequest("Invalid webhook payload.");
             }
 
-            // Resolve command handler and process command asynchronously.
             await sender.Send(new ChocoOrderCreatedCommand(payload));
 
             return Results.Ok(new { Message = "Webhook received successfully, processing asynchronously." });
