@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
@@ -8,11 +8,13 @@ using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Sequences;
 using Crowbond.Modules.OMS.Domain.Settings;
+using Crowbond.Modules.OMS.PublicApi;
 
 namespace Crowbond.Modules.OMS.Application.Orders.CreateOrder;
 
 internal sealed class CreateOrderCommandHandler(
     ICustomerApi customerApi,
+    IRouteTripApi routeTripApi,
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IDateTimeProvider dateTimeProvider,
@@ -85,10 +87,11 @@ internal sealed class CreateOrderCommandHandler(
         }
 
 
-        Result<OrderHeader> result = OrderHeader.Create(
+        var result = OrderHeader.Create(
             sequence.GetNumber(),
             null,
             customer.Id,
+            request.CustomerOutletId,
             customer.AccountNumber,
             customer.BusinessName,
             outlet.LocationName,
@@ -117,10 +120,11 @@ internal sealed class CreateOrderCommandHandler(
             return Result.Failure<Guid>(result.Error);
         }
         
-        orderRepository.Insert(result.Value);
-
+        var order = result.Value;
+        orderRepository.Insert(order);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return Result.Success(result.Value.Id);
+        
+        await routeTripApi.AssignRouteTripToOrderAsync(order.Id, cancellationToken);
+        return Result.Success(order.Id);
     }
 }

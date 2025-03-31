@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.PublicApi;
@@ -86,6 +86,7 @@ internal sealed class UpdateOrderCommandHandler(
 
         Result result = orderHeader.Update(
             customer.BusinessName,
+            request.CustomerOutletId,
             outlet.LocationName,
             outlet.FullName,
             outlet.Email,

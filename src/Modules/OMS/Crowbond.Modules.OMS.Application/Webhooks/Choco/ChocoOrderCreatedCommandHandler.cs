@@ -88,6 +88,7 @@ public class ChocoOrderCreatedCommandHandler(
             sequence.GetNumber(),
             orderData.ReferenceNumber,
             customer.Id,
+            outlet.Id,
             customer.AccountNumber,
             customer.BusinessName,
             outlet.LocationName,

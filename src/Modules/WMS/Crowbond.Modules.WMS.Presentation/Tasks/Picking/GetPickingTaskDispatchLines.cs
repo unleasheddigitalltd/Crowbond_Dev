@@ -15,7 +15,7 @@ internal sealed class GetPickingTaskDispatchLines : IEndpoint
     {
         app.MapGet("tasks/picking/{id}/dispatch-lines", async (Guid id, ISender sender) =>
         {
-            Result<IReadOnlyCollection<TaskDispatchLineResponse>> result = await sender.Send(new GetPickingTaskDispatchLinesQuery(id));
+            var result = await sender.Send(new GetPickingTaskDispatchLinesQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

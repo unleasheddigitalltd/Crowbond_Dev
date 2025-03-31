@@ -5,6 +5,7 @@ using Crowbond.Modules.WMS.Domain.Dispatches;
 using Crowbond.Modules.WMS.Domain.Products;
 using Crowbond.Modules.WMS.Domain.Sequences;
 using Crowbond.Modules.WMS.Domain.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Crowbond.Modules.WMS.Application.Dispatches.AddDispatchLines;
 
@@ -12,17 +13,31 @@ internal sealed class AddDispatchLinesCommandHandler(
     IDispatchRepository dispatchRepository,
     IProductRepository productRepository,
     ITaskRepository taskRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    ILogger<AddDispatchLinesCommandHandler> logger)
     : ICommandHandler<AddDispatchLinesCommand>
 {
     public async Task<Result> Handle(AddDispatchLinesCommand request, CancellationToken cancellationToken)
     {
+        logger.LogInformation(
+            "Processing dispatch lines for route trip {RouteTripId}. Lines count: {LineCount}",
+            request.RouteTripId,
+            request.DispatchLines.Count);
+
         DispatchHeader? dispatchHeader = await dispatchRepository.GetByRouteTripAsync(request.RouteTripId, cancellationToken);
 
         if (dispatchHeader is null)
         {
+            logger.LogError(
+                "Dispatch header not found for route trip {RouteTripId}",
+                request.RouteTripId);
             return Result.Failure(DispatchErrors.ForRouteTripNotFound(request.RouteTripId));
         }
+
+        logger.LogInformation(
+            "Found dispatch header {DispatchId} for route trip {RouteTripId}",
+            dispatchHeader.Id,
+            request.RouteTripId);
 
         IEnumerable<TaskHeader> tasks = await taskRepository.GetByDispatchHeader(dispatchHeader.Id, cancellationToken);
 
@@ -30,15 +45,26 @@ internal sealed class AddDispatchLinesCommandHandler(
 
         if (taskSeq is null)
         {
+            logger.LogError("Task sequence not found");
             return Result.Failure(TaskErrors.SequenceNotFound());
         }
 
         foreach (DispatchLineRequest line in request.DispatchLines)
         {
+            logger.LogInformation(
+                "Processing dispatch line for order {OrderId}, product {ProductId}, quantity {Quantity}",
+                line.OrderId,
+                line.ProductId,
+                line.Qty);
+
             Product? product = await productRepository.GetAsync(line.ProductId, cancellationToken);
 
             if (product is null)
             {
+                logger.LogError(
+                    "Product {ProductId} not found for dispatch line in order {OrderId}",
+                    line.ProductId,
+                    line.OrderId);
                 return Result.Failure(ProductErrors.NotFound(line.ProductId));
             }
 
@@ -53,9 +79,19 @@ internal sealed class AddDispatchLinesCommandHandler(
 
             dispatchRepository.AddLine(dispatchLine);
 
+            logger.LogInformation(
+                "Created dispatch line {DispatchLineId} for order {OrderId}, product {ProductId}",
+                dispatchLine.Id,
+                line.OrderId,
+                line.ProductId);
+
             if (!tasks.Any(t => t.TaskType == TaskType.PickingItem) && !dispatchLine.IsBulk)
             {
-                // generate the picking item task          
+                logger.LogInformation(
+                    "Creating new picking item task for dispatch line {DispatchLineId}, product {ProductId}",
+                    dispatchLine.Id,
+                    line.ProductId);
+
                 Result<TaskHeader> pickingItemTaskResult = TaskHeader.Create(
                     taskSeq.GetNumber(),
                     null,
@@ -64,64 +100,117 @@ internal sealed class AddDispatchLinesCommandHandler(
 
                 if (pickingItemTaskResult.IsFailure)
                 {
+                    logger.LogError(
+                        "Failed to create picking item task for dispatch line {DispatchLineId}, product {ProductId}",
+                        dispatchLine.Id,
+                        line.ProductId);
                     return Result.Failure(pickingItemTaskResult.Error);
                 }
 
                 taskRepository.Insert(pickingItemTaskResult.Value);
+
+                logger.LogInformation(
+                    "Created picking item task {TaskId} for dispatch line {DispatchLineId}",
+                    pickingItemTaskResult.Value.Id,
+                    dispatchLine.Id);
             }
 
             if (!tasks.Any(t => t.TaskType == TaskType.PickingBulk) && dispatchLine.IsBulk)
             {
-                // generate the picking bulk task
+                logger.LogInformation(
+                    "Creating new picking bulk task for dispatch line {DispatchLineId}, product {ProductId}",
+                    dispatchLine.Id,
+                    line.ProductId);
+
                 Result<TaskHeader> pickingBulkTaskResult = TaskHeader.Create(
-                taskSeq.GetNumber(),
-                null,
-                dispatchHeader.Id,
-                TaskType.PickingBulk);
+                    taskSeq.GetNumber(),
+                    null,
+                    dispatchHeader.Id,
+                    TaskType.PickingBulk);
 
                 if (pickingBulkTaskResult.IsFailure)
                 {
+                    logger.LogError(
+                        "Failed to create picking bulk task for dispatch line {DispatchLineId}, product {ProductId}",
+                        dispatchLine.Id,
+                        line.ProductId);
                     return Result.Failure(pickingBulkTaskResult.Error);
                 }
 
                 taskRepository.Insert(pickingBulkTaskResult.Value);
+
+                logger.LogInformation(
+                    "Created picking bulk task {TaskId} for dispatch line {DispatchLineId}",
+                    pickingBulkTaskResult.Value.Id,
+                    dispatchLine.Id);
             }
+
             if (!tasks.Any(t => t.TaskType == TaskType.CheckingItem) && !dispatchLine.IsBulk)
             {
-                // generate the checking item task          
-                Result<TaskHeader> pickingItemTaskResult = TaskHeader.Create(
+                logger.LogInformation(
+                    "Creating new checking item task for dispatch line {DispatchLineId}, product {ProductId}",
+                    dispatchLine.Id,
+                    line.ProductId);
+
+                Result<TaskHeader> checkingItemTaskResult = TaskHeader.Create(
                     taskSeq.GetNumber(),
                     null,
                     dispatchHeader.Id,
                     TaskType.CheckingItem);
 
-                if (pickingItemTaskResult.IsFailure)
+                if (checkingItemTaskResult.IsFailure)
                 {
-                    return Result.Failure(pickingItemTaskResult.Error);
+                    logger.LogError(
+                        "Failed to create checking item task for dispatch line {DispatchLineId}, product {ProductId}",
+                        dispatchLine.Id,
+                        line.ProductId);
+                    return Result.Failure(checkingItemTaskResult.Error);
                 }
 
-                taskRepository.Insert(pickingItemTaskResult.Value);
+                taskRepository.Insert(checkingItemTaskResult.Value);
+
+                logger.LogInformation(
+                    "Created checking item task {TaskId} for dispatch line {DispatchLineId}",
+                    checkingItemTaskResult.Value.Id,
+                    dispatchLine.Id);
             }
 
             if (!tasks.Any(t => t.TaskType == TaskType.CheckingBulk) && dispatchLine.IsBulk)
             {
-                // generate the checking bulk task
-                Result<TaskHeader> pickingBulkTaskResult = TaskHeader.Create(
-                taskSeq.GetNumber(),
-                null,
-                dispatchHeader.Id,
-                TaskType.CheckingBulk);
+                logger.LogInformation(
+                    "Creating new checking bulk task for dispatch line {DispatchLineId}, product {ProductId}",
+                    dispatchLine.Id,
+                    line.ProductId);
 
-                if (pickingBulkTaskResult.IsFailure)
+                Result<TaskHeader> checkingBulkTaskResult = TaskHeader.Create(
+                    taskSeq.GetNumber(),
+                    null,
+                    dispatchHeader.Id,
+                    TaskType.CheckingBulk);
+
+                if (checkingBulkTaskResult.IsFailure)
                 {
-                    return Result.Failure(pickingBulkTaskResult.Error);
+                    logger.LogError(
+                        "Failed to create checking bulk task for dispatch line {DispatchLineId}, product {ProductId}",
+                        dispatchLine.Id,
+                        line.ProductId);
+                    return Result.Failure(checkingBulkTaskResult.Error);
                 }
 
-                taskRepository.Insert(pickingBulkTaskResult.Value);
+                taskRepository.Insert(checkingBulkTaskResult.Value);
+
+                logger.LogInformation(
+                    "Created checking bulk task {TaskId} for dispatch line {DispatchLineId}",
+                    checkingBulkTaskResult.Value.Id,
+                    dispatchLine.Id);
             }
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation(
+            "Successfully processed all dispatch lines for route trip {RouteTripId}",
+            request.RouteTripId);
 
         return Result.Success();
     }

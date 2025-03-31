@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.OMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.OMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(OmsDbContext))]
-    partial class OmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250312192612_Rename_CustomerOutletId_Column_To_Snake_Case")]
+    partial class Rename_CustomerOutletId_Column_To_Snake_Case
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

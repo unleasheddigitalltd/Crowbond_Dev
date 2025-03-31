@@ -13,6 +13,7 @@ internal static class Permissions
     internal const string CreateProductGroups = "product-groups:create";
     internal const string CreateBrands = "brands:create";
     internal const string CreateCategories = "categories:create";
+    internal const string ModifyCategories = "categories:update";
 
 
     internal const string GetStocks = "stocks:read";

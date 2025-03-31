@@ -22,12 +22,12 @@ internal sealed class UpdateCustomerOutletCommandHandler(
 
         if (!TimeOnly.TryParseExact(request.CustomerOutlet.DeliveryTimeFrom, validFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out TimeOnly deliveryTimeFrom))
         {
-            return Result.Failure(CustomerOutletErrors.InvalitTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeFrom)));
+            return Result.Failure(CustomerOutletErrors.InvalidTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeFrom)));
         }
 
         if (!TimeOnly.TryParseExact(request.CustomerOutlet.DeliveryTimeTo, validFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out TimeOnly deliveryTimeTo))
         {
-            return Result.Failure(CustomerOutletErrors.InvalitTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeTo)));
+            return Result.Failure(CustomerOutletErrors.InvalidTimeFormat(nameof(request.CustomerOutlet.DeliveryTimeTo)));
         }
 
         CustomerOutlet? customerOutlet = await customerOutletRepository.GetAsync(request.CustomerOutletId, cancellationToken);

@@ -1,18 +1,18 @@
-﻿using Crowbond.Common.Application.Clock;
+using Crowbond.Common.Application.Clock;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Common.Infrastructure.Outbox;
 using Crowbond.Common.Infrastructure.Serialization;
 using Crowbond.Modules.OMS.Application;
+using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
-using System.Data.Common;
 using System.Data;
-using Dapper;
+using System.Data.Common;
 
 namespace Crowbond.Modules.OMS.Infrastructure.Outbox;
 
@@ -38,6 +38,58 @@ internal sealed class ProcessOutboxJob(
             Exception? exception = null;
             try
             {
+                logger.LogInformation(
+                    "{Module} - Processing outbox message {MessageId}. Content: {Content}",
+                    ModuleName,
+                    outboxMessage.Id,
+                    outboxMessage.Content);
+
+                // Log assembly and type information for debugging
+                var assemblyInfo = AssemblyReference.Assembly.FullName;
+                logger.LogInformation(
+                    "{Module} - Current assembly info: {AssemblyInfo}",
+                    ModuleName,
+                    assemblyInfo);
+
+                // Log all loaded assemblies in the current AppDomain
+                var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                logger.LogInformation(
+                    "{Module} - Loaded assemblies in AppDomain on {MachineName}:\n{Assemblies}",
+                    ModuleName,
+                    Environment.MachineName,
+                    string.Join("\n", loadedAssemblies.Select(a => 
+                    {
+                        try
+                        {
+                            var loadContext = System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a);
+                            return $"- {a.FullName} (Context: {loadContext?.Name ?? "Default"})";
+                        }
+                        catch
+                        {
+                            return $"- {a.FullName} (Context: Unknown)";
+                        }
+                    })));
+
+                // Try to parse the type information from JSON without deserializing
+                var jsonObject = JsonConvert.DeserializeObject<dynamic>(outboxMessage.Content);
+                var typeString = (string)jsonObject?["$type"];
+                
+                if (typeString != null)
+                {
+                    logger.LogInformation(
+                        "{Module} - Attempting to deserialize type: {TypeString}",
+                        ModuleName,
+                        typeString);
+
+                    // Check if type exists in assembly
+                    var type = AssemblyReference.Assembly.GetType(typeString);
+                    logger.LogInformation(
+                        "{Module} - Type found in assembly: {TypeFound}, Machine Name: {MachineName}",
+                        ModuleName,
+                        type != null,
+                        Environment.MachineName);
+                }
+
                 IDomainEvent domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
                     outboxMessage.Content,
                     SerializerSettings.Instance)!;
@@ -52,6 +104,19 @@ internal sealed class ProcessOutboxJob(
                 foreach (IDomainEventHandler domainEventHandler in domainEventHandlers)
                 {
                     await domainEventHandler.Handle(domainEvent);
+
+                    // Record the consumer after successful processing
+                    await connection.ExecuteAsync(
+                        """
+                        INSERT INTO oms.outbox_messages_consumers (outbox_message_id, name)
+                        VALUES (@OutboxMessageId, @Name)
+                        """,
+                        new
+                        {
+                            OutboxMessageId = outboxMessage.Id,
+                            Name = domainEventHandler.GetType().Name
+                        },
+                        transaction: transaction);
                 }
             }
             catch (Exception caughtException)

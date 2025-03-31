@@ -2,7 +2,10 @@
 
 public sealed record TaskDispatchLineResponse(
     Guid DispatchLineId,
+    Guid ProductId,
     string ProductName,
+    string UnitOfMeasure,
     decimal OrderedQty,
     decimal PickedQty,
-    bool IsPicked);
+    bool IsPicked,
+    string Location);

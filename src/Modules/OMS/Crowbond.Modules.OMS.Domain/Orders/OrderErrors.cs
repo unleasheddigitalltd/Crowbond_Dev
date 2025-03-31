@@ -1,9 +1,12 @@
-﻿using Crowbond.Common.Domain;
+using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.OMS.Domain.Orders;
 
 public static class OrderErrors
 {
+    public static Error Unknown(Guid orderId) =>
+        Error.NotFound("Orders.Unknown", $"The action on order with the identifier {orderId} was failed for an unknown reason");
+
     public static Error NotFound(Guid orderId) =>
         Error.NotFound("Orders.NotFound", $"The order with the identifier {orderId} was not found");
 
@@ -78,6 +81,9 @@ public static class OrderErrors
 
     public static readonly Error IsDelivered =
         Error.Problem("Orders.IsDelivered", "The order is in delivered status");
+
+    public static readonly Error RouteAlreadyAssigned =
+        Error.Problem("Orders.RouteAlreadyAssigned", "A route trip has already been assigned to this order");
 
     public static readonly Error PendingOrderLines =
         Error.Problem("Orders.PendingOrderLines", "Some order lines are still pending delivery");

@@ -16,7 +16,7 @@ internal sealed class OrderAcceptedDomainEventHandler(ISender sender, IEventBus 
         OrderAcceptedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
-        Result<OrderResponse> result = await sender.Send(
+        var result = await sender.Send(
             new GetOrderWithLinesQuery(domainEvent.OrderId),
             cancellationToken);
 

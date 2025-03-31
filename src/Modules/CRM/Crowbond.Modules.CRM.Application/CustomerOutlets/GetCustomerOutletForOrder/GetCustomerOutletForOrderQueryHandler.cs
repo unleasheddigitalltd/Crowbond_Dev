@@ -38,13 +38,8 @@ internal sealed class GetCustomerOutletForOrderQueryHandler(IDbConnectionFactory
              WHERE id = @CustomerOutletId AND is_deleted = false AND is_active = true
              """;
 
-        CustomerOutletForOrderResponse? customerOutlet = await connection.QuerySingleOrDefaultAsync<CustomerOutletForOrderResponse>(sql, request);
+        var customerOutlet = await connection.QuerySingleOrDefaultAsync<CustomerOutletForOrderResponse>(sql, request);
 
-        if (customerOutlet is null)
-        {
-            return Result.Failure<CustomerOutletForOrderResponse>(CustomerOutletErrors.NotFound(request.CustomerOutletId));
-        }
-
-        return customerOutlet;
+        return customerOutlet ?? Result.Failure<CustomerOutletForOrderResponse>(CustomerOutletErrors.NotFound(request.CustomerOutletId));
     }
 }
