@@ -4,6 +4,7 @@ using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Application.Orders.GetOrder;
+using Crowbond.Modules.OMS.Domain.Orders;
 using Dapper;
 
 namespace Crowbond.Modules.OMS.Application.RouteTrips.GetRouteTripsByStatus;
@@ -16,18 +17,22 @@ internal sealed class GetRouteTripsByStatusQueryHandler(IDbConnectionFactory dbC
 {
     await using var connection = await dbConnectionFactory.OpenConnectionAsync();
 
-    var routeTrips = await GetRouteTripsByStatus(connection, (int)request.Status);
+    var routeTrips = await GetRouteTrips(connection);
     
     foreach (var routeTrip in routeTrips)
     {
         var orders = await GetOrdersByRouteTripId(connection, routeTrip.Id);
-        routeTrip.Orders.AddRange(orders);
+        var pendingOrders = orders.Any(o => o.Status == (int)OrderStatus.Pending);
+        if (pendingOrders)
+        {
+            routeTrip.Orders.AddRange(orders);
+        }
     }
     
-    return routeTrips;
+    return routeTrips.Where(r => r.Orders.Count > 0).ToList();
 }
 
-private static async Task<List<RouteTripByStatusResponse>> GetRouteTripsByStatus(DbConnection connection, int status)
+private static async Task<List<RouteTripByStatusResponse>> GetRouteTrips(DbConnection connection)
 {
     const string sql = @"
         SELECT 
@@ -39,10 +44,11 @@ private static async Task<List<RouteTripByStatusResponse>> GetRouteTripsByStatus
             t.comments AS Comments
         FROM oms.route_trips t
         INNER JOIN oms.routes r ON r.id = t.route_id
-        WHERE t.status = @Status
+        AND t.date >= @Date
         ORDER BY r.position, t.date";
     
-    var dto = await connection.QueryAsync<RouteTripDto>(sql, new { Status = status });
+    var dto = await connection.QueryAsync<RouteTripDto>(sql, 
+        new { Date = DateTime.UtcNow.AddDays(1) });
     
     
     return dto.Select(rt => new RouteTripByStatusResponse(
@@ -72,17 +78,19 @@ private async Task<List<OrderResponse>> GetOrdersByRouteTripId(DbConnection conn
         FROM oms.order_headers o
         WHERE o.route_trip_id = @RouteTripId";
     
-    return (await connection.QueryAsync<OrderDto>(sql, new { RouteTripId = routeTripId })).Select(o => new OrderResponse(
-        o.Id,
-        o.CustomerId,
-        o.OrderNo,
-        o.CustomerAccountNumber,
-        o.CustomerBusinessName,
-        o.ShippingDate,
-        o.Status,
-        o.DeliveryCharge,
-        o.OrderAmount
-    )).ToList();
+    return (await connection
+            .QueryAsync<OrderDto>(sql, new { RouteTripId = routeTripId }))
+            .Select(o => new OrderResponse(
+                    o.Id,
+                    o.CustomerId,
+                    o.OrderNo,
+                    o.CustomerAccountNumber,
+                    o.CustomerBusinessName,
+                    o.ShippingDate,
+                    o.Status,
+                    o.DeliveryCharge,
+                    o.OrderAmount
+                )).ToList();
 }
 
 
