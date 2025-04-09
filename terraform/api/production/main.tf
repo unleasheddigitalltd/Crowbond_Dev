@@ -248,7 +248,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_attach
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# ECS Task Definition
+# ECS Task Definition - Updated for DB password change
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app_name}-${var.environment}"
   network_mode             = "awsvpc"
