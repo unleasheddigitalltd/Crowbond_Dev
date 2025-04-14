@@ -16,14 +16,14 @@ internal sealed class AddOrderLineCommandHandler(
 {
     public async Task<Result<Guid>> Handle(AddOrderLineCommand request, CancellationToken cancellationToken)
     {
-        OrderHeader? orderHeader = await orderRepository.GetAsync(request.OrderHeaderId, cancellationToken);
+        var orderHeader = await orderRepository.GetAsync(request.OrderHeaderId, cancellationToken);
 
         if (orderHeader is null)
         {
             return Result.Failure<Guid>(OrderErrors.NotFound(request.OrderHeaderId));
         }
 
-        CustomerProductResponse? customerProduct = await customerProductApi.GetAsync(orderHeader.CustomerId, request.ProductId, cancellationToken);
+        var customerProduct = await customerProductApi.GetAsync(orderHeader.CustomerId, request.ProductId, cancellationToken);
 
         if (customerProduct is null)
         {
@@ -40,7 +40,7 @@ internal sealed class AddOrderLineCommandHandler(
             return Result.Failure<Guid>(CustomerProductErrors.InvalidTaxRateType);
         }
 
-        OrderLine? existingLine = orderHeader.Lines.SingleOrDefault(l => l.ProductId == request.ProductId);
+        var existingLine = orderHeader.Lines.SingleOrDefault(l => l.ProductId == request.ProductId);
 
         if (existingLine != null)
         {

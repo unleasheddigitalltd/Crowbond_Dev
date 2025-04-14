@@ -15,7 +15,7 @@ internal sealed class AddPurchaseOrderLine : IEndpoint
     {
         app.MapPost("purchase-orders/{id}/lines", async (Guid id, Request request, ISender sender) =>
         {
-            Result<Guid> result = await sender.Send(new AddPurchaseOrderLineCommand(id, request.ProductId, request.UnitPrice, request.Qty, request.Comments));
+           var result = await sender.Send(new AddPurchaseOrderLineCommand(id, request.ProductId, request.UnitPrice, request.Qty, request.Comments));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
