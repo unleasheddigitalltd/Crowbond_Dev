@@ -49,8 +49,12 @@ internal sealed class GetCustomerProductPriceQueryHandler(
                         -- When price-tier price is available
                        WHEN pp.sale_price IS NOT NULL
                             THEN pp.sale_price
-                      -- Fallback to product's sales_price if no tier price exists
-                        ELSE p.sales_price
+                       ELSE (SELECT fpp.sale_price 
+                             FROM crm.product_prices fpp
+                             INNER JOIN crm.price_tiers fpt ON fpp.price_tier_id = fpt.id
+                             WHERE fpp.product_id = p.id 
+                             AND fpt.is_fallback_tier = true
+                             LIMIT 1)
                      END AS DECIMAL(10, 2)
                  ) AS {nameof(CustomerProductPriceResponse.UnitPrice)},
                  p.tax_rate_type AS {nameof(CustomerProductPriceResponse.TaxRateType)},
