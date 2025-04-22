@@ -242,6 +242,7 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
         PaymentMethod = paymentMethod;
         CustomerComment = customerComment;
 
+        UpdateTotalAmount();
         return Result.Success();
     }
 
@@ -440,8 +441,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
     public void UpdateTotalAmount()
     {
-        OrderTax = _lines.Sum(line => line.Tax - line.DeductionTax ?? 0);
-        OrderAmount = _lines.Sum(line => line.LineTotal - line.DeductionLineTotal ?? 0) + DeliveryCharge;
+        OrderTax = _lines.Sum(line => line.Tax - (line.DeductionTax ?? 0));
+        OrderAmount = _lines.Sum(line => line.LineTotal - (line.DeductionLineTotal ?? 0)) + DeliveryCharge;
     }
 
     public Result AssignRouteTrip(Guid routeTripId, string routeName)

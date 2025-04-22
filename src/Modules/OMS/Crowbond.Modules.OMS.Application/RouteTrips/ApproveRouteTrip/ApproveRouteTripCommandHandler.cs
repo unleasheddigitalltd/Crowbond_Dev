@@ -14,7 +14,7 @@ internal sealed class ApproveRouteTripCommandHandler(
 {
     public async Task<Result> Handle(ApproveRouteTripCommand request, CancellationToken cancellationToken)
     {
-        RouteTrip? routeTrip = await routeTripRepository.GetAsync(request.RouteTripId, cancellationToken);
+        var routeTrip = await routeTripRepository.GetAsync(request.RouteTripId, cancellationToken);
 
         if (routeTrip == null)
         {
@@ -22,12 +22,12 @@ internal sealed class ApproveRouteTripCommandHandler(
         }
 
         // check the route trip is not expired.
-        if (routeTrip.Date < DateOnly.FromDateTime(dateTimeProvider.UtcNow))
+        if (routeTrip.IsExpired(DateOnly.FromDateTime(dateTimeProvider.UtcNow)))
         {
             return Result.Failure(RouteTripErrors.Expired(request.RouteTripId));
         }
 
-        Result result = routeTrip.Approve();
+        var result = routeTrip.Approve(DateOnly.FromDateTime(dateTimeProvider.UtcNow));
 
         if (result.IsFailure)
         {
