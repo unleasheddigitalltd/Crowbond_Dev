@@ -10,5 +10,5 @@ public sealed record ProductWithStockResponse(
     string ProductGroupName,
     decimal UnitPrice,
     int TaxRateType,
-    int StockLevel
+    decimal StockLevel
 );
