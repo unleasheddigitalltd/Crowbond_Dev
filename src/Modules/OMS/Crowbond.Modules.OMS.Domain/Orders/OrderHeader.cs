@@ -578,12 +578,8 @@ public sealed class OrderHeader : Entity, IAuditable, ISoftDeletable, IChangeDet
 
     public Result ValidateRemoval()
     {
-        if (Status != OrderStatus.Pending)
-        {
-            return Result.Failure(OrderErrors.NotPending);
-        }
-
-        return Result.Success();
+        return Status != OrderStatus.Pending ? 
+            Result.Failure(OrderErrors.NotPending) : Result.Success();
     }
 
     public Result UpdateOutlet(

@@ -11,12 +11,15 @@ public sealed class PriceTier : Entity
     public Guid Id { get; private set; }
     public string Name { get; private set; }
 
-    public static PriceTier Create(string name)
+    public bool IsFallbackTier { get; private set; }
+
+    public static PriceTier Create(string name, bool isFallbackTier = false)
     {
         var priceTier = new PriceTier
         {
             Name = name,
-        };
+            IsFallbackTier = isFallbackTier
+        };  
 
         return priceTier;
     }
@@ -24,5 +27,10 @@ public sealed class PriceTier : Entity
     public void Update(string name)
     { 
         Name = name;
+    }
+
+    public void UpdateIsFallbackTier(bool isFallbackTier)
+    {
+        IsFallbackTier = isFallbackTier;
     }
 }
