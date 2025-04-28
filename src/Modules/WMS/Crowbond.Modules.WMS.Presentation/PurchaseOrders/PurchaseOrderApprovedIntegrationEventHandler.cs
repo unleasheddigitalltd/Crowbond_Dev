@@ -17,7 +17,7 @@ internal sealed class PurchaseOrderApprovedIntegrationEventHandler(ISender sende
             PurchaseOrderId: integrationEvent.PurchaseOrderId,
             PurchaseOrderNo: integrationEvent.PurchaseOrderNo,
             ReceiptLines: integrationEvent.ReceiptLines.Select(l => new ReceiptRequest.ReceiptLineRequest(
-                l.ProductId, l.Qty, l.UnitPrice)).ToList());
+                l.ProductId, l.Qty, l.UnitPrice, "", null, null)).ToList());
 
         Result result = await sender.Send(
             new CreateReceiptWithLinesCommand(request),

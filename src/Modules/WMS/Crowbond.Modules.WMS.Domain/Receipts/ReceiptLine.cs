@@ -33,7 +33,10 @@ public sealed class ReceiptLine : Entity
     internal static ReceiptLine Create(
         Guid productId,
         decimal receivedQty,
-        decimal unitPrice)
+        decimal unitPrice,
+        string batchNumber,
+        DateOnly? sellByDate,
+        DateOnly? useByDate)
     {
         var receiptLine = new ReceiptLine
         {
@@ -43,7 +46,9 @@ public sealed class ReceiptLine : Entity
             StoredQty = 0,
             MissedQty = 0,
             UnitPrice = unitPrice,
-            BatchNumber = GenerateBatchNumber(),
+            BatchNumber = batchNumber,
+            SellByDate = sellByDate,
+            UseByDate = useByDate,
             IsStored = false
         };
 
