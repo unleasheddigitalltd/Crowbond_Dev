@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
@@ -15,14 +16,18 @@ using Crowbond.Modules.OMS.Domain.Products;
 
 namespace Crowbond.Modules.OMS.Application.Webhooks.Choco;
 
-public sealed class ChocoOrderCreatedCommandHandler(
+public interface IChocoOrderCreatedCommandHandler
+{
+    Task<Result> Handle(ChocoOrderCreatedCommand command, CancellationToken cancellationToken);
+}
+public class ChocoOrderCreatedCommandHandler(
     ICustomerApi customerApi,
     ICustomerProductApi customerProductApi,
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IUnitOfWork unitOfWork,
     IDateTimeProvider dateTimeProvider)
-    : ICommandHandler<ChocoOrderCreatedCommand>
+    : ICommandHandler<ChocoOrderCreatedCommand>, IChocoOrderCreatedCommandHandler
 {
     public async Task<Result> Handle(ChocoOrderCreatedCommand request, CancellationToken cancellationToken)
     {
@@ -53,9 +58,11 @@ public sealed class ChocoOrderCreatedCommandHandler(
         {
             return Result.Failure(OrderErrors.SequenceNotFound);
         }
-
-        // Get customer outlet
-        CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderAsync(customer.Id, cancellationToken);
+        
+        string fullDeliveryAddress = orderData.Customer.DeliveryAddress.Full;
+        string postcode = Regex.Match(fullDeliveryAddress, @"[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}").Value;
+        
+        CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderByPostcodeAsync(postcode, customer.Id, cancellationToken);
         if (outlet is null)
         {
             return Result.Failure(CustomerErrors.OutletNotFound(customer.Id));

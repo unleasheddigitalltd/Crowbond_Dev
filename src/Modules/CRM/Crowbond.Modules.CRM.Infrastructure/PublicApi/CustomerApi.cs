@@ -1,6 +1,7 @@
 ﻿using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrder;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetOutletRouteForDay;
+using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrderByPostcode;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerByAccountNumber;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrder;
 using Crowbond.Modules.CRM.Application.Customers.GetCustomerForOrderByContactId;
@@ -132,6 +133,35 @@ internal sealed class CustomerApi(ISender sender) : ICustomerApi
         {
             return null;
         }
+        return new CustomerOutletForOrderResponse(
+            result.Value.Id,
+            result.Value.CustomerId,
+            result.Value.LocationName,
+            result.Value.FullName,
+            result.Value.Email,
+            result.Value.PhoneNumber,
+            result.Value.Mobile,
+            result.Value.AddressLine1,
+            result.Value.AddressLine2,
+            result.Value.TownCity,
+            result.Value.County,
+            result.Value.Country,
+            result.Value.PostalCode,
+            result.Value.DeliveryNote,
+            result.Value.DeliveryTimeFrom,
+            result.Value.DeliveryTimeTo,
+            result.Value.Is24HrsDelivery);
+    }
+
+    public async Task<CustomerOutletForOrderResponse?> GetOutletForOrderByPostcodeAsync(string postcode, Guid customerId, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new GetCustomerOutletForOrderByPostcodeQuery(postcode, customerId), cancellationToken);
+    
+        if (result.IsFailure)
+        {
+            return null;
+        }
+    
         return new CustomerOutletForOrderResponse(
             result.Value.Id,
             result.Value.CustomerId,
