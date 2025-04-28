@@ -6,4 +6,7 @@ public sealed record AddReceiptLineCommand(
     Guid ReceiptHeaderId,
     Guid ProductId, 
     decimal ReceivedQty,
-    decimal UnitPrice) : ICommand<Guid>;
+    decimal UnitPrice,
+    string BatchNumber,
+    DateOnly? SellByDate,
+    DateOnly? UseByDate) : ICommand<Guid>;

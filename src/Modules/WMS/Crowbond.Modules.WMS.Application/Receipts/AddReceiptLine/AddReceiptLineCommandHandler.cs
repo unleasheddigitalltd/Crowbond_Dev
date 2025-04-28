@@ -23,7 +23,10 @@ internal sealed class AddReceiptLineCommandHandler(
         Result<ReceiptLine> result = receipt.AddLine(
             request.ProductId, 
             request.ReceivedQty, 
-            request.UnitPrice);
+            request.UnitPrice,
+            request.BatchNumber,
+            request.SellByDate,
+            request.UseByDate);
 
         if (result.IsFailure)
         {

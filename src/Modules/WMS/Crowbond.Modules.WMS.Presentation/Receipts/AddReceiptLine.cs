@@ -14,18 +14,27 @@ internal sealed class AddReceiptLine : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("receipts/{id}/lines", async (Guid id, Request request, ISender sender) =>
-        {
-            Result<Guid> result = await sender.Send(new AddReceiptLineCommand(
-                id, 
-                request.ProductId, 
-                request.ReceivedQty, 
-                request.UnitPrice));
+            {
+                Result<Guid> result = await sender.Send(new AddReceiptLineCommand(
+                    id,
+                    request.ProductId,
+                    request.ReceivedQty,
+                    request.UnitPrice,
+                    request.BatchNumber,
+                    request.SellByDate,
+                    request.UseByDate));
 
-            return result.Match(Results.Ok, ApiResults.Problem);
-        })
+                return result.Match(Results.Ok, ApiResults.Problem);
+            })
             .RequireAuthorization(Permissions.CreateReceipts)
             .WithTags(Tags.Receipts);
     }
 
-    private sealed record Request(Guid ProductId, decimal ReceivedQty, decimal UnitPrice);
+    private sealed record Request(
+        Guid ProductId,
+        decimal ReceivedQty,
+        decimal UnitPrice,
+        string BatchNumber,
+        DateOnly? SellByDate,
+        DateOnly? UseByDate);
 }
