@@ -124,7 +124,7 @@ internal sealed class RouteTripApi(
         {
             logger.LogError(
                 ex,
-                "Unexpected error while processing order created event for order {OrderId}",
+                "Unexpected error while assigning route trip for order {OrderId}",
                 orderId);
         }
     }

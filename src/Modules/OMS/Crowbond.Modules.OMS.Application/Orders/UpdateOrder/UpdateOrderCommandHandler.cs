@@ -7,6 +7,7 @@ using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Settings;
+using Crowbond.Modules.OMS.PublicApi;
 
 namespace Crowbond.Modules.OMS.Application.Orders.UpdateOrder;
 
@@ -15,7 +16,7 @@ internal sealed class UpdateOrderCommandHandler(
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IDateTimeProvider dateTimeProvider,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork, IRouteTripApi routeTripApi)
     : ICommandHandler<UpdateOrderCommand>
 {
     public async Task<Result> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
@@ -30,14 +31,14 @@ internal sealed class UpdateOrderCommandHandler(
             return Result.Failure(OrderErrors.InvalidDeliveryMethod);
         }
 
-        OrderHeader? orderHeader = await orderRepository.GetAsync(request.OrderId, cancellationToken);
+        var orderHeader = await orderRepository.GetAsync(request.OrderId, cancellationToken);
 
         if (orderHeader == null)
         {
             return Result.Failure(OrderErrors.NotFound(request.OrderId));
         }
 
-        CustomerForOrderResponse? customer = await customerApi.GetAsync(orderHeader.CustomerId, cancellationToken);
+        var customer = await customerApi.GetAsync(orderHeader.CustomerId, cancellationToken);
 
         if (customer is null)
         {
@@ -54,14 +55,14 @@ internal sealed class UpdateOrderCommandHandler(
             return Result.Failure(OrderErrors.InvalidDeliveryFeeSetting);
         }
 
-        CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderAsync(request.CustomerOutletId, cancellationToken);
+        var outlet = await customerApi.GetOutletForOrderAsync(request.CustomerOutletId, cancellationToken);
 
         if (outlet is null)
         {
             return Result.Failure(CustomerErrors.OutletNotFound(request.CustomerOutletId));
         }
 
-        Setting? setting = await settingRepository.GetAsync(cancellationToken);
+        var setting = await settingRepository.GetAsync(cancellationToken);
 
         if (setting is null)
         {
@@ -75,7 +76,7 @@ internal sealed class UpdateOrderCommandHandler(
         }
 
         // get delivery charge
-        decimal deliveryCharge = (DeliveryFeeSetting)customer.DeliveryFeeSetting switch
+        var deliveryCharge = (DeliveryFeeSetting)customer.DeliveryFeeSetting switch
         {
             DeliveryFeeSetting.None => 0,
             DeliveryFeeSetting.Global => setting.DeliveryCharge,
@@ -84,7 +85,7 @@ internal sealed class UpdateOrderCommandHandler(
         };
 
 
-        Result result = orderHeader.Update(
+        var result = orderHeader.Update(
             customer.BusinessName,
             request.CustomerOutletId,
             outlet.LocationName,
@@ -114,6 +115,7 @@ internal sealed class UpdateOrderCommandHandler(
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        await routeTripApi.AssignRouteTripToOrderAsync(orderHeader.Id, cancellationToken);
 
         return Result.Success();
     }

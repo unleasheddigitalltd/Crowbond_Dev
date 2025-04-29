@@ -108,7 +108,7 @@ internal sealed class ProcessOutboxJob(
                     // Record the consumer after successful processing
                     await connection.ExecuteAsync(
                         """
-                        INSERT INTO oms.outbox_messages_consumers (outbox_message_id, name)
+                        INSERT INTO oms.outbox_message_consumers (outbox_message_id, name)
                         VALUES (@OutboxMessageId, @Name)
                         """,
                         new

@@ -39,21 +39,21 @@ public class ChocoOrderCreatedCommandHandler(
         }
 
         // Retrieve customer details
-        CustomerForOrderResponse? customer = await customerApi.GetByAccountNumberAsync(orderData.Customer.CustomerNumber, cancellationToken);
+        var customer = await customerApi.GetByAccountNumberAsync(orderData.Customer.CustomerNumber, cancellationToken);
         if (customer is null)
         {
             return Result.Failure(CustomerErrors.NotFound());
         }
 
         // Retrieve settings
-        Setting? setting = await settingRepository.GetAsync(cancellationToken);
+        var setting = await settingRepository.GetAsync(cancellationToken);
         if (setting is null)
         {
             return Result.Failure(SettingErrors.NotFound);
         }
 
         // Retrieve sequence for order numbering
-        Sequence? sequence = await orderRepository.GetSequenceAsync(cancellationToken);
+        var sequence = await orderRepository.GetSequenceAsync(cancellationToken);
         if (sequence is null)
         {
             return Result.Failure(OrderErrors.SequenceNotFound);
@@ -75,7 +75,7 @@ public class ChocoOrderCreatedCommandHandler(
         }
 
         // Determine delivery charge
-        decimal deliveryCharge = (DeliveryFeeSetting)customer.DeliveryFeeSetting switch
+        var deliveryCharge = (DeliveryFeeSetting)customer.DeliveryFeeSetting switch
         {
             DeliveryFeeSetting.None => 0,
             DeliveryFeeSetting.Global => setting.DeliveryCharge,
@@ -84,7 +84,7 @@ public class ChocoOrderCreatedCommandHandler(
         };
 
         // Create the new order
-        Result<OrderHeader> orderResult = OrderHeader.Create(
+        var orderResult = OrderHeader.Create(
             sequence.GetNumber(),
             orderData.ReferenceNumber,
             customer.Id,
@@ -120,9 +120,9 @@ public class ChocoOrderCreatedCommandHandler(
         OrderHeader order = orderResult.Value;
 
         // Add products (line items) to the order
-        foreach (ChocoOrderProduct product in orderData.Products)
+        foreach (var product in orderData.Products)
         {
-            CustomerProductResponse? customerProduct = await customerProductApi.GetBySkuAsync(customer.Id, product.Product.ExternalId, cancellationToken);
+            var customerProduct = await customerProductApi.GetBySkuAsync(customer.Id, product.Product.ExternalId, cancellationToken);
             if (customerProduct is null)
             {
                 return Result.Failure(CustomerProductErrors.SkuNotFound(customer.Id, product.Product.ExternalId));
@@ -139,14 +139,14 @@ public class ChocoOrderCreatedCommandHandler(
             }
 
             // Ensure the product does not already exist in the order
-            OrderLine? existingLine = order.Lines.SingleOrDefault(l => l.ProductId == customerProduct.ProductId);
+            var existingLine = order.Lines.SingleOrDefault(l => l.ProductId == customerProduct.ProductId);
             if (existingLine != null)
             {
                 return Result.Failure(OrderErrors.LineForProductExists(customerProduct.ProductId));
             }
 
             // Add the order line
-            Result<OrderLine> lineResult = order.AddLine(
+            var lineResult = order.AddLine(
                 customerProduct.ProductId,
                 customerProduct.ProductSku,
                 customerProduct.ProductName,
