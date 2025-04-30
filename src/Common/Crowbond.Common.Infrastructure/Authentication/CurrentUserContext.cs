@@ -11,13 +11,15 @@ internal sealed class CurrentUserContext(IHttpContextAccessor httpContextAccesso
     {
         get
         {
-            // If HttpContext is available, return the user ID, else return the system user ID
-            if (httpContextAccessor.HttpContext?.User != null)
+            var user = httpContextAccessor.HttpContext?.User;
+
+            // If we have a user *and* they’re authenticated, return their ID
+            if (user?.Identity?.IsAuthenticated == true)
             {
-                return httpContextAccessor.HttpContext.User.GetUserId();
+                return user.GetUserId();
             }
 
-            // If no HttpContext (e.g., in a background job), return a default system user ID
+            // Otherwise (no context, or not authenticated), treat as "system"
             return _systemUserId;
         }
     }
