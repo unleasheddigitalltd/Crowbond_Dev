@@ -1,11 +1,9 @@
 using System.Data.Common;
-using System.Text;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
 using Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrder;
 using Dapper;
-using Newtonsoft.Json;
 
 namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrderByPostcode;
 
@@ -18,21 +16,37 @@ internal sealed class GetCustomerOutletForOrderByPostcodeQueryHandler(
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
         // Step 1: Fetch active outlets
-        const string sql = """
+        const string sql = $"""
             SELECT 
-                id AS Id, postal_code AS PostalCode
+                id AS {nameof(CustomerOutletForOrderResponse.Id)},
+                customer_id AS {nameof(CustomerOutletForOrderResponse.CustomerId)},
+                location_name AS {nameof(CustomerOutletForOrderResponse.LocationName)},
+                full_name AS {nameof(CustomerOutletForOrderResponse.FullName)},
+                email AS {nameof(CustomerOutletForOrderResponse.Email)},
+                phone_number AS {nameof(CustomerOutletForOrderResponse.PhoneNumber)},
+                mobile AS {nameof(CustomerOutletForOrderResponse.Mobile)},
+                address_line1 AS {nameof(CustomerOutletForOrderResponse.AddressLine1)},
+                address_line2 AS {nameof(CustomerOutletForOrderResponse.AddressLine2)},
+                town_city AS {nameof(CustomerOutletForOrderResponse.TownCity)},
+                county AS {nameof(CustomerOutletForOrderResponse.County)},
+                country AS {nameof(CustomerOutletForOrderResponse.Country)},
+                postal_code AS {nameof(CustomerOutletForOrderResponse.PostalCode)},
+                delivery_note AS {nameof(CustomerOutletForOrderResponse.DeliveryNote)},
+                delivery_time_from AS {nameof(CustomerOutletForOrderResponse.DeliveryTimeFrom)},
+                delivery_time_to AS {nameof(CustomerOutletForOrderResponse.DeliveryTimeTo)},
+                is24hrs_delivery AS {nameof(CustomerOutletForOrderResponse.Is24HrsDelivery)}
             FROM crm.customer_outlets
             WHERE customer_id = @CustomerID 
               AND is_deleted = false 
               AND is_active = true
         """;
 
-        var outlets = (await connection.QueryAsync<CustomerOutletForOrderResponse>(sql, new { CustomerId = request.customerId })).ToList();
+        List<CustomerOutletForOrderResponse> outlets = (await connection.QueryAsync<CustomerOutletForOrderResponse>(sql, request)).AsList();
         if (!outlets.Any())
         {
             return Result.Failure<CustomerOutletForOrderResponse>(new Error("NO_OUTLET", "No active outlets found.", ErrorType.Failure));
         }
-
+        
         return outlets.FirstOrDefault();
     }
 
