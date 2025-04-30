@@ -55,7 +55,6 @@ namespace Crowbond.Modules.OMS.Application.Choco
                 _logger.LogError(
                     "Choco UpdateActionStatus failed. Status {StatusCode}, Body: {Body}",
                     resp.StatusCode, body);
-                // you can choose to throw or swallow based on your retry policy
             }
         }
 
