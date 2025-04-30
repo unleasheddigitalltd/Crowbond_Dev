@@ -8,5 +8,8 @@ public sealed record ReceiptRequest(
     public sealed record ReceiptLineRequest(
         Guid ProductId,
         decimal QuantityReceived,
-        decimal UnitPrice);
+        decimal UnitPrice,
+        string BatchNumber,
+        DateOnly? SellByDate,
+        DateOnly? UseByDate);
 }

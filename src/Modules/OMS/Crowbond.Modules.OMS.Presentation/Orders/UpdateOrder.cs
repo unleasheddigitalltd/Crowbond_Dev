@@ -14,7 +14,7 @@ internal sealed class UpdateOrder : IEndpoint
     {
         app.MapPut("orders/{id}", async (Guid id, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateOrderCommand(
+            var result = await sender.Send(new UpdateOrderCommand(
                 id,
                 request.CustomerOutletId,
                 request.ShippingDate,

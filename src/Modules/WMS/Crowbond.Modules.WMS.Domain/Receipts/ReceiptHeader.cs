@@ -82,9 +82,12 @@ public sealed class ReceiptHeader : Entity, IAuditable
     public Result<ReceiptLine> AddLine(
         Guid productId,
         decimal quantityReceived,
-        decimal unitPrice)
+        decimal unitPrice,
+        string batchNumber,
+        DateOnly? sellByDate,
+        DateOnly? useByDate)
     {
-        var receiptLine = ReceiptLine.Create(productId, quantityReceived, unitPrice);
+        var receiptLine = ReceiptLine.Create(productId, quantityReceived, unitPrice, batchNumber, sellByDate, useByDate);
 
         _lines.Add(receiptLine);
 
@@ -137,6 +140,7 @@ public sealed class ReceiptHeader : Entity, IAuditable
         {
             return Result.Failure(ReceiptErrors.NotReceived);
         }
+
         ReceiptLine? receiptLine = _lines.SingleOrDefault(l => l.Id == receivedLineId);
 
         if (receiptLine is null)
@@ -167,4 +171,5 @@ public sealed class ReceiptHeader : Entity, IAuditable
 
         return result;
     }
+    
 }

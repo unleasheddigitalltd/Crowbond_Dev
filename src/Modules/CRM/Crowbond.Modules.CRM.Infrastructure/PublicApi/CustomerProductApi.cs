@@ -10,7 +10,7 @@ internal sealed class CustomerProductApi(ISender sender) : ICustomerProductApi
 {
     public async Task<CustomerProductResponse> GetAsync(Guid customerId, Guid productId, CancellationToken cancellationToken = default)
     {
-        Result<CustomerProductPriceResponse> result =
+        var result =
             await sender.Send(new GetCustomerProductPriceQuery(customerId, productId), cancellationToken);
 
         if (result.IsFailure)

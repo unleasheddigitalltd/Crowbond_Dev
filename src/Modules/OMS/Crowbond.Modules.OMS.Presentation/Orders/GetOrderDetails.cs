@@ -15,7 +15,7 @@ internal sealed class GetOrderDetails : IEndpoint
     {
         app.MapGet("orders/{id}/details", async (Guid id, ISender sender) =>
         {
-            Result<OrderResponse> result = await sender.Send(new GetOrderDetailsQuery(id));
+           var result = await sender.Send(new GetOrderDetailsQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })

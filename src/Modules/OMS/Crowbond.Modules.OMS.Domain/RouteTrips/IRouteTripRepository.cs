@@ -6,5 +6,7 @@ public interface IRouteTripRepository
     
     Task<RouteTrip?> GetByDateAndRouteAsync(DateOnly date, Guid routeId, CancellationToken cancellationToken = default);
 
+    Task<RouteTrip[]?> GetByDateAsync(DateOnly date, CancellationToken cancellationToken = default);
+    
     void Insert(RouteTrip routeTrip);
 }

@@ -30,7 +30,10 @@ internal sealed class CreateReceiptWithLinesCommandHandler(
             result.Value.AddLine(
                 line.ProductId,
                 line.QuantityReceived,
-                line.UnitPrice);
+                line.UnitPrice,
+                line.BatchNumber,
+                line.SellByDate,
+                line.UseByDate);
         }
 
         receiptRepository.Insert(result.Value);

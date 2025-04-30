@@ -40,9 +40,9 @@ public sealed class RouteTrip : Entity
         return routeTrip;
     }
 
-    public Result Approve()
+    public Result Approve(DateOnly utcNow)
     {
-        if (Status != RouteTripStatus.Registered)
+        if (!CanApprove() && !IsExpired(utcNow))
         {
             return Result.Failure(RouteTripErrors.InvalidStatus(RouteTripStatus.Registered));
         }
@@ -51,6 +51,16 @@ public sealed class RouteTrip : Entity
 
         Raise(new RouteTripApprovedDomainEvent(Id));
         return Result.Success();
+    }
+
+    public bool IsExpired(DateOnly utcNow)
+    {
+        return Status == RouteTripStatus.Registered && Date < utcNow;
+    }
+
+    public bool CanApprove()
+    {
+        return Status == RouteTripStatus.Registered;
     }
 
 }

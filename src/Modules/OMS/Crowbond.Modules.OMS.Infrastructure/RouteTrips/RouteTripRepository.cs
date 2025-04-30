@@ -13,6 +13,11 @@ internal sealed class RouteTripRepository(OmsDbContext context) : IRouteTripRepo
         await context.RouteTrips.SingleOrDefaultAsync(r => r.Date == date && r.RouteId == routeId,
             cancellationToken);
 
+    public async Task<RouteTrip[]?> GetByDateAsync(DateOnly date, CancellationToken cancellationToken = default)
+    {
+        return await context.RouteTrips.Where(r => r.Date == date).ToArrayAsync(cancellationToken);
+    }
+
     public void Insert(RouteTrip routeTrip) => 
         context.RouteTrips.Add(routeTrip);
 }

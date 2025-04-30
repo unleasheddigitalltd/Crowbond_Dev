@@ -16,14 +16,14 @@ internal sealed class AddPurchaseOrderLineCommandHandler(
 {
     public async Task<Result<Guid>> Handle(AddPurchaseOrderLineCommand request, CancellationToken cancellationToken)
     {
-        PurchaseOrderHeader? purchaseOrderHeader = await purchaseOrderRepository.GetAsync(request.PurchaseOrderId, cancellationToken);
+        var purchaseOrderHeader = await purchaseOrderRepository.GetAsync(request.PurchaseOrderId, cancellationToken);
 
         if (purchaseOrderHeader is null)
         {
             return Result.Failure<Guid>(PurchaseOrderErrors.NotFound(request.PurchaseOrderId));
         }
 
-        SupplierProductResponse? supplierProduct = await supplierProductApi.GetAsync(purchaseOrderHeader.SupplierId, request.ProductId, cancellationToken);
+        var supplierProduct = await supplierProductApi.GetAsync(purchaseOrderHeader.SupplierId, request.ProductId, cancellationToken);
 
         if (supplierProduct is null)
         {

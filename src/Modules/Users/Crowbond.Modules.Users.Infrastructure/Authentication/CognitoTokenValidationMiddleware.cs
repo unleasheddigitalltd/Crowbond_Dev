@@ -62,7 +62,7 @@ public class CognitoTokenValidationMiddleware
 
             await _next(context);
         }
-        catch (Exception)
+        catch (SecurityTokenException)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new { error = "Invalid token" });
