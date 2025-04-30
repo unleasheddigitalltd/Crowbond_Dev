@@ -82,6 +82,9 @@ namespace Crowbond.Modules.OMS.Application.Choco
 
             var tokenResp = await resp.Content.ReadFromJsonAsync<ChocoTokenResponse>(cancellationToken: ct)
                             ?? throw new InvalidOperationException("Invalid Choco token response");
+            
+            _logger.LogInformation("Choco Access token: {TokenRespAccessToken}", tokenResp.AccessToken);
+            
             return tokenResp.AccessToken;
         }
     }
