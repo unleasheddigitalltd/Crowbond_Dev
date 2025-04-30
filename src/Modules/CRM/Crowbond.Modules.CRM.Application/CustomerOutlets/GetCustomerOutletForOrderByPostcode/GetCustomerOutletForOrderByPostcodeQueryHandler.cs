@@ -10,8 +10,7 @@ using Newtonsoft.Json;
 namespace Crowbond.Modules.CRM.Application.CustomerOutlets.GetCustomerOutletForOrderByPostcode;
 
 internal sealed class GetCustomerOutletForOrderByPostcodeQueryHandler(
-    IDbConnectionFactory dbConnectionFactory, 
-    HttpClient httpClient)
+    IDbConnectionFactory dbConnectionFactory)
     : IQueryHandler<GetCustomerOutletForOrderByPostcodeQuery, CustomerOutletForOrderResponse>
 {
     public async Task<Result<CustomerOutletForOrderResponse>> Handle(GetCustomerOutletForOrderByPostcodeQuery request, CancellationToken cancellationToken)
@@ -34,61 +33,7 @@ internal sealed class GetCustomerOutletForOrderByPostcodeQueryHandler(
             return Result.Failure<CustomerOutletForOrderResponse>(new Error("NO_OUTLET", "No active outlets found.", ErrorType.Failure));
         }
 
-        // Step 2: Fetch delivery postcode coordinates
-        string baseUrl = "https://api.postcodes.io/postcodes/";
-        var deliveryResponse = await httpClient.GetStringAsync(baseUrl + request.postcode, cancellationToken);
-        var deliveryData = JsonConvert.DeserializeObject<PostcodeApiResponse>(deliveryResponse);
-
-        if (deliveryData?.Status != 200 || deliveryData.Result == null)
-        {
-            return Result.Failure<CustomerOutletForOrderResponse>(new Error("POSTCODE_NOT_FOUND", "Postcode not found.", ErrorType.Failure));
-        }
-
-        double deliveryLat = deliveryData.Result.Latitude;
-        double deliveryLon = deliveryData.Result.Longitude;
-
-        // Step 3: Bulk Lookup for Outlets
-        var outletPostcodes = outlets.Select(o => o.PostalCode).Distinct().ToArray();
-        var bulkRequestBody = JsonConvert.SerializeObject(new { postcodes = outletPostcodes });
-
-        using var content = new StringContent(bulkRequestBody, Encoding.UTF8, "application/json");
-        var bulkResponse = await httpClient.PostAsync($"{baseUrl}", content, cancellationToken);
-        
-        var bulkContent = await bulkResponse.Content.ReadAsStringAsync(cancellationToken);
-        var bulkData = JsonConvert.DeserializeObject<BulkPostcodeApiResponse>(bulkContent);
-
-        if (bulkData?.Status != 200 || bulkData.Result == null)
-        {
-            return Result.Failure<CustomerOutletForOrderResponse>(new Error("BULK_LOOKUP_FAILED", "Bulk lookup failed.", ErrorType.Failure));
-        }
-
-        var outletCoordinates = bulkData.Result
-            .Where(r => r.Result != null)
-            .ToDictionary(
-                r => r.Query,
-                r => new { r.Result.Latitude, r.Result.Longitude }
-            );
-
-        // Step 4: Find the Closest Outlet
-        CustomerOutletForOrderResponse? closestOutlet = null;
-        double minDistance = double.MaxValue;
-
-        foreach (var outlet in outlets)
-        {
-            if (!outletCoordinates.TryGetValue(outlet.PostalCode, out var coords))
-            {
-                continue;
-            }
-
-            double distance = Haversine(deliveryLat, deliveryLon, coords.Latitude, coords.Longitude);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                closestOutlet = outlet;
-            }
-        }
-
-        return closestOutlet ?? Result.Failure<CustomerOutletForOrderResponse>(new Error("OUTLET_NOT_FOUND", "Outlet not found.", ErrorType.Failure));
+        return outlets.FirstOrDefault();
     }
 
     private static double Haversine(double lat1, double lon1, double lat2, double lon2)
