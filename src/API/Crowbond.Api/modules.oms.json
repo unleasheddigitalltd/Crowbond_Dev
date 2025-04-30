@@ -16,7 +16,15 @@
       "ComplianceStoragePath": "/compliances"
     },
     "Choco": {
-      "Secret": "0b89376d1c58087108bf13ef878116fdf8d72eeb55dc4f53c84ce60dec542fd9a36c2c6f51be135b7b6857cb41237961"
+      "BaseUrl": "https://api.choco.com",
+      "AuthUrl": "https://oauth.choco.com",
+      "Auth": {
+        "ApiKey": "jJcX0DF2U791NnI6MlmcD6IJk7yugSAG26Nlibgt",
+        "ClientId": "09ea5dba-a1c7-434d-8b39-a7d14671f906",
+        "ClientSecret": "bb4a216378f1746a21fcffdf1f2f89ae30edb263a2763f2f1964e32a0209ddd2cc500ae976a0eec38f6a3fc0fd5bbcbe",
+        "WebhookSecret": "0b89376d1c58087108bf13ef878116fdf8d72eeb55dc4f53c84ce60dec542fd9a36c2c6f51be135b7b6857cb41237961",
+        "ConnectionId": "946c5caf-46b9-4650-9966-f34e02d47c44"
+      }
     }
   }
 }

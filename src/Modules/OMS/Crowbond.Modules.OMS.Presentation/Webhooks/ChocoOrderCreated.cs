@@ -17,13 +17,7 @@ public sealed class ChocoOrderCreated : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("webhook/choco/order-created", (HttpContext httpContext, 
-            ISender sender,
-            ILogger<ChocoOrderCreated> logger,
-            IConfiguration configuration) =>
-        {
-            return HandleAsync(httpContext, sender, logger, configuration);
-        }).AllowAnonymous();
+        app.MapPost("webhook/choco/order-created", HandleAsync).AllowAnonymous();
     }
 
     public async Task<IResult> HandleAsync(HttpContext httpContext,
@@ -72,7 +66,7 @@ public sealed class ChocoOrderCreated : IEndpoint
     public static bool IsValidSignature(IConfiguration configuration, ILogger<ChocoOrderCreated> logger,
         string requestBody, string providedSignature)
     {
-        string? webhookSecret = configuration["OMS:Choco:Secret"];
+        string? webhookSecret = configuration["OMS:Choco:Auth:WebhookSecret"];
         if (string.IsNullOrWhiteSpace(webhookSecret))
         {
             logger.LogWarning("Webhook secret is missing");

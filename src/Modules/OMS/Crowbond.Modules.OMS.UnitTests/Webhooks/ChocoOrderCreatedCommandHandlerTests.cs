@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Crowbond.Common.Application.Clock;
@@ -14,6 +14,9 @@ using Crowbond.Modules.OMS.Domain.CustomerProducts;
 using Crowbond.Modules.OMS.Domain.Products;
 using Crowbond.Modules.CRM.PublicApi;
 using Crowbond.Modules.OMS.Application.Abstractions.Data;
+using Crowbond.Modules.OMS.Application.Choco;
+using Crowbond.Modules.OMS.Application.Choco.Enums;
+using Crowbond.Modules.OMS.Application.Choco.Requests;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Sequences;
 using Moq;
@@ -173,7 +176,7 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
                 Is24HrsDelivery: false
             );
             customerApiMock
-                .Setup(x => x.GetOutletForOrderAsync(internalCustomerId, It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetOutletForOrderByPostcodeAsync("", internalCustomerId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(outletResponse);
 
             var settingRepositoryMock = new Mock<ISettingRepository>();
@@ -219,12 +222,19 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
                 .Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
+            var chocoClientMock = new Mock<IChocoClient>();
+            chocoClientMock
+                .Setup(x => x.UpdateActionStatusAsync(
+                    It.IsAny<UpdateActionStatusRequest>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
             var handler = new ChocoOrderCreatedCommandHandler(
                 customerApiMock.Object,
                 customerProductApiMock.Object,
                 settingRepositoryMock.Object,
                 orderRepositoryMock.Object,
                 unitOfWorkMock.Object,
+                chocoClientMock.Object,
                 dateTimeProviderMock.Object
             );
 
@@ -232,17 +242,22 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
             Result result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsSuccess, "Expected the command handler to return success.");
+            Assert.True(result.IsSuccess);
 
-            // Verify that the mocks were called once.
             customerApiMock.Verify(x => x.GetByAccountNumberAsync("CT100", It.IsAny<CancellationToken>()), Times.Once);
-            customerApiMock.Verify(x => x.GetOutletForOrderAsync(internalCustomerId, It.IsAny<CancellationToken>()),
-                Times.Once);
+            customerApiMock.Verify(x => x.GetOutletForOrderByPostcodeAsync(
+                It.IsAny<string>(), internalCustomerId, It.IsAny<CancellationToken>()), Times.Once);
             settingRepositoryMock.Verify(x => x.GetAsync(It.IsAny<CancellationToken>()), Times.Once);
             orderRepositoryMock.Verify(x => x.GetSequenceAsync(It.IsAny<CancellationToken>()), Times.Once);
-            customerProductApiMock.Verify(
-                x => x.GetBySkuAsync(internalCustomerId, "GRCH5SB", It.IsAny<CancellationToken>()), Times.Once);
+            customerProductApiMock.Verify(x => x.GetBySkuAsync(internalCustomerId, "GRCH5SB", It.IsAny<CancellationToken>()), Times.Once);
             unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            
+            chocoClientMock.Verify(x =>
+                x.UpdateActionStatusAsync(
+                    It.Is<UpdateActionStatusRequest>(r => r.ActionId == webhook.ActionId &&
+                                                          r.Status == ChocoActionStatus.Succeeded),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
     }
 }

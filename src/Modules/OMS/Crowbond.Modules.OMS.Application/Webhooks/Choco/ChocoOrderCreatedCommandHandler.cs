@@ -7,6 +7,9 @@ using Crowbond.Modules.OMS.Domain.Orders;
 using Crowbond.Modules.OMS.Domain.Settings;
 using Crowbond.Common.Application.Clock;
 using Crowbond.Modules.CRM.PublicApi;
+using Crowbond.Modules.OMS.Application.Choco;
+using Crowbond.Modules.OMS.Application.Choco.Enums;
+using Crowbond.Modules.OMS.Application.Choco.Requests;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Payments;
 using Crowbond.Modules.OMS.Domain.Sequences;
@@ -26,6 +29,7 @@ public class ChocoOrderCreatedCommandHandler(
     ISettingRepository settingRepository,
     IOrderRepository orderRepository,
     IUnitOfWork unitOfWork,
+    IChocoClient chocoClient,
     IDateTimeProvider dateTimeProvider)
     : ICommandHandler<ChocoOrderCreatedCommand>, IChocoOrderCreatedCommandHandler
 {
@@ -58,9 +62,14 @@ public class ChocoOrderCreatedCommandHandler(
         {
             return Result.Failure(OrderErrors.SequenceNotFound);
         }
-        
-        string fullDeliveryAddress = orderData.Customer.DeliveryAddress.Full;
-        string postcode = Regex.Match(fullDeliveryAddress, @"[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}").Value;
+
+        string postcode = orderData.Customer.DeliveryAddress.PostalCode;
+
+        if (string.IsNullOrEmpty(postcode))
+        {
+            string fullDeliveryAddress = orderData.Customer.DeliveryAddress.Full;
+            postcode = Regex.Match(fullDeliveryAddress, @"[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}").Value;
+        }
         
         CustomerOutletForOrderResponse? outlet = await customerApi.GetOutletForOrderByPostcodeAsync(postcode, customer.Id, cancellationToken);
         if (outlet is null)
@@ -174,6 +183,13 @@ public class ChocoOrderCreatedCommandHandler(
         // Store the order
         orderRepository.Insert(order);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        await chocoClient.UpdateActionStatusAsync(new UpdateActionStatusRequest()
+        {
+            ActionId = request.webhook.ActionId,
+            Status = ChocoActionStatus.Succeeded,
+            Details = new { OrderId = order.Id }
+        }, cancellationToken);
 
         return Result.Success();
     }

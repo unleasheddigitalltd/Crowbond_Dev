@@ -46,14 +46,15 @@ using Crowbond.Modules.Users.IntegrationEvents;
 using Crowbond.Modules.OMS.PublicApi;
 using Crowbond.Modules.OMS.Infrastructure.PublicApi;
 using System.Reflection;
+using Crowbond.Modules.OMS.Application.Choco;
 
 namespace Crowbond.Modules.OMS.Infrastructure;
 
 public static class OmsModule
 {
     public static IServiceCollection AddOMSModule(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddDomainEventHandlers();
 
@@ -65,6 +66,7 @@ public static class OmsModule
 
         return services;
     }
+
     public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
     {
         registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
@@ -90,6 +92,10 @@ public static class OmsModule
                 .AddInterceptors(sp.GetRequiredService<AuditEntityInterceptor>())
                 .UseSnakeCaseNamingConvention());
 
+        services.AddHttpClient<IChocoClient, ChocoClient>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["OMS:Choco:BaseUrl"]!, UriKind.Absolute);
+        });
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
@@ -105,7 +111,7 @@ public static class OmsModule
         services.AddScoped<IComplianceRepository, ComplianceRepository>();
 
         services.AddScoped<IDriverApi, DriverApi>();
-        
+
         services.AddScoped<IRouteTripApi, RouteTripApi>();
 
         services.AddSingleton<CartService>();
