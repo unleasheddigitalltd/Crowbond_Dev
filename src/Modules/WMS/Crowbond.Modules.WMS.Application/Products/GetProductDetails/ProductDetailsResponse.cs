@@ -1,4 +1,4 @@
-﻿namespace Crowbond.Modules.WMS.Application.Products.GetProductDetails;
+    namespace Crowbond.Modules.WMS.Application.Products.GetProductDetails;
 
 public sealed record ProductDetailsResponse(
     Guid Id,
@@ -22,4 +22,5 @@ public sealed record ProductDetailsResponse(
     decimal? Width,
     decimal? Length,
     bool WeightInput,
-    bool IsActive);
+    bool IsActive,
+    string[] Images);

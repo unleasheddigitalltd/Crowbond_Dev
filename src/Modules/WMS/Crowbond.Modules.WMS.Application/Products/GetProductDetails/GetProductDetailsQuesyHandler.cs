@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
@@ -49,6 +49,8 @@ internal sealed class GetProductDetailsQueryHandler(IDbConnectionFactory dbConne
         {
             return Result.Failure<ProductDetailsResponse>(ProductErrors.NotFound(request.ProductId));
         }
+        
+        product = product with { Images = new[] { $"https://crowbond-images.s3.eu-west-1.amazonaws.com/{product.Sku}.png" } };
 
         return product;
     }
