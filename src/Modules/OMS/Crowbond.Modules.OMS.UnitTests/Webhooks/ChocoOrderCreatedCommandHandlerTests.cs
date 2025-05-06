@@ -19,8 +19,8 @@ using Crowbond.Modules.OMS.Application.Choco.Enums;
 using Crowbond.Modules.OMS.Application.Choco.Requests;
 using Crowbond.Modules.OMS.Domain.Customers;
 using Crowbond.Modules.OMS.Domain.Sequences;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace Crowbond.Modules.OMS.UnitTests.Webhooks
 {
@@ -235,7 +235,8 @@ namespace Crowbond.Modules.OMS.UnitTests.Webhooks
                 orderRepositoryMock.Object,
                 unitOfWorkMock.Object,
                 chocoClientMock.Object,
-                dateTimeProviderMock.Object
+                dateTimeProviderMock.Object,
+                new Mock<ILogger<ChocoOrderCreatedCommandHandler>>().Object
             );
 
             // Act
