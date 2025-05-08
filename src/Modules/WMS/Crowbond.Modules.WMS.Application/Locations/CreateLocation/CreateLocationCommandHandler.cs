@@ -41,6 +41,8 @@ internal sealed class CreateLocationCommandHandler(
             request.ParentId,
             request.Name,
             request.ScanCode,
+            request.NetworkAddress,
+            request.PrinterName,
             request.LocationType,
             request.LocationLayer);
 

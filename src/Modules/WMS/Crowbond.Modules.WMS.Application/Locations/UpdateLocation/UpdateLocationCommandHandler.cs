@@ -35,7 +35,7 @@ internal sealed class UpdateLocationCommandHandler(
                 return Result.Failure<Guid>(LocationErrors.InvalidParentLayerForArea);
             }
 
-            if (request.LocationLayer == LocationLayer.Location && parent.LocationLayer != LocationLayer.Area)
+            if (request.LocationLayer == LocationLayer.Area && parent.LocationLayer != LocationLayer.Site)
             {
                 return Result.Failure<Guid>(LocationErrors.InvalidParentLayerForLocation);
             }
@@ -60,7 +60,7 @@ internal sealed class UpdateLocationCommandHandler(
             return Result.Failure(LocationErrors.HasStock(request.LocationId));
         }
 
-        location.Update(request.ParentId, request.Name, request.ScanCode, request.LocationType, request.LocationLayer);
+        location.Update(request.ParentId, request.Name, request.ScanCode, request.NetworkAddress, request.PrinterName, request.LocationType, request.LocationLayer);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
