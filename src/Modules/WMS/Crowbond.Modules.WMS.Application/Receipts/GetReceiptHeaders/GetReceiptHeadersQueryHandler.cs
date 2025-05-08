@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Crowbond.Common.Application.Data;
 using Crowbond.Common.Application.Messaging;
 using Crowbond.Common.Domain;
@@ -24,8 +24,9 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
             "receivedDate" => "received_date",
             "purchaseOrderNo" => "purchase_order_no",
             "deliveryNoteNumber" => "delivery_note_number",
+            "createdOnUtc" => "created_on_utc",
             "status" => "status",            
-            _ => "receive_date" // Default sorting
+            _ => "created_on_utc" // Default sorting
         };
 
         string[] caseClauses = Enum.GetValues<ReceiptStatus>()
@@ -34,30 +35,34 @@ internal sealed class GetReceiptHeadersQueryHandler(IDbConnectionFactory dbConne
                           .ToArray();
 
         string sql = $@"WITH FilteredReceiptHeaders AS (
-                SELECT 
-                    id AS {nameof(ReceiptHeader.Id)},
-                    receipt_no AS {nameof(ReceiptHeader.ReceiptNo)},
-                    received_date AS {nameof(ReceiptHeader.ReceivedDate)},
-                    delivery_note_number AS {nameof(ReceiptHeader.DeliveryNoteNumber)},
-                    purchase_order_no AS {nameof(ReceiptHeader.PurchaseOrderNo)},
-                    CASE status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(ReceiptHeader.Status)},
-                    ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
-                FROM wms.receipt_headers
-                WHERE
-                    delivery_note_number ILIKE '%' || @Search || '%'
-                    OR purchase_order_no ILIKE '%' || @Search || '%'
-                    OR receipt_no ILIKE '%' || @Search || '%'
-            )
             SELECT 
-                r.{nameof(ReceiptHeader.Id)},
-                r.{nameof(ReceiptHeader.ReceiptNo)},
-                r.{nameof(ReceiptHeader.ReceivedDate)},
-                r.{nameof(ReceiptHeader.DeliveryNoteNumber)},
-                r.{nameof(ReceiptHeader.PurchaseOrderNo)},
-                r.{nameof(ReceiptHeader.Status)}
-            FROM FilteredReceiptHeaders r
-            WHERE r.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
-            ORDER BY r.RowNum;
+                id AS {nameof(ReceiptHeader.Id)},
+                receipt_no AS {nameof(ReceiptHeader.ReceiptNo)},
+                received_date AS {nameof(ReceiptHeader.ReceivedDate)},
+                delivery_note_number AS {nameof(ReceiptHeader.DeliveryNoteNumber)},
+                purchase_order_no AS {nameof(ReceiptHeader.PurchaseOrderNo)},
+                CASE status {string.Join(" ", caseClauses)} ELSE 'Unknown' END AS {nameof(ReceiptHeader.Status)},
+                created_on_utc AS {nameof(ReceiptHeader.CreatedOnUtc)},
+                NULL AS {nameof(ReceiptHeader.SupplierName)},
+                ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
+            FROM wms.receipt_headers
+            WHERE
+                delivery_note_number ILIKE '%' || @Search || '%'
+                OR purchase_order_no ILIKE '%' || @Search || '%'
+                OR receipt_no ILIKE '%' || @Search || '%'
+        )
+        SELECT 
+            r.{nameof(ReceiptHeader.Id)},
+            r.{nameof(ReceiptHeader.ReceiptNo)},
+            r.{nameof(ReceiptHeader.ReceivedDate)},
+            r.{nameof(ReceiptHeader.DeliveryNoteNumber)},
+            r.{nameof(ReceiptHeader.PurchaseOrderNo)},
+            r.{nameof(ReceiptHeader.Status)},
+            r.{nameof(ReceiptHeader.CreatedOnUtc)},
+            r.{nameof(ReceiptHeader.SupplierName)}
+        FROM FilteredReceiptHeaders r
+        WHERE r.RowNum BETWEEN ((@Page) * @Size) + 1 AND (@Page + 1) * @Size
+        ORDER BY r.RowNum;
 
             SELECT COUNT(*)
                 FROM wms.receipt_headers

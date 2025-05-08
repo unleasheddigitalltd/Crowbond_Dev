@@ -15,10 +15,10 @@ internal sealed class UpdateReceiptLine : IEndpoint
     {
         app.MapPut("receipts/lines/{id}", async (Guid id, Request request, ISender sender) =>
         {
-            Result result = await sender.Send(new UpdateReceiptLineCommand(
+            var result = await sender.Send(new UpdateReceiptLineCommand(
                 id,
                 request.QuantityReceived,
-                request.UnitPrice));
+                request.UseByDate, request.SellByDate, request.Batch));
 
             return result.Match(() => Results.Ok(), ApiResults.Problem);
         })
@@ -26,5 +26,5 @@ internal sealed class UpdateReceiptLine : IEndpoint
             .WithTags(Tags.Receipts);
     }
 
-    private sealed record Request(decimal QuantityReceived, decimal UnitPrice);
+    private sealed record Request(decimal QuantityReceived, string? Batch, DateOnly? UseByDate, DateOnly? SellByDate);
 }

@@ -22,8 +22,7 @@ internal sealed class GetPutAwayTaskReceiptLinesQueryHandler(IDbConnectionFactor
                 rl.stored_qty AS {nameof(TaskReceiptLineResponse.StoredQty)},
                 rl.missed_qty AS {nameof(TaskReceiptLineResponse.MissedQty)},
                 rl.is_stored AS {nameof(TaskReceiptLineResponse.IsStored)}
-             FROM wms.task_assignments ta
-             INNER JOIN wms.task_headers t ON ta.task_header_id = t.id
+             FROM  wms.task_headers t
              INNER JOIN wms.receipt_headers r ON t.receipt_id = r.id
              INNER JOIN wms.receipt_lines rl ON rl.receipt_header_id = r.id
              INNER JOIN wms.products p ON rl.product_id = p.id

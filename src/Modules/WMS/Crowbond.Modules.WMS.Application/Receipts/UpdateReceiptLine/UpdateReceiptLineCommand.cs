@@ -5,4 +5,4 @@ namespace Crowbond.Modules.WMS.Application.Receipts.UpdateReceiptLine;
 public sealed record UpdateReceiptLineCommand(
     Guid ReceiptLineId,
     decimal QuantityReceived,
-    decimal UnitPrice) : ICommand;
+    DateOnly? UseByDate, DateOnly? SellByDate, string? Batch) : ICommand;

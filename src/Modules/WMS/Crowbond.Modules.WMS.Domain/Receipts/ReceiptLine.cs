@@ -55,6 +55,21 @@ public sealed class ReceiptLine : Entity
         return receiptLine;
     }
 
+    internal Result Update(decimal receivedQty, DateOnly? sellByDate, DateOnly? useByDate, string batchNumber)
+    {
+        if (IsStored)
+        {
+            return Result.Failure(ReceiptErrors.LineAlreadyStored);
+        }
+        
+        ReceivedQty = receivedQty;
+        SellByDate = sellByDate;
+        UseByDate = useByDate;
+        BatchNumber = batchNumber;
+        
+        return Result.Success();
+    }
+
     internal Result Update(
         decimal receivedQty,
         decimal unitPrice)

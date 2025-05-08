@@ -94,6 +94,18 @@ public sealed class ReceiptHeader : Entity, IAuditable
         return Result.Success(receiptLine);
     }
 
+    public Result UpdateLine(Guid purchaseOrderLineId, decimal quantityReceived, string batchNumber, DateOnly? sellByDate,
+        DateOnly? useByDate)
+    {
+        if (Status != ReceiptStatus.Shipping) return Result.Failure(ReceiptErrors.NotShipping);
+        
+        var line = _lines.SingleOrDefault(l => l.Id == purchaseOrderLineId);
+        if (line == null) return Result.Failure(ReceiptErrors.LineNotFound(purchaseOrderLineId));
+        
+        line.Update(quantityReceived, sellByDate, useByDate, batchNumber);
+        return Result.Success();
+    }
+
     public Result UpdateLine(
         Guid purchaseOrderLineId,
         decimal unitPrice,

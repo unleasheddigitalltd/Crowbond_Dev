@@ -26,10 +26,8 @@ internal sealed class UpdateReceiptLineCommandHandler(
             return Result.Failure(ReceiptErrors.NotFound(receiptLine.ReceiptHeaderId));
         }
 
-        Result result = receipt.UpdateLine(
-            request.ReceiptLineId, 
-            request.UnitPrice, 
-            request.QuantityReceived);
+        var result = receipt.UpdateLine(
+           request.ReceiptLineId, request.QuantityReceived, request.Batch ?? string.Empty, request.SellByDate, request.UseByDate);
 
         if (result.IsFailure)
         {

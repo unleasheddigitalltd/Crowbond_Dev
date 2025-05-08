@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Application.Pagination;
+using Crowbond.Common.Application.Pagination;
 
 namespace Crowbond.Modules.WMS.Application.Receipts.GetReceiptHeaders;
 
@@ -18,4 +18,6 @@ public sealed record ReceiptHeader
     public string? PurchaseOrderNo { get; }
     public string? DeliveryNoteNumber { get; }
     public string Status { get; }
+    public DateTime CreatedOnUtc { get; }
+    public string? SupplierName { get; }
 }

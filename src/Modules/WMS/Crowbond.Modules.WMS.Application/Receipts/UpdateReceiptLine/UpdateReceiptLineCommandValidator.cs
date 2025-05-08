@@ -6,8 +6,7 @@ internal sealed class UpdateReceiptLineCommandValidator : AbstractValidator<Upda
 {
     public UpdateReceiptLineCommandValidator()
     {
-        RuleFor(r => r.ReceiptLineId).NotEmpty();
-        RuleFor(r => r.UnitPrice).GreaterThan(decimal.Zero);
+        RuleFor(r => r.ReceiptLineId).NotEmpty(); 
         RuleFor(r => r.QuantityReceived).GreaterThan(decimal.Zero);
     }
 }
