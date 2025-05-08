@@ -14,11 +14,13 @@ public class LocationTests : BaseTest
         var parentId = Guid.NewGuid();
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
-        LocationType locationType = LocationType.Putaway;
+        string networkAddress = Faker.Random.AlphaNumeric(10);
+        string printerName = Faker.Random.AlphaNumeric(10);
+        LocationType locationType = LocationType.Storage;
         LocationLayer locationLayer = LocationLayer.Location;
 
         // Act
-        Result<Location> result = Location.Create(parentId, name, scanCode, locationType, locationLayer);
+        Result<Location> result = Location.Create(parentId, name, scanCode, networkAddress, printerName, locationType, locationLayer);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -37,13 +39,15 @@ public class LocationTests : BaseTest
         var parentId = Guid.NewGuid();
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
+        string networkAddress = Faker.Random.AlphaNumeric(10);
+        string printerName = Faker.Random.AlphaNumeric(10);
         LocationType? locationType = Enum.GetValues<LocationType>().FirstOrDefault();
         LocationLayer nonLocationLayer = Enum.GetValues(typeof(LocationLayer))
                                .Cast<LocationLayer>()
                                .FirstOrDefault(layer => layer != LocationLayer.Location);
 
         // Act
-        Result<Location> result = Location.Create(parentId, name, scanCode, locationType, nonLocationLayer);
+        Result<Location> result = Location.Create(parentId, name, scanCode, networkAddress, printerName, locationType, nonLocationLayer);
 
         // Assert
         result.Error.Should().Be(LocationErrors.InvalidLocationTypeAssignment);
@@ -56,14 +60,16 @@ public class LocationTests : BaseTest
         Guid? parentId = null;
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
-        
+        string networkAddress = Faker.Random.AlphaNumeric(10);
+        string printerName = Faker.Random.AlphaNumeric(10);
+
         LocationLayer[] locationLayers = { LocationLayer.Area, LocationLayer.Location };
 
         foreach (LocationLayer layer in locationLayers)
         {
-            LocationType? locationType = layer == LocationLayer.Location ? LocationType.Putaway : null;
+            LocationType? locationType = layer == LocationLayer.Location ? LocationType.Storage : null;
             // Act
-            Result<Location> result = Location.Create(parentId, name, scanCode, locationType, layer);
+            Result<Location> result = Location.Create(parentId, name, scanCode, networkAddress, printerName, locationType, layer);
 
             // Assert
             result.Error.Should().Be(LocationErrors.NeedParent);
@@ -77,11 +83,14 @@ public class LocationTests : BaseTest
         var parentId = Guid.NewGuid();
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
+        string networkAddress = Faker.Random.AlphaNumeric(10);
+        string printerName = Faker.Random.AlphaNumeric(10);
+
         LocationType? locationType = null;
         LocationLayer locationLayer = LocationLayer.Site;
 
         // Act
-        Result<Location> result = Location.Create(parentId, name, scanCode, locationType, locationLayer);
+        Result<Location> result = Location.Create(parentId, name, scanCode, networkAddress, printerName, locationType, locationLayer);
 
         // Assert
         result.Error.Should().Be(LocationErrors.CanNotHaveParent);
@@ -94,19 +103,25 @@ public class LocationTests : BaseTest
         var parentId = Guid.NewGuid();
         string name = Faker.Random.AlphaNumeric(10);
         string scanCode = Faker.Random.AlphaNumeric(10);
-        LocationType locationType = LocationType.Putaway;
+        string networkAddress = Faker.Random.AlphaNumeric(10);
+        string printerName = Faker.Random.AlphaNumeric(10);
+
+        LocationType locationType = LocationType.Storage;
         LocationLayer locationLayer = LocationLayer.Location;
 
-        Result<Location> location = Location.Create(parentId, name, scanCode, locationType, locationLayer);
+        Result<Location> location = Location.Create(parentId, name, scanCode, networkAddress, printerName, locationType, locationLayer);
 
         var newParentId = Guid.NewGuid();
         string newName = Faker.Random.AlphaNumeric(10);
         string newScanCode = Faker.Random.AlphaNumeric(10);
+        string newNetworkAddress = Faker.Random.AlphaNumeric(10);   
+        string newPrinterName = Faker.Random.AlphaNumeric(10);
+
         LocationType? newLocationType = null;
         LocationLayer newLocationLayer = LocationLayer.Area;
 
         // Act
-        Result result = location.Value.Update(newParentId, newName, newScanCode, newLocationType, newLocationLayer);
+        Result result = location.Value.Update(newParentId, newName, newScanCode, newNetworkAddress, newPrinterName, newLocationType, newLocationLayer);
 
         // Assert
         result.IsSuccess.Should().BeTrue();

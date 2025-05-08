@@ -21,6 +21,8 @@ internal sealed class CreateLocation : IEndpoint
                 request.ParentId,
                 request.Name,
                 request.ScanCode,
+                request.NetworkAddress,
+                request.PrinterName,
                 request.LocationType,
                 request.LocationLayer));
 
@@ -34,6 +36,8 @@ internal sealed class CreateLocation : IEndpoint
         Guid? ParentId,
         string Name,
         string? ScanCode,
+        string? NetworkAddress,
+        string? PrinterName,
         LocationType? LocationType,
         LocationLayer LocationLayer);
 }

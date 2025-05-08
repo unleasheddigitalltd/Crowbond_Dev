@@ -100,7 +100,7 @@ internal sealed class PickProductForDispatchLineCommandHandler(
             return Result.Failure<Guid>(StockErrors.LocationNotFound(request.ToLocationId));
         }
 
-        if (location.LocationType != LocationType.TransferUtility)
+        if (location.LocationType != LocationType.Tote)
         {
             return Result.Failure<Guid>(LocationErrors.NotTransfereUtility(request.ToLocationId));
         }

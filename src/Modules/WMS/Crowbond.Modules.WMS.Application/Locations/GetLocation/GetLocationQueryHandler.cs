@@ -22,6 +22,8 @@ internal sealed class GetLocationQueryHandler(IDbConnectionFactory dbConnectionF
                  name AS {nameof(LocationResponse.Name)},
                  scan_code AS {nameof(LocationResponse.ScanCode)},
                  location_type AS {nameof(LocationResponse.LocationType)},
+                 network_address AS {nameof(LocationResponse.NetworkAddress)},
+                 printer_name AS {nameof(LocationResponse.PrinterName)},
                  location_layer AS {nameof(LocationResponse.LocationLayer)},
                  status AS {nameof(LocationResponse.Status)}
              FROM wms.locations

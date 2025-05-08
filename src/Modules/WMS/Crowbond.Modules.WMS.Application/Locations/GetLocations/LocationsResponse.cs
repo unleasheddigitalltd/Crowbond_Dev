@@ -15,6 +15,8 @@ public sealed record Location(
     Guid? ParentId,
     string Name,
     string? ScanCode,
+    string? NetworkAddress,
+    string? PrinterName,
     LocationType? LocationType,
     LocationLayer LocationLayer,
     LocationStatus Status);

@@ -19,6 +19,8 @@ internal sealed class GetLocationsQueryHandler(IDbConnectionFactory dbConnection
         {
             "name" => "name",
             "scanCode" => "scan_code",
+            "networkAddress" => "network_address",
+            "printerName" => "printer_name",
             "locationType" => "location_type",
             "locationLayer" => "location_layer",
             "status" => "status",
@@ -31,6 +33,8 @@ internal sealed class GetLocationsQueryHandler(IDbConnectionFactory dbConnection
                     parent_id AS {nameof(Location.ParentId)},
                     name AS {nameof(Location.Name)},
                     scan_code AS {nameof(Location.ScanCode)},
+network_address AS {nameof(Location.NetworkAddress)},
+                    printer_name AS {nameof(Location.PrinterName)},
                     location_type AS {nameof(Location.LocationType)},
                     location_layer AS {nameof(Location.LocationLayer)},
                     status AS {nameof(Location.Status)},
@@ -45,6 +49,8 @@ internal sealed class GetLocationsQueryHandler(IDbConnectionFactory dbConnection
                 l.{nameof(Location.ParentId)},
                 l.{nameof(Location.Name)},
                 l.{nameof(Location.ScanCode)},
+                l.{nameof(Location.NetworkAddress)} AS {nameof(Location.NetworkAddress)},
+                l.{nameof(Location.PrinterName)} AS {nameof(Location.PrinterName)},
                 l.{nameof(Location.LocationType)},
                 l.{nameof(Location.LocationLayer)},
                 l.{nameof(Location.Status)}

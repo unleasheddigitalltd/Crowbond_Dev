@@ -17,6 +17,8 @@ public sealed class Location : Entity
     public string Name { get; private set; }
 
     public string? ScanCode { get; private set; }
+    public string? NetworkAddress { get; private set; }
+    public string? PrinterName { get; private set; }
 
     public LocationType? LocationType { get; private set; }
 
@@ -28,6 +30,8 @@ public sealed class Location : Entity
         Guid? parentId,
         string name,
         string? scanCode,
+        string? networkAddress,
+        string? printerName,
         LocationType? locationType,
         LocationLayer locationLayer)
     {
@@ -52,6 +56,8 @@ public sealed class Location : Entity
             ParentId = parentId,
             Name = name,
             ScanCode = scanCode,
+            NetworkAddress = networkAddress,
+            PrinterName = printerName,
             LocationType = locationType,
             LocationLayer = locationLayer,
             Status = LocationStatus.Active
@@ -64,6 +70,8 @@ public sealed class Location : Entity
         Guid? parentId,
         string name,
         string? scanCode,
+        string? networkAddress,
+        string? printerName,
         LocationType? locationType,
         LocationLayer locationLayer)
     {
@@ -85,6 +93,8 @@ public sealed class Location : Entity
         ParentId = parentId;
         Name = name;
         ScanCode = scanCode;
+        NetworkAddress = networkAddress;
+        PrinterName = printerName;
         LocationType = locationType;
         LocationLayer = locationLayer;
 

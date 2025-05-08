@@ -9,6 +9,8 @@ internal sealed class UpdateLocationCommandValidator: AbstractValidator<UpdateLo
         RuleFor(l => l.LocationId).NotEmpty();
         RuleFor(l => l.Name).NotEmpty().MaximumLength(100);
         RuleFor(l => l.ScanCode).MaximumLength(20);
+        RuleFor(l => l.NetworkAddress).MaximumLength(50);
+        RuleFor(l => l.PrinterName).MaximumLength(50);
         RuleFor(l => l.LocationLayer).IsInEnum();
     }
 }
