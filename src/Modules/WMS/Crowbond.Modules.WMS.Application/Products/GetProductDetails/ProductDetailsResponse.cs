@@ -22,5 +22,4 @@ public sealed record ProductDetailsResponse(
     decimal? Width,
     decimal? Length,
     bool WeightInput,
-    bool IsActive,
-    string[] Images);
+    bool IsActive);
