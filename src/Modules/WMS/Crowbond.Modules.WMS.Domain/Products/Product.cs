@@ -23,6 +23,7 @@ public sealed class Product : Entity
     public string InventoryTypeName { get; private set; }
 
     public Guid CategoryId { get; private set; }
+    public Guid? DefaultLocation { get; private set; }
 
     public Guid BrandId { get; private set; }
 
@@ -60,6 +61,7 @@ public sealed class Product : Entity
         string unitOfMeasureName,
         string inventoryTypeName,
         Guid categoryId,
+        Guid defaultLocation,
         Guid brandId,
         Guid productGroupId,
         TaxRateType taxRateType,
@@ -113,6 +115,7 @@ public sealed class Product : Entity
         string unitOfMeasureName,
         string inventoryTypeName,
         Guid categoryId,
+        Guid defaultLocation,
         Guid brandId,
         Guid productGroupId,
         TaxRateType taxRateType,
@@ -135,6 +138,7 @@ public sealed class Product : Entity
         UnitOfMeasureName = unitOfMeasureName;
         InventoryTypeName = inventoryTypeName;
         CategoryId = categoryId;
+        DefaultLocation = defaultLocation;
         BrandId = brandId;
         ProductGroupId = productGroupId;
         TaxRateType = taxRateType;

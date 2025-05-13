@@ -11,6 +11,7 @@ internal sealed class CreateProductCommandValidator : AbstractValidator<CreatePr
         RuleFor(p => p.Product.FilterTypeName).NotEmpty().MaximumLength(20);
         RuleFor(p => p.Product.UnitOfMeasureName).NotEmpty().MaximumLength(20);
         RuleFor(p => p.Product.CategoryId).NotEmpty();
+        RuleFor(p => p.Product.DefaultLocation).NotEmpty();
         RuleFor(p => p.Product.BrandId).NotEmpty();
         RuleFor(p => p.Product.ProductGroupId).NotEmpty();
         RuleFor(p => p.Product.InventoryTypeName).NotEmpty().MaximumLength(20);

@@ -10,6 +10,7 @@ public sealed record ProductRequest(
     string UnitOfMeasureName,
     string InventoryTypeName,
     Guid CategoryId,
+    Guid DefaultLocation,
     Guid BrandId,
     Guid ProductGroupId,
     TaxRateType TaxRateType,

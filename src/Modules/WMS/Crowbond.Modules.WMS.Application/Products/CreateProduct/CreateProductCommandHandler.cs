@@ -2,6 +2,7 @@
 using Crowbond.Common.Domain;
 using Crowbond.Modules.WMS.Application.Abstractions.Data;
 using Crowbond.Modules.WMS.Domain.Products;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Crowbond.Modules.WMS.Application.Products.CreateProduct;
 
@@ -62,6 +63,7 @@ internal sealed class CreateProductCommandHandler(
              request.Product.UnitOfMeasureName,
              request.Product.InventoryTypeName,
              request.Product.CategoryId,
+             request.Product.DefaultLocation,
              request.Product.BrandId,
              request.Product.ProductGroupId,
              request.Product.TaxRateType,

@@ -9,6 +9,7 @@ public sealed record ProductRequest(
     string FilterTypeName,
     string UnitOfMeasureName,
     Guid CategoryId,
+    Guid DefaultLocation,
     Guid BrandId,
     Guid ProductGroupId,
     string InventoryTypeName,

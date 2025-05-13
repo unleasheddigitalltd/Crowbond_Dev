@@ -21,7 +21,8 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                  p.sku AS {nameof(ProductResponse.Sku)},
                  p.name AS {nameof(ProductResponse.Name)},
                  p.unit_of_measure_name AS {nameof(ProductResponse.UnitOfMeasureName)},
-                 c.name AS {nameof(ProductResponse.CategoryName)},                                 
+                 c.name AS {nameof(ProductResponse.CategoryName)},           
+                 p.default_location AS {nameof(ProductResponse.DefaultLocation)},  
                  COALESCE(SUM(s.current_qty), 0) AS {nameof(ProductResponse.Stock)},
                  p.reorder_level AS {nameof(ProductResponse.ReorderLevel)},
                  p.is_active AS {nameof(ProductResponse.IsActive)}
@@ -33,6 +34,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                  p.id,
                  p.sku,
                  p.name,
+                 p.default_location,
                  p.unit_of_measure_name,
                  c.name, 
                  p.reorder_level,

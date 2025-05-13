@@ -16,6 +16,7 @@ public sealed record Product()
     public string Name { get; }
     public string UnitOfMeasureName { get; }
     public string CategoryName { get; }
+    public string DefaultLocation { get; }
     public decimal Stock { get; }
     public decimal? ReorderLevel { get; }
     public bool IsActive { get; }
