@@ -3,6 +3,7 @@ using System;
 using Crowbond.Modules.WMS.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    partial class WmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250513151122_product_defaultlocation_null")]
+    partial class product_defaultlocation_null
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,17 +310,9 @@ namespace Crowbond.Modules.WMS.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("NetworkAddress")
-                        .HasColumnType("text")
-                        .HasColumnName("network_address");
-
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
-
-                    b.Property<string>("PrinterName")
-                        .HasColumnType("text")
-                        .HasColumnName("printer_name");
 
                     b.Property<string>("ScanCode")
                         .HasMaxLength(20)

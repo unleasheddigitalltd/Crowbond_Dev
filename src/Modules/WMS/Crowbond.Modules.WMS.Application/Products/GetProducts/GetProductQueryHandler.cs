@@ -23,6 +23,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
             "sku" => "p.sku",
             "name" => "p.name",
             "categoryName" => "c.name",
+            "defaultLocation" => "p.default_location",
             "unitOfMeasure" => "p.unit_of_measure_name",
             "isActive" => "p.is_active",
             _ => "p.name" // Default sorting
@@ -36,6 +37,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                     p.name AS {nameof(Product.Name)},
                     p.unit_of_measure_name AS {nameof(Product.UnitOfMeasureName)},
                     c.name AS {nameof(Product.CategoryName)},
+                    p.default_location AS {nameof(Product.DefaultLocation)},
                     p.reorder_level AS {nameof(Product.ReorderLevel)},
                     p.is_active AS {nameof(Product.IsActive)},
                     ROW_NUMBER() OVER (ORDER BY {orderByClause} {sortOrder}) AS RowNum
@@ -53,6 +55,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.Name)},
                 p.{nameof(Product.UnitOfMeasureName)},
                 p.{nameof(Product.CategoryName)},
+                p.{nameof(Product.DefaultLocation)},
                 COALESCE(SUM(s.current_qty), 0) AS {nameof(Product.Stock)},
                 p.{nameof(Product.ReorderLevel)},
                 p.{nameof(Product.IsActive)}
@@ -65,6 +68,7 @@ internal sealed class GetProductQueryHandler(IDbConnectionFactory dbConnectionFa
                 p.{nameof(Product.Name)},
                 p.{nameof(Product.UnitOfMeasureName)},
                 p.{nameof(Product.CategoryName)},
+                p.{nameof(Product.DefaultLocation)},
                 p.{nameof(Product.ReorderLevel)},
                 p.{nameof(Product.IsActive)},
 				p.RowNum

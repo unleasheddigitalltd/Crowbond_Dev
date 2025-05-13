@@ -46,6 +46,7 @@ internal sealed class UpdateProductCommandHandler(IProductRepository productRepo
             request.Product.UnitOfMeasureName,
             request.Product.InventoryTypeName,
             request.Product.CategoryId,
+            request.Product.DefaultLocation,
             request.Product.BrandId,
             request.Product.ProductGroupId,
             request.Product.TaxRateType,

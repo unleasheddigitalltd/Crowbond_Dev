@@ -23,6 +23,7 @@ public class ProductTests : BaseTest
             Guid.Empty,
             Guid.Empty,
             Guid.Empty,
+            Guid.Empty,
             TaxRateType.NoVat,
             null,
             null,

@@ -12,6 +12,8 @@ public sealed record ProductResponse()
 
     public string CategoryName { get; }
 
+    public string DefaultLocation { get; }
+
     public decimal Stock { get; }
 
     public decimal? ReorderLevel { get; }
