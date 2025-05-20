@@ -75,7 +75,7 @@ internal sealed class AddDispatchLinesCommandHandler(
                 line.OrderLineId,
                 line.ProductId,
                 line.Qty,
-                line.IsBulk);
+                IsProductBulk(product));
 
             dispatchRepository.AddLine(dispatchLine);
 
@@ -214,4 +214,8 @@ internal sealed class AddDispatchLinesCommandHandler(
 
         return Result.Success();
     }
+
+    private static bool IsProductBulk(Product product) => 
+        !string.Equals(product.UnitOfMeasureName, "Each", StringComparison.OrdinalIgnoreCase) 
+        || !string.Equals(product.UnitOfMeasureName, "Kg", StringComparison.OrdinalIgnoreCase);
 }
