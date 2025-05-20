@@ -12,4 +12,8 @@
     <InternalsVisibleTo Include="Crowbond.Modules.WMS.IntegrationTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2025.5.0" />
+  </ItemGroup>
+
 </Project>

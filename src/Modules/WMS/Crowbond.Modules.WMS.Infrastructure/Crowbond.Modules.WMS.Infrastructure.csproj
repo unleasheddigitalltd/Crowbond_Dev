@@ -17,4 +17,8 @@
     <Folder Include="Outbox\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2025.5.0" />
+  </ItemGroup>
+
 </Project>

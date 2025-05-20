@@ -10,4 +10,5 @@ internal static class Tags
     internal const string Picking = "Picking";
     internal const string Checking = "Checking";
     internal const string WarehouseOperators = "Warehouse Operators";
+    internal const string Reports = "Reports";
 }
