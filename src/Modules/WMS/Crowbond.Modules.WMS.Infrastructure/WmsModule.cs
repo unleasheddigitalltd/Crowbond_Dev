@@ -41,6 +41,7 @@ using Crowbond.Modules.WMS.Infrastructure.PublicApi;
 using Crowbond.Modules.WMS.Domain.Users;
 using Crowbond.Modules.WMS.Infrastructure.Users;
 using Crowbond.Modules.Users.IntegrationEvents;
+using Crowbond.Modules.WMS.Domain.Reports;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -122,6 +123,8 @@ public static class WmsModule
         services.Configure<InboxOptions>(configuration.GetSection("WMS:Inbox"));
 
         services.ConfigureOptions<ConfigureProcessInboxJob>();
+
+        services.AddScoped<IReportService, ReportService>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)

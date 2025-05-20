@@ -5,7 +5,10 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Crowbond.Modules.Users.Infrastructure.Authentication;
+using QuestPDF.Infrastructure;
 
+QuestPDF.Settings.License = LicenseType.Community;
+// Set the license type for QuestPDF to Community
 
 var builder = WebApplication.CreateBuilder(args);
 
