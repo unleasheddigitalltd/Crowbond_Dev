@@ -21,6 +21,8 @@ internal sealed class GetLocationByScanCodeQueryHandler(IDbConnectionFactory dbC
                  parent_id AS {nameof(LocationResponse.ParentId)},
                  name AS {nameof(LocationResponse.Name)},
                  scan_code AS {nameof(LocationResponse.ScanCode)},
+                 network_address AS {nameof(LocationResponse.NetworkAddress)},
+                 printer_name AS {nameof(LocationResponse.PrinterName)},
                  location_type AS {nameof(LocationResponse.LocationType)},
                  location_layer AS {nameof(LocationResponse.LocationLayer)},
                  status AS {nameof(LocationResponse.Status)}
@@ -28,13 +30,13 @@ internal sealed class GetLocationByScanCodeQueryHandler(IDbConnectionFactory dbC
              WHERE scan_code = @ScanCode
              """;
 
-        LocationResponse? product = await connection.QuerySingleOrDefaultAsync<LocationResponse>(sql, request);
-
-        if (product is null)
+        LocationResponse? location = await connection.QuerySingleOrDefaultAsync<LocationResponse>(sql, request);
+            
+        if (location is null)
         {
             return Result.Failure<LocationResponse>(LocationErrors.SacnCodeNotFound(request.ScanCode));
-        }
+        }        
 
-        return product;
+        return location;
     }
 }
