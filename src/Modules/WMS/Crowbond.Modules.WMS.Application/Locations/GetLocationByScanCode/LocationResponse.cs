@@ -5,7 +5,9 @@ public sealed record LocationResponse(
     Guid Id,    
     Guid? ParentId,    
     string Name,    
-    string ScanCode,    
+    string ScanCode,
+    string? NetworkAddress,
+    string? PrinterName,
     LocationType? LocationType,    
     LocationLayer LocationLayer,    
     LocationStatus Status);
