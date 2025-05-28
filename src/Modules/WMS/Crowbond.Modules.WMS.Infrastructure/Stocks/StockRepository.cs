@@ -17,6 +17,11 @@ internal sealed class StockRepository(WmsDbContext context) : IStockRepository
         return await context.Stocks.Where(s => s.LocationId == locationId).ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Stock>> GetByProductAsync(Guid productId, CancellationToken cancellationToken)
+    {
+        return await context.Stocks.Where(s => s.ProductId == productId && s.CurrentQty > 0).ToListAsync(cancellationToken);
+    }
+
     public async Task<StockTransactionReason?> GetTransactionReasonAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.StockTransactionReasons.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);

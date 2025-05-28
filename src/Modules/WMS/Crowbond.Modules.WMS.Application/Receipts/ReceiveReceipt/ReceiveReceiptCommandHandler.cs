@@ -41,6 +41,7 @@ internal sealed class ReceiveReceiptCommandHandler(
             sequence.GetNumber(),
             receipt.Id,
             null,
+            null, null, null,
             TaskType.Putaway);
 
         if (taskResult.IsFailure)

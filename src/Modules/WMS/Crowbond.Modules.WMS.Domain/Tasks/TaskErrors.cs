@@ -1,4 +1,4 @@
-﻿using Crowbond.Common.Domain;
+using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
 public static class TaskErrors
@@ -84,4 +84,13 @@ public static class TaskErrors
 
     public static Error ProductCompleteQtyExceedsRequestQty(Guid productId) =>
         Error.Problem("Tasks.ProductCompleteQtyExceedsRequestQty", $"The task assignment line for the product with identifier {productId} has a completed quantity greater than the requested quantity.");
+        
+    public static Error TaskLineNotFound(Guid taskLineId) =>
+        Error.NotFound("Tasks.TaskLineNotFound", $"The task line with the identifier {taskLineId} was not found");
+        
+    public static Error DispatchLineAlreadyMapped(Guid dispatchLineId) =>
+        Error.Problem("Tasks.DispatchLineAlreadyMapped", $"The dispatch line with the identifier {dispatchLineId} is already mapped to a task line");
+        
+    public static Error MappingCompleteQtyExceedsAllocatedQty(Guid mappingId) =>
+        Error.Problem("Tasks.MappingCompleteQtyExceedsAllocatedQty", $"The mapping with identifier {mappingId} has a completed quantity greater than the allocated quantity.");
 }

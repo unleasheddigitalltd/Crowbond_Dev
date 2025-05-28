@@ -22,7 +22,7 @@ public class TaskTests : BaseTest
         TaskType taskType = Faker.PickRandom<TaskType>();
 
         // Act
-        Result<TaskHeader> result = TaskHeader.Create(taskNo, receiptId, dispatchId, taskType);
+        Result<TaskHeader> result = TaskHeader.Create(taskNo, receiptId, dispatchId, null, null, null, taskType);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -43,6 +43,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         var warehouseOperatorId = Guid.NewGuid();
@@ -65,6 +66,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -84,6 +86,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -105,6 +108,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         var warehouseOperatorId = Guid.NewGuid();
@@ -133,6 +137,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         DateTime modificationDate = Faker.Date.Recent();
@@ -154,6 +159,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -179,6 +185,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         // Act
@@ -196,6 +203,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -218,6 +226,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -243,6 +252,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         // Act
@@ -260,6 +270,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -281,6 +292,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -308,6 +320,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         // Act
@@ -326,6 +339,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         taskHeader.AddAssignment(Guid.NewGuid());
@@ -349,6 +363,7 @@ public class TaskTests : BaseTest
             Faker.Random.AlphaNumeric(10),
             Guid.NewGuid(),
             Guid.NewGuid(),
+            null, null, null,
             Faker.PickRandom<TaskType>()).Value;
 
         // Act

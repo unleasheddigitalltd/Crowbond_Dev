@@ -42,6 +42,8 @@ using Crowbond.Modules.WMS.Domain.Users;
 using Crowbond.Modules.WMS.Infrastructure.Users;
 using Crowbond.Modules.Users.IntegrationEvents;
 using Crowbond.Modules.WMS.Domain.Reports;
+using Crowbond.Modules.WMS.Application.Tasks;
+using Crowbond.Modules.WMS.Application.Tasks.Picking.Strategies;
 
 namespace Crowbond.Modules.WMS.Infrastructure;
 
@@ -110,6 +112,13 @@ public static class WmsModule
         services.AddScoped<ITaskRepository, TaskRepository>();
 
         services.AddScoped<IDispatchRepository, DispatchRepository>();
+        
+        services.AddScoped<ConsolidatedPickingTaskService>();
+        
+        // Register picking strategies
+        services.AddScoped<IProductPickingClassifier, NameBasedProductPickingClassifier>();
+        services.AddScoped<ConsolidatedPickingStrategy>();
+        services.AddScoped<IndividualPickingStrategy>();
 
         services.AddScoped<IWarehouseOperatorContext, WarehouseOperatorContext>();
 

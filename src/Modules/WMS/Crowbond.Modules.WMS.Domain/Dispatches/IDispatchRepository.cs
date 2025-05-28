@@ -13,4 +13,5 @@ public interface IDispatchRepository
     void Insert(DispatchHeader header);
 
     void AddLine(DispatchLine line);
+    Task<DispatchLine?> GetLineAsync(Guid mappingDispatchLineId, CancellationToken cancellationToken);
 }
