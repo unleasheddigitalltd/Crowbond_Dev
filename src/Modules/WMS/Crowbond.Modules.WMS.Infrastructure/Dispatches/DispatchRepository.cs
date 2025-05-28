@@ -27,6 +27,11 @@ internal sealed class DispatchRepository(WmsDbContext context) : IDispatchReposi
         context.DispatchLines.Add(line);
     }
 
+    public Task<DispatchLine?> GetLineAsync(Guid mappingDispatchLineId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
     {
         return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Dispatch, cancellationToken);

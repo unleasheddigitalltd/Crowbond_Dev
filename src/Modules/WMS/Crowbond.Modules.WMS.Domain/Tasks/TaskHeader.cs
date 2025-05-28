@@ -1,11 +1,11 @@
-﻿using Crowbond.Common.Domain;
-using Serilog.Parsing;
+using Crowbond.Common.Domain;
 
 namespace Crowbond.Modules.WMS.Domain.Tasks;
 
-public sealed class TaskHeader : Entity, IChangeDetectable
+public class TaskHeader : Entity, IChangeDetectable
 {
     private readonly List<TaskAssignment> _assignments = new();
+    private readonly List<TaskLine> _lines = new();
 
     private TaskHeader()
     {
@@ -18,17 +18,28 @@ public sealed class TaskHeader : Entity, IChangeDetectable
     public Guid? ReceiptId { get; private set; }
 
     public Guid? DispatchId { get; private set; }
+    
+    public Guid? LocationId { get; private set; }
+    
+    public Guid? RouteTripId { get; private set; }
+    
+    public DateOnly? ScheduledDeliveryDate { get; private set; }
 
     public TaskType TaskType { get; private set; }
 
     public TaskHeaderStatus Status { get; private set; }
 
     public IReadOnlyCollection<TaskAssignment> Assignments => _assignments;
+    
+    public IReadOnlyCollection<TaskLine> Lines => _lines;
 
     public static Result<TaskHeader> Create(
         string taskNo,
         Guid? receiptId,
         Guid? dispatchId,
+        Guid? locationId,
+        Guid? routeTripId,
+        DateOnly? scheduledDeliveryDate,
         TaskType taskType)
     {
         var taskHeader = new TaskHeader
@@ -37,6 +48,9 @@ public sealed class TaskHeader : Entity, IChangeDetectable
             TaskNo = taskNo,
             ReceiptId = receiptId,
             DispatchId = dispatchId,
+            LocationId = locationId,
+            RouteTripId = routeTripId,
+            ScheduledDeliveryDate = scheduledDeliveryDate,
             TaskType = taskType,
             Status = TaskHeaderStatus.NotAssigned,
         };
@@ -232,11 +246,82 @@ public sealed class TaskHeader : Entity, IChangeDetectable
         return result;
     }
 
+    public Result<TaskLine> AddTaskLine(
+        Guid fromLocationId,
+        Guid toLocationId,
+        Guid productId,
+        decimal totalQty)
+    {
+        // Create a new task line
+        var taskLine = TaskLine.Create(
+            fromLocationId,
+            toLocationId,
+            productId,
+            totalQty);
+            
+        _lines.Add(taskLine);
+        
+        return Result.Success(taskLine);
+    }
+    
+    public Result MapDispatchLineToTaskLine(
+        Guid taskLineId,
+        Guid dispatchLineId,
+        decimal allocatedQty)
+    {
+        var taskLine = _lines.Find(l => l.Id == taskLineId);
+        
+        if (taskLine is null)
+        {
+            return Result.Failure(TaskErrors.TaskLineNotFound(taskLineId));
+        }
+        
+        return taskLine.AddDispatchMapping(dispatchLineId, allocatedQty);
+    }
+    
+    public Result CompleteTaskLine(Guid taskLineId, decimal completedQty)
+    {
+        if (Status is not TaskHeaderStatus.InProgress)
+        {
+            return Result.Failure(TaskErrors.NotInProgress);
+        }
+        
+        var taskLine = _lines.Find(l => l.Id == taskLineId);
+        
+        if (taskLine is null)
+        {
+            return Result.Failure(TaskErrors.TaskLineNotFound(taskLineId));
+        }
+        
+        Result result = taskLine.CompleteQuantity(completedQty);
+        
+        if (result.IsFailure)
+        {
+            return result;
+        }
+        
+        // Check if all task lines are completed
+#pragma warning disable S6603
+        if (_lines.All(l => l.IsCompleted))
+#pragma warning restore S6603
+        {
+            // Auto-complete the task if all lines are completed
+            Status = TaskHeaderStatus.Completed;
+        }
+        
+        return Result.Success();
+    }
+    
     public bool IsAssignedTo(Guid operatorId)
     {
-        TaskAssignment? activeAssignment = _assignments.Find(a =>
+        var activeAssignment = _assignments.Find(a =>
             a.Status is not TaskAssignmentStatus.Quit or TaskAssignmentStatus.Completed);
 
         return activeAssignment?.AssignedOperatorId == operatorId;
+    }
+    
+    public TaskLine? FindTaskLineByProductAndLocation(Guid productId, Guid fromLocationId)
+    {
+        return _lines.Find(l => l.ProductId == productId && l.FromLocationId == fromLocationId);
     }
 }

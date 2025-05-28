@@ -74,26 +74,26 @@ public sealed class DispatchHeader : Entity, IAuditable
         return line;
     }
 
-    public Result PickLine(Guid dispatchLineId, decimal Qty)
+    public Result PickLine(Guid dispatchLineId, decimal qty)
     {
         if (Status != DispatchStatus.Processing)
         {
             return Result.Failure(DispatchErrors.NotProcessing);
         }
 
-        DispatchLine? dispatchLine = _lines.SingleOrDefault(l => l.Id == dispatchLineId);
+        var dispatchLine = _lines.SingleOrDefault(l => l.Id == dispatchLineId);
 
         if (dispatchLine is null)
         {
             return Result.Failure(DispatchErrors.LineNotFound(dispatchLineId));
         }
 
-        if (dispatchLine.OrderedQty < dispatchLine.PickedQty + Qty)
+        if (dispatchLine.OrderedQty < dispatchLine.PickedQty + qty)
         {
             return Result.Failure(DispatchErrors.PickedExceedsOrdered);
         }
 
-        Result result = dispatchLine.Pick(Qty);
+        var result = dispatchLine.Pick(qty);
 
         return result;
     }

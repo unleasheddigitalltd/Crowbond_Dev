@@ -21,6 +21,26 @@ internal sealed class TaskRepository(WmsDbContext context) : ITaskRepository
         return await context.TaskAssignmentLines.Include(t => t.Assignment).ThenInclude(a => a.Header).SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
+    public async Task<TaskLine?> GetTaskLineAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.TaskLines
+            .Include(t => t.DispatchMappings)
+            .SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
+    public async Task<TaskHeader?> GetByRouteLocationAndTypeAsync(Guid routeTripId, Guid locationId, TaskType taskType,
+        CancellationToken cancellationToken = default)
+    {
+        return await context.TaskHeaders
+            .Include(t => t.Lines)
+            .ThenInclude(l => l.DispatchMappings)
+            .SingleOrDefaultAsync(t => 
+                t.RouteTripId == routeTripId && 
+                t.LocationId == locationId && 
+                t.TaskType == taskType, 
+                cancellationToken);
+    }
+
     public async Task<Sequence?> GetSequenceAsync(CancellationToken cancellationToken = default)
     {
         return await context.Sequences.SingleOrDefaultAsync(s => s.Context == SequenceContext.Task, cancellationToken);
@@ -39,5 +59,15 @@ internal sealed class TaskRepository(WmsDbContext context) : ITaskRepository
     public void AddAssignmentLine(TaskAssignmentLine assignmentLine)
     {
         context.TaskAssignmentLines.Add(assignmentLine);
+    }
+
+    public void AddTaskLine(TaskLine taskLine)
+    {
+        context.TaskLines.Add(taskLine);
+    }
+
+    public void AddTaskLineDispatchMapping(TaskLineDispatchMapping mapping)
+    {
+        context.TaskLineDispatchMappings.Add(mapping);
     }
 }

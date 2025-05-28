@@ -50,6 +50,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
     internal DbSet<TaskAssignment> TaskAssignments { get; set; }
     internal DbSet<TaskAssignmentLine> TaskAssignmentLines { get; set; }
     internal DbSet<TaskAssignmentStatusHistory> TaskAssignmentStatusHistories { get; set; }
+    internal DbSet<TaskLine> TaskLines { get; set; }
+    internal DbSet<TaskLineDispatchMapping> TaskLineDispatchMappings { get; set; }
     internal DbSet<DispatchHeader> DispatchHeaders { get; set; }
     internal DbSet<DispatchLine> DispatchLines { get; set; }
     internal DbSet<User> Users { get; set; }
@@ -92,6 +94,8 @@ public sealed class WmsDbContext(DbContextOptions<WmsDbContext> options)
         modelBuilder.ApplyConfiguration(new TaskAssignmentConfiguration());
         modelBuilder.ApplyConfiguration(new TaskAssignmentLineConfiguration());
         modelBuilder.ApplyConfiguration(new TaskAssignmentStatusHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new TaskLineConfiguration());
+        modelBuilder.ApplyConfiguration(new TaskLineDispatchMappingConfiguration());
 
         modelBuilder.ApplyConfiguration(new WarehouseOperatorConfiguration());
 
